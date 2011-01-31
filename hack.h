@@ -1,6 +1,16 @@
+class Socket
+{
+	public:
+	Socket(int sock);
+	int socket;
+	bool send(char* stuff, int size);
+	bool receive(char* stuff, int size);
+	bool hasRemaining();
+};
+
 class Vector2D
 {
-  public:
+	public:
 		float x, y;
 		Vector2D() {x= y = 0;}
 		Vector2D(float a, float b) {x = a; y = b;}
@@ -67,7 +77,10 @@ class Object
 		float rad;
 		Color color;
 		float h;
-		int id;  
+		int id;
+		
+		bool send(Socket socket);
+		bool receive(Socket socket);
 };
 
 class Obstacle
@@ -91,4 +104,7 @@ class World
 		map<int, Object> objects;
 		vector<Light> lights;
 		vector<Obstacle> obstacles;
+		
+		bool sendObjects(Socket socket);
+		bool receiveObjects(Socket socket);
 };

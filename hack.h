@@ -25,45 +25,12 @@ class Vector2D
 		Vector2D operator-(const Vector2D&) const;
 		Vector2D& operator+=(const Vector2D&);
 		Vector2D& operator-=(const Vector2D&);
+		Vector2D& operator*=(const float);
 		bool operator==(const Vector2D&) const;
 		float operator*(const Vector2D&) const;
+		Vector2D operator*(const float) const;
+		Vector2D getNormalVector() const;
 };
-
-Vector2D Vector2D::operator+(const Vector2D& v) const
-{
-	Vector2D ret(x+v.x, y+v.y);
-	return ret;
-}
-
-Vector2D Vector2D::operator-(const Vector2D& v) const
-{
-	Vector2D ret(x-v.x, y-v.y);
-	return ret;
-}
-
-Vector2D& Vector2D::operator+=(const Vector2D& v)
-{
-	x += v.x;
-	y += v.y;
-	return *this;
-}
-
-Vector2D& Vector2D::operator-=(const Vector2D& v)
-{
-	x -= v.x;
-	y -= v.y;
-	return *this;
-}
-
-bool Vector2D::operator==(const Vector2D& v) const
-{
-	return x == v.x && y == v.y;
-}
-
-float Vector2D::operator*(const Vector2D& v) const
-{
-	return x * v.x + y * v.y;
-}
 
 class Vector3D
 {
@@ -76,53 +43,18 @@ class Vector3D
 		Vector3D operator-(const Vector3D&) const;
 		Vector3D& operator+=(const Vector3D&);
 		Vector3D& operator-=(const Vector3D&);
+		Vector3D& operator*=(const float);
 		bool operator==(const Vector3D&) const;
 		float operator*(const Vector3D) const;
+		Vector3D operator*(const float) const;
 };
-
-Vector3D Vector3D::operator+(const Vector3D& v) const
-{
-	Vector3D ret(x+v.x, y+v.y, z+v.z);
-	return ret;
-}
-
-Vector3D Vector3D::operator-(const Vector3D& v) const
-{
-	Vector3D ret(x-v.x, y-v.y, z-v.z);
-	return ret;
-}
-
-Vector3D& Vector3D::operator+=(const Vector3D& v)
-{
-	x += v.x;
-	y += v.y;
-	z += v.z;
-	return *this;
-}
-
-Vector3D& Vector3D::operator-=(const Vector3D& v)
-{
-	x -= v.x;
-	y -= v.y;
-	z -= v.z;
-	return *this;
-}
-
-bool Vector3D::operator==(const Vector3D& v) const
-{
-	return x == v.x && y == v.y && z == v.z;
-}
-
-float Vector3D::operator*(const Vector3D v) const
-{
-	return x * v.x + y * v.y + z * v.z;
-}
 
 class Color
 {
 	public:
 		unsigned char r, g, b, a; // align, dammit
 		Color(unsigned char x, unsigned char y, unsigned char z) : r(x), g(y), b(z), a(0) {} 
+		Color() : r(0), g(0), b(0), a(0) {}
 };
 
 class Object

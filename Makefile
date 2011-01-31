@@ -6,8 +6,8 @@ CCFLAGS=-I. -O2
 LDFLAGS=-lSDL -lGLEW -O2
 SERVER_TARGET=server
 CLIENT_TARGET=client
-SERVER_OBJECTS=server.o
-CLIENT_OBJECTS=client.o
+SERVER_OBJECTS=
+CLIENT_OBJECTS=client.o render.o socket.o vec.o object.o world.o
 
 all: $(SERVER_TARGET) $(CLIENT_TARGET)
 

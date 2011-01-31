@@ -19,8 +19,7 @@ class Vector2D
 {
 	public:
 		float x, y;
-		Vector2D() : x(0), y(0) {}
-		Vector2D(float a, float b) : x(a), y(b) {}
+		Vector2D(float a = 0, float b = 0) : x(a), y(b) {}
 		Vector2D operator+(const Vector2D&) const;
 		Vector2D operator-(const Vector2D&) const;
 		Vector2D& operator+=(const Vector2D&);
@@ -36,8 +35,7 @@ class Vector3D
 {
 	public:
 		float x, y, z, w;
-		Vector3D() : x(0), y(0), z(0), w(0) {}
-		Vector3D(float a, float b, float c) : x(a), y(b), z(c), w(0) {}
+		Vector3D(float a = 0, float b = 0, float c = 0) : x(a), y(b), z(c), w(0) {}
 		Vector3D(Vector2D& v) : x(v.x), y(v.y), z(0), w(0) {}
 		Vector3D operator+(const Vector3D&) const;
 		Vector3D operator-(const Vector3D&) const;
@@ -53,8 +51,7 @@ class Color
 {
 	public:
 		unsigned char r, g, b, a; // align, dammit
-		Color(unsigned char x, unsigned char y, unsigned char z) : r(x), g(y), b(z), a(0) {} 
-		Color() : r(0), g(0), b(0), a(0) {}
+		Color(unsigned char x = 0, unsigned char y = 0, unsigned char z = 0) : r(x), g(y), b(z), a(0) {} 
 };
 
 class Object

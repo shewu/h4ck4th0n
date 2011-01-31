@@ -10,6 +10,7 @@
 #include <sys/time.h>
 #include <ctime>
 #include <cstdlib>
+#include <SDL/SDL.h>
 using namespace std;
 
 #define MYPORT "3490"
@@ -58,8 +59,23 @@ int main() {
 			o.color = Color(0.0f, 1.0f, 0.0f);
 			o.h = 1.0f;
 			o.id = next_id;
+			float min_x = MIN_X + o.rad;
+			float max_x = MAX_X - o.rad;
+			float min_y = MIN_Y + o.rad;
+			float max_y = MAX_Y - o.rad;
 			while(true) {
-				
+				o.p.x = rand() * (max_x - min_x) + min_x;
+				o.p.y = rand() * (max_y - min_y) + min_y;
+				bool fail = false;
+				for(map<int, Object>::iterator it = world->objects.begin(); it != world->objects.end(); it++) {
+					Vector2D v = it->second.p - o.p;
+					if((it->second.rad + o.rad) * (it->second.rad + o.rad) > v.x * v.x + v.y * v.y) {
+						fail = true;
+						break;
+					}
+				}
+				if(!fail)
+					break;
 			}
 
 			world->objects.insert(pair<int, Object>(next_id, o)); 
@@ -73,7 +89,7 @@ int main() {
 				while(it->sock.hasRemaining()) {
 				char keypress[2];
 				it->sock.receive(keypress, 2);
-				it->key_pressed[(unsigned char)keypress[1]] = (bool)keypress[0];
+				it->key_pressed[(unsigned char)keypress[1]] = (keypress[0] == SDL_KEYDOWN);
 			}
 		}
 
@@ -81,7 +97,22 @@ int main() {
 		gettimeofday(&tim2, NULL);
 		float dt = (float)(tim2.tv_sec - tim.tv_sec) + (float)(tim2.tv_usec - tim.tv_usec) * 1.0e-6f;
 		tim = tim2;
+
 		world->doSimulation(dt);
+
+		for(vector<ClientCommunicator>::iterator it = clients.begin(); it != clients.end(); ++it) {
+			Vector2D acceleration = 0.0f;
+			if(it->key_pressed[SDLK_LEFT])
+				acceleration += Vector2D(-1.0f, 0.0f);
+			if(it->key_pressed[SDLK_RIGHT])
+				acceleration += Vector2D(1.0f, 0.0f);
+			if(it->key_pressed[SDLK_UP])
+				acceleration += Vector2D(0.0f, 1.0f);
+			if(it->key_pressed[SDLK_DOWN])
+				acceleration += Vector2D(0.0f, -1.0f);
+			acceleration = acceleration.getNormalVector() * KEYPRESS_ACCELERATION;
+			world->objects[it->object_id].v += dt * acceleration;
+		}
 	}
 }
 

@@ -96,13 +96,13 @@ int main() {
 
 		//for(vector<ClientCommunicator>::iterator it = clients.begin(); it != clients.end();) {
 		//printf("size here is %d\n", clients.size());
+		printf("clients.size() = %d\n", clients.size());
 		for(int i = 0; i < clients.size(); i++) {
-			//printf("rawr\n");
+			printf("rawr\n");
 			world->sendObjects(clients[i].sock);
 			while(clients[i].sock.hasRemaining()) {
-				printf("blah\n");
 				char keypress[2];
-				bool isOkay = clients[i].sock.receive(keypress, 2);
+				bool isOkay = clients[i].sock.receive(keypress, 1);
 				if(!isOkay) {
 					world->objects.erase(clients[i].object_id);
 					for(int j = i; j < clients.size() - 1; j++)

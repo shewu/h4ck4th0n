@@ -4,7 +4,7 @@
 class Socket
 {
 	public:
-	Socket(int sock) {
+	Socket(int sock) { socket = sock; }
 	int socket;
 	bool send(char* stuff, int size);
 	bool receive(char* stuff, int size);

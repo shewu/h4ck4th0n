@@ -14,7 +14,7 @@ SDL_Surface *screen;
 
 int initVideo()
 {
-	Uint32 flags = SDL_DOUBLEBUF | SDL_OPENGL;
+	int flags = SDL_DOUBLEBUF | SDL_OPENGL;
 	atexit(SDL_Quit);
 	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 24, flags);
 	return true;

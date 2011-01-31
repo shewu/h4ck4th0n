@@ -148,7 +148,7 @@ int main() {
 		}
 
 		world->doSimulation(dt);
-
+		SDL_Delay(10);
 		//printf("o.o\n");
 	}
 }

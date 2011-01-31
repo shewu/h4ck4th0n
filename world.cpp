@@ -1,4 +1,4 @@
-#include <hack.h>
+#include "hack.h"
 #include <map>
 #include <netinet/in.h>
 #include <cstdio>
@@ -26,6 +26,7 @@ bool World::receiveObjects(Socket socket) {
 		if(!o.receive(socket))
 			return false;
 		objects[o.id] = o;
+		printf("K %d\n", o.id);
 	}
 	return true;
 }

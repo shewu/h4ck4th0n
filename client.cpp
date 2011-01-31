@@ -23,7 +23,7 @@ void initVideo()
 {
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, /*SDL_OPENGL*/0);
 	SDL_ShowCursor(false);
 	
 	initGL();
@@ -125,6 +125,6 @@ int main(int argc, char* argv[])
 		do {
 			if (!world.receiveObjects(*sock)) exit(1);
 		} while (sock->hasRemaining());
-		SDL_GL_SwapBuffers();
+		//SDL_GL_SwapBuffers();
 	}
 }

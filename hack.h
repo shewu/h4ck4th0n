@@ -160,6 +160,7 @@ class World
 		std::map<int, Object> objects;
 		std::vector<Light> lights;
 		std::vector<Obstacle> obstacles;
+		void doSimulation(float dt);
 		
 		bool sendObjects(Socket socket);
 		bool receiveObjects(Socket socket);

@@ -53,6 +53,10 @@ Vector2D Vector2D::getNormalVector() const
 	return Vector2D(-y, x);
 }
 
+Vector2D operator*(const float s, const Vector2D v) {
+	return Vector2D(v.x*s,v.y*s);
+}
+
 Vector3D Vector3D::operator+(const Vector3D& v) const
 {
   Vector3D ret(x+v.x, y+v.y, z+v.z);
@@ -104,3 +108,6 @@ Vector3D Vector3D:: operator*(const float s) const
 	return Vector3D(s*x, s*y, s*z);
 }
 
+Vector3D operator*(const float s, const Vector3D v) {
+	return Vector3D(v.x*s,v.y*s,v.z*s);
+}

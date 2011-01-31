@@ -31,6 +31,8 @@ class Vector2D
 		Vector2D getNormalVector() const;
 };
 
+Vector2D operator*(const float, const Vector2D);
+
 class Vector3D
 {
 	public:
@@ -46,6 +48,8 @@ class Vector3D
 		float operator*(const Vector3D) const;
 		Vector3D operator*(const float) const;
 };
+
+Vector3D operator*(const float, const Vector3D);
 
 class Color
 {

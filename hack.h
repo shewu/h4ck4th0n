@@ -4,11 +4,11 @@
 class Socket
 {
 	public:
-	Socket(int sock) { socket = sock; }
-	int socket;
-	bool send(char* stuff, int size);
-	bool receive(char* stuff, int size);
-	bool hasRemaining();
+		Socket(int sock) { socket = sock; }
+		int socket;
+		bool send(char* stuff, int size);
+		bool receive(char* stuff, int size);
+		bool hasRemaining();
 };
 
 class Vector2D

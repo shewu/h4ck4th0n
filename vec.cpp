@@ -2,14 +2,17 @@
 
 Vector2D Vector2D::operator+(const Vector2D& v) const
 {
-  Vector2D ret(x+v.x, y+v.y);
-  return ret;
+  return Vector2D(x+v.x, y+v.y);
 }
 
 Vector2D Vector2D::operator-(const Vector2D& v) const
 {
-  Vector2D ret(x-v.x, y-v.y);
-  return ret;
+  return Vector2D(x-v.x, y-v.y);
+}
+
+Vector2D Vector2D::operator-() const
+{
+	return Vector2D(-x, -y);
 }
 
 Vector2D& Vector2D::operator+=(const Vector2D& v)
@@ -53,16 +56,23 @@ Vector2D Vector2D::getNormalVector() const
 	return Vector2D(-y, x);
 }
 
+Vector2D operator*(const float s, const Vector2D v) {
+	return Vector2D(v.x*s,v.y*s);
+}
+
 Vector3D Vector3D::operator+(const Vector3D& v) const
 {
-  Vector3D ret(x+v.x, y+v.y, z+v.z);
-  return ret;
+  return Vector3D(x+v.x, y+v.y, z+v.z);
 }
 
 Vector3D Vector3D::operator-(const Vector3D& v) const
 {
-  Vector3D ret(x-v.x, y-v.y, z-v.z);
-  return ret;
+  return Vector3D(x-v.x, y-v.y, z-v.z);
+}
+
+Vector3D Vector3D::operator-() const
+{
+	return Vector3D(-x, -y, -z);
 }
 
 Vector3D& Vector3D::operator+=(const Vector3D& v)
@@ -104,3 +114,6 @@ Vector3D Vector3D:: operator*(const float s) const
 	return Vector3D(s*x, s*y, s*z);
 }
 
+Vector3D operator*(const float s, const Vector3D v) {
+	return Vector3D(v.x*s,v.y*s,v.z*s);
+}

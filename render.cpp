@@ -3,6 +3,7 @@
 #include <iostream>
 #include <SDL/SDL.h>
 #include "constants.h"
+#include "client.h"
 
 using namespace std;
 

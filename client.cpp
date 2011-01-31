@@ -4,6 +4,7 @@
 #include "hack.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
+#include <GL/glew.h>
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -14,12 +15,11 @@ SDL_Surface *screen;
 Socket sock(1);
 World world;
 
-int initVideo()
+void initVideo()
 {
-	int flags = SDL_DOUBLEBUF | SDL_OPENGL;
-	atexit(SDL_Quit);
-	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 24, flags);
-	return true;
+	SDL_Init(SDL_INIT_VIDEO);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 24, SDL_DOUBLEBUF | SDL_OPENGL);
 }
 
 /*

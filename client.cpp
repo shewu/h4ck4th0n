@@ -22,6 +22,12 @@ int initVideo()
 	return true;
 }
 
+/*
+ * Event handling:
+ * Sends a buffer
+ * First byte is event type
+ * Followed by appropriate data
+ */
 int event_handle(void*)
 {	
 	SDL_Event event;

@@ -21,16 +21,24 @@ bool Object::receive(Socket socket) {
 	char *buf = new char[35];
 	if(!socket.receive(buf, 35))
 		return false;
-	p.x = *reinterpret_cast<float*>(ntohl(*((int *)(buf))));
-	p.y = *reinterpret_cast<float*>(ntohl(*((int *)(buf + 4))));
-	v.x = *reinterpret_cast<float*>(ntohl(*((int *)(buf + 8))));
-	v.y = *reinterpret_cast<float*>(ntohl(*((int *)(buf + 12))));
-	mass =*reinterpret_cast<float*>(ntohl(*((int *)(buf + 16))));
-	rad = *reinterpret_cast<float*>(ntohl(*((int *)(buf + 20))));
+	*((int *)buf) = ntohl(*((int *)(buf)));
+	*((int *)buf) = ntohl(*((int *)(buf+4)));
+	*((int *)buf) = ntohl(*((int *)(buf+8)));
+	*((int *)buf) = ntohl(*((int *)(buf+12)));
+	*((int *)buf) = ntohl(*((int *)(buf+16)));
+	*((int *)buf) = ntohl(*((int *)(buf+20)));
+	*((int *)buf) = ntohl(*((int *)(buf+27)));
+
+	p.x = *reinterpret_cast<float*>(buf);
+	p.y = *reinterpret_cast<float*>(buf + 4);
+	v.x = *reinterpret_cast<float*>(buf + 8);
+	v.y = *reinterpret_cast<float*>(buf + 12);
+	mass =*reinterpret_cast<float*>(buf + 16);
+	rad = *reinterpret_cast<float*>(buf + 20);
 	color.r = *(buf + 24);
 	color.g = *(buf + 25);
 	color.b = *(buf + 26);
-	h = *reinterpret_cast<float*>(ntohl(*((int *)(buf + 27))));
+	h = *reinterpret_cast<float*>(buf + 27);
 	id = ntohl(*((int *)(buf + 31)));
 	return true;
 }

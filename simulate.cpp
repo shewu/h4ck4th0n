@@ -1,6 +1,7 @@
 #include "hack.h"
 #include <queue>
 #include <math.h>
+#include <stdio.h>
 
 #define MAX_EVENTS 1 /* Only 1 event can be handled per frame and still slightly broken */
 
@@ -95,7 +96,7 @@ void World::doSimulation(float dt)
 				objects[e.t1].p += (e.time-knownTime)*objects[e.t1].v;
 				objects[e.t2].p += (e.time-knownTime)*objects[e.t2].v;
 				Vector2D normal = objects[e.t2].p-objects[e.t1].p;
-				float nv1 = objects[e.t1].v*normal, nv2 = objects[e.t1].v*normal;
+				float nv1 = objects[e.t1].v*normal, nv2 = objects[e.t2].v*normal;
 				objects[e.t1].v -= (nv1/(normal*normal))*normal;
 				objects[e.t2].v -= (nv2/(normal*normal))*normal;
 				objects[e.t1].v += (((objects[e.t1].mass-objects[e.t2].mass)/(objects[e.t1].mass+objects[e.t2].mass)*nv1+2*objects[e.t2].mass/(objects[e.t1].mass+objects[e.t2].mass)*nv2)/(normal*normal))*normal;

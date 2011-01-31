@@ -20,11 +20,28 @@ int initVideo()
 	return true;
 }
 
+int event_handle(void*)
+{	
+	SDL_Event event;
+	for (;;){
+		SDL_WaitEvent(&event);
+		switch(event.type) {
+			case SDL_QUIT:
+				exit(0);
+				break;
+			default:
+				break;
+		}
+	}
+}
+
 int main(int argc, char* argv[])
 {
 	Socket sock(0);
 	World w;
 	initVideo();
+	SDL_Thread *thread;
+	thread = SDL_CreateThread(event_handle, NULL);
 	for (;;) {
 		do {
 			render();

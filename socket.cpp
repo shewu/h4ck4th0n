@@ -18,7 +18,6 @@ bool Socket::send(char* stuff, int size) {
 bool Socket::receive(char* stuff, int size) {
 	int pos = 0;
 	while (pos < size) {
-		printf("pos = %d\n", pos);
 		int r = read(socket, stuff+pos, size-pos);
 		if (r <= 0) return false;
 		pos += r;

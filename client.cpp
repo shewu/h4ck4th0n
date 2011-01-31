@@ -116,15 +116,14 @@ int main(int argc, char* argv[])
 	int v = 0;
 	sock->receive((char*)&v, 4);
 	myId = ntohl(v);
+	cout << myId << endl;
 	
 	thread = SDL_CreateThread(event_handle, NULL);
 	
 	for (;;) {
 		render();
 		do {
-			cout << "Here1" << endl;
 			if (!world.receiveObjects(*sock)) exit(1);
-			cout << "Here2" << endl;
 		} while (sock->hasRemaining());
 		SDL_GL_SwapBuffers();
 	}

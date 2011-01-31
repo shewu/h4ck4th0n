@@ -17,6 +17,7 @@ bool World::sendObjects(Socket socket) {
 }
 
 bool World::receiveObjects(Socket socket) {
+	int dummy;
 	int a;
 	socket.receive((char *)(&a), 4);
 	int numObjects = ntohl(a);
@@ -28,3 +29,4 @@ bool World::receiveObjects(Socket socket) {
 	}
 	return true;
 }
+

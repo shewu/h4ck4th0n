@@ -2,7 +2,7 @@
 #include <netinet/in.h>
 
 bool Object::send(Socket socket) {
-	char *buf = new char[35];
+	char buf[35];
 	*((int *)buf) = htonl(*reinterpret_cast<int *>(&p.x));
 	*((int *)(buf + 4)) = htonl(*reinterpret_cast<int*>(&p.y));
 	*((int *)(buf + 8)) = htonl(*reinterpret_cast<int*>(&v.x));
@@ -18,16 +18,16 @@ bool Object::send(Socket socket) {
 }
 
 bool Object::receive(Socket socket) {
-	char *buf = new char[35];
+	char buf[35];
 	if(!socket.receive(buf, 35))
 		return false;
 	*((int *)buf) = ntohl(*((int *)(buf)));
-	*((int *)buf) = ntohl(*((int *)(buf+4)));
-	*((int *)buf) = ntohl(*((int *)(buf+8)));
-	*((int *)buf) = ntohl(*((int *)(buf+12)));
-	*((int *)buf) = ntohl(*((int *)(buf+16)));
-	*((int *)buf) = ntohl(*((int *)(buf+20)));
-	*((int *)buf) = ntohl(*((int *)(buf+27)));
+	*((int *)buf+4) = ntohl(*((int *)(buf+4)));
+	*((int *)buf+8) = ntohl(*((int *)(buf+8)));
+	*((int *)buf+12) = ntohl(*((int *)(buf+12)));
+	*((int *)buf+16) = ntohl(*((int *)(buf+16)));
+	*((int *)buf+20) = ntohl(*((int *)(buf+20)));
+	*((int *)buf+27) = ntohl(*((int *)(buf+27)));
 
 	p.x = *reinterpret_cast<float*>(buf);
 	p.y = *reinterpret_cast<float*>(buf + 4);

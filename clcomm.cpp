@@ -59,7 +59,7 @@ int main() {
 			o.v = Vector2D(0.0f, 0.0f);
 			o.mass = 1.0f;
 			o.rad = 1.0f;
-			o.color = Color(0.0f, 1.0f, 0.0f);
+			o.color = Color(0, 255, 0);
 			o.h = 1.0f;
 			o.id = next_id;
 			float min_x = MIN_X + o.rad;
@@ -96,9 +96,9 @@ int main() {
 
 		//for(vector<ClientCommunicator>::iterator it = clients.begin(); it != clients.end();) {
 		//printf("size here is %d\n", clients.size());
-		printf("clients.size() = %d\n", clients.size());
+		//printf("clients.size() = %d\n", clients.size());
 		for(int i = 0; i < clients.size(); i++) {
-			printf("rawr\n");
+			//printf("rawr\n");
 			world->sendObjects(clients[i].sock);
 			while(clients[i].sock.hasRemaining()) {
 				char keypress[2];
@@ -113,7 +113,7 @@ int main() {
 					break;
 				}
 				clients[i].key_pressed[(unsigned char)keypress[1]] = (keypress[0] == SDL_KEYDOWN);
-				printf("received: %d %d\n", (int)keypress[0], (int)keypress[1]);
+				//printf("received: %d %d\n", (int)keypress[0], (int)keypress[1]);
 			}
 		}
 

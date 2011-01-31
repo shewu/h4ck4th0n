@@ -44,13 +44,13 @@ int event_handle(void*)
 			case SDL_KEYDOWN:
 			{
 				char buf[] = {(char) SDL_KEYDOWN, (char) event.key.keysym.sym};
-				//sock.send(buf, 2);
+				sock->send(buf, 2);
 				break;
 			}
 			case SDL_KEYUP:
 			{
 				char buf[] = {(char) SDL_KEYUP, (char) event.key.keysym.sym};
-				//sock.send(buf, 2);
+				sock->send(buf, 2);
 				break;
 			}
 			case SDL_QUIT:
@@ -124,7 +124,6 @@ int main(int argc, char* argv[])
 		do {
 			if (!world.receiveObjects(*sock)) exit(1);
 		} while (sock->hasRemaining());
-		world.doSimulation(.0005);
 		SDL_GL_SwapBuffers();
 	}
 }

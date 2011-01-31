@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <errno.h>
 
 bool Socket::send(char* stuff, int size) {
 	int pos = 0;
@@ -27,5 +28,5 @@ bool Socket::hasRemaining() {
 	char c;
 	int val;
 	while ((val = recv(socket, &c, 1, MSG_DONTWAIT|MSG_PEEK)) == 0);
-	return (val == 1);
+	return (val == 1 || (errno != EAGAIN && errno != EWOULDBLOCK));
 }

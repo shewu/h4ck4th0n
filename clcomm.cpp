@@ -66,9 +66,9 @@ int main() {
 				o.p.x = rand() * (max_x - min_x) + min_x;
 				o.p.y = rand() * (max_y - min_y) + min_y;
 				bool fail = false;
-				for(vector<ClientCommunicator>::iterator it = world->objects.begin(); it != world->objects.end(); it++) {
-					Vector2D v = world->objects[i].p - o.p;
-					if((world->objects[i].r + o.r) * (world->objects[i].r + o.r) > v.x * v.x + v.y * v.y) {
+				for(map<int, Object>::iterator it = world->objects.begin(); it != world->objects.end(); it++) {
+					Vector2D v = it->second.p - o.p;
+					if((it->second.rad + o.rad) * (it->second.rad + o.rad) > v.x * v.x + v.y * v.y) {
 						fail = true;
 						break;
 					}

@@ -34,8 +34,3 @@ bool Object::receive(Socket socket) {
 	id = ntohl(*((long *)(buf + 31)));
 	return true;
 }
-
-int main() {
-
-}
-

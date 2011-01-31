@@ -7,6 +7,7 @@
 class Socket
 {
 	public:
+		Socket() { socket = 0; }
 		Socket(int sock) { socket = sock; }
 		int socket;
 		bool send(char* stuff, int size);

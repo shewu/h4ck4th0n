@@ -157,7 +157,7 @@ int main() {
 		}
 
 		world.doSimulation(dt);
-		SDL_Delay(10);
+		SDL_Delay(30);
 	}
 }
 

@@ -175,4 +175,3 @@ int main(int argc, char* argv[])
 		SDL_GL_SwapBuffers();
 	}
 }
-				char b = 0;

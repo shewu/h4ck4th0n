@@ -6,12 +6,12 @@
 #include <SDL/SDL_thread.h>
 #include <GL/glew.h>
 #include "constants.h"
+#include "client.h"
 
 using namespace std;
 
 SDL_Surface *screen;
 Socket sock(1);
-World world;
 
 void initVideo()
 {

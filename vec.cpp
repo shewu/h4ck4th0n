@@ -1,4 +1,5 @@
 #include "hack.h"
+#include <cstdio>
 #include <cmath>
 
 Vector2D Vector2D::operator+(const Vector2D& v) const
@@ -54,6 +55,11 @@ Vector2D Vector2D::operator*(const float s) const
 
 Vector2D Vector2D::getNormalVector() const
 {
+	if(*this == Vector2D(0,0))
+	{
+		fprintf(stderr, "[WARN] normalizing (0,0)!\n");
+		return *this;
+	}
 	return Vector2D(-y, x)*(1/sqrt(x*x+y*y));
 }
 

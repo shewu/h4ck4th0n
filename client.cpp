@@ -122,7 +122,9 @@ int main(int argc, char* argv[])
 	for (;;) {
 		render();
 		do {
+			cout << "Here1" << endl;
 			if (!world.receiveObjects(*sock)) exit(1);
+			cout << "Here2" << endl;
 		} while (sock->hasRemaining());
 		SDL_GL_SwapBuffers();
 	}

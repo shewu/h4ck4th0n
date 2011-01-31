@@ -13,7 +13,7 @@
 #include <SDL/SDL.h>
 using namespace std;
 
-#define MYPORT "3490"
+#define MYPORT "55555"
 #define BACKLOG 10
 
 vector<ClientCommunicator> clients;

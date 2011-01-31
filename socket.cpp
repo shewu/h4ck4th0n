@@ -8,7 +8,7 @@
 bool Socket::send(char* stuff, int size) {
 	int pos = 0;
 	while (pos < size) {
-		int r = write(socket, stuff+pos, size-pos);
+		int r = ::send(socket, stuff+pos, size-pos, MSG_NOSIGNAL);
 		if (r < 0) return false;
 		pos += r;
 	}

@@ -6,7 +6,7 @@ using namespace std;
 
 bool World::sendObjects(Socket socket) {
 	int a = htonl(objects.size());
-	if(!socket.send((char *)(&a), 4))
+	if(!socket.send((char*)(&a), 4))
 		return false;
 	
 	int s = objects.size();
@@ -20,7 +20,7 @@ bool World::sendObjects(Socket socket) {
 
 bool World::receiveObjects(Socket socket) {
 	int a;
-	socket.receive((char *)(&a), 4);
+	socket.receive((char*)(&a), 4);
 	int numObjects = ntohl(a);
 	objects.clear();
 	for(int i = 0; i < numObjects; i++) {

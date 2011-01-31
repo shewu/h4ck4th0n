@@ -1,6 +1,6 @@
 #include "hack.h"
 #include <queue>
-#include <math.h>
+#include <cmath>
 #include <stdio.h>
 
 #define MAX_EVENTS 1 /* Only 1 event can be handled per frame and still slightly broken */

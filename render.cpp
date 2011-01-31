@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <iostream>
 #include <SDL/SDL.h>
-#include <math.h>
+#include <cmath>
 #include "constants.h"
 #include "client.h"
 

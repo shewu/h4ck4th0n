@@ -44,52 +44,55 @@ int event_handle(void*)
 		switch(event.type) {
 			case SDL_KEYDOWN:
 			{
-				char buf[] = {0, 0};
+				char b = -1;
 				switch (event.key.keysym.sym) {
 					case SDLK_ESCAPE:
-						exit(0);
+						_exit(0);
 						break;
 					case SDLK_LEFT:
-						buf[1] = 1;
+						b = 0;
 						break;
 					case SDLK_RIGHT:
-						buf[1] = 2;
+						b = 1;
 						break;
 					case SDLK_UP:
-						buf[1] = 3;
+						b = 2;
 						break;
 					case SDLK_DOWN:
-						buf[1] = 4;
+						b = 3;
 						break;
 				}
-				if (buf[1]) {
-					sock->send(buf, 2);
+				if (b != -1) {
+					sock->send(&b, 1);
 				}
 				break;
 			}
 			case SDL_KEYUP:
 			{
-				char buf[] = {1, 0};
+				char b = 0;
 				switch (event.key.keysym.sym) {
 					case SDLK_LEFT:
-						buf[1] = 1;
+						b = 0;
 						break;
 					case SDLK_RIGHT:
-						buf[1] = 2;
+						b = 1;
 						break;
 					case SDLK_UP:
-						buf[1] = 3;
+						b = 2;
 						break;
 					case SDLK_DOWN:
-						buf[1] = 4;
+						b = 3;
 						break;
 				}
-				if (buf[1]) sock->send(buf, 2);
+				if (b != -1) {
+					b ^= 4;
+					sock->send(&b, 1);
+				}
 				break;
 			}
 			case SDL_QUIT:
 			{
-				exit(0);
+				_exit(0);
 				break;
 			}
 			case SDL_MOUSEMOTION:
@@ -152,7 +155,10 @@ int main(int argc, char* argv[])
 	int v = 0;
 	sock->receive((char*)&v, 4);
 	myId = ntohl(v);
-	cout << myId << endl;
+	int u;
+	sock->receive((char*)&u, 4);
+	u = ntohl(u);
+	angle = *reinterpret_cast<float*>(&u);
 	
 	thread = SDL_CreateThread(event_handle, NULL);
 	

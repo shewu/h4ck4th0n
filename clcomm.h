@@ -5,4 +5,5 @@ class ClientCommunicator {
 		Socket sock;
 		int object_id;
 		bool key_pressed[256];
+		float angle;
 };

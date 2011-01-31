@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <SDL/SDL.h>
 #include <cstdio>
+#include <cmath>
 using namespace std;
 
 #define MYPORT "55555"
@@ -26,7 +27,7 @@ int main() {
 
 	gettimeofday(&tim, NULL);
 
-	World *world = new World();
+	World world;
 
 	struct addrinfo hints, *res;
 	memset(&hints, 0, sizeof hints);
@@ -38,12 +39,10 @@ int main() {
 
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	int opt = 1;
-	setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt));
+	setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char*)&opt, sizeof(opt));
 	bind(sockfd, res->ai_addr, res->ai_addrlen);
 	listen(sockfd, BACKLOG);
 	fcntl(sockfd, F_SETFL, O_NONBLOCK);
-
-	int next_id = 0;
 
 	while(true) {
 		sockaddr_storage their_addr;
@@ -54,7 +53,11 @@ int main() {
 
 			ClientCommunicator clcomm;
 			clcomm.sock = Socket(new_fd);
-			clcomm.object_id = next_id;
+			do {
+				clcomm.object_id = rand();
+			} while (world.objects.count(clcomm.object_id));
+			
+			clcomm.angle = rand()/float(RAND_MAX)*2*M_PI;
 
 			Object o;
 			o.v = Vector2D(0.0f, 0.0f);
@@ -62,7 +65,7 @@ int main() {
 			o.rad = 1.0f;
 			o.color = Color(0, 255, 0);
 			o.h = 1.0f;
-			o.id = next_id;
+			o.id = clcomm.object_id;
 			float min_x = MIN_X + o.rad;
 			float max_x = MAX_X - o.rad;
 			float min_y = MIN_Y + o.rad;
@@ -71,7 +74,7 @@ int main() {
 				o.p.x = rand()/float(RAND_MAX)*(max_x - min_x) + min_x;
 				o.p.y = rand()/float(RAND_MAX)*(max_y - min_y) + min_y;
 				bool fail = false;
-				for(map<int, Object>::iterator it = world->objects.begin(); it != world->objects.end(); it++) {
+				for(map<int, Object>::iterator it = world.objects.begin(); it != world.objects.end(); it++) {
 					Vector2D v = it->second.p - o.p;
 					if((it->second.rad + o.rad) * (it->second.rad + o.rad) > v.x * v.x + v.y * v.y) {
 						fail = true;
@@ -82,27 +85,23 @@ int main() {
 					break;
 			}
 		
-			world->objects.insert(pair<int, Object>(next_id, o)); 
+			world.objects.insert(pair<int, Object>(o.id, o)); 
 			clients.push_back(clcomm);
 
-			int id = htonl(next_id);
-			clients[clients.size() - 1].sock.send((char *)(&id), 4);
-
-			next_id++;
+			int id = htonl(o.id);
+			clients[clients.size() - 1].sock.send((char*)(&id), 4);
+			int angle = htonl(*reinterpret_cast<int*>(&clcomm.angle));
+			clients[clients.size() - 1].sock.send((char*)(&id), 4);
 
 			printf("Object created\n");
 		}
-
-		//for(vector<ClientCommunicator>::iterator it = clients.begin(); it != clients.end();) {
-		//printf("size here is %d\n", clients.size());
-		//printf("clients.size() = %d\n", clients.size());
+		
 		for(int i = 0; i < clients.size(); i++) {
-			//printf("rawr\n");
-			world->sendObjects(clients[i].sock);
+			world.sendObjects(clients[i].sock);
 			while(clients[i].sock.hasRemaining()) {
-				char keypress[2];
-				if(!clients[i].sock.receive(keypress, 2)) {
-					world->objects.erase(clients[i].object_id);
+				char keypress;
+				if(!clients[i].sock.receive(&keypress, 1)) {
+					world.objects.erase(clients[i].object_id);
 					for(int j = i; j < clients.size() - 1; j++)
 						clients[j] = clients[j+1];
 					clients.pop_back();
@@ -110,8 +109,7 @@ int main() {
 					i--;
 					break;
 				}
-				clients[i].key_pressed[(unsigned char)keypress[1]] = (keypress[0] == 0);
-				//printf("received: %d %d\n", (int)keypress[0], (int)keypress[1]);
+				clients[i].key_pressed[(unsigned char)keypress&3] = ((keypress&4) == 0);
 			}
 		}
 
@@ -123,31 +121,30 @@ int main() {
 		for(vector<ClientCommunicator>::iterator it = clients.begin(); it != clients.end(); ++it) {
 			Vector2D acceleration = Vector2D(0.0f, 0.0f);
 			int value = 0;
-			if(it->key_pressed[1]) {
+			if(it->key_pressed[0]) {
 				acceleration += Vector2D(-1.0f, 0.0f);
 				value += 1;
 			}
-			if(it->key_pressed[2]) {
+			if(it->key_pressed[1]) {
 				acceleration += Vector2D(1.0f, 0.0f);
 				value -= 1;
 			}
-			if(it->key_pressed[3]) {
+			if(it->key_pressed[2]) {
 				acceleration += Vector2D(0.0f, 1.0f);
 				value += 2;
 			}
-			if(it->key_pressed[4]) {
+			if(it->key_pressed[3]) {
 				acceleration += Vector2D(0.0f, -1.0f);
 				value -= 2;
 			}
 			if(value != 0) {
-				acceleration = acceleration.getNormalVector() * KEYPRESS_ACCELERATION*1000;
-				world->objects[it->object_id].v += Vector2D(1, 1);
+				acceleration = acceleration.getNormalVector()*KEYPRESS_ACCELERATION;
+				world.objects[it->object_id].v += acceleration*dt;
 			}
 		}
 
-		world->doSimulation(dt);
+		world.doSimulation(dt);
 		SDL_Delay(10);
-		//printf("o.o\n");
 	}
 }
 

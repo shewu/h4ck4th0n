@@ -101,8 +101,7 @@ int main() {
 			world->sendObjects(clients[i].sock);
 			while(clients[i].sock.hasRemaining()) {
 				char keypress[2];
-				bool isOkay = clients[i].sock.receive(keypress, 1);
-				if(!isOkay) {
+				if(!clients[i].sock.receive(keypress, 2)) {
 					world->objects.erase(clients[i].object_id);
 					for(int j = i; j < clients.size() - 1; j++)
 						clients[j] = clients[j+1];

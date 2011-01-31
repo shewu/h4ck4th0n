@@ -11,6 +11,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <SDL/SDL.h>
+#include <cstdio>
 using namespace std;
 
 #define MYPORT "55555"
@@ -82,11 +83,13 @@ int main() {
 			clients.push_back(clcomm);
 
 			next_id++;
+
+			printf("Object created\n");
 		}
 
 		for(vector<ClientCommunicator>::iterator it = clients.begin(); it != clients.end(); ++it) {
 			world->sendObjects(it->sock);
-				while(it->sock.hasRemaining()) {
+			while(it->sock.hasRemaining()) {
 				char keypress[2];
 				it->sock.receive(keypress, 2);
 				it->key_pressed[(unsigned char)keypress[1]] = (keypress[0] == SDL_KEYDOWN);
@@ -97,8 +100,6 @@ int main() {
 		gettimeofday(&tim2, NULL);
 		float dt = (float)(tim2.tv_sec - tim.tv_sec) + (float)(tim2.tv_usec - tim.tv_usec) * 1.0e-6f;
 		tim = tim2;
-
-		world->doSimulation(dt);
 
 		for(vector<ClientCommunicator>::iterator it = clients.begin(); it != clients.end(); ++it) {
 			Vector2D acceleration = 0.0f;
@@ -113,6 +114,8 @@ int main() {
 			acceleration = acceleration.getNormalVector() * KEYPRESS_ACCELERATION;
 			world->objects[it->object_id].v += dt * acceleration;
 		}
+
+		world->doSimulation(dt);
 	}
 }
 

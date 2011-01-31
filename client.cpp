@@ -23,8 +23,9 @@ void initVideo()
 {
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, /*SDL_OPENGL*/0);
+	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	SDL_ShowCursor(false);
+	SDL_WM_GrabInput(SDL_GRAB_ON);
 	
 	initGL();
 }
@@ -44,6 +45,7 @@ int event_handle(void*)
 			case SDL_KEYDOWN:
 			{
 				char buf[] = {(char) SDL_KEYDOWN, (char) event.key.keysym.sym};
+				if (event.key.keysym.sym == SDLK_ESCAPE) exit(0);
 				sock->send(buf, 2);
 				break;
 			}
@@ -58,6 +60,8 @@ int event_handle(void*)
 				exit(0);
 				break;
 			}
+			case SDL_MOUSEMOTION:
+				angle += event.motion.xrel/float(WIDTH);
 			default:
 			{
 				break;
@@ -125,6 +129,6 @@ int main(int argc, char* argv[])
 		do {
 			if (!world.receiveObjects(*sock)) exit(1);
 		} while (sock->hasRemaining());
-		//SDL_GL_SwapBuffers();
+		SDL_GL_SwapBuffers();
 	}
 }

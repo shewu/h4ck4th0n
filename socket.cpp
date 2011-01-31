@@ -9,7 +9,7 @@ bool Socket::send(char* stuff, int size) {
 	int pos = 0;
 	while (pos < size) {
 		int r = write(socket, stuff+pos, size-pos);
-		if (r <= 0) return false;
+		if (r < 0) return false;
 		pos += r;
 	}
 	return true;

@@ -8,10 +8,12 @@ bool World::sendObjects(Socket socket) {
 	int a = htonl(objects.size());
 	if(!socket.send((char *)(&a), 4))
 		return false;
+	
+	int s = objects.size();
 	for(map<int, Object>::iterator it = objects.begin(); it != objects.end(); it++) {
-		//printf("hey");
-		if((*it).second.send(socket))
+		if (!it->second.send(socket))
 			return false;
+		s--;
 	}
 	return true;
 }
@@ -26,7 +28,6 @@ bool World::receiveObjects(Socket socket) {
 		if(!o.receive(socket))
 			return false;
 		objects[o.id] = o;
-		printf("K %d\n", o.id);
 	}
 	return true;
 }

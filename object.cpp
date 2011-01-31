@@ -1,5 +1,6 @@
 #include "hack.h"
 #include <netinet/in.h>
+#include <stdio.h>
 
 bool Object::send(Socket socket) {
 	char buf[35];

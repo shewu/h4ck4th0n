@@ -36,8 +36,9 @@ int main() {
 
 	getaddrinfo(NULL, MYPORT, &hints, &res);
 
-
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+	int opt = 1;
+	setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt));
 	bind(sockfd, res->ai_addr, res->ai_addrlen);
 	listen(sockfd, BACKLOG);
 	fcntl(sockfd, F_SETFL, O_NONBLOCK);
@@ -67,8 +68,8 @@ int main() {
 			float min_y = MIN_Y + o.rad;
 			float max_y = MAX_Y - o.rad;
 			while(true) {
-				o.p.x = rand() * (max_x - min_x) + min_x;
-				o.p.y = rand() * (max_y - min_y) + min_y;
+				o.p.x = rand()/float(RAND_MAX)*(max_x - min_x) + min_x;
+				o.p.y = rand()/float(RAND_MAX)*(max_y - min_y) + min_y;
 				bool fail = false;
 				for(map<int, Object>::iterator it = world->objects.begin(); it != world->objects.end(); it++) {
 					Vector2D v = it->second.p - o.p;
@@ -81,8 +82,6 @@ int main() {
 					break;
 			}
 		
-			o.p.x = 0.0f;
-			o.p.y = 0.0f;
 			world->objects.insert(pair<int, Object>(next_id, o)); 
 			clients.push_back(clcomm);
 

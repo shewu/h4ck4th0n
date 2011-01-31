@@ -7,6 +7,7 @@
 #include <netdb.h>
 #include <vector>
 #include <cstring>
+#include <sys/time.h>
 using namespace std;
 
 #define MYPORT "3490"
@@ -14,7 +15,13 @@ using namespace std;
 
 vector<ClientCommunicator> clients;
 
-void listen_for_clients(World *world) {
+timeval tim;
+
+int main() {
+	gettimeofday(&tim, NULL);
+
+	World *world = new World();
+
 	struct addrinfo hints, *res;
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_UNSPEC;
@@ -60,10 +67,15 @@ void listen_for_clients(World *world) {
 				while(it->sock.hasRemaining()) {
 				char keypress[2];
 				it->sock.receive(keypress, 2);
-				it->key_pressed[keypress[1]] = (bool)keypress[0];
+				it->key_pressed[(unsigned char)keypress[1]] = (bool)keypress[0];
 			}
 		}
 
+		timeval tim2;
+		gettimeofday(&tim2, NULL);
+		float dt = (float)(tim2.tv_sec - tim.tv_sec) + (float)(tim2.tv_usec - tim.tv_usec) * 1.0e-6f;
+		tim = tim2;
+		world->doSimulation(dt);
 	}
 }
 

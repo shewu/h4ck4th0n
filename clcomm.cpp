@@ -49,6 +49,8 @@ int main() {
 		socklen_t addr_size = sizeof their_addr;
 		int new_fd = accept(sockfd, (sockaddr *)&their_addr, &addr_size);
 		if(new_fd != -1) {
+			printf("Connection made\n");
+
 			ClientCommunicator clcomm;
 			clcomm.sock = Socket(new_fd);
 			clcomm.object_id = next_id;
@@ -78,9 +80,14 @@ int main() {
 				if(!fail)
 					break;
 			}
-
+		
+			o.p.x = 0.0f;
+			o.p.y = 0.0f;
 			world->objects.insert(pair<int, Object>(next_id, o)); 
 			clients.push_back(clcomm);
+
+			int id = htonl(next_id);
+			clients[clients.size() - 1].sock.send((char *)(&id), 4);
 
 			next_id++;
 
@@ -88,11 +95,19 @@ int main() {
 		}
 
 		for(vector<ClientCommunicator>::iterator it = clients.begin(); it != clients.end(); ++it) {
+			//printf("rawr\n");
 			world->sendObjects(it->sock);
 			while(it->sock.hasRemaining()) {
+				printf("blah\n");
 				char keypress[2];
-				it->sock.receive(keypress, 2);
+				bool isOkay = it->sock.receive(keypress, 2);
+				if(!isOkay) {
+					world->objects.erase(it->object_id);
+					clients.erase(it);
+					continue;
+				}
 				it->key_pressed[(unsigned char)keypress[1]] = (keypress[0] == SDL_KEYDOWN);
+				printf("received: %d %d\n", (int)keypress[0], (int)keypress[1]);
 			}
 		}
 
@@ -102,20 +117,33 @@ int main() {
 		tim = tim2;
 
 		for(vector<ClientCommunicator>::iterator it = clients.begin(); it != clients.end(); ++it) {
-			Vector2D acceleration = 0.0f;
-			if(it->key_pressed[SDLK_LEFT])
+			Vector2D acceleration = Vector2D(0.0f, 0.0f);
+			int value = 0;
+			if(it->key_pressed[SDLK_LEFT]) {
 				acceleration += Vector2D(-1.0f, 0.0f);
-			if(it->key_pressed[SDLK_RIGHT])
+				value += 1;
+			}
+			if(it->key_pressed[SDLK_RIGHT]) {
 				acceleration += Vector2D(1.0f, 0.0f);
-			if(it->key_pressed[SDLK_UP])
+				value -= 1;
+			}
+			if(it->key_pressed[SDLK_UP]) {
 				acceleration += Vector2D(0.0f, 1.0f);
-			if(it->key_pressed[SDLK_DOWN])
+				value += 2;
+			}
+			if(it->key_pressed[SDLK_DOWN]) {
 				acceleration += Vector2D(0.0f, -1.0f);
-			acceleration = acceleration.getNormalVector() * KEYPRESS_ACCELERATION;
-			world->objects[it->object_id].v += dt * acceleration;
+				value -= 2;
+			}
+			if(value != 0) {
+				acceleration = acceleration.getNormalVector() * KEYPRESS_ACCELERATION;
+				world->objects[it->object_id].v += dt * acceleration;
+			}
 		}
 
 		world->doSimulation(dt);
+
+		//printf("o.o\n");
 	}
 }
 

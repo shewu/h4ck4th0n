@@ -46,14 +46,14 @@ void render()
 		glPushMatrix();
 		glTranslatef(i->second.p.x, i->second.p.y, 0);
 		glScalef(i->second.rad, i->second.rad, i->second.h);
-		glColor3f(i->second.color.r, i->second.color.g, i->second.color.b);
+		glColor3f(i->second.color.r/255.0, i->second.color.g/255.0, i->second.color.b/255.0);
 		gluSphere(quad, 1.0, 30, 30);
 		glPopMatrix();
 	}
 	
 	glBegin(GL_QUADS);
 	for (vector<Obstacle>::iterator i = world.obstacles.begin(); i != world.obstacles.end(); i++) {
-		glColor3f(i->color.r, i->color.g, i->color.b);
+		glColor3f(i->color.r/255.0, i->color.g/255.0, i->color.b/255.0);
 		glVertex3f(i->p1.x, i->p1.y, 0);
 		glVertex3f(i->p2.x, i->p2.y, 0);
 		glVertex3f(i->p2.x, i->p2.y, 1);

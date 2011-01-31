@@ -63,7 +63,7 @@ int main() {
 			o.v = Vector2D(0.0f, 0.0f);
 			o.mass = 1.0f;
 			o.rad = 1.0f;
-			o.color = Color(0, 255, 0);
+			o.color = Color(0, 0, 255);
 			o.h = 1.0f;
 			o.id = clcomm.object_id;
 			float min_x = MIN_X + o.rad;
@@ -151,14 +151,17 @@ int main() {
 				acceleration += Vector2D(-sin(it->angle), cos(it->angle));
 				value -= 2;
 			}
-			if(value != 0)
+			if(value != 0) {
 				acceleration = acceleration.getNormalVector()*KEYPRESS_ACCELERATION;
-			acceleration -= world.objects[it->object_id].v*0.2;
-			world.objects[it->object_id].v += acceleration*dt;
+				world.objects[it->object_id].v += acceleration*dt;
+			}			
 		}
+		
+		for(map<int, Object>::iterator it = world.objects.begin(); it != world.objects.end(); it++)
+			it->second.v -= it->second.v*0.2*dt;
 
 		world.doSimulation(dt);
-		SDL_Delay(10);
+		SDL_Delay(30);
 	}
 }
 

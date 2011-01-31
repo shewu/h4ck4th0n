@@ -84,3 +84,11 @@ class Light
 		Vector3D position;
 		Color color;
 };
+
+class World
+{
+	public:
+		map<int, Object> objects;
+		vector<Light> lights;
+		vector<Obstacle> obstacles;
+};

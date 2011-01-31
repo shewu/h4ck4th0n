@@ -33,7 +33,7 @@ void render()
 		glScalef(i->second.rad, i->second.rad, i->second.h);
 		glColor3f(i->second.color.r, i->second.color.g, i->second.color.b);
 		gluSphere(quad, 1.0, 30, 30);
-		printf("%d: %d %f %f %f %f\n", i->first, i->second.id, i->second.p.x, i->second.p.y, i->second.rad, i->second.h);
+		printf("%d: %d %f %f %f %f %f %f\n", i->first, i->second.id, i->second.p.x, i->second.p.y, i->second.v.x, i->second.v.y, i->second.rad, i->second.h);
 		glPopMatrix();
 	}
 	

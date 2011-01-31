@@ -17,10 +17,10 @@ bool World::sendObjects(Socket socket) {
 }
 
 bool World::receiveObjects(Socket socket) {
-	int dummy;
 	int a;
 	socket.receive((char *)(&a), 4);
 	int numObjects = ntohl(a);
+	objects.clear();
 	for(int i = 0; i < numObjects; i++) {
 		Object o;
 		if(!o.receive(socket))

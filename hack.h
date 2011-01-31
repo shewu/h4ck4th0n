@@ -1,6 +1,19 @@
+#ifndef HACK_H
+#define HACK_H
+
+class Socket
+{
+	public:
+	Socket(int sock) { socket = sock; }
+	int socket;
+	bool send(char* stuff, int size);
+	bool receive(char* stuff, int size);
+	bool hasRemaining();
+};
+
 class Vector2D
 {
-  public:
+	public:
 		float x, y;
 		Vector2D() : x(0), y(0) {}
 		Vector2D(float a, float b) : x(a), y(b) {}
@@ -83,7 +96,10 @@ class Object
 		float rad;
 		Color color;
 		float h;
-		int id;  
+		int id;
+		
+		bool send(Socket socket);
+		bool receive(Socket socket);
 };
 
 class Obstacle
@@ -104,8 +120,13 @@ class Light
 class World
 {
 	public:
-		std::map<int, Object> objects;
-		std::vector<Light> lights;
-		std::vector<Obstacle> obstacles;
+		map<int, Object> objects;
+		vector<Light> lights;
+		vector<Obstacle> obstacles;
+		
+		bool sendObjects(Socket socket);
+		bool receiveObjects(Socket socket);
 };
+
+#endif
 

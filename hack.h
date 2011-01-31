@@ -21,6 +21,7 @@ class Vector2D
 		Vector2D& operator-(const Vector2D&) const;
 		Vector2D& operator+=(const Vector2D&);
 		Vector2D& operator-=(const Vector2D&);
+		bool operator==(const Vector2D&) const;
 		float operator*(const Vector2D&) const;
 };
 
@@ -48,6 +49,11 @@ Vector2D& Vector2D::operator-=(const Vector2D& v)
 	return *this;
 }
 
+bool Vector2D::operator==(const Vector2D& v) const
+{
+	return x == v.x && y == v.y;
+}
+
 float Vector2D::operator*(const Vector2D& v) const
 {
 	return x * v.x + y * v.y;
@@ -59,20 +65,44 @@ class Vector3D
 		float x, y, z, w;
 		Vector3D() : x(0), y(0), z(0), w(0) {}
 		Vector3D(float a, float b, float c) : x(a), y(b), z(c), w(0) {}
-		Vector3D(Vector2D v) : x(v.x), y(v.y), z(0), w(0) {}
-		Vector3D operator+(const Vector3D) const;
-		Vector3D operator-(const Vector3D) const;
+		Vector3D(Vector2D& v) : x(v.x), y(v.y), z(0), w(0) {}
+		Vector3D& operator+(const Vector3D&) const;
+		Vector3D& operator-(const Vector3D&) const;
+		Vector3D& operator+=(const Vector3D&);
+		Vector3D& operator-=(const Vector3D&);
+		bool operator==(const Vector3D&) const;
 		float operator*(const Vector3D) const;
 };
 
-Vector3D Vector3D::operator+(const Vector3D v) const
+Vector3D& Vector3D::operator+(const Vector3D& v) const
 {
 	return Vector3D(x + v.x, y + v.y, z + v.z);
 }
 
-Vector3D Vector3D::operator-(const Vector3D v) const
+Vector3D& Vector3D::operator-(const Vector3D& v) const
 {
 	return Vector3D(x - v.x, y - v.y, z - v.z);
+}
+
+Vector3D& Vector3D::operator+=(const Vector3D& v)
+{
+	x += v.x;
+	y += v.y;
+	z += v.z;
+	return *this;
+}
+
+Vector3D& Vector3D::operator-=(const Vector3D& v)
+{
+	x -= v.x;
+	y -= v.y;
+	z -= v.z;
+	return *this;
+}
+
+bool Vector3D::operator==(const Vector3D& v) const
+{
+	return x == v.x && y = v.y && z == v.z;
 }
 
 float Vector3D::operator*(const Vector3D v) const

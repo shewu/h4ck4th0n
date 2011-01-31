@@ -24,8 +24,11 @@ class Vector2D
 		Vector2D operator-(const Vector2D&) const;
 		Vector2D& operator+=(const Vector2D&);
 		Vector2D& operator-=(const Vector2D&);
+		Vector2D& operator*=(const float);
 		bool operator==(const Vector2D&) const;
 		float operator*(const Vector2D&) const;
+		Vector2D operator*(const float) const;
+		Vector2D getNormalVector() const;
 };
 
 class Vector3D
@@ -39,8 +42,10 @@ class Vector3D
 		Vector3D operator-(const Vector3D&) const;
 		Vector3D& operator+=(const Vector3D&);
 		Vector3D& operator-=(const Vector3D&);
+		Vector3D& operator*=(const float);
 		bool operator==(const Vector3D&) const;
 		float operator*(const Vector3D) const;
+		Vector3D operator*(const float) const;
 };
 
 class Color

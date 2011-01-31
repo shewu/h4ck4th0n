@@ -1,6 +1,9 @@
 #ifndef HACK_H
 #define HACK_H
 
+#include <map>
+#include <vector>
+
 class Socket
 {
 	public:
@@ -27,12 +30,14 @@ class Vector2D
 
 Vector2D& Vector2D::operator+(const Vector2D& v) const
 {
-  return Vector2D(x + v.x, y + v.y);
+	Vector2D ret(x+v.x, y+v.y);
+	return ret;
 }
 
 Vector2D& Vector2D::operator-(const Vector2D& v) const
 {
-  return Vector2D(x - v.x, y - v.y);
+	Vector2D ret(x-v.x, y-v.y);
+	return ret;
 }
 
 Vector2D& Vector2D::operator+=(const Vector2D& v)
@@ -76,12 +81,14 @@ class Vector3D
 
 Vector3D& Vector3D::operator+(const Vector3D& v) const
 {
-	return Vector3D(x + v.x, y + v.y, z + v.z);
+	Vector3D ret(x+v.x, y+v.y, z+v.z);
+	return ret;
 }
 
 Vector3D& Vector3D::operator-(const Vector3D& v) const
 {
-	return Vector3D(x - v.x, y - v.y, z - v.z);
+	Vector3D ret(x-v.x, y-v.y, z-v.z);
+	return ret;
 }
 
 Vector3D& Vector3D::operator+=(const Vector3D& v)
@@ -102,7 +109,7 @@ Vector3D& Vector3D::operator-=(const Vector3D& v)
 
 bool Vector3D::operator==(const Vector3D& v) const
 {
-	return x == v.x && y = v.y && z == v.z;
+	return x == v.x && y == v.y && z == v.z;
 }
 
 float Vector3D::operator*(const Vector3D v) const
@@ -150,9 +157,9 @@ class Light
 class World
 {
 	public:
-		map<int, Object> objects;
-		vector<Light> lights;
-		vector<Obstacle> obstacles;
+		std::map<int, Object> objects;
+		std::vector<Light> lights;
+		std::vector<Obstacle> obstacles;
 		
 		bool sendObjects(Socket socket);
 		bool receiveObjects(Socket socket);

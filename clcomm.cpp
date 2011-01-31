@@ -104,6 +104,7 @@ int main() {
 				if(!isOkay) {
 					world->objects.erase(it->object_id);
 					clients.erase(it);
+					printf("Client disconnected\n");
 					continue;
 				}
 				it->key_pressed[(unsigned char)keypress[1]] = (keypress[0] == SDL_KEYDOWN);

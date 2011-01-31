@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <errno.h>
+#include <cstdio>
 
 bool Socket::send(char* stuff, int size) {
 	int pos = 0;

@@ -4,6 +4,11 @@
 #include <map>
 #include <vector>
 
+#define MIN_X -10.0f
+#define MAX_X 10.0f
+#define MIN_Y -10.0f
+#define MAX_Y 10.0f
+
 class Socket
 {
 	public:

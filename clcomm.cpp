@@ -8,6 +8,8 @@
 #include <vector>
 #include <cstring>
 #include <sys/time.h>
+#include <ctime>
+#include <cstdlib>
 using namespace std;
 
 #define MYPORT "3490"
@@ -18,6 +20,8 @@ vector<ClientCommunicator> clients;
 timeval tim;
 
 int main() {
+	srand((unsigned int)time(NULL));
+
 	gettimeofday(&tim, NULL);
 
 	World *world = new World();
@@ -48,13 +52,15 @@ int main() {
 			clcomm.object_id = next_id;
 
 			Object o;
-			o.p = Vector2D(0.0f, 0.0f);
 			o.v = Vector2D(0.0f, 0.0f);
 			o.mass = 1.0f;
 			o.rad = 1.0f;
 			o.color = Color(0.0f, 1.0f, 0.0f);
 			o.h = 1.0f;
 			o.id = next_id;
+			while(true) {
+				
+			}
 
 			world->objects.insert(pair<int, Object>(next_id, o)); 
 			clients.push_back(clcomm);

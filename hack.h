@@ -1,7 +1,10 @@
+#ifndef HACK_H
+#define HACK_H
+
 class Socket
 {
 	public:
-	Socket(int sock);
+	Socket(int sock) {
 	int socket;
 	bool send(char* stuff, int size);
 	bool receive(char* stuff, int size);
@@ -19,17 +22,17 @@ class Vector2D
 		float operator*(const Vector2D);
 };
 
-Vector2D Vector2D::operator+(const Vector2D v)
+inline Vector2D Vector2D::operator+(const Vector2D v)
 {
   return Vector2D(x + v.x, y + v.y);
 }
 
-Vector2D Vector2D::operator-(const Vector2D v)
+inline Vector2D Vector2D::operator-(const Vector2D v)
 {
   return Vector2D(x - v.x, y - v.y);
 }
 
-float Vector2D::operator*(const Vector2D v)
+inline float Vector2D::operator*(const Vector2D v)
 {
 	return x * v.x + y * v.y;
 }
@@ -46,17 +49,17 @@ class Vector3D
 		float operator*(const Vector3D);
 };
 
-Vector3D Vector3D::operator+(const Vector3D v)
+inline Vector3D Vector3D::operator+(const Vector3D v)
 {
 	return Vector3D(x + v.x, y + v.y, z + v.z);
 }
 
-Vector3D Vector3D::operator-(const Vector3D v)
+inline Vector3D Vector3D::operator-(const Vector3D v)
 {
 	return Vector3D(x - v.x, y - v.y, z - v.z);
 }
 
-float Vector3D::operator*(const Vector3D v)
+inline float Vector3D::operator*(const Vector3D v)
 {
 	return x * v.x + y * v.y + z * v.z;
 }
@@ -108,3 +111,5 @@ class World
 		bool sendObjects(Socket socket);
 		bool receiveObjects(Socket socket);
 };
+
+#endif

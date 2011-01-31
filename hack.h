@@ -132,6 +132,15 @@ class World
 			o.h = 1.5;
 			o.id = 0;
 			objects[0] = o;
+			Object o2;
+			o2.p = Vector2D(0, 1);
+			o2.v = Vector2D(0, 0);
+			o2.mass = 1.5;
+			o2.rad = 1;
+			o2.color = Color(255, 150, 0);
+			o2.h = 1.5;
+			o2.id = 1;
+			objects[1] = o2;
 		}
 		std::map<int, Object> objects;
 		std::vector<Light> lights;

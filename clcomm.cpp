@@ -161,7 +161,7 @@ int main() {
 			it->second.v -= it->second.v*0.2*dt;
 
 		world.doSimulation(dt);
-		SDL_Delay(30);
+		SDL_Delay(10);
 	}
 }
 

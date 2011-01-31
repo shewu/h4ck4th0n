@@ -3,7 +3,7 @@
 #include <cmath>
 #include <stdio.h>
 
-#define MAX_EVENTS 1 /* Only 1 event can be handled per frame and still slightly broken */
+#define MAX_EVENTS 10
 
 using namespace std;
 
@@ -31,6 +31,53 @@ float collideCircles(Vector2D diff, float r, Vector2D vel)
 	return ans;
 }
 
+void doObjectCollision(int f, int s, Object fo, Object so, map<pair<int, int>, float>& collideTimes, priority_queue<collide_event>& collide_events, float cur, float dt) {
+	collideTimes[pair<int, int>(f, s)] = collideCircles(so.p-fo.p, fo.rad+so.rad, so.v-fo.v)+cur;
+	if (collideTimes[pair<int, int>(f, s)] < dt) {
+		collide_event e = { collideTimes[pair<int, int>(s, f)], 0, s, f };
+		collide_events.push(e);
+	}
+}
+
+void doObstacleCollision(int f, Object fo, vector<Obstacle>& obstacles, map<pair<int, int>, float>& collideTimesObs, priority_queue<collide_event>& collide_events, float cur, float dt) {
+	for (int j = 0; j < obstacles.size(); j++) {
+		float time1 = collideCircles(fo.p-obstacles[j].p1, fo.rad, fo.v), time2 = collideCircles(fo.p-obstacles[j].p2, fo.rad, fo.v);
+		float time3;
+		Vector2D dir = obstacles[j].p2-obstacles[j].p1;
+		Vector2D relpos =fo.p-obstacles[j].p1;
+		Vector2D normal = dir.getNormalVector();
+		float dist = relpos*normal;
+		if (dist < 0) {
+			normal = -normal;
+			dist = -dist;
+		}
+		if (fo.v*normal >= 0) time3 = INFINITY;
+		else {
+			time3 = (fo.rad-dist)/(fo.v*normal);
+			if (time3 < 0) time3 = 0;
+			Vector2D newpos = relpos+time3*fo.v;
+			if (newpos*dir < 0 || newpos*dir > dir*dir) time3 = INFINITY;
+		}
+		int type;
+		if (time1 < time2 && time1 < time3) {
+			collideTimesObs[pair<int, int>(f, j)] = time1+cur;
+			type = 1;
+		}
+		else if (time2 < time3) {
+			collideTimesObs[pair<int, int>(f, j)] = time2+cur;
+			type = 2;
+		}
+		else {
+			collideTimesObs[pair<int, int>(f, j)] = time3+cur;
+			type = 3;
+		}
+		if (collideTimesObs[pair<int, int>(f, j)] < dt) {
+			collide_event e = { collideTimesObs[pair<int, int>(f, j)], type, f, j };
+			collide_events.push(e);
+		}
+	}
+}
+
 void World::doSimulation(float dt)
 {
 	map<pair<int, int>, float> collideTimes;
@@ -38,49 +85,10 @@ void World::doSimulation(float dt)
 	priority_queue<collide_event> collide_events;
 	for (map<int, Object>::iterator i = objects.begin(); i != objects.end(); i++) {
 		for (map<int, Object>::iterator j = objects.begin(); j != objects.end(); j++) if (i->first < j->first) {
-			collideTimes[pair<int, int>(i->first, j->first)] = collideCircles(j->second.p-i->second.p, i->second.rad+j->second.rad, j->second.v-i->second.v);
-			if (collideTimes[pair<int, int>(i->first, j->first)] < dt) {
-				collide_event e = { collideTimes[pair<int, int>(i->first, j->first)], 0, i->first, j->first };
-				collide_events.push(e);
-			}
+			doObjectCollision(i->first, j->first, i->second, j->second, collideTimes, collide_events, 0, dt);
 		}
 		
-		for (int j = 0; j < obstacles.size(); j++) {
-			float time1 = collideCircles(i->second.p-obstacles[j].p1, i->second.rad, i->second.v), time2 = collideCircles(i->second.p-obstacles[j].p2, i->second.rad, i->second.v);
-			float time3;
-			Vector2D dir = obstacles[j].p2-obstacles[j].p1;
-			Vector2D relpos = i->second.p-obstacles[j].p1;
-			Vector2D normal = dir.getNormalVector();
-			float dist = relpos*normal;
-			if (dist < 0) {
-				normal = -normal;
-				dist = -dist;
-			}
-			if (i->second.v*normal >= 0) time3 = INFINITY;
-			else {
-				time3 = (i->second.rad-dist)/(i->second.v*normal);
-				if (time3 < 0) time3 = 0;
-				Vector2D newpos = relpos+time3*i->second.v;
-				if (newpos*dir < 0 || newpos*dir > dir*dir) time3 = INFINITY;
-			}
-			int type;
-			if (time1 < time2 && time1 < time3) {
-				collideTimesObs[pair<int, int>(i->first, j)] = time1;
-				type = 1;
-			}
-			else if (time2 < time3) {
-				collideTimesObs[pair<int, int>(i->first, j)] = time2;
-				type = 2;
-			}
-			else {
-				collideTimesObs[pair<int, int>(i->first, j)] = time3;
-				type = 3;
-			}
-			if (collideTimes[pair<int, int>(i->first, j)] < dt) {
-				collide_event e = { collideTimes[pair<int, int>(i->first, j)], type, i->first, j };
-				collide_events.push(e);
-			}
-		}
+		doObstacleCollision(i->first, i->second, obstacles, collideTimesObs, collide_events, 0, dt);
 	}
 	
 	int eventsDone = 0;
@@ -104,7 +112,23 @@ void World::doSimulation(float dt)
 				
 				for (map<int, Object>::iterator i = objects.begin(); i != objects.end(); i++) if (i->first != e.t1 && i->first != e.t2) {
 					i->second.p += (e.time-knownTime)*i->second.v;
+					int f = e.t1, s = i->first;
+					if (f > s) {
+						int temp = f;
+						f = s;
+						s = temp;
+					}
+					doObjectCollision(f, s, objects[f], objects[s], collideTimes, collide_events, e.time, dt);
+					f = e.t2, s = i->first;
+					if (f > s) {
+						int temp = f;
+						f = s;
+						s = temp;
+					}
+					doObjectCollision(f, s, objects[f], objects[s], collideTimes, collide_events, e.time, dt);
 				}
+				doObstacleCollision(e.t1, objects[e.t1], obstacles, collideTimesObs, collide_events, e.time, dt);
+				doObstacleCollision(e.t2, objects[e.t2], obstacles, collideTimesObs, collide_events, e.time, dt);
 				break;
 			}
 			case 1: {
@@ -116,7 +140,15 @@ void World::doSimulation(float dt)
 				
 				for (map<int, Object>::iterator i = objects.begin(); i != objects.end(); i++) if (i->first != e.t1) {
 					i->second.p += (e.time-knownTime)*i->second.v;
+					int f = e.t1, s = i->first;
+					if (f > s) {
+						int temp = f;
+						f = s;
+						s = temp;
+					}
+					doObjectCollision(f, s, objects[f], objects[s], collideTimes, collide_events, e.time, dt);
 				}
+				doObstacleCollision(e.t1, objects[e.t1], obstacles, collideTimesObs, collide_events, e.time, dt);
 				break;
 			}
 			case 2: {
@@ -128,7 +160,15 @@ void World::doSimulation(float dt)
 				
 				for (map<int, Object>::iterator i = objects.begin(); i != objects.end(); i++) if (i->first != e.t1) {
 					i->second.p += (e.time-knownTime)*i->second.v;
+					int f = e.t1, s = i->first;
+					if (f > s) {
+						int temp = f;
+						f = s;
+						s = temp;
+					}
+					doObjectCollision(f, s, objects[f], objects[s], collideTimes, collide_events, e.time, dt);
 				}
+				doObstacleCollision(e.t1, objects[e.t1], obstacles, collideTimesObs, collide_events, e.time, dt);
 				break;
 			}
 			case 3: {
@@ -140,7 +180,15 @@ void World::doSimulation(float dt)
 				
 				for (map<int, Object>::iterator i = objects.begin(); i != objects.end(); i++) if (i->first != e.t1) {
 					i->second.p += (e.time-knownTime)*i->second.v;
+					int f = e.t1, s = i->first;
+					if (f > s) {
+						int temp = f;
+						f = s;
+						s = temp;
+					}
+					doObjectCollision(f, s, objects[f], objects[s], collideTimes, collide_events, e.time, dt);
 				}
+				doObstacleCollision(e.t1, objects[e.t1], obstacles, collideTimesObs, collide_events, e.time, dt);
 				break;
 			}
 
@@ -148,6 +196,8 @@ void World::doSimulation(float dt)
 		knownTime = e.time;
 	}
 	
+	float elapsed = dt;
+	if (!collide_events.empty() && collide_events.top().time < elapsed) elapsed = collide_events.top().time;
 	for (map<int, Object>::iterator i = objects.begin(); i != objects.end(); i++)
-		i->second.p += (dt-knownTime)*i->second.v;
+		i->second.p += (elapsed-knownTime)*i->second.v;
 }

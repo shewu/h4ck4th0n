@@ -50,16 +50,16 @@ int event_handle(void*)
 					case SDLK_ESCAPE:
 						_exit(0);
 						break;
-					case SDLK_LEFT:
+					case SDLK_a:
 						b = 0;
 						break;
-					case SDLK_RIGHT:
+					case SDLK_d:
 						b = 1;
 						break;
-					case SDLK_UP:
+					case SDLK_w:
 						b = 2;
 						break;
-					case SDLK_DOWN:
+					case SDLK_s:
 						b = 3;
 						break;
 				}
@@ -72,16 +72,16 @@ int event_handle(void*)
 			{
 				char b = -1;
 				switch (event.key.keysym.sym) {
-					case SDLK_LEFT:
+					case SDLK_a:
 						b = 0;
 						break;
-					case SDLK_RIGHT:
+					case SDLK_d:
 						b = 1;
 						break;
-					case SDLK_UP:
+					case SDLK_w:
 						b = 2;
 						break;
-					case SDLK_DOWN:
+					case SDLK_s:
 						b = 3;
 						break;
 				}

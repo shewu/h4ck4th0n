@@ -16,7 +16,7 @@ void initGL() {
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, ((float) WIDTH) / ((float) HEIGHT), 1.0, 30.0);
+	gluPerspective(60.0, ((float) WIDTH) / ((float) HEIGHT), 1.0, 100.0);
 	glMatrixMode(GL_MODELVIEW);
 	quad = gluNewQuadric();
 	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
@@ -40,7 +40,14 @@ void render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-	gluLookAt(world.objects[myId].p.x-8*cos(angle), world.objects[myId].p.y-8*sin(angle), 3, world.objects[myId].p.x, world.objects[myId].p.y, 0.0, 0.0, 0.0, 1.0);
+	
+	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
+	if (focusx < MIN_X+6) focusx = MIN_X+6;
+	if (focusx > MAX_X-6) focusx = MAX_X-6;
+	if (focusy < MIN_Y+6) focusy = MIN_Y+6;
+	if (focusy > MAX_Y-6) focusy = MAX_Y-6;
+	
+	gluLookAt(focusx-6*cos(angle), focusy-6*sin(angle), 3, focusx, focusy, 0.0, 0.0, 0.0, 1.0);
 	
 	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {
 		glPushMatrix();

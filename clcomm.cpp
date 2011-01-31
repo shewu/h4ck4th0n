@@ -94,7 +94,7 @@ int main() {
 			printf("Object created\n");
 		}
 
-		for(vector<ClientCommunicator>::iterator it = clients.begin(); it != clients.end(); ++it) {
+		for(vector<ClientCommunicator>::iterator it = clients.begin(); it != clients.end();) {
 			//printf("rawr\n");
 			world->sendObjects(it->sock);
 			while(it->sock.hasRemaining()) {
@@ -103,12 +103,15 @@ int main() {
 				bool isOkay = it->sock.receive(keypress, 2);
 				if(!isOkay) {
 					world->objects.erase(it->object_id);
-					clients.erase(it);
+					vector<ClientCommunicator>::iterator it1 = it;
+					++it;
+					clients.erase(it1);
 					printf("Client disconnected\n");
 					continue;
 				}
 				it->key_pressed[(unsigned char)keypress[1]] = (keypress[0] == SDL_KEYDOWN);
 				printf("received: %d %d\n", (int)keypress[0], (int)keypress[1]);
+				++it;
 			}
 		}
 

@@ -7,6 +7,6 @@ class ClientCommunicator {
 		bool key_pressed[256];
 		float angle;
 		bool waiting;
-		int buf[4];
+		char buf[4];
 		int pos;
 };

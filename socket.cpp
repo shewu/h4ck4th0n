@@ -28,5 +28,5 @@ bool Socket::receive(char* stuff, int size) {
 bool Socket::hasRemaining() {
 	char c;
 	int val = recv(socket, &c, 1, MSG_DONTWAIT|MSG_PEEK);
-	return (val != 1 || (errno != EAGAIN && errno != EWOULDBLOCK));
+	return (val != -1 || (errno != EAGAIN && errno != EWOULDBLOCK));
 }

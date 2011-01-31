@@ -42,6 +42,7 @@ int main(int argc, char* argv[])
 	initVideo();
 	SDL_Thread *thread;
 	thread = SDL_CreateThread(event_handle, NULL);
+	cout << "Starting client" << endl;
 	for (;;) {
 		do {
 			render();

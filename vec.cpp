@@ -1,4 +1,5 @@
 #include "hack.h"
+#include <cmath>
 
 Vector2D Vector2D::operator+(const Vector2D& v) const
 {
@@ -53,7 +54,7 @@ Vector2D Vector2D::operator*(const float s) const
 
 Vector2D Vector2D::getNormalVector() const
 {
-	return Vector2D(-y, x);
+	return Vector2D(-y, x)*(1/sqrt(x*x+y*y));
 }
 
 Vector2D operator*(const float s, const Vector2D v) {

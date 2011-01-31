@@ -58,8 +58,23 @@ int main() {
 			o.color = Color(0.0f, 1.0f, 0.0f);
 			o.h = 1.0f;
 			o.id = next_id;
+			float min_x = MIN_X + o.rad;
+			float max_x = MAX_X - o.rad;
+			float min_y = MIN_Y + o.rad;
+			float max_y = MAX_Y - o.rad;
 			while(true) {
-				
+				o.p.x = rand() * (max_x - min_x) + min_x;
+				o.p.y = rand() * (max_y - min_y) + min_y;
+				bool fail = false;
+				for(vector<ClientCommunicator>::iterator it = world->objects.begin(); it != world->objects.end(); it++) {
+					Vector2D v = world->objects[i].p - o.p;
+					if((world->objects[i].r + o.r) * (world->objects[i].r + o.r) > v.x * v.x + v.y * v.y) {
+						fail = true;
+						break;
+					}
+				}
+				if(!fail)
+					break;
 			}
 
 			world->objects.insert(pair<int, Object>(next_id, o)); 

@@ -24,33 +24,33 @@ timeval tim;
 
 int main() {
 	srand((unsigned int)time(NULL));
-
+	
 	gettimeofday(&tim, NULL);
-
+	
 	World world;
-
+	
 	struct addrinfo hints, *res;
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
-
+	
 	getaddrinfo(NULL, MYPORT, &hints, &res);
-
+	
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	int opt = 1;
 	setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char*)&opt, sizeof(opt));
 	bind(sockfd, res->ai_addr, res->ai_addrlen);
 	listen(sockfd, BACKLOG);
 	fcntl(sockfd, F_SETFL, O_NONBLOCK);
-
+	
 	while(true) {
 		sockaddr_storage their_addr;
 		socklen_t addr_size = sizeof their_addr;
 		int new_fd = accept(sockfd, (sockaddr *)&their_addr, &addr_size);
 		if(new_fd != -1) {
 			printf("Connection made\n");
-
+			
 			ClientCommunicator clcomm;
 			clcomm.sock = Socket(new_fd);
 			do {
@@ -58,7 +58,7 @@ int main() {
 			} while (world.objects.count(clcomm.object_id));
 			
 			clcomm.angle = rand()/float(RAND_MAX)*2*M_PI;
-
+			
 			Object o;
 			o.v = Vector2D(0.0f, 0.0f);
 			o.mass = 1.0f;
@@ -84,23 +84,24 @@ int main() {
 				if(!fail)
 					break;
 			}
-		
-			world.objects.insert(pair<int, Object>(o.id, o)); 
+			
+			world.objects.insert(pair<int, Object>(o.id, o));
+			clcomm.waiting = false;
 			clients.push_back(clcomm);
-
+			
 			int id = htonl(o.id);
 			clients[clients.size() - 1].sock.send((char*)(&id), 4);
 			int angle = htonl(*reinterpret_cast<int*>(&clcomm.angle));
-			clients[clients.size() - 1].sock.send((char*)(&id), 4);
-
+			clients[clients.size() - 1].sock.send((char*)(&angle), 4);
+			
 			printf("Object created\n");
 		}
 		
 		for(int i = 0; i < clients.size(); i++) {
 			world.sendObjects(clients[i].sock);
-			while(clients[i].sock.hasRemaining()) {
-				char keypress;
-				if(!clients[i].sock.receive(&keypress, 1)) {
+			while (clients[i].sock.hasRemaining()) {
+				char data;
+				if(!clients[i].sock.receive(&data, 1)) {
 					world.objects.erase(clients[i].object_id);
 					for(int j = i; j < clients.size() - 1; j++)
 						clients[j] = clients[j+1];
@@ -109,7 +110,19 @@ int main() {
 					i--;
 					break;
 				}
-				clients[i].key_pressed[(unsigned char)keypress&3] = ((keypress&4) == 0);
+				if (clients[i].waiting) {
+					clients[i].buf[clients[i].pos++] = data;
+					if (clients[i].pos == 4) {
+						clients[i].waiting = false;
+						int angle = ntohl(*((int*)clients[i].buf));
+						clients[i].angle = *reinterpret_cast<float*>(&angle);
+					}
+				}
+				else if (data == 8) {
+					clients[i].waiting = true;
+					clients[i].pos = 0;
+				}
+				else clients[i].key_pressed[(unsigned char)data&3] = ((data&4) == 0);
 			}
 		}
 
@@ -122,19 +135,19 @@ int main() {
 			Vector2D acceleration = Vector2D(0.0f, 0.0f);
 			int value = 0;
 			if(it->key_pressed[0]) {
-				acceleration += Vector2D(-1.0f, 0.0f);
+				acceleration += Vector2D(-cos(it->angle), -sin(it->angle));
 				value += 1;
 			}
 			if(it->key_pressed[1]) {
-				acceleration += Vector2D(1.0f, 0.0f);
+				acceleration += Vector2D(cos(it->angle), sin(it->angle));
 				value -= 1;
 			}
 			if(it->key_pressed[2]) {
-				acceleration += Vector2D(0.0f, 1.0f);
+				acceleration += Vector2D(sin(it->angle), -cos(it->angle));
 				value += 2;
 			}
 			if(it->key_pressed[3]) {
-				acceleration += Vector2D(0.0f, -1.0f);
+				acceleration += Vector2D(-sin(it->angle), cos(it->angle));
 				value -= 2;
 			}
 			if(value != 0) {

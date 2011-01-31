@@ -8,6 +8,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <cmath>
 #include "constants.h"
 #include "client.h"
 
@@ -69,7 +70,7 @@ int event_handle(void*)
 			}
 			case SDL_KEYUP:
 			{
-				char b = 0;
+				char b = -1;
 				switch (event.key.keysym.sym) {
 					case SDLK_LEFT:
 						b = 0;
@@ -95,10 +96,14 @@ int event_handle(void*)
 				_exit(0);
 				break;
 			}
-			case SDL_MOUSEMOTION:
+			case SDL_MOUSEMOTION: {
 				angle -= event.motion.xrel/float(WIDTH);
-			default:
-			{
+				while (angle >= 2*M_PI) angle -= 2*M_PI;
+				while (angle < 0) angle += 2*M_PI;
+				char buf[5];
+				buf[0] = 8;
+				*((int*)(buf+1)) = htonl(*reinterpret_cast<int*>(&angle));
+				sock->send(buf, 5);
 				break;
 			}
 		}
@@ -170,3 +175,4 @@ int main(int argc, char* argv[])
 		SDL_GL_SwapBuffers();
 	}
 }
+				char b = 0;

@@ -1,16 +1,21 @@
-#include "hack.h"
 #include <iostream>
 #include "render.h"
+#include "hack.h"
+#include "SDL.h"
+
 using namespace std;
+
+SDL_Surface *screen;
 
 int main(int argc, char* argv[])
 {
-	Socket sock;
+	Socket sock(0);
 	World w;
+	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 16, flags);
 	for (;;) {
 		do {
 			render();
-			w.recieveObjects(sock);
+			w.receiveObjects(sock);
 		} while (sock.hasRemaining());
 	}
 }

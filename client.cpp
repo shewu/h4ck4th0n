@@ -61,7 +61,7 @@ int event_handle(void*)
 				break;
 			}
 			case SDL_MOUSEMOTION:
-				angle += event.motion.xrel/float(WIDTH);
+				angle -= event.motion.xrel/float(WIDTH);
 			default:
 			{
 				break;

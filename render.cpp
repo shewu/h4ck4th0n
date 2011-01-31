@@ -33,16 +33,15 @@ void render()
 		glScalef(i->second.rad, i->second.rad, i->second.h);
 		glColor3f(i->second.color.r, i->second.color.g, i->second.color.b);
 		gluSphere(quad, 1.0, 30, 30);
-		printf("%d: %d %f %f %f %f %f %f\n", i->first, i->second.id, i->second.p.x, i->second.p.y, i->second.v.x, i->second.v.y, i->second.rad, i->second.h);
 		glPopMatrix();
 	}
 	
 	glBegin(GL_QUADS);
 	glColor3f(0.5f, 0.5f, 0.5f);
-	glVertex3f(world.objects[myId].p.x-30.0, world.objects[myId].p.y-30.0, 0);
-	glVertex3f(world.objects[myId].p.x-30.0, world.objects[myId].p.y+30.0, 0);
-	glVertex3f(world.objects[myId].p.x+30.0, world.objects[myId].p.y+30.0, 0);
-	glVertex3f(world.objects[myId].p.x+30.0, world.objects[myId].p.y-30.0, 0);
+	glVertex3f(world.objects[myId].p.x-1000.0, world.objects[myId].p.y-1000.0, 0);
+	glVertex3f(world.objects[myId].p.x-1000.0, world.objects[myId].p.y+1000.0, 0);
+	glVertex3f(world.objects[myId].p.x+1000.0, world.objects[myId].p.y+1000.0, 0);
+	glVertex3f(world.objects[myId].p.x+1000.0, world.objects[myId].p.y-1000.0, 0);
 	
 	for (vector<Obstacle>::iterator i = world.obstacles.begin(); i != world.obstacles.end(); i++) {
 		glColor3f(i->color.r, i->color.g, i->color.b);

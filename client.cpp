@@ -5,9 +5,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
 #include <GL/glew.h>
-
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#include "constants.h"
 
 using namespace std;
 
@@ -19,7 +17,7 @@ void initVideo()
 {
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 24, SDL_DOUBLEBUF | SDL_OPENGL);
+	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_DOUBLEBUF | SDL_OPENGL);
 }
 
 /*

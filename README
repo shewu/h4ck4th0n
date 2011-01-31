@@ -1,0 +1,42 @@
+Object
+* position
+* velocity
+* mass
+* radius
+* color
+* height
+
+Light
+* 3D positions
+* color
+* intensity
+
+Obstacle
+* point1, point2
+* deadly
+* color
+
+World
+* list<Object>
+* list<Light>
+* list<Obstacle>
+* ground texture
+* sky texture
+
+Server
+* map file name
+* ???
+* list of client communicator
+
+Client
+* world
+* object id
+* rotation
+
+Client communicator
+* socket
+* object id
+
+Server to client
+* number of objects
+

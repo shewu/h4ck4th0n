@@ -111,7 +111,7 @@ int main() {
 					i--;
 					break;
 				}
-				clients[i].key_pressed[(unsigned char)keypress[1]] = (keypress[0] == SDL_KEYDOWN);
+				clients[i].key_pressed[(unsigned char)keypress[1]] = (keypress[0] == 0);
 				//printf("received: %d %d\n", (int)keypress[0], (int)keypress[1]);
 			}
 		}
@@ -124,25 +124,25 @@ int main() {
 		for(vector<ClientCommunicator>::iterator it = clients.begin(); it != clients.end(); ++it) {
 			Vector2D acceleration = Vector2D(0.0f, 0.0f);
 			int value = 0;
-			if(it->key_pressed[SDLK_LEFT]) {
+			if(it->key_pressed[1]) {
 				acceleration += Vector2D(-1.0f, 0.0f);
 				value += 1;
 			}
-			if(it->key_pressed[SDLK_RIGHT]) {
+			if(it->key_pressed[2]) {
 				acceleration += Vector2D(1.0f, 0.0f);
 				value -= 1;
 			}
-			if(it->key_pressed[SDLK_UP]) {
+			if(it->key_pressed[3]) {
 				acceleration += Vector2D(0.0f, 1.0f);
 				value += 2;
 			}
-			if(it->key_pressed[SDLK_DOWN]) {
+			if(it->key_pressed[4]) {
 				acceleration += Vector2D(0.0f, -1.0f);
 				value -= 2;
 			}
 			if(value != 0) {
-				acceleration = acceleration.getNormalVector() * KEYPRESS_ACCELERATION;
-				world->objects[it->object_id].v += dt * acceleration;
+				acceleration = acceleration.getNormalVector() * KEYPRESS_ACCELERATION*1000;
+				world->objects[it->object_id].v += Vector2D(1, 1);
 			}
 		}
 

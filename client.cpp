@@ -44,15 +44,47 @@ int event_handle(void*)
 		switch(event.type) {
 			case SDL_KEYDOWN:
 			{
-				char buf[] = {(char) SDL_KEYDOWN, (char) event.key.keysym.sym};
-				if (event.key.keysym.sym == SDLK_ESCAPE) exit(0);
-				sock->send(buf, 2);
+				char buf[] = {0, 0};
+				switch (event.key.keysym.sym) {
+					case SDLK_ESCAPE:
+						exit(0);
+						break;
+					case SDLK_LEFT:
+						buf[1] = 1;
+						break;
+					case SDLK_RIGHT:
+						buf[1] = 2;
+						break;
+					case SDLK_UP:
+						buf[1] = 3;
+						break;
+					case SDLK_DOWN:
+						buf[1] = 4;
+						break;
+				}
+				if (buf[1]) {
+					sock->send(buf, 2);
+				}
 				break;
 			}
 			case SDL_KEYUP:
 			{
-				char buf[] = {(char) SDL_KEYUP, (char) event.key.keysym.sym};
-				sock->send(buf, 2);
+				char buf[] = {1, 0};
+				switch (event.key.keysym.sym) {
+					case SDLK_LEFT:
+						buf[1] = 1;
+						break;
+					case SDLK_RIGHT:
+						buf[1] = 2;
+						break;
+					case SDLK_UP:
+						buf[1] = 3;
+						break;
+					case SDLK_DOWN:
+						buf[1] = 4;
+						break;
+				}
+				if (buf[1]) sock->send(buf, 2);
 				break;
 			}
 			case SDL_QUIT:

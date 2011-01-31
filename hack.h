@@ -48,6 +48,7 @@ class Color
 	public:
 		unsigned char r, g, b, a; // align, dammit
 		Color(unsigned char x, unsigned char y, unsigned char z) : r(x), g(y), b(z), a(0) {} 
+		Color() : r(0), g(0), b(0), a(0) {}
 };
 
 class Object

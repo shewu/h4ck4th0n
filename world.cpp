@@ -1,11 +1,14 @@
 #include <hack.h>
+#include <map>
+#include <netinet/in.h>
+using namespace std;
 
 bool World::sendObjects(Socket socket) {
 	int a = htonl(objects.size());
 	if(!socket.send((char *)(&a), 4))
 		return false;
 	for(map<int, Object>::iterator it = objects.begin(); it != objects.end(); it++)
-		if((*it).send(socket))
+		if((*it).second.send(socket))
 			return false;
 	return true;
 }

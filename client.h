@@ -2,6 +2,6 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-World world;
+extern World world;
 
 #endif

@@ -136,19 +136,19 @@ int main() {
 			Vector2D acceleration = Vector2D(0.0f, 0.0f);
 			int value = 0;
 			if(it->key_pressed[0]) {
-				acceleration += Vector2D(-cos(it->angle), -sin(it->angle));
+				acceleration += Vector2D(cos(it->angle), sin(it->angle));
 				value += 1;
 			}
 			if(it->key_pressed[1]) {
-				acceleration += Vector2D(cos(it->angle), sin(it->angle));
+				acceleration += Vector2D(-cos(it->angle), -sin(it->angle));
 				value -= 1;
 			}
 			if(it->key_pressed[2]) {
-				acceleration += Vector2D(-sin(it->angle), cos(it->angle));
+				acceleration += Vector2D(sin(it->angle), -cos(it->angle));
 				value += 2;
 			}
 			if(it->key_pressed[3]) {
-				acceleration += Vector2D(sin(it->angle), -cos(it->angle));
+				acceleration += Vector2D(-sin(it->angle), cos(it->angle));
 				value -= 2;
 			}
 			if(value != 0)

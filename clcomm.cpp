@@ -94,24 +94,26 @@ int main() {
 			printf("Object created\n");
 		}
 
-		for(vector<ClientCommunicator>::iterator it = clients.begin(); it != clients.end();) {
+		//for(vector<ClientCommunicator>::iterator it = clients.begin(); it != clients.end();) {
+		//printf("size here is %d\n", clients.size());
+		for(int i = 0; i < clients.size(); i++) {
 			//printf("rawr\n");
-			world->sendObjects(it->sock);
-			while(it->sock.hasRemaining()) {
+			world->sendObjects(clients[i].sock);
+			while(clients[i].sock.hasRemaining()) {
 				printf("blah\n");
 				char keypress[2];
-				bool isOkay = it->sock.receive(keypress, 2);
+				bool isOkay = clients[i].sock.receive(keypress, 2);
 				if(!isOkay) {
-					world->objects.erase(it->object_id);
-					vector<ClientCommunicator>::iterator it1 = it;
-					++it;
-					clients.erase(it1);
-					printf("Client disconnected\n");
-					continue;
+					world->objects.erase(clients[i].object_id);
+					for(int j = i; j < clients.size() - 1; j++)
+						clients[j] = clients[j+1];
+					clients.pop_back();
+					printf("Client disconnected size = %d\n", clients.size());
+					i--;
+					break;
 				}
-				it->key_pressed[(unsigned char)keypress[1]] = (keypress[0] == SDL_KEYDOWN);
+				clients[i].key_pressed[(unsigned char)keypress[1]] = (keypress[0] == SDL_KEYDOWN);
 				printf("received: %d %d\n", (int)keypress[0], (int)keypress[1]);
-				++it;
 			}
 		}
 

@@ -8,7 +8,7 @@ bool Socket::send(char* stuff, int size) {
 	while (pos < size) {
 		int r = write(socket, stuff+pos, size-pos);
 		if (r == -1) return false;
-		pos -= r;
+		pos += r;
 	}
 	return true;
 }
@@ -18,8 +18,9 @@ bool Socket::receive(char* stuff, int size) {
 	while (pos < size) {
 		int r = read(socket, stuff+pos, size-pos);
 		if (r == -1) return false;
-		pos -= r;
+		pos += r;
 	}
+	return true;
 }
 
 bool Socket::hasRemaining() {

@@ -5,20 +5,26 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
 #include <GL/glew.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
 #include "constants.h"
 #include "client.h"
 
 using namespace std;
 
 SDL_Surface *screen;
-Socket sock(1);
+Socket* sock;
 World world;
+float angle;
+int myId;
 
 void initVideo()
 {
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+	SDL_ShowCursor(false);
 	
 	initGL();
 }
@@ -64,7 +70,6 @@ int main(int argc, char* argv[])
 {
 	initVideo();
 	SDL_Thread *thread;
-	thread = SDL_CreateThread(event_handle, NULL);
 	cout << "Starting client" << endl;
 
 	/*	
@@ -77,7 +82,6 @@ int main(int argc, char* argv[])
 	o1.id = 0;
 	o1.color = Color(1, 0, 0);
 	world.objects[0] = o1;
-	*/
 	
 	Object o2;
 	o2.p = Vector2D(0, 0);
@@ -93,13 +97,33 @@ int main(int argc, char* argv[])
 	ob1.p1 = Vector2D(0, 3);
 	ob1.p2 = Vector2D(0, 2);
 	ob1.color = Color(0, 0, 1);
-	world.obstacles.push_back(ob1);
+	world.obstacles.push_back(ob1);*/
+	
+	addrinfo hints, *res;
+	
+	memset(&hints, 0, sizeof hints);
+	hints.ai_family = AF_UNSPEC;
+	hints.ai_socktype = SOCK_STREAM;
+	
+	getaddrinfo(argv[1], "55555", &hints, &res);
+	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+	sock = new Socket(sockfd);
+	if (connect(sockfd, res->ai_addr, res->ai_addrlen) == -1) {
+		cout << "Failed to connect" << endl;
+		exit(1);
+	}
+	angle = 0;
+	int v = 0;
+	sock->receive((char*)&v, 4);
+	myId = ntohl(v);
+	
+	thread = SDL_CreateThread(event_handle, NULL);
 	
 	for (;;) {
 		render();
-		/*do {
-			world.receiveObjects(sock);
-		} while (sock.hasRemaining());*/
+		do {
+			if (!world.receiveObjects(*sock)) exit(1);
+		} while (sock->hasRemaining());
 		world.doSimulation(.0005);
 		SDL_GL_SwapBuffers();
 	}

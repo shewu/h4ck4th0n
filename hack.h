@@ -4,22 +4,38 @@ class Vector2D
 		float x, y;
 		Vector2D() : x(0), y(0) {}
 		Vector2D(float a, float b) : x(a), y(b) {}
-		Vector2D operator+(const Vector2D) const;
-		Vector2D operator-(const Vector2D) const;
-		float operator*(const Vector2D) const;
+		Vector2D& operator+(const Vector2D&) const;
+		Vector2D& operator-(const Vector2D&) const;
+		Vector2D& operator+=(const Vector2D&);
+		Vector2D& operator-=(const Vector2D&);
+		float operator*(const Vector2D&) const;
 };
 
-Vector2D Vector2D::operator+(const Vector2D v) const
+Vector2D& Vector2D::operator+(const Vector2D& v) const
 {
   return Vector2D(x + v.x, y + v.y);
 }
 
-Vector2D Vector2D::operator-(const Vector2D v) const
+Vector2D& Vector2D::operator-(const Vector2D& v) const
 {
   return Vector2D(x - v.x, y - v.y);
 }
 
-float Vector2D::operator*(const Vector2D v) const
+Vector2D& Vector2D::operator+=(const Vector2D& v)
+{
+	x += v.x;
+	y += v.y;
+	return *this;
+}
+
+Vector2D& Vector2D::operator-=(const Vector2D& v)
+{
+	x -= v.x;
+	y -= v.y;
+	return *this;
+}
+
+float Vector2D::operator*(const Vector2D& v) const
 {
 	return x * v.x + y * v.y;
 }

@@ -144,21 +144,21 @@ int main() {
 				value -= 1;
 			}
 			if(it->key_pressed[2]) {
-				acceleration += Vector2D(sin(it->angle), -cos(it->angle));
+				acceleration += Vector2D(-sin(it->angle), cos(it->angle));
 				value += 2;
 			}
 			if(it->key_pressed[3]) {
-				acceleration += Vector2D(-sin(it->angle), cos(it->angle));
+				acceleration += Vector2D(sin(it->angle), -cos(it->angle));
 				value -= 2;
 			}
 			if(value != 0)
 				acceleration = acceleration.getNormalVector()*KEYPRESS_ACCELERATION;
-			acceleration -= world.objects[it->object_id].v*0.3;
+			acceleration -= world.objects[it->object_id].v*0.2;
 			world.objects[it->object_id].v += acceleration*dt;
 		}
 
 		world.doSimulation(dt);
-		SDL_Delay(30);
+		SDL_Delay(10);
 	}
 }
 

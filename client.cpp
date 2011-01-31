@@ -115,33 +115,6 @@ int main(int argc, char* argv[])
 	initVideo();
 	SDL_Thread *thread;
 	cout << "Starting client" << endl;
-
-	/*	
-	Object o1;
-	o1.p = Vector2D(-2, -2);
-	o1.v = Vector2D(1, 1);
-	o1.mass = 1;
-	o1.rad = 1;
-	o1.h = 2;
-	o1.id = 0;
-	o1.color = Color(1, 0, 0);
-	world.objects[0] = o1;
-	
-	Object o2;
-	o2.p = Vector2D(0, 0);
-	o2.v = Vector2D(0, 1);
-	o2.mass = 1;
-	o2.rad = 1;
-	o2.h = 2;
-	o2.id = 1;
-	o2.color = Color(0, 1, 0);
-	world.objects[1] = o2;
-	
-	Obstacle ob1;
-	ob1.p1 = Vector2D(0, 3);
-	ob1.p2 = Vector2D(0, 2);
-	ob1.color = Color(0, 0, 1);
-	world.obstacles.push_back(ob1);*/
 	
 	addrinfo hints, *res;
 	

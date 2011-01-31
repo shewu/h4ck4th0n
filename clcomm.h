@@ -4,7 +4,7 @@ class ClientCommunicator {
 	public:
 		Socket sock;
 		int object_id;
-		bool key_pressed[256];
+		bool key_pressed[4];
 		float angle;
 		bool waiting;
 		char buf[4];

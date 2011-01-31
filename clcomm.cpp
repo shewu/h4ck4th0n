@@ -87,6 +87,7 @@ int main() {
 			
 			world.objects.insert(pair<int, Object>(o.id, o));
 			clcomm.waiting = false;
+			for (int i = 0; i < 4; i++) clcomm.key_pressed[i] = 0;
 			clients.push_back(clcomm);
 			
 			int id = htonl(o.id);
@@ -150,10 +151,10 @@ int main() {
 				acceleration += Vector2D(-sin(it->angle), cos(it->angle));
 				value -= 2;
 			}
-			if(value != 0) {
+			if(value != 0)
 				acceleration = acceleration.getNormalVector()*KEYPRESS_ACCELERATION;
-				world.objects[it->object_id].v += acceleration*dt;
-			}
+			acceleration -= world.objects[it->object_id].v*0.3;
+			world.objects[it->object_id].v += acceleration*dt;
 		}
 
 		world.doSimulation(dt);

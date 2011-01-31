@@ -88,7 +88,7 @@ int main() {
 				while(it->sock.hasRemaining()) {
 				char keypress[2];
 				it->sock.receive(keypress, 2);
-				it->key_pressed[(unsigned char)keypress[1]] = (bool)keypress[0];
+				it->key_pressed[(unsigned char)keypress[1]] = (keypress[0] == SDL_KEYDOWN);
 			}
 		}
 
@@ -96,7 +96,22 @@ int main() {
 		gettimeofday(&tim2, NULL);
 		float dt = (float)(tim2.tv_sec - tim.tv_sec) + (float)(tim2.tv_usec - tim.tv_usec) * 1.0e-6f;
 		tim = tim2;
+
 		world->doSimulation(dt);
+
+		for(vector<ClientCommunicator>::iterator it = clients.begin(); it != clients.end(); ++it) {
+			Vector2D acceleration = 0.0f;
+			if(it->key_pressed[SDLK_LEFT])
+				acceleration += Vector2D(-1.0f, 0.0f);
+			if(it->key_pressed[SDLK_RIGHT])
+				acceleration += Vector2D(1.0f, 0.0f);
+			if(it->key_pressed[SDLK_UP])
+				acceleration += Vector2D(0.0f, 1.0f);
+			if(it->key_pressed[SDLK_DOWN])
+				acceleration += Vector2D(0.0f, -1.0f);
+			acceleration = acceleration.getNormalVector() * KEYPRESS_ACCELERATION;
+			world->objects[it->object_id].v += dt * acceleration;
+		}
 	}
 }
 

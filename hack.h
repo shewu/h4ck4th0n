@@ -9,6 +9,8 @@
 #define MIN_Y -10.0f
 #define MAX_Y 10.0f
 
+#define KEYPRESS_ACCELERATION 1.0f
+
 class Socket
 {
 	public:

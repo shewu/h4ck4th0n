@@ -11,6 +11,8 @@
 using namespace std;
 
 SDL_Surface *screen;
+Socket sock(1);
+World world;
 
 int initVideo()
 {
@@ -26,19 +28,33 @@ int event_handle(void*)
 	for (;;){
 		SDL_WaitEvent(&event);
 		switch(event.type) {
+			case SDL_KEYDOWN:
+			{
+				char buf[] = {(char) SDL_KEYDOWN, (char) event.key.keysym.sym};
+				sock.send(buf, 2);
+				break;
+			}
+			case SDL_KEYUP:
+			{
+				char buf[] = {(char) SDL_KEYUP, (char) event.key.keysym.sym};
+				sock.send(buf, 2);
+				break;
+			}
 			case SDL_QUIT:
+			{
 				exit(0);
 				break;
+			}
 			default:
+			{
 				break;
+			}
 		}
 	}
 }
 
 int main(int argc, char* argv[])
 {
-	Socket sock(0);
-	World w;
 	initVideo();
 	SDL_Thread *thread;
 	thread = SDL_CreateThread(event_handle, NULL);
@@ -46,7 +62,7 @@ int main(int argc, char* argv[])
 	for (;;) {
 		do {
 			render();
-			w.receiveObjects(sock);
+			world.receiveObjects(sock);
 		} while (sock.hasRemaining());
 	}
 }

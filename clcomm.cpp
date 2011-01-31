@@ -10,6 +10,7 @@
 #include <sys/time.h>
 #include <ctime>
 #include <cstdlib>
+#include <SDL/SDL.h>
 using namespace std;
 
 #define MYPORT "3490"

@@ -1,6 +1,7 @@
 #include "render.h"
 #include <GL/glew.h>
 #include <iostream>
+#include <fstream>
 #include <SDL/SDL.h>
 #include <IL/il.h>
 #include <cmath>
@@ -10,6 +11,7 @@
 using namespace std;
 
 GLUquadric* quad;
+unsigned int program;
 
 void initGL() {
 	glewInit();
@@ -34,6 +36,33 @@ void initGL() {
 	ilLoadImage("grass.png");
 	ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), GL_RGB, GL_UNSIGNED_BYTE, ilGetData());
+	
+	string vertexCode;
+	{
+		ifstream code("vertex.glsl");
+		vertexCode = string((std::istreambuf_iterator<char>(code)), std::istreambuf_iterator<char>());
+	}
+	int vlength = vertexCode.length();
+	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	const char* vc = vertexCode.c_str();
+	glShaderSource(vertexShader, 1, &vc, &vlength);
+	glCompileShader(vertexShader);
+	
+	string fragmentCode;
+	{
+		ifstream code("fragment.glsl");
+		fragmentCode = string((std::istreambuf_iterator<char>(code)), std::istreambuf_iterator<char>());
+	}
+	int flength = fragmentCode.length();
+	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	const char* fc = fragmentCode.c_str();
+	glShaderSource(fragmentShader, 1, &fc, &flength);
+	glCompileShader(fragmentShader);
+	
+	program = glCreateProgram();
+	glAttachShader(program, vertexShader);
+	glAttachShader(program, fragmentShader);
+	glLinkProgram(program);
 }
 
 void render()
@@ -48,7 +77,11 @@ void render()
 	if (focusy > MAX_Y-6) focusy = MAX_Y-6;
 	
 	gluLookAt(focusx-6*cos(angle), focusy-6*sin(angle), 3, focusx, focusy, 0.0, 0.0, 0.0, 1.0);
+	float matrix[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 	
+	glUseProgram(program);
+	glUniform3f(glGetUniformLocation(program, "lightv"), 5*matrix[8]+matrix[12], 5*matrix[9]+matrix[13], 5*matrix[10]+matrix[14]);
 	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {
 		glPushMatrix();
 		glTranslatef(i->second.p.x, i->second.p.y, 0);
@@ -58,6 +91,7 @@ void render()
 		glPopMatrix();
 	}
 	
+	glUseProgram(0);
 	glBegin(GL_QUADS);
 	for (vector<Obstacle>::iterator i = world.obstacles.begin(); i != world.obstacles.end(); i++) {
 		glColor3f(i->color.r/255.0, i->color.g/255.0, i->color.b/255.0);

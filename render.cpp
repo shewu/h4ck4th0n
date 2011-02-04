@@ -33,7 +33,11 @@ void initGL() {
 	ilInit();
 	ilGenImages(1, &image);
 	ilBindImage(image);
-	ilLoadImage("grass.png");
+	ILboolean grassExists = ilLoadImage("grass.png");
+	if(grassExists == IL_COULD_NOT_OPEN_FILE)
+	{
+		cerr << "your grass does not exist\n";
+	}
 	ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), GL_RGB, GL_UNSIGNED_BYTE, ilGetData());
 	

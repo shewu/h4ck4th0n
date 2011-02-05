@@ -9,7 +9,6 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <cmath>
-#include "constants.h"
 #include "client.h"
 
 using namespace std;

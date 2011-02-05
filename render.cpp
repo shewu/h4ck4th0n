@@ -7,7 +7,6 @@
 #include <CL/cl.hpp>
 #include <IL/il.h>
 #include <cmath>
-#include "constants.h"
 #include "client.h"
 
 using namespace std;
@@ -101,7 +100,7 @@ void render()
 	cl::Kernel renderKern(program, "render", NULL);
 	renderKern.setArg(0, focusx-6*cos(angle));
 	renderKern.setArg(1, focusy-6*sin(angle));
-	renderKern.setArg(2, 3);
+	renderKern.setArg(2, 3.0f);
 	renderKern.setArg(3, cos(angle));
 	renderKern.setArg(4, sin(angle));
 	renderKern.setArg(5, -1/3.0f);

@@ -1,14 +1,14 @@
 #include "constants.h"
 
 __kernel void render(float x, float y, float z, float xdir, float ydir, float zdir, int obstacles, __constant float* obspoints, __constant unsigned char* obscolor, int objects, __constant float* objpoint, __constant float* objsize, __constant unsigned char* objcolor, __write_only image2d_t im) {
-	float when = 100;
 	int obstacle = -1;
 	int object = -1;
-	float nxdir = xdir+((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*ydir)*1.5;
-	float nydir = ydir-((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*xdir)*1.5;
+	float nxdir = xdir+((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*ydir);
+	float nydir = ydir-((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*xdir);
 	xdir = nxdir;
 	ydir = nydir;
-	zdir += (get_global_id(1)-(HEIGHT-1)/2.0)/((float)HEIGHT-1)*1.5;
+	zdir += (get_global_id(1)-(HEIGHT-1)/2.0)/((float)HEIGHT-1);
+	float when = 100;
 	for (int i = 0; i < obstacles; i++) {
 		float xdirr = obspoints[4*i+2]-obspoints[4*i], ydirr = obspoints[4*i+3]-obspoints[4*i+1];
 		float pos = x*ydirr-y*xdirr, amount = xdir*ydirr-ydir*xdirr;
@@ -45,8 +45,8 @@ __kernel void render(float x, float y, float z, float xdir, float ydir, float zd
 			when = ans;
 		}
 	}
-	float4 color = (float4)(0, 1, 0, 1);
-	if (zdir > 0) color = (float4)(0, .5, 1, 1);
+	float4 color = (float4)(0, .5, 1, 1);
+	if (zdir < 0 && x-xdir*z/zdir >= MIN_X && x-xdir*z/zdir <= MAX_X && y-ydir*z/zdir >= MIN_Y && y-ydir*z/zdir <= MAX_Y) color = (float4)(0, 1, 0, 1);
 	if (obstacle != -1) color = (float4)(obscolor[4*obstacle]/255.0, obscolor[4*obstacle+1]/255.0, obscolor[4*obstacle+2]/255.0, obscolor[4*obstacle+3]/255.0);
 	if (object != -1) color = (float4)(objcolor[4*object]/255.0, objcolor[4*object+1]/255.0, objcolor[4*object+2]/255.0, objcolor[4*object+3]/255.0);
 	write_imagef(im, (int2)(get_global_id(0), get_global_id(1)), color);

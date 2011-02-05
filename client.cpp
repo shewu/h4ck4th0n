@@ -139,19 +139,11 @@ int main(int argc, char* argv[])
 	
 	thread = SDL_CreateThread(event_handle, NULL);
 	
-	int otime = 0;
-	int i = 0;
 	for (;;) {
 		do {
 			if (!world.receiveObjects(*sock)) exit(1);
 		} while (sock->hasRemaining());
 		render();
 		SDL_GL_SwapBuffers();
-		
-		if ((++i)%100 == 0) {
-			int time = SDL_GetTicks();
-			cout << time-otime << endl;
-			otime = time;
-		}
 	}
 }

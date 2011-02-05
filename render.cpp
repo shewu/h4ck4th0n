@@ -103,7 +103,7 @@ void render()
 	renderKern.setArg(2, 3.0f);
 	renderKern.setArg(3, cos(angle));
 	renderKern.setArg(4, sin(angle));
-	renderKern.setArg(5, -1/3.0f);
+	renderKern.setArg(5, -.5f);
 	renderKern.setArg(6, (int)world.obstacles.size());
 	renderKern.setArg(7, obspointsbuf);
 	renderKern.setArg(8, obscolorbuf);

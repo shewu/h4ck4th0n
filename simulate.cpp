@@ -25,7 +25,7 @@ float collideCircles(Vector2D diff, float r, Vector2D vel)
 	if (diff*vel >= 0) return INFINITY;
 	float a = vel*vel, b = 2*(diff*vel), c = diff*diff-r*r;
 	float discrim = b*b-4*a*c;
-	if (b*b-4*a*c <= 0) return INFINITY;
+	if (discrim <= 0) return INFINITY;
 	float ans = (-b-sqrt(discrim))/(2*a);
 	if (ans <= 0) return 0;
 	return ans;

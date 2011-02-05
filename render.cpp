@@ -18,6 +18,7 @@ cl::Image2DGL igl;
 cl::Program program;
 vector<cl::Memory> bs;
 vector<cl::Device> devices;
+cl::CommandQueue cq;
 
 void initGL() {
 	vector<cl::Platform> platforms;
@@ -51,12 +52,13 @@ void initGL() {
 	
 	igl = cl::Image2DGL(context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, texture, NULL);
 	bs.push_back(igl);
+	cq = cl::CommandQueue(context, devices[0], 0, NULL);
 }
 
 void render()
 {
 	float obspoints[4*world.obstacles.size()];
-	char obscolor[4*world.obstacles.size()];
+	unsigned char obscolor[4*world.obstacles.size()];
 	for (int i = 0; i < world.obstacles.size(); i++) {
 		obspoints[4*i] = world.obstacles[i].p1.x;
 		obspoints[4*i+1] = world.obstacles[i].p1.y;
@@ -70,25 +72,47 @@ void render()
 	cl::Buffer obspointsbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.obstacles.size()*sizeof(float), obspoints, NULL);
 	cl::Buffer obscolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.obstacles.size()*sizeof(char), obscolor, NULL);
 	
+	float objpoint[2*world.objects.size()];
+	float objsize[2*world.objects.size()];
+	unsigned char objcolor[4*world.objects.size()];
+	map<int, Object>::iterator it = world.objects.begin();
+	for (int i = 0; i < world.objects.size(); i++) {
+		objpoint[2*i] = it->second.p.x;
+		objpoint[2*i+1] = it->second.p.y;
+		objsize[2*i] = it->second.rad;
+		objsize[2*i+1] = it->second.h;
+		objcolor[4*i] = it->second.color.r;
+		objcolor[4*i+1] = it->second.color.g;
+		objcolor[4*i+2] = it->second.color.b;
+		objcolor[4*i+3] = it->second.color.a;
+		it++;
+	}
+	cl::Buffer objpointbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 2*world.objects.size()*sizeof(float), objpoint, NULL);
+	cl::Buffer objsizebuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 2*world.objects.size()*sizeof(float), objsize, NULL);
+	cl::Buffer objcolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.objects.size()*sizeof(char), objcolor, NULL);
+	
 	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
 	if (focusx < MIN_X+6) focusx = MIN_X+6;
 	if (focusx > MAX_X-6) focusx = MAX_X-6;
 	if (focusy < MIN_Y+6) focusy = MIN_Y+6;
 	if (focusy > MAX_Y-6) focusy = MAX_Y-6;
 	
-	cl::CommandQueue cq(context, devices[0], 0, NULL);
 	cq.enqueueAcquireGLObjects(&bs);
 	cl::Kernel renderKern(program, "render", NULL);
-	renderKern.setArg(0, (int)world.obstacles.size());
-	renderKern.setArg(1, focusx-6*cos(angle));
-	renderKern.setArg(2, focusy-6*sin(angle));
-	renderKern.setArg(3, 3);
-	renderKern.setArg(4, cos(angle));
-	renderKern.setArg(5, sin(angle));
-	renderKern.setArg(6, -1/2);
+	renderKern.setArg(0, focusx-6*cos(angle));
+	renderKern.setArg(1, focusy-6*sin(angle));
+	renderKern.setArg(2, 3);
+	renderKern.setArg(3, cos(angle));
+	renderKern.setArg(4, sin(angle));
+	renderKern.setArg(5, -1/3.0f);
+	renderKern.setArg(6, (int)world.obstacles.size());
 	renderKern.setArg(7, obspointsbuf);
 	renderKern.setArg(8, obscolorbuf);
-	renderKern.setArg(9, igl);
+	renderKern.setArg(9, (int)world.objects.size());
+	renderKern.setArg(10, objpointbuf);
+	renderKern.setArg(11, objsizebuf);
+	renderKern.setArg(12, objcolorbuf);
+	renderKern.setArg(13, igl);
 	cq.enqueueNDRangeKernel(renderKern, cl::NullRange, cl::NDRange((WIDTH+15)/16*16, (HEIGHT+15)/16*16), cl::NDRange(16, 16));
 	cq.enqueueReleaseGLObjects(&bs);
 	cq.finish();

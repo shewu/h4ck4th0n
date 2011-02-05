@@ -141,10 +141,10 @@ int main(int argc, char* argv[])
 	thread = SDL_CreateThread(event_handle, NULL);
 	
 	for (;;) {
-		render();
 		do {
 			if (!world.receiveObjects(*sock)) exit(1);
 		} while (sock->hasRemaining());
+		render();
 		SDL_GL_SwapBuffers();
 	}
 }

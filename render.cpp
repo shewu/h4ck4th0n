@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 #include <SDL/SDL.h>
+#include <GL/glx.h>
+#include <CL/cl.hpp>
 #include <IL/il.h>
 #include <cmath>
 #include "constants.h"
@@ -11,64 +13,62 @@
 using namespace std;
 
 GLUquadric* quad;
-unsigned int program;
+cl::Context context;
+cl::Image2DGL igl;
+cl::Program program;
+vector<cl::Memory> bs;
+vector<cl::Device> devices;
 
 void initGL() {
-	glewInit();
-	glEnable(GL_DEPTH_TEST);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(60.0, ((float) WIDTH) / ((float) HEIGHT), 1.0, 100.0);
-	glMatrixMode(GL_MODELVIEW);
-	quad = gluNewQuadric();
-	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
+	vector<cl::Platform> platforms;
+	cl::Platform::get(&platforms);
+	cl_context_properties props[7] = { CL_CONTEXT_PLATFORM, (cl_context_properties)(platforms[0])(), CL_GLX_DISPLAY_KHR, (intptr_t)glXGetCurrentDisplay(), CL_GL_CONTEXT_KHR, (intptr_t)glXGetCurrentContext(), 0 };
+	context = cl::Context(CL_DEVICE_TYPE_GPU, props, NULL, NULL, NULL);
+	devices = context.getInfo<CL_CONTEXT_DEVICES>();
 	
-	unsigned int texture, image;
+	string clCode;
+	{
+		ifstream code("render.cl");
+		clCode = string((std::istreambuf_iterator<char>(code)), std::istreambuf_iterator<char>());
+	}
+	
+	cl::Program::Sources clSource(1, pair<const char*, int>(clCode.c_str(), clCode.length()+1));
+	program = cl::Program(context, clSource);
+	if (program.build(devices, "-I.")) {
+		cout << program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(devices[0]) << endl;
+		_exit(1);
+	}
+	
+	glViewport(0, 0, WIDTH, HEIGHT);
+	glOrtho(-1, 1, -1, 1, -1, 1);
+	
+	glEnable(GL_TEXTURE_2D);
+	GLuint texture;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	ilInit();
-	ilGenImages(1, &image);
-	ilBindImage(image);
-	ilLoadImage("grass.png");
-	ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), GL_RGB, GL_UNSIGNED_BYTE, ilGetData());
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, WIDTH, HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	
-	string vertexCode;
-	{
-		ifstream code("vertex.glsl");
-		vertexCode = string((std::istreambuf_iterator<char>(code)), std::istreambuf_iterator<char>());
-	}
-	int vlength = vertexCode.length();
-	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	const char* vc = vertexCode.c_str();
-	glShaderSource(vertexShader, 1, &vc, &vlength);
-	glCompileShader(vertexShader);
-	
-	string fragmentCode;
-	{
-		ifstream code("fragment.glsl");
-		fragmentCode = string((std::istreambuf_iterator<char>(code)), std::istreambuf_iterator<char>());
-	}
-	int flength = fragmentCode.length();
-	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	const char* fc = fragmentCode.c_str();
-	glShaderSource(fragmentShader, 1, &fc, &flength);
-	glCompileShader(fragmentShader);
-	
-	program = glCreateProgram();
-	glAttachShader(program, vertexShader);
-	glAttachShader(program, fragmentShader);
-	glLinkProgram(program);
+	igl = cl::Image2DGL(context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, texture, NULL);
+	bs.push_back(igl);
 }
 
 void render()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
+	float obspoints[4*world.obstacles.size()];
+	char obscolor[4*world.obstacles.size()];
+	for (int i = 0; i < world.obstacles.size(); i++) {
+		obspoints[4*i] = world.obstacles[i].p1.x;
+		obspoints[4*i+1] = world.obstacles[i].p1.y;
+		obspoints[4*i+2] = world.obstacles[i].p2.x;
+		obspoints[4*i+3] = world.obstacles[i].p2.y;
+		obscolor[4*i] = world.obstacles[i].color.r;
+		obscolor[4*i+1] = world.obstacles[i].color.g;
+		obscolor[4*i+2] = world.obstacles[i].color.b;
+		obscolor[4*i+3] = world.obstacles[i].color.a;
+	}
+	cl::Buffer obspointsbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.obstacles.size()*sizeof(float), obspoints, NULL);
+	cl::Buffer obscolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.obstacles.size()*sizeof(char), obscolor, NULL);
 	
 	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
 	if (focusx < MIN_X+6) focusx = MIN_X+6;
@@ -76,43 +76,32 @@ void render()
 	if (focusy < MIN_Y+6) focusy = MIN_Y+6;
 	if (focusy > MAX_Y-6) focusy = MAX_Y-6;
 	
-	gluLookAt(focusx-6*cos(angle), focusy-6*sin(angle), 3, focusx, focusy, 0.0, 0.0, 0.0, 1.0);
-	float matrix[16];
-	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+	cl::CommandQueue cq(context, devices[0], 0, NULL);
+	cq.enqueueAcquireGLObjects(&bs);
+	cl::Kernel renderKern(program, "render", NULL);
+	renderKern.setArg(0, (int)world.obstacles.size());
+	renderKern.setArg(1, focusx-6*cos(angle));
+	renderKern.setArg(2, focusy-6*sin(angle));
+	renderKern.setArg(3, 3);
+	renderKern.setArg(4, cos(angle));
+	renderKern.setArg(5, sin(angle));
+	renderKern.setArg(6, -1/2);
+	renderKern.setArg(7, obspointsbuf);
+	renderKern.setArg(8, obscolorbuf);
+	renderKern.setArg(9, igl);
+	cq.enqueueNDRangeKernel(renderKern, cl::NullRange, cl::NDRange((WIDTH+15)/16*16, (HEIGHT+15)/16*16), cl::NDRange(16, 16));
+	cq.enqueueReleaseGLObjects(&bs);
+	cq.finish();
 	
-	glUseProgram(program);
-	glUniform3f(glGetUniformLocation(program, "lightv"), 5*matrix[8]+matrix[12], 5*matrix[9]+matrix[13], 5*matrix[10]+matrix[14]);
-	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {
-		glPushMatrix();
-		glTranslatef(i->second.p.x, i->second.p.y, 0);
-		glScalef(i->second.rad, i->second.rad, i->second.h);
-		glColor3f(i->second.color.r/255.0, i->second.color.g/255.0, i->second.color.b/255.0);
-		gluSphere(quad, 1.0, 30, 30);
-		glPopMatrix();
-	}
-	
-	glUseProgram(0);
 	glBegin(GL_QUADS);
-	for (vector<Obstacle>::iterator i = world.obstacles.begin(); i != world.obstacles.end(); i++) {
-		glColor3f(i->color.r/255.0, i->color.g/255.0, i->color.b/255.0);
-		glVertex3f(i->p1.x, i->p1.y, 0);
-		glVertex3f(i->p2.x, i->p2.y, 0);
-		glVertex3f(i->p2.x, i->p2.y, 1);
-		glVertex3f(i->p1.x, i->p1.y, 1);
-	}
+		glTexCoord2f(0, 0);
+		glVertex2f(-1, -1);
+		glTexCoord2f(0, 1);
+		glVertex2f(-1, 1);
+		glTexCoord2f(1, 1);
+		glVertex2f(1, 1);
+		glTexCoord2f(1, 0);
+		glVertex2f(1, -1);
+		glEnd();
 	glEnd();
-	
-	glEnable(GL_TEXTURE_2D);
-	glColor3f(1.0f, 1.0f, 1.0f);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(MIN_X, MIN_Y, 0);
-	glTexCoord2f(10.0f, 0.0f);
-	glVertex3f(MAX_X, MIN_Y, 0);
-	glTexCoord2f(10.0f, 10.0f);
-	glVertex3f(MAX_X, MAX_Y, 0);
-	glTexCoord2f(0.0f, 10.0f);
-	glVertex3f(MIN_X, MAX_Y, 0);
-	glEnd();
-	glDisable(GL_TEXTURE_2D);
 }

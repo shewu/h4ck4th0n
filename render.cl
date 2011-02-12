@@ -52,7 +52,7 @@ __kernel void render(float x, float y, float z, float xdir, float ydir, float zd
 	zdir += (get_global_id(1)-(HEIGHT-1)/2.0)/((float)HEIGHT-1);
 	
 	float4 tcolor = (float4)(0, 0, 0, 0), mult = 1;
-	for (int s = 0; s < 5; s++) {
+	for (int s = 0; s < 6; s++) {
 		int obstacle = -1;
 		int object = -1;
 		float when = castRay(x, y, z, xdir, ydir, zdir, obstacles, obspoints, objects, objpoint, objsize, &obstacle, &object, 100);
@@ -95,7 +95,7 @@ __kernel void render(float x, float y, float z, float xdir, float ydir, float zd
 			}
 		}
 		tcolor += color*mult;
-		mult *= .1;
+		mult *= .2;
 		if (!specular) break;
 		x += xdir*when;
 		y += ydir*when;

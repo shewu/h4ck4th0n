@@ -38,7 +38,7 @@ float castRay(float x, float y, float z, float xdir, float ydir, float zdir, int
 		if (ans > -EPS && ans < when && z+zdir*ans > 0) {
 			*obstaclep = -1;
 			*objectp = i;
-			when = ans;
+			when = ans;;
 		}
 	}
 	return when;

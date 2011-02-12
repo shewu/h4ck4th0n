@@ -140,7 +140,7 @@ class World
 			
 			Light l;
 			l.position = Vector3D(0, 0, 10);
-			l.color = Color(150, 150, 150);
+			l.color = Color(255, 255, 255);
 			lights.push_back(l);
 		}
 		std::map<int, Object> objects;

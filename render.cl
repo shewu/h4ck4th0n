@@ -1,6 +1,6 @@
 #include "constants.h"
 
-#define EPS .0001
+#define EPS .000001
 
 const sampler_t texSample = CLK_NORMALIZED_COORDS_TRUE|CLK_ADDRESS_REPEAT|CLK_FILTER_LINEAR;
 
@@ -10,12 +10,12 @@ float castRay(float x, float y, float z, float xdir, float ydir, float zdir, int
 		float pos = x*ydirr-y*xdirr, amount = xdir*ydirr-ydir*xdirr;
 		float move = (obspoints[4*i]*ydirr-obspoints[4*i+1]*xdirr-pos)/amount;
 		float newx = x+move*xdir, newy = y+move*ydir, newz = z+move*zdir;
-		if (move > EPS && move < when && newz >= 0 && newz < 1) {
+		if (move > 0 && move*(1-EPS) < when && newz >= 0 && newz < 1) {
 			float loc1 = obspoints[4*i]*xdirr+obspoints[4*i+1]*ydirr;
 			float loc2 = loc1+xdirr*xdirr+ydirr*ydirr;
 			float loc = newx*xdirr+newy*ydirr;
 			if (loc >= loc1 && loc <= loc2) {
-				when = move;
+				when = move*(1-EPS);
 				*obstaclep = i;
 				*objectp = -1;
 			}
@@ -35,7 +35,7 @@ float castRay(float x, float y, float z, float xdir, float ydir, float zdir, int
 		float discrim = b*b-4*a*c;
 		if (discrim <= 0) continue;
 		float ans = (-b-sqrt(discrim))/(2*a);
-		if (ans > -EPS && ans < when && z+zdir*ans > 0) {
+		if (ans < when && z+zdir*ans > 0) {
 			*obstaclep = -1;
 			*objectp = i;
 			when = ans;
@@ -77,11 +77,12 @@ __kernel void render(float x, float y, float z, float xdir, float ydir, float zd
 			specular = true;
 		}
 		else if (zdir < 0 && x-xdir*z/zdir >= MIN_X && x-xdir*z/zdir <= MAX_X && y-ydir*z/zdir >= MIN_Y && y-ydir*z/zdir <= MAX_Y) {
-			ccolor = read_imagef(grass, texSample, (float2)(x-xdir*z/zdir, y-ydir*z/zdir)/20.0);
+			ccolor = read_imagef(grass, texSample, (float2)(x-xdir*z/zdir, y-ydir*z/zdir)/100.0);
 			normal = (float3)(0, 0, 1);
 			when = -z/zdir;
 			hit = true;
 		}
+		when *= (1-EPS);
 		if (hit) {
 			color = ccolor*.2;
 			for (int i = 0; i < lights; i++) {
@@ -94,6 +95,16 @@ __kernel void render(float x, float y, float z, float xdir, float ydir, float zd
 				color += .6*dot(lightdir, normal)*ccolor*(float4)(lightcolor[4*i]/255.0, lightcolor[4*i+1]/255.0, lightcolor[4*i+2]/255.0, lightcolor[4*i+3]/255.0);
 			}
 		}
+		
+		for (int i = 0; i < lights; i++) {
+			float xdiff = lightpos[3*i]-x, ydiff = lightpos[3*i+1]-y, zdiff = lightpos[3*i+2]-z;
+			float3 diffv = (float3)(xdiff, ydiff, zdiff);
+			diffv -= dot(diffv, dir)*dir;
+			float smallest = dot(diffv, diffv);
+			if (xdiff*xdir+ydiff*ydir+zdiff*zdir <= 0) smallest = xdiff*xdiff+ydiff*ydiff+zdiff*zdiff;
+			color += (float4)(lightcolor[4*i]/255.0, lightcolor[4*i+1]/255.0, lightcolor[4*i+2]/255.0, lightcolor[4*i+3]/255.0)*exp(-smallest/8.0)*3;
+		}
+		
 		tcolor += color*mult;
 		mult *= .2;
 		if (!specular) break;

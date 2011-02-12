@@ -3,8 +3,6 @@
 #include "render.h"
 #include "hack.h"
 #include <SDL/SDL.h>
-#include <SDL/SDL_thread.h>
-#include <GL/glew.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -28,85 +26,6 @@ void initVideo()
 	SDL_WM_GrabInput(SDL_GRAB_ON);
 	
 	initGL();
-}
-
-/*
- * Event handling:
- * Sends a buffer
- * First byte is event type
- * Followed by appropriate data
- */
-int event_handle(void*)
-{	
-	SDL_Event event;
-	for (;;) {
-		SDL_WaitEvent(&event);
-		switch(event.type) {
-			case SDL_KEYDOWN:
-			{
-				char b = -1;
-				switch (event.key.keysym.sym) {
-					case SDLK_ESCAPE:
-						_exit(0);
-						break;
-					case SDLK_a:
-						b = 0;
-						break;
-					case SDLK_d:
-						b = 1;
-						break;
-					case SDLK_w:
-						b = 2;
-						break;
-					case SDLK_s:
-						b = 3;
-						break;
-				}
-				if (b != -1) {
-					sock->send(&b, 1);
-				}
-				break;
-			}
-			case SDL_KEYUP:
-			{
-				char b = -1;
-				switch (event.key.keysym.sym) {
-					case SDLK_a:
-						b = 0;
-						break;
-					case SDLK_d:
-						b = 1;
-						break;
-					case SDLK_w:
-						b = 2;
-						break;
-					case SDLK_s:
-						b = 3;
-						break;
-				}
-				if (b != -1) {
-					b ^= 4;
-					sock->send(&b, 1);
-				}
-				break;
-			}
-			case SDL_QUIT:
-			{
-				_exit(0);
-				break;
-			}
-			case SDL_MOUSEMOTION: {
-				angle -= event.motion.xrel/float(WIDTH);
-				while (angle >= 2*M_PI) angle -= 2*M_PI;
-				while (angle < 0) angle += 2*M_PI;
-				char buf[5];
-				buf[0] = 8;
-				*((int*)(buf+1)) = htonl(*reinterpret_cast<int*>(&angle));
-				sock->send(buf, 5);
-				break;
-			}
-		}
-	}
 }
 
 int main(int argc, char* argv[])
@@ -137,17 +56,85 @@ int main(int argc, char* argv[])
 	u = ntohl(u);
 	angle = *reinterpret_cast<float*>(&u);
 	
-	thread = SDL_CreateThread(event_handle, NULL);
-	
 	int count = 0, oldTime = SDL_GetTicks();
 	for (;;) {
-		do {
+		while (sock->hasRemaining()) {
 			if (!world.receiveObjects(*sock)) exit(1);
-		} while (sock->hasRemaining());
+		}
+		
+		SDL_Event event;
+		while (SDL_PollEvent(&event)) {
+			switch(event.type) {
+				case SDL_KEYDOWN:
+				{
+					char b = -1;
+					switch (event.key.keysym.sym) {
+						case SDLK_ESCAPE:
+							exit(0);
+							break;
+						case SDLK_a:
+							b = 0;
+							break;
+						case SDLK_d:
+							b = 1;
+							break;
+						case SDLK_w:
+							b = 2;
+							break;
+						case SDLK_s:
+							b = 3;
+							break;
+					}
+					if (b != -1) {
+						sock->send(&b, 1);
+					}
+					break;
+				}
+				case SDL_KEYUP:
+				{
+					char b = -1;
+					switch (event.key.keysym.sym) {
+						case SDLK_a:
+							b = 0;
+							break;
+						case SDLK_d:
+							b = 1;
+							break;
+						case SDLK_w:
+							b = 2;
+							break;
+						case SDLK_s:
+							b = 3;
+							break;
+					}
+					if (b != -1) {
+						b ^= 4;
+						sock->send(&b, 1);
+					}
+					break;
+				}
+				case SDL_QUIT:
+				{
+					_exit(0);
+					break;
+				}
+				case SDL_MOUSEMOTION: {
+					angle -= event.motion.xrel/float(WIDTH);
+					while (angle >= 2*M_PI) angle -= 2*M_PI;
+					while (angle < 0) angle += 2*M_PI;
+					char buf[5];
+					buf[0] = 8;
+					*((int*)(buf+1)) = htonl(*reinterpret_cast<int*>(&angle));
+					sock->send(buf, 5);
+					break;
+				}
+			}
+		}
+		
 		render();
 		if ((++count)%100 == 0) {
 			int time = SDL_GetTicks();
-			cout << time-oldTime << endl;
+			cout << "100 frames in " << time-oldTime << " milliseconds" << endl;
 			oldTime = time;
 		}
 		SDL_GL_SwapBuffers();

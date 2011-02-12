@@ -65,6 +65,7 @@ int main() {
 			o.rad = 1.0f;
 			o.color = Color(0, 0, 255);
 			o.h = 1.0f;
+			o.dead = false;
 			o.id = clcomm.object_id;
 			float min_x = MIN_X + o.rad;
 			float max_x = MAX_X - o.rad;
@@ -153,12 +154,20 @@ int main() {
 			}
 			if(value != 0) {
 				acceleration = acceleration.getNormalVector()*KEYPRESS_ACCELERATION;
-				world.objects[it->object_id].v += acceleration*dt;
+				if (!world.objects[it->object_id].dead) world.objects[it->object_id].v += acceleration*dt;
 			}			
 		}
 		
-		for(map<int, Object>::iterator it = world.objects.begin(); it != world.objects.end(); it++)
-			it->second.v -= it->second.v*0.2*dt;
+		for(map<int, Object>::iterator it = world.objects.begin(); it != world.objects.end(); it++) {
+			if (it->second.dead) {
+				float newrad = it->second.rad-dt;
+				if (newrad < 0) newrad = 0;
+				it->second.p += (it->second.rad-newrad)*it->second.ddir;
+				it->second.h *= newrad/it->second.rad;
+				it->second.rad = newrad;
+			}
+			else it->second.v -= it->second.v*0.2*dt;
+		}
 
 		world.doSimulation(dt);
 		SDL_Delay(10);

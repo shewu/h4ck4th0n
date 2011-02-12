@@ -1,9 +1,10 @@
 #include "render.h"
-#include <GL/glew.h>
 #include <iostream>
 #include <fstream>
 #include <SDL/SDL.h>
 #include <GL/glx.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include <CL/cl.hpp>
 #include <IL/il.h>
 #include <cmath>
@@ -37,7 +38,7 @@ void initGL() {
 	program = cl::Program(context, clSource);
 	if (program.build(devices, "-I.")) {
 		cout << program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(devices[0]) << endl;
-		_exit(1);
+		exit(1);
 	}
 	
 	glViewport(0, 0, WIDTH, HEIGHT);
@@ -120,19 +121,19 @@ void render()
 	cl::Buffer lightcolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.lights.size()*sizeof(char), lightcolor, NULL);
 	
 	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
-	if (focusx < MIN_X+6) focusx = MIN_X+6;
-	if (focusx > MAX_X-6) focusx = MAX_X-6;
-	if (focusy < MIN_Y+6) focusy = MIN_Y+6;
-	if (focusy > MAX_Y-6) focusy = MAX_Y-6;
+	if (focusx < MIN_X+14) focusx += (14-focusx+MIN_X)*(14-focusx+MIN_X)/28.0;
+	if (focusx > MAX_X-14) focusx -= (14+focusx-MAX_X)*(14+focusx-MAX_X)/28.0;
+	if (focusy < MIN_Y+14) focusy += (14-focusy+MIN_Y)*(14-focusy+MIN_Y)/28.0;
+	if (focusy > MAX_Y-14) focusy -= (14+focusy-MAX_Y)*(14+focusy-MAX_Y)/28.0;
 	
 	cq.enqueueAcquireGLObjects(&bs);
 	cl::Kernel renderKern(program, "render", NULL);
-	renderKern.setArg(0, focusx-6*cos(angle));
-	renderKern.setArg(1, focusy-6*sin(angle));
-	renderKern.setArg(2, 3.0f);
+	renderKern.setArg(0, focusx-7*cos(angle));
+	renderKern.setArg(1, focusy-7*sin(angle));
+	renderKern.setArg(2, 4.0f);
 	renderKern.setArg(3, cos(angle));
 	renderKern.setArg(4, sin(angle));
-	renderKern.setArg(5, -.5f);
+	renderKern.setArg(5, -4.0f/7);
 	renderKern.setArg(6, (int)world.obstacles.size());
 	renderKern.setArg(7, obspointsbuf);
 	renderKern.setArg(8, obscolorbuf);

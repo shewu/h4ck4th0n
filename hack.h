@@ -74,6 +74,9 @@ class Object
 		float h;
 		int id;
 		
+		bool dead;
+		Vector2D ddir;
+		
 		bool send(Socket socket);
 		bool receive(Socket socket);
 };
@@ -119,6 +122,23 @@ class World
 			w4.deadly = false;
 			obstacles.push_back(w4);
 			
+			Obstacle deader1, deader2, deader3;
+			deader1.p1 = Vector2D(-7, -7);
+			deader1.p2 = Vector2D(-4, -4);
+			deader1.color = Color(0, 255, 0);
+			deader1.deadly = true;
+			obstacles.push_back(deader1);
+			deader2.p1 = Vector2D(-4, -4);
+			deader2.p2 = Vector2D(-4, -7);
+			deader2.color = Color(0, 255, 0);
+			deader2.deadly = true;
+			obstacles.push_back(deader2);
+			deader3.p1 = Vector2D(-4, -7);
+			deader3.p2 = Vector2D(-7, -7);
+			deader3.color = Color(0, 255, 0);
+			deader3.deadly = true;
+			obstacles.push_back(deader3);
+			
 			Object o;
 			o.p = Vector2D(0, 0);
 			o.v = Vector2D(0, 0);
@@ -126,15 +146,17 @@ class World
 			o.rad = 1;
 			o.color = Color(255, 150, 0);
 			o.h = 1.5;
+			o.dead = false;
 			o.id = 0;
 			objects[0] = o;
 			Object o2;
-			o2.p = Vector2D(0, 1);
+			o2.p = Vector2D(0, 2);
 			o2.v = Vector2D(0, 0);
 			o2.mass = 1.5;
 			o2.rad = 1;
 			o2.color = Color(255, 150, 0);
 			o2.h = 1.5;
+			o2.dead = false;
 			o2.id = 1;
 			objects[1] = o2;
 			

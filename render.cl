@@ -24,10 +24,10 @@ float castRay(float x, float y, float z, float xdir, float ydir, float zdir, int
 	for (int i = 0; i < objects; i++) {
 		float xpos = (x-objpoint[2*i])/objsize[2*i];
 		float ypos = (y-objpoint[2*i+1])/objsize[2*i];
-		float zpos = z/objsize[2*i+1];
+		float zpos = z/objsize[2*i]/objsize[2*i+1];
 		float xve = xdir/objsize[2*i];
 		float yve = ydir/objsize[2*i];
-		float zve = zdir/objsize[2*i+1];
+		float zve = zdir/objsize[2*i]/objsize[2*i+1];
 		float a = xve*xve+yve*yve+zve*zve;
 		float b = 2*(xpos*xve+ypos*yve+zpos*zve);
 		if (b >= 0) continue;
@@ -72,7 +72,7 @@ __kernel void render(float x, float y, float z, float xdir, float ydir, float zd
 		}
 		else if (object != -1) {
 			ccolor = (float4)(objcolor[4*object]/255.0, objcolor[4*object+1]/255.0, objcolor[4*object+2]/255.0, objcolor[4*object+3]/255.0);
-			normal = normalize((float3)(x+xdir*when-objpoint[2*object], y+ydir*when-objpoint[2*object+1], (z+zdir*when)*objsize[2*object]*objsize[2*object]/objsize[2*object+1]/objsize[2*object+1]));
+			normal = normalize((float3)(x+xdir*when-objpoint[2*object], y+ydir*when-objpoint[2*object+1], (z+zdir*when)/objsize[2*object+1]/objsize[2*object+1]));
 			hit = true;
 			specular = true;
 		}

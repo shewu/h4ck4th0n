@@ -5,8 +5,6 @@
 #include <vector>
 #include "constants.h"
 
-#define KEYPRESS_ACCELERATION 2.0f
-
 class Socket
 {
 	public:
@@ -71,11 +69,13 @@ class Object
 		float mass;
 		float rad;
 		Color color;
-		float h;
+		float hrat;
 		int id;
 		
 		bool dead;
-		Vector2D ddir;
+		bool stopped;
+		int nattached;
+		int attachedTo;
 		
 		bool send(Socket socket);
 		bool receive(Socket socket);
@@ -145,7 +145,7 @@ class World
 			o.mass = 1.5;
 			o.rad = 1;
 			o.color = Color(255, 150, 0);
-			o.h = 1.5;
+			o.hrat = 1.5;
 			o.dead = false;
 			o.id = 0;
 			objects[0] = o;
@@ -155,7 +155,7 @@ class World
 			o2.mass = 1.5;
 			o2.rad = 1;
 			o2.color = Color(255, 150, 0);
-			o2.h = 1.5;
+			o2.hrat = 1.5;
 			o2.dead = false;
 			o2.id = 1;
 			objects[1] = o2;

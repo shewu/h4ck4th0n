@@ -64,7 +64,7 @@ int main() {
 			o.mass = 1.0f;
 			o.rad = 1.0f;
 			o.color = Color(0, 0, 255);
-			o.h = 1.0f;
+			o.hrat = 1.0f;
 			o.dead = false;
 			o.id = clcomm.object_id;
 			float min_x = MIN_X + o.rad;
@@ -104,7 +104,7 @@ int main() {
 			while (clients[i].sock.hasRemaining()) {
 				char data;
 				if(!clients[i].sock.receive(&data, 1)) {
-					world.objects.erase(clients[i].object_id);
+					if (!world.objects[clients[i].object_id].dead) world.objects.erase(clients[i].object_id);
 					for(int j = i; j < clients.size() - 1; j++)
 						clients[j] = clients[j+1];
 					clients.pop_back();
@@ -159,14 +159,7 @@ int main() {
 		}
 		
 		for(map<int, Object>::iterator it = world.objects.begin(); it != world.objects.end(); it++) {
-			if (it->second.dead) {
-				float newrad = it->second.rad-dt;
-				if (newrad < 0) newrad = 0;
-				it->second.p += (it->second.rad-newrad)*it->second.ddir;
-				it->second.h *= newrad/it->second.rad;
-				it->second.rad = newrad;
-			}
-			else it->second.v -= it->second.v*0.2*dt;
+			if (!it->second.dead) it->second.v -= it->second.v*0.2*dt;
 		}
 
 		world.doSimulation(dt);

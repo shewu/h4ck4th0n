@@ -13,7 +13,7 @@ bool Object::send(Socket socket) {
 	*(buf + 24) = color.r;
 	*(buf + 25) = color.g;
 	*(buf + 26) = color.b;
-	*((int*)(buf + 27)) = htonl(*reinterpret_cast<int*>(&h));
+	*((int*)(buf + 27)) = htonl(*reinterpret_cast<int*>(&hrat));
 	*((int*)(buf + 31)) = htonl(id);
 	return socket.send(buf, 35);
 }
@@ -39,7 +39,7 @@ bool Object::receive(Socket socket) {
 	color.r = *(buf + 24);
 	color.g = *(buf + 25);
 	color.b = *(buf + 26);
-	h = *reinterpret_cast<float*>(buf + 27);
+	hrat = *reinterpret_cast<float*>(buf + 27);
 	id = ntohl(*((int*)(buf + 31)));
 	return true;
 }

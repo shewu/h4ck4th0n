@@ -95,7 +95,7 @@ void render()
 		objpoint[2*i] = it->second.p.x;
 		objpoint[2*i+1] = it->second.p.y;
 		objsize[2*i] = it->second.rad;
-		objsize[2*i+1] = it->second.h;
+		objsize[2*i+1] = it->second.hrat;
 		objcolor[4*i] = it->second.color.r;
 		objcolor[4*i+1] = it->second.color.g;
 		objcolor[4*i+2] = it->second.color.b;

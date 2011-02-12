@@ -14,6 +14,7 @@ using namespace std;
 GLUquadric* quad;
 cl::Context context;
 cl::Image2DGL igl;
+cl::Image2DGL igl2;
 cl::Program program;
 vector<cl::Memory> bs;
 vector<cl::Device> devices;
@@ -43,14 +44,28 @@ void initGL() {
 	glOrtho(-1, 1, -1, 1, -1, 1);
 	
 	glEnable(GL_TEXTURE_2D);
-	GLuint texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	GLuint texture[2];
+	glGenTextures(2, texture);
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, WIDTH, HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-	
-	igl = cl::Image2DGL(context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, texture, NULL);
+	igl = cl::Image2DGL(context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, texture[0], NULL);
+	glBindTexture(GL_TEXTURE_2D, texture[1]);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	unsigned int image;
+	ilInit();
+	ilGenImages(1, &image);
+	ilBindImage(image);
+	ilLoadImage("grass.png");
+	ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+	igl2 = cl::Image2DGL(context, CL_MEM_READ_ONLY, GL_TEXTURE_2D, 0, texture[1], NULL);
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	bs.push_back(igl);
+	bs.push_back(igl2);
 	cq = cl::CommandQueue(context, devices[0], 0, NULL);
 }
 
@@ -90,6 +105,20 @@ void render()
 	cl::Buffer objsizebuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 2*world.objects.size()*sizeof(float), objsize, NULL);
 	cl::Buffer objcolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.objects.size()*sizeof(char), objcolor, NULL);
 	
+	float lightpos[3*world.lights.size()];
+	unsigned char lightcolor[4*world.lights.size()];
+	for (int i = 0; i < world.lights.size(); i++) {
+		lightpos[3*i] = world.lights[i].position.x;
+		lightpos[3*i+1] = world.lights[i].position.y;
+		lightpos[3*i+2] = world.lights[i].position.z;
+		lightcolor[4*i] = world.lights[i].color.r;
+		lightcolor[4*i+1] = world.lights[i].color.g;
+		lightcolor[4*i+2] = world.lights[i].color.b;
+		lightcolor[4*i+3] = world.lights[i].color.a;
+	}
+	cl::Buffer lightposbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 3*world.lights.size()*sizeof(float), lightpos, 0);
+	cl::Buffer lightcolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.lights.size()*sizeof(char), lightcolor, NULL);
+	
 	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
 	if (focusx < MIN_X+6) focusx = MIN_X+6;
 	if (focusx > MAX_X-6) focusx = MAX_X-6;
@@ -111,7 +140,11 @@ void render()
 	renderKern.setArg(10, objpointbuf);
 	renderKern.setArg(11, objsizebuf);
 	renderKern.setArg(12, objcolorbuf);
-	renderKern.setArg(13, igl);
+	renderKern.setArg(13, (int)world.lights.size());
+	renderKern.setArg(14, lightposbuf);
+	renderKern.setArg(15, lightcolorbuf);
+	renderKern.setArg(16, igl);
+	renderKern.setArg(17, igl2);
 	cq.enqueueNDRangeKernel(renderKern, cl::NullRange, cl::NDRange((WIDTH+15)/16*16, (HEIGHT+15)/16*16), cl::NDRange(16, 16));
 	cq.enqueueReleaseGLObjects(&bs);
 	cq.finish();

@@ -139,11 +139,17 @@ int main(int argc, char* argv[])
 	
 	thread = SDL_CreateThread(event_handle, NULL);
 	
+	int count = 0, oldTime = SDL_GetTicks();
 	for (;;) {
 		do {
 			if (!world.receiveObjects(*sock)) exit(1);
 		} while (sock->hasRemaining());
 		render();
+		if ((++count)%100 == 0) {
+			int time = SDL_GetTicks();
+			cout << time-oldTime << endl;
+			oldTime = time;
+		}
 		SDL_GL_SwapBuffers();
 	}
 }

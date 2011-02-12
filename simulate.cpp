@@ -141,13 +141,13 @@ void World::doSimulation(float dt)
 			case 1: {
 				collideTimesObs[pair<int, int>(e.t1, e.t2)] = INFINITY;
 				objects[e.t1].p += (e.time-knownTime)*objects[e.t1].v;
+				Vector2D normal = objects[e.t1].p-obstacles[e.t2].p1;
 				if (obstacles[e.t2].deadly) {
 					objects[e.t1].dead = true;
-					objects[e.t1].ddir = objects[e.t1].v*(1/sqrt(objects[e.t1].v*objects[e.t1].v));
+					objects[e.t1].ddir = -normal*(1/sqrt(normal*normal));
 					objects[e.t1].v = 0;
 				}
 				else {
-					Vector2D normal = objects[e.t1].p-obstacles[e.t2].p1;
 					float nv1 = objects[e.t1].v*normal;
 					objects[e.t1].v -= 2*(nv1/(normal*normal))*normal;
 				}
@@ -168,13 +168,13 @@ void World::doSimulation(float dt)
 			case 2: {
 				collideTimesObs[pair<int, int>(e.t1, e.t2)] = INFINITY;
 				objects[e.t1].p += (e.time-knownTime)*objects[e.t1].v;
+				Vector2D normal = objects[e.t1].p-obstacles[e.t2].p2;
 				if (obstacles[e.t2].deadly) {
 					objects[e.t1].dead = true;
-					objects[e.t1].ddir = objects[e.t1].v*(1/sqrt(objects[e.t1].v*objects[e.t1].v));
+					objects[e.t1].ddir = -normal*(1/sqrt(normal*normal));
 					objects[e.t1].v = 0;
 				}
 				else {
-					Vector2D normal = objects[e.t1].p-obstacles[e.t2].p2;
 					float nv1 = objects[e.t1].v*normal;
 					objects[e.t1].v -= 2*(nv1/(normal*normal))*normal;
 				}
@@ -195,13 +195,13 @@ void World::doSimulation(float dt)
 			case 3: {
 				collideTimesObs[pair<int, int>(e.t1, e.t2)] = INFINITY;
 				objects[e.t1].p += (e.time-knownTime)*objects[e.t1].v;
+				Vector2D normal = (obstacles[e.t2].p2-obstacles[e.t2].p1).getNormalVector();
 				if (obstacles[e.t2].deadly) {
 					objects[e.t1].dead = true;
-					objects[e.t1].ddir = objects[e.t1].v*(1/sqrt(objects[e.t1].v*objects[e.t1].v));
+					objects[e.t1].ddir = -normal*(1/sqrt(normal*normal));
 					objects[e.t1].v = 0;
 				}
 				else {
-					Vector2D normal = (obstacles[e.t2].p2-obstacles[e.t2].p1).getNormalVector();
 					float nv1 = objects[e.t1].v*normal;
 					objects[e.t1].v -= 2*(nv1/(normal*normal))*normal;
 				}

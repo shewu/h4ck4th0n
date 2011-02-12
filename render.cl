@@ -83,7 +83,7 @@ __kernel void render(float x, float y, float z, float xdir, float ydir, float zd
 			hit = true;
 		}
 		if (hit) {
-			color = ccolor*.1;
+			color = ccolor*.2;
 			for (int i = 0; i < lights; i++) {
 				float3 lightdir = (float3)(lightpos[3*i]-x-xdir*when, lightpos[3*i+1]-y-ydir*when, lightpos[3*i+2]-z-zdir*when);
 				float w = castRay(x+xdir*when, y+ydir*when, z+zdir*when, lightdir.x, lightdir.y, lightdir.z, obstacles, obspoints, objects, objpoint, objsize, &obstacle, &object, 1);
@@ -91,7 +91,7 @@ __kernel void render(float x, float y, float z, float xdir, float ydir, float zd
 			
 				lightdir = normalize(lightdir);
 				if (dot(lightdir, normal) <= 0) continue;
-				color += .4*dot(lightdir, normal)*ccolor*(float4)(lightcolor[4*i]/255.0, lightcolor[4*i+1]/255.0, lightcolor[4*i+2]/255.0, lightcolor[4*i+3]/255.0);
+				color += .6*dot(lightdir, normal)*ccolor*(float4)(lightcolor[4*i]/255.0, lightcolor[4*i+1]/255.0, lightcolor[4*i+2]/255.0, lightcolor[4*i+3]/255.0);
 			}
 		}
 		tcolor += color*mult;

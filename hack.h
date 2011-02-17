@@ -164,6 +164,11 @@ class World
 			l.position = Vector3D(0, 0, 10);
 			l.color = Color(255, 255, 255);
 			lights.push_back(l);
+			
+			Light l2;
+			l2.position = Vector3D(0, 30, 20);
+			l2.color = Color(255, 255, 255);
+			lights.push_back(l2);
 		}
 		std::map<int, Object> objects;
 		std::vector<Light> lights;

@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
 				}
 				case SDL_QUIT:
 				{
-					_exit(0);
+					exit(0);
 					break;
 				}
 				case SDL_MOUSEMOTION: {

@@ -117,7 +117,7 @@ void render()
 		lightcolor[4*i+2] = world.lights[i].color.b;
 		lightcolor[4*i+3] = world.lights[i].color.a;
 	}
-	cl::Buffer lightposbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 3*world.lights.size()*sizeof(float), lightpos, 0);
+	cl::Buffer lightposbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 3*world.lights.size()*sizeof(float), lightpos, NULL);
 	cl::Buffer lightcolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.lights.size()*sizeof(char), lightcolor, NULL);
 	
 	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;

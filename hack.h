@@ -3,6 +3,8 @@
 
 #include <map>
 #include <vector>
+#include <fstream>
+#include <string>
 #include "constants.h"
 
 class Socket
@@ -122,43 +124,45 @@ class World
 			w4.deadly = false;
 			obstacles.push_back(w4);
 			
-			Obstacle deader1, deader2, deader3;
-			deader1.p1 = Vector2D(-7, -7);
-			deader1.p2 = Vector2D(-4, -4);
-			deader1.color = Color(0, 255, 0);
-			deader1.deadly = true;
-			obstacles.push_back(deader1);
-			deader2.p1 = Vector2D(-4, -4);
-			deader2.p2 = Vector2D(-4, -7);
-			deader2.color = Color(0, 255, 0);
-			deader2.deadly = true;
-			obstacles.push_back(deader2);
-			deader3.p1 = Vector2D(-4, -7);
-			deader3.p2 = Vector2D(-7, -7);
-			deader3.color = Color(0, 255, 0);
-			deader3.deadly = true;
-			obstacles.push_back(deader3);
-			
-			Object o;
-			o.p = Vector2D(0, 0);
-			o.v = Vector2D(0, 0);
-			o.mass = 1.5;
-			o.rad = 1;
-			o.color = Color(255, 150, 0);
-			o.hrat = 1.5;
-			o.dead = false;
-			o.id = 0;
-			objects[0] = o;
-			Object o2;
-			o2.p = Vector2D(0, 2);
-			o2.v = Vector2D(0, 0);
-			o2.mass = 1.5;
-			o2.rad = 1;
-			o2.color = Color(255, 150, 0);
-			o2.hrat = 1.5;
-			o2.dead = false;
-			o2.id = 1;
-			objects[1] = o2;
+			std::ifstream mapf("map");
+			int nobs = 0;
+			std::string cmd;
+			while (mapf >> cmd) {
+				if (cmd == "obs") {
+					float x1, y1, x2, y2;
+					mapf >> x1 >> y1 >> x2 >> y2;
+					Obstacle obs;
+					obs.p1 = Vector2D(x1, y1);
+					obs.p2 = Vector2D(x2, y2);
+					obs.color = Color(255, 0, 0);
+					obs.deadly = false;
+					obstacles.push_back(obs);
+				}
+				else if (cmd == "sobs") {
+					float x1, y1, x2, y2;
+					mapf >> x1 >> y1 >> x2 >> y2;
+					Obstacle obs;
+					obs.p1 = Vector2D(x1, y1);
+					obs.p2 = Vector2D(x2, y2);
+					obs.color = Color(0, 255, 0);
+					obs.deadly = true;
+					obstacles.push_back(obs);
+				}
+				else if (cmd == "obj") {
+					float x, y, mass, rad, hrat;
+					mapf >> x >> y >> mass >> rad >> hrat;
+					Object obj;
+					obj.p = Vector2D(x, y);
+					obj.v = Vector2D(0, 0);
+					obj.mass = mass;
+					obj.rad = rad;
+					obj.hrat = hrat;
+					obj.dead = false;
+					obj.id = nobs++;
+					obj.color = Color(255, 150, 0);
+					objects[obj.id] = obj;
+				}
+			}
 			
 			Light l;
 			l.position = Vector3D(0, 0, 10);

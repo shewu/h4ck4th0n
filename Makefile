@@ -2,7 +2,7 @@
 
 CC=g++
 LD=g++
-CCFLAGS=-I. -O2 -g
+CCFLAGS=-O2 -g
 LDFLAGS=-lSDL -lGL -lGLU -lIL -lOpenCL -O2 -g
 SERVER_TARGET=server
 CLIENT_TARGET=client

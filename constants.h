@@ -9,5 +9,7 @@
 #define MAX_Y 30.0f
 #define KEYPRESS_ACCELERATION 2.0f
 #define DEATH_RATE .05
+#define MAX_DEPTH 100
+#define EPS .000001
 
 #endif

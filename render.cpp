@@ -6,7 +6,6 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <CL/cl.hpp>
-#include <IL/il.h>
 #include <cmath>
 #include "client.h"
 
@@ -15,7 +14,6 @@ using namespace std;
 GLUquadric* quad;
 cl::Context context;
 cl::Image2DGL igl;
-cl::Image2DGL igl2;
 cl::Program program;
 vector<cl::Memory> bs;
 vector<cl::Device> devices;
@@ -45,98 +43,14 @@ void initGL() {
 	glOrtho(-1, 1, -1, 1, -1, 1);
 	
 	glEnable(GL_TEXTURE_2D);
-	GLuint texture[2];
-	glGenTextures(2, texture);
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, WIDTH, HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-	igl = cl::Image2DGL(context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, texture[0], NULL);
-	glBindTexture(GL_TEXTURE_2D, texture[1]);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	unsigned int image;
-	ilInit();
-	ilGenImages(1, &image);
-	ilBindImage(image);
-	ilLoadImage("grass.png");
-	ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
-	igl2 = cl::Image2DGL(context, CL_MEM_READ_ONLY, GL_TEXTURE_2D, 0, texture[1], NULL);
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	igl = cl::Image2DGL(context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, texture, NULL);
 	bs.push_back(igl);
-	bs.push_back(igl2);
 	cq = cl::CommandQueue(context, devices[0], 0, NULL);
-}
-
-struct obsDesc {
-	int obs;
-	float start;
-	float end;
-};
-
-struct node {
-	int obs;
-	int left;
-	int right;
-};
-
-int buildBSP(vector<obsDesc> obstacles, vector<node>& nodes) {
-	int pos = nodes.size();
-	node n = { obstacles[rand()%obstacles.size()].obs, -1, -1 };
-	nodes.push_back(n);
-	
-	vector<obsDesc> leftObs, rightObs;
-	
-	Vector2D normal = (world.obstacles[n.obs].p2-world.obstacles[n.obs].p1).getNormalVector();
-	float normAmount = world.obstacles[n.obs].p1*normal;
-	for (int i = 0; i < obstacles.size(); i++) {
-		if (obstacles[i].obs == n.obs) continue;
-		Vector2D dir = world.obstacles[obstacles[i].obs].p2-world.obstacles[obstacles[i].obs].p1;
-		float v1 = ((1-obstacles[i].start)*world.obstacles[obstacles[i].obs].p1+obstacles[i].start*world.obstacles[obstacles[i].obs].p2)*normal, v2 = ((1-obstacles[i].end)*world.obstacles[obstacles[i].obs].p1+obstacles[i].end*world.obstacles[obstacles[i].obs].p2)*normal;
-		if (fabs(v1-normAmount) < EPS) v1 = v2;
-		if (fabs(v2-normAmount) < EPS) v2 = v1;
-		if (v1 < normAmount) {
-			if (v2 < normAmount) leftObs.push_back(obstacles[i]);
-			else {
-				float intermed = (normAmount-world.obstacles[obstacles[i].obs].p1*normal)*(1/(dir*normal));
-				obsDesc o1 = { obstacles[i].obs, obstacles[i].start, intermed };
-				leftObs.push_back(o1);
-				obsDesc o2 = { obstacles[i].obs, intermed, obstacles[i].end };
-				rightObs.push_back(o2);
-			}
-		}
-		else {
-			if (v2 < normAmount) {
-				float intermed = (normAmount-world.obstacles[obstacles[i].obs].p1*normal)*(1/(dir*normal));
-				obsDesc o1 = { obstacles[i].obs, intermed, obstacles[i].end };
-				leftObs.push_back(o1);
-				obsDesc o2 = { obstacles[i].obs, obstacles[i].start, intermed };
-				rightObs.push_back(o2);
-			}
-			else rightObs.push_back(obstacles[i]);
-		}
-	}
-	if (leftObs.size()) {
-		int l = buildBSP(leftObs, nodes);
-		nodes[pos].left = l;
-	}
-	if (rightObs.size()) {
-		int r = buildBSP(rightObs, nodes);
-		nodes[pos].right = r;
-	}
-	return pos;
-}
-
-void buildWholeBSP(vector<node>& nodes) {
-	vector<obsDesc> obstacles(world.obstacles.size());
-	for (int i = 0; i < obstacles.size(); i++) {
-		obstacles[i].obs = i;
-		obstacles[i].start = 0;
-		obstacles[i].end = 1;
-	}
-	buildBSP(obstacles, nodes);
 }
 
 void render()
@@ -189,9 +103,6 @@ void render()
 	cl::Buffer lightposbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 3*world.lights.size()*sizeof(float), lightpos, NULL);
 	cl::Buffer lightcolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.lights.size()*sizeof(char), lightcolor, NULL);
 	
-	vector<node> nodes;
-	buildWholeBSP(nodes);
-	cl::Buffer bspbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, nodes.size()*sizeof(node), &nodes[0], NULL);
 	
 	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
 	if (focusx < MIN_X+14) focusx += (14-focusx+MIN_X)*(14-focusx+MIN_X)/28.0;
@@ -210,16 +121,14 @@ void render()
 	renderKern.setArg(6, (int)world.obstacles.size());
 	renderKern.setArg(7, obspointsbuf);
 	renderKern.setArg(8, obscolorbuf);
-	renderKern.setArg(9, bspbuf);
-	renderKern.setArg(10, (int)world.objects.size());
-	renderKern.setArg(11, objpointbuf);
-	renderKern.setArg(12, objsizebuf);
-	renderKern.setArg(13, objcolorbuf);
-	renderKern.setArg(14, (int)world.lights.size());
-	renderKern.setArg(15, lightposbuf);
-	renderKern.setArg(16, lightcolorbuf);
-	renderKern.setArg(17, igl);
-	renderKern.setArg(18, igl2);
+	renderKern.setArg(9, (int)world.objects.size());
+	renderKern.setArg(10, objpointbuf);
+	renderKern.setArg(11, objsizebuf);
+	renderKern.setArg(12, objcolorbuf);
+	renderKern.setArg(13, (int)world.lights.size());
+	renderKern.setArg(14, lightposbuf);
+	renderKern.setArg(15, lightcolorbuf);
+	renderKern.setArg(16, igl);
 	cq.enqueueNDRangeKernel(renderKern, cl::NullRange, cl::NDRange((WIDTH+15)/16*16, (HEIGHT+15)/16*16), cl::NDRange(16, 16));
 	cq.enqueueReleaseGLObjects(&bs);
 	cq.finish();

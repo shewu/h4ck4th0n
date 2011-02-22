@@ -4,7 +4,7 @@
 
 const sampler_t texSample = CLK_NORMALIZED_COORDS_TRUE|CLK_ADDRESS_REPEAT|CLK_FILTER_LINEAR;
 
-float castRay(float x, float y, float z, float xdir, float ydir, float zdir, int obstacles, __constant float* obspoints, __constant int* bsp, int objects, __constant float* objpoint, __constant float* objsize, int* obstaclep, int* objectp, float when) {
+float castRay(float x, float y, float z, float xdir, float ydir, float zdir, int obstacles, __constant float* obspoints, int objects, __constant float* objpoint, __constant float* objsize, int* obstaclep, int* objectp, float when) {
 	for (int i = 0; i < obstacles; i++) {
 		float xdirr = obspoints[4*i+2]-obspoints[4*i], ydirr = obspoints[4*i+3]-obspoints[4*i+1];
 		float pos = x*ydirr-y*xdirr, amount = xdir*ydirr-ydir*xdirr;
@@ -44,7 +44,7 @@ float castRay(float x, float y, float z, float xdir, float ydir, float zdir, int
 	return when;
 }
 
-__kernel void render(float x, float y, float z, float xdir, float ydir, float zdir, int obstacles, __constant float* obspoints, __constant unsigned char* obscolor, __constant int* bsp, int objects, __constant float* objpoint, __constant float* objsize, __constant unsigned char* objcolor, int lights, __constant float* lightpos, __constant unsigned char* lightcolor, __write_only image2d_t im, __read_only image2d_t grass) {
+__kernel void render(float x, float y, float z, float xdir, float ydir, float zdir, int obstacles, __constant float* obspoints, __constant unsigned char* obscolor, int objects, __constant float* objpoint, __constant float* objsize, __constant unsigned char* objcolor, int lights, __constant float* lightpos, __constant unsigned char* lightcolor, __write_only image2d_t im) {
 	float nxdir = xdir+((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*ydir);
 	float nydir = ydir-((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*xdir);
 	xdir = nxdir;
@@ -55,7 +55,7 @@ __kernel void render(float x, float y, float z, float xdir, float ydir, float zd
 	for (int s = 0; s < 6; s++) {
 		int obstacle = -1;
 		int object = -1;
-		float when = castRay(x, y, z, xdir, ydir, zdir, obstacles, obspoints, bsp, objects, objpoint, objsize, &obstacle, &object, 100);
+		float when = castRay(x, y, z, xdir, ydir, zdir, obstacles, obspoints, objects, objpoint, objsize, &obstacle, &object, 100);
 		
 		float4 color = (float4)(0, .5, 1, 1);
 		float4 ccolor;
@@ -77,7 +77,10 @@ __kernel void render(float x, float y, float z, float xdir, float ydir, float zd
 			specular = true;
 		}
 		else if (zdir < 0 && x-xdir*z/zdir >= MIN_X && x-xdir*z/zdir <= MAX_X && y-ydir*z/zdir >= MIN_Y && y-ydir*z/zdir <= MAX_Y) {
-			ccolor = read_imagef(grass, texSample, (float2)(x-xdir*z/zdir, y-ydir*z/zdir)/100.0);
+			float xp = (x-xdir*z/zdir)/3, yp = (y-ydir*z/zdir)/3;
+			if (xp < 0) xp += (int)(fabs(xp)/2+1)*2;
+			if (yp < 0) yp += (int)(fabs(yp)/2+1)*2;
+			ccolor = (((int)xp+(int)yp)%2)*(float4)(1, 1, 1, 0);
 			normal = (float4)(0, 0, 1, 0);
 			when = -z/zdir;
 			hit = true;
@@ -87,7 +90,7 @@ __kernel void render(float x, float y, float z, float xdir, float ydir, float zd
 			color = ccolor*.2;
 			for (int i = 0; i < lights; i++) {
 				float4 lightdir = (float4)(lightpos[3*i]-x-xdir*when, lightpos[3*i+1]-y-ydir*when, lightpos[3*i+2]-z-zdir*when, 0);
-				float w = castRay(x+xdir*when, y+ydir*when, z+zdir*when, lightdir.x, lightdir.y, lightdir.z, obstacles, obspoints, bsp, objects, objpoint, objsize, &obstacle, &object, 1);
+				float w = castRay(x+xdir*when, y+ydir*when, z+zdir*when, lightdir.x, lightdir.y, lightdir.z, obstacles, obspoints, objects, objpoint, objsize, &obstacle, &object, 1);
 				if (w != 1) continue;
 			
 				lightdir = normalize(lightdir);

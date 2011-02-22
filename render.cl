@@ -22,7 +22,7 @@ float castRay(float x, float y, float z, float xdir, float ydir, float zdir, int
 			float loc2 = loc1+xdirr*xdirr+ydirr*ydirr;
 			float loc = newx*xdirr+newy*ydirr;
 			timeStack[n] = move*(1-EPS);
-			if (loc >= loc1 && loc <= loc2 && newz >= 0 && newz < 1) nodeStack[n] = -i-1;
+			if (loc >= loc1 && loc <= loc2 && newz >= 0 && newz < 2.5) nodeStack[n] = -i-1;
 			else if (which < 0 && bsp[3*current+1] != -1) nodeStack[n] = bsp[3*current+1];
 			else if (bsp[3*current+2] != -1) nodeStack[n] = bsp[3*current+2];
 			else n--;

@@ -103,7 +103,6 @@ void render()
 	cl::Buffer lightposbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 3*world.lights.size()*sizeof(float), lightpos, NULL);
 	cl::Buffer lightcolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.lights.size()*sizeof(char), lightcolor, NULL);
 	
-	
 	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
 	if (focusx < MIN_X+14) focusx += (14-focusx+MIN_X)*(14-focusx+MIN_X)/28.0;
 	if (focusx > MAX_X-14) focusx -= (14+focusx-MAX_X)*(14+focusx-MAX_X)/28.0;
@@ -142,6 +141,5 @@ void render()
 		glVertex2f(1, 1);
 		glTexCoord2f(1, 0);
 		glVertex2f(1, -1);
-		glEnd();
 	glEnd();
 }

@@ -44,7 +44,28 @@ float castRay(float x, float y, float z, float xdir, float ydir, float zdir, int
 	return when;
 }
 
-__kernel void render(float x, float y, float z, float xdir, float ydir, float zdir, int obstacles, __constant float* obspoints, __constant unsigned char* obscolor, int objects, __constant float* objpoint, __constant float* objsize, __constant unsigned char* objcolor, int lights, __constant float* lightpos, __constant unsigned char* lightcolor, __write_only image2d_t im) {
+__kernel void 
+render(
+	float x, 
+	float y, 
+	float z, 
+	float xdir, 
+	float ydir, 
+	float zdir, 
+	int obstacles, 
+	__constant float* obspoints, 
+	__constant unsigned char* obscolor, 
+	int objects, 
+	__constant float* objpoint, 
+	__constant float* objsize, 
+	__constant unsigned char* objcolor, 
+	int lights, 
+	__constant float* lightpos, 
+	__constant unsigned char* lightcolor, 
+	__write_only image2d_t im,
+	int WIDTH,
+	int HEIGHT
+	) {
 	float nxdir = xdir+((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*ydir);
 	float nydir = ydir-((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*xdir);
 	xdir = nxdir;

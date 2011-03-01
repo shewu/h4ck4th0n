@@ -177,6 +177,7 @@ class World
 		std::map<int, Object> objects;
 		std::vector<Light> lights;
 		std::vector<Obstacle> obstacles;
+		std::vector<std::pair<char, Vector2D> > sounds;
 		void doSimulation(float dt);
 		
 		bool sendObjects(Socket socket);

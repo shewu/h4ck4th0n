@@ -123,6 +123,7 @@ void World::doSimulation(float dt)
 	
 	int eventsDone = 0;
 	float knownTime = 0;
+	sounds.clear();
 	while (!collide_events.empty() && collide_events.top().time < dt && eventsDone < MAX_EVENTS) {
 		collide_event e = collide_events.top();
 		collide_events.pop();
@@ -143,6 +144,7 @@ void World::doSimulation(float dt)
 					objects[e.t2].nattached = 0;
 					objects[e.t2].attachedTo = e.t1;
 					objects[e.t1].nattached++;
+					sounds.push_back(pair<int, Vector2D>(1, objects[e.t1].p+normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 				}
 				else if (objects[e.t2].dead) {
 					if (objects[e.t2].nattached == 0) objects[e.t2].rad -= DEATH_RATE*(e.time-knownTime);
@@ -152,12 +154,14 @@ void World::doSimulation(float dt)
 					objects[e.t1].nattached = 0;
 					objects[e.t1].attachedTo = e.t2;
 					objects[e.t2].nattached++;
+					sounds.push_back(pair<int, Vector2D>(1, objects[e.t1].p+normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 				}
 				else {
 					objects[e.t1].v -= (nv1/(normal*normal))*normal;
 					objects[e.t2].v -= (nv2/(normal*normal))*normal;
 					objects[e.t1].v += (((objects[e.t1].mass-objects[e.t2].mass)/(objects[e.t1].mass+objects[e.t2].mass)*nv1+2*objects[e.t2].mass/(objects[e.t1].mass+objects[e.t2].mass)*nv2)/(normal*normal))*normal;
 					objects[e.t2].v += (((objects[e.t2].mass-objects[e.t1].mass)/(objects[e.t2].mass+objects[e.t1].mass)*nv2+2*objects[e.t1].mass/(objects[e.t2].mass+objects[e.t1].mass)*nv1)/(normal*normal))*normal;
+					sounds.push_back(pair<int, Vector2D>(0, objects[e.t1].p+normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 				}
 				
 				for (map<int, Object>::iterator i = objects.begin(); i != objects.end(); i++) if (i->first != e.t1 && i->first != e.t2) {
@@ -192,10 +196,12 @@ void World::doSimulation(float dt)
 					objects[e.t1].v = -normal*(1/sqrt(normal*normal))*DEATH_RATE;
 					objects[e.t1].nattached = 0;
 					objects[e.t1].attachedTo = -1;
+					sounds.push_back(pair<int, Vector2D>(1, objects[e.t1].p-normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 				}
 				else {
 					float nv1 = objects[e.t1].v*normal;
 					objects[e.t1].v -= 2*(nv1/(normal*normal))*normal;
+					sounds.push_back(pair<int, Vector2D>(0, objects[e.t1].p-normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 				}
 				
 				for (map<int, Object>::iterator i = objects.begin(); i != objects.end(); i++) if (i->first != e.t1) {
@@ -222,10 +228,12 @@ void World::doSimulation(float dt)
 					objects[e.t1].v = -normal*(1/sqrt(normal*normal))*DEATH_RATE;
 					objects[e.t1].nattached = 0;
 					objects[e.t1].attachedTo = -1;
+					sounds.push_back(pair<int, Vector2D>(1, objects[e.t1].p-normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 				}
 				else {
 					float nv1 = objects[e.t1].v*normal;
 					objects[e.t1].v -= 2*(nv1/(normal*normal))*normal;
+					sounds.push_back(pair<int, Vector2D>(0, objects[e.t1].p-normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 				}
 				
 				for (map<int, Object>::iterator i = objects.begin(); i != objects.end(); i++) if (i->first != e.t1) {
@@ -253,10 +261,12 @@ void World::doSimulation(float dt)
 					objects[e.t1].v = -normal*(1/sqrt(normal*normal))*DEATH_RATE;
 					objects[e.t1].nattached = 0;
 					objects[e.t1].attachedTo = -1;
+					sounds.push_back(pair<int, Vector2D>(1, objects[e.t1].p-normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 				}
 				else {
 					float nv1 = objects[e.t1].v*normal;
 					objects[e.t1].v -= 2*(nv1/(normal*normal))*normal;
+					sounds.push_back(pair<int, Vector2D>(0, objects[e.t1].p-normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 				}
 				
 				for (map<int, Object>::iterator i = objects.begin(); i != objects.end(); i++) if (i->first != e.t1) {

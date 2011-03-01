@@ -12,4 +12,6 @@
 #define MAX_DEPTH 100
 #define EPS .000001
 
+#define ALSRCS 32
+
 #endif

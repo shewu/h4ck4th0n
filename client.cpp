@@ -3,6 +3,8 @@
 #include "render.h"
 #include "hack.h"
 #include <SDL/SDL.h>
+#include <AL/al.h>
+#include <AL/alc.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -16,6 +18,7 @@ Socket* sock;
 World world;
 float angle;
 int myId;
+unsigned int albuf[2], alsrcs[ALSRCS];
 
 void initVideo()
 {
@@ -28,9 +31,32 @@ void initVideo()
 	initGL();
 }
 
+void initSound()
+{
+	ALCdevice* dev;
+	ALCcontext* con;
+	
+	dev = alcOpenDevice(NULL);
+	con = alcCreateContext(dev, NULL);
+	alcMakeContextCurrent(con);
+	
+	ALfloat pos[] = { 0, 0, 0 };
+	ALfloat vel[] = { 0, 0, 0 };
+	ALfloat ori[] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
+	
+	alGenBuffers(2, albuf);
+	short stuff[44000];
+	for (int i = 0; i < 44000; i++) stuff[i] = (short)(10000*cos((.5-.1*cos(2*i*M_PI/44000.0))*440*2*i*M_PI/44000.0));
+	alBufferData(albuf[0], AL_FORMAT_MONO16, stuff, 44000*sizeof(short), 44000);
+	for (int i = 0; i < 44000; i++) stuff[i] = (short)(10000*cos((.5+.1*cos(2*i*M_PI/44000.0))*440*2*i*M_PI/44000.0));
+	alBufferData(albuf[1], AL_FORMAT_MONO16, stuff, 44000*sizeof(short), 44000);
+	alGenSources(ALSRCS, alsrcs);
+}
+
 int main(int argc, char* argv[])
 {
 	initVideo();
+	initSound();
 	SDL_Thread *thread;
 	cout << "Starting client" << endl;
 	
@@ -60,6 +86,30 @@ int main(int argc, char* argv[])
 	for (;;) {
 		while (sock->hasRemaining()) {
 			if (!world.receiveObjects(*sock)) exit(1);
+			
+			for(vector<pair<char, Vector2D> >::iterator it = world.sounds.begin(); it != world.sounds.end(); it++) {
+				int src = -1;
+				for (int s = 0; s < ALSRCS; s++) {
+					int st;
+					alGetSourcei(alsrcs[s], AL_SOURCE_STATE, &st);
+					if (st != AL_PLAYING) {
+						src = s;
+						break;
+					}
+				}
+				if (src != -1) {
+					ALfloat alsrcpos[] = { it->second.x, it->second.y, 0 };
+					ALfloat alsrcvel[] = { 0, 0, 0 };
+				
+					alSourcef(alsrcs[src], AL_PITCH, 1.0f);
+					alSourcef(alsrcs[src], AL_GAIN, 1.0f);
+					alSourcefv(alsrcs[src], AL_POSITION, alsrcpos);
+					alSourcefv(alsrcs[src], AL_VELOCITY, alsrcvel);
+					alSourcei(alsrcs[src], AL_BUFFER, albuf[it->first]);
+					alSourcei(alsrcs[src], AL_LOOPING, AL_FALSE);
+					alSourcePlay(alsrcs[src]);
+				}
+			}
 		}
 		
 		SDL_Event event;
@@ -130,6 +180,13 @@ int main(int argc, char* argv[])
 				}
 			}
 		}
+		
+		ALfloat alpos[] = { world.objects[myId].p.x, world.objects[myId].p.y, 0 };
+		ALfloat alvel[] = { world.objects[myId].v.x, world.objects[myId].v.y, 0 };
+		ALfloat alori[] = { 0.0, cos(angle), sin(angle), 0.0, 1.0, 0.0 };
+		alListenerfv(AL_POSITION, alpos);
+		alListenerfv(AL_VELOCITY, alvel);
+		alListenerfv(AL_ORIENTATION, alori);
 		
 		render();
 		if ((++count)%100 == 0) {

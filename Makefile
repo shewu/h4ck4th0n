@@ -3,7 +3,7 @@
 CC=g++
 LD=g++
 CCFLAGS=-O2 -g
-LDFLAGS=-lSDL -lGL -lGLU -lOpenCL -O2 -g
+LDFLAGS=-lSDL -lGL -lGLU -lopenal -lOpenCL -O2 -g
 SERVER_TARGET=server
 CLIENT_TARGET=client
 SERVER_OBJECTS=clcomm.o world.o socket.o object.o vec.o simulate.o

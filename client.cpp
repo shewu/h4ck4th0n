@@ -57,10 +57,10 @@ void initSound()
 
 int main(int argc, char* argv[])
 {
-	if(argc == 3)
+	if(argc == 4)
 	{
-		int tmpWIDTH = atoi(argv[1]);
-		int tmpHEIGHT = atoi(argv[2]);
+		int tmpWIDTH = atoi(argv[2]);
+		int tmpHEIGHT = atoi(argv[3]);
 		if((tmpWIDTH & 15) == 0)
 			WIDTH = tmpWIDTH;
 		if((tmpHEIGHT & 15) == 0)

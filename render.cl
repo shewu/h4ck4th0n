@@ -4,7 +4,22 @@
 
 const sampler_t texSample = CLK_NORMALIZED_COORDS_TRUE|CLK_ADDRESS_REPEAT|CLK_FILTER_LINEAR;
 
-float castRay(float x, float y, float z, float xdir, float ydir, float zdir, int obstacles, __constant float* obspoints, int objects, __constant float* objpoint, __constant float* objsize, int* obstaclep, int* objectp, float when) {
+float castRay(
+		float x, 
+		float y, 
+		float z, 
+		float xdir, 
+		float ydir, 
+		float zdir, 
+		int obstacles, 
+		__constant float* obspoints, 
+		int objects, 
+		__constant float* objpoint, 
+		__constant float* objsize, 
+		int* obstaclep, 
+		int* objectp, 
+		float when
+	) {
 	for (int i = 0; i < obstacles; i++) {
 		float xdirr = obspoints[4*i+2]-obspoints[4*i], ydirr = obspoints[4*i+3]-obspoints[4*i+1];
 		float pos = x*ydirr-y*xdirr, amount = xdir*ydirr-ydir*xdirr;
@@ -46,25 +61,25 @@ float castRay(float x, float y, float z, float xdir, float ydir, float zdir, int
 
 __kernel void 
 render(
-	float x, 
-	float y, 
-	float z, 
-	float xdir, 
-	float ydir, 
-	float zdir, 
-	int obstacles, 
-	__constant float* obspoints, 
-	__constant unsigned char* obscolor, 
-	int objects, 
-	__constant float* objpoint, 
-	__constant float* objsize, 
-	__constant unsigned char* objcolor, 
-	int lights, 
-	__constant float* lightpos, 
-	__constant unsigned char* lightcolor, 
-	__write_only image2d_t im,
-	int WIDTH,
-	int HEIGHT
+		float x, 
+		float y, 
+		float z, 
+		float xdir, 
+		float ydir, 
+		float zdir, 
+		int obstacles, 
+		__constant float* obspoints, 
+		__constant unsigned char* obscolor, 
+		int objects, 
+		__constant float* objpoint, 
+		__constant float* objsize, 
+		__constant unsigned char* objcolor, 
+		int lights, 
+		__constant float* lightpos, 
+		__constant unsigned char* lightcolor, 
+		__write_only image2d_t im,
+		int WIDTH,
+		int HEIGHT
 	) {
 	float nxdir = xdir+((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*ydir);
 	float nydir = ydir-((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*xdir);

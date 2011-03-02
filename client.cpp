@@ -3,8 +3,7 @@
 #include "render.h"
 #include "hack.h"
 #include <SDL/SDL.h>
-#include <AL/al.h>
-#include <AL/alc.h>
+#include <AL/alut.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -45,11 +44,15 @@ void initSound()
 	ALfloat ori[] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
 	
 	alGenBuffers(2, albuf);
-	short stuff[44000];
-	for (int i = 0; i < 44000; i++) stuff[i] = (short)(10000*cos((.5-.1*cos(2*i*M_PI/44000.0))*440*2*i*M_PI/44000.0));
-	alBufferData(albuf[0], AL_FORMAT_MONO16, stuff, 44000*sizeof(short), 44000);
-	for (int i = 0; i < 44000; i++) stuff[i] = (short)(10000*cos((.5+.1*cos(2*i*M_PI/44000.0))*440*2*i*M_PI/44000.0));
-	alBufferData(albuf[1], AL_FORMAT_MONO16, stuff, 44000*sizeof(short), 44000);
+	
+	ALenum format;
+	void* data;
+	ALsizei size, frequency;
+	ALboolean loop;
+	alutLoadWAVFile((ALbyte*)"boing.wav", &format, &data, &size, &frequency, &loop);
+	alBufferData(albuf[0], format, data, size, frequency);
+	alutLoadWAVFile((ALbyte*)"splat.wav", &format, &data, &size, &frequency, &loop);
+	alBufferData(albuf[1], format, data, size, frequency);
 	alGenSources(ALSRCS, alsrcs);
 }
 

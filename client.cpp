@@ -18,6 +18,8 @@ World world;
 float angle;
 int myId;
 unsigned int albuf[2], alsrcs[ALSRCS];
+int WIDTH = 640;
+int HEIGHT = 480;
 
 void initVideo()
 {
@@ -58,6 +60,15 @@ void initSound()
 
 int main(int argc, char* argv[])
 {
+	if(argc == 4)
+	{
+		int tmpWIDTH = atoi(argv[2]);
+		int tmpHEIGHT = atoi(argv[3]);
+		if((tmpWIDTH & 15) == 0)
+			WIDTH = tmpWIDTH;
+		if((tmpHEIGHT & 15) == 0)
+			HEIGHT = tmpHEIGHT;
+	}
 	initVideo();
 	initSound();
 	SDL_Thread *thread;

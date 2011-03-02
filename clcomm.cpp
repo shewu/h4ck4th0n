@@ -13,6 +13,7 @@
 #include <SDL/SDL.h>
 #include <cstdio>
 #include <cmath>
+
 using namespace std;
 
 #define MYPORT "55555"
@@ -108,7 +109,7 @@ int main() {
 					for(int j = i; j < clients.size() - 1; j++)
 						clients[j] = clients[j+1];
 					clients.pop_back();
-					printf("Client disconnected size = %lu\n", clients.size());
+					printf("Client disconnected size = %zu\n", clients.size());
 					i--;
 					break;
 				}

@@ -18,6 +18,8 @@ cl::Program program;
 vector<cl::Memory> bs;
 vector<cl::Device> devices;
 cl::CommandQueue cq;
+extern int WIDTH;
+extern int HEIGHT;
 
 void initGL() {
 	vector<cl::Platform> platforms;
@@ -128,6 +130,8 @@ void render()
 	renderKern.setArg(14, lightposbuf);
 	renderKern.setArg(15, lightcolorbuf);
 	renderKern.setArg(16, igl);
+	renderKern.setArg(17, WIDTH);
+	renderKern.setArg(18, HEIGHT);
 	cq.enqueueNDRangeKernel(renderKern, cl::NullRange, cl::NDRange((WIDTH+15)/16*16, (HEIGHT+15)/16*16), cl::NDRange(16, 16));
 	cq.enqueueReleaseGLObjects(&bs);
 	cq.finish();

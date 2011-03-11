@@ -116,6 +116,7 @@ class MapEditPanel extends JPanel implements KeyListener
 			System.out.printn("Aw crap");
 			System.exit(0);
 		}
+	}
 }
 
 class Segment

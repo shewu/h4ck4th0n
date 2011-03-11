@@ -103,14 +103,14 @@ class MapEditPanel extends JPanel implements KeyListener
 
 	  	for (int i = 0; i < walls.size(); i++) {
 				Segment seg = walls.get(i);
-				outfile.write("obs " + seg.p1.x + " " + seg.p1.y + " "
-											 + seg.p2.x + " " + seg.p2.y + "\n");
+				outfile.write("obs " + (seg.p1.x - WIDTH/2) + " " + (seg.p1.y - HEIGHT/2) + " "
+											 + (seg.p2.x - WIDTH/2)  + " " + (seg.p2.y - HEIGHT/2) + "\n");
 			}	
 
 	  	for (int i = 0; i < sticky.size(); i++) {
 				Segment seg = sticky.get(i);
-				outfile.write("sobs " + seg.p1.x + " " + seg.p1.y + " "
-											 + seg.p2.x + " " + seg.p2.y + "\n");
+				outfile.write("sobs " + (seg.p1.x - WIDTH/2) + " " + (seg.p1.y - HEIGHT/2) + " "
+											 + (seg.p2.x - WIDTH/2) + " " + (seg.p2.y - HEIGHT/2) + "\n");
 			}	
 		} catch (Exception e) {
 			System.out.println("Aw crap");

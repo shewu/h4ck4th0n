@@ -113,7 +113,7 @@ class MapEditPanel extends JPanel implements KeyListener
 											 + seg.p2.x + " " + seg.p2.y + "\n");
 			}	
 		} catch (Exception e) {
-			System.out.printn("Aw crap");
+			System.out.println("Aw crap");
 			System.exit(0);
 		}
 	}

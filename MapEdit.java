@@ -126,6 +126,20 @@ class MapEditPanel extends JPanel implements KeyListener
 						walls.add(new Segment(start.x, start.y, end.x, end.y));
 					} else if (positive) {
 						sticky.add(new Segment(start.x, start.y, end.x, end.y));
+					} else {
+						Segment seg = new Segment(start.x, start.y, end.x, end.y);
+						for (int i = 0; i < walls.size(); i++) {
+							if (walls.get(i).equals(seg)) {
+								walls.remove(i);
+								i--;	
+							}
+						}
+						for (int i = 0; i < sticky.size(); i++) {
+							if (sticky.get(i).equals(seg)) {
+								sticky.remove(i);
+								i--;	
+							}
+						}
 					}
 				}
 				break;
@@ -134,6 +148,9 @@ class MapEditPanel extends JPanel implements KeyListener
 				break;
 			case 'k':
 				wall = !wall;
+				break;
+			case 'x':
+				positive = !positive;
 				break;
 			default:
 				break;
@@ -183,5 +200,10 @@ class Segment
 	public void draw(Graphics g)
 	{
 		g.drawLine(14*p1.x, 14*p1.y, 14*p2.x, 14*p2.y);
+	}
+
+	public boolean equals(Segment s)
+	{
+		return p1.equals(s.p1) && p2.equals(s.p2) || p2.equals(s.p1) && p1.equals(s.p2);
 	}
 }

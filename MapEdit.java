@@ -10,7 +10,7 @@ public class MapEdit
 	{
 		// linux title bars take up space, so we need an offset
 		JFrame frame = new JFrame("Holy Balls: The Game Map Editor");
-		frame.setSize(720, 720+30);
+		frame.setSize(840, 840+30);
 		frame.setResizable(false);
 
 		MapEditPanel p = new MapEditPanel();
@@ -53,14 +53,14 @@ class MapEditPanel extends JPanel implements KeyListener
 		{
 			for(int j = 0; j <= 60; ++j)
 			{
-				g.fillOval(12*j - DOT_R, 12*i - DOT_R, 2*DOT_R, 2*DOT_R);
+				g.fillOval(14*j - DOT_R, 14*i - DOT_R, 2*DOT_R, 2*DOT_R);
 			}
 		}
 
 		// draw where we are
 		final int HERE_R = 3;
 		g.setColor(Color.RED);
-		g.drawOval(12*here.x - HERE_R, 12*here.y - HERE_R, 2*HERE_R, 2*HERE_R);
+		g.drawOval(14*here.x - HERE_R, 14*here.y - HERE_R, 2*HERE_R, 2*HERE_R);
 
 		//draw lines
 		for (int i = 0; i < walls.size(); i++) {

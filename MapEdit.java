@@ -6,14 +6,17 @@ import java.io.*;
 
 public class MapEdit
 {
-	JFrame frame = new JFrame("Holy Balls: The Game Map Editor");
-	frame.setSize(800, 600);
-	frame.setResizable(false);
+	public static void main(String args[])
+	{
+		JFrame frame = new JFrame("Holy Balls: The Game Map Editor");
+		frame.setSize(800, 600);
+		frame.setResizable(false);
 
-	MapEditPanel p = new MapEditPanel();
-	frame.getContentPane().add(p);
+		MapEditPanel p = new MapEditPanel();
+		frame.getContentPane().add(p);
 
-	frame.setVisible(true);
+		frame.setVisible(true);
+	}
 }
 
 class MapEditPanel extends JPanel implements KeyListener

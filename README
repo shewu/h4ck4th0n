@@ -3,4 +3,13 @@ Version 0.1
 
 Controls (Game):
 Mouse: Turn
+W: Accelerate forwards
+D: Accelerate backwards
+
+Controls (Editor)
+WASD: Move cursor
+P: Write to file "output" on disk
+K: Toggle Sticky Wall mode
+X: Toggle Delete mode
+Space: Toggle Edit mode
 

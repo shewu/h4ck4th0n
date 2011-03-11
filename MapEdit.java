@@ -28,6 +28,8 @@ class MapEditPanel extends JPanel implements KeyListener
 	public final int WIDTH = 60, HEIGHT = 60;
 	public Point here;
 	public boolean drawing;
+	public boolean positive;
+	public Point start, end;
 
 	public MapEditPanel()
 	{
@@ -35,6 +37,7 @@ class MapEditPanel extends JPanel implements KeyListener
 		sticky = new ArrayList<Segment>();		
 		here = new Point(0,0);
 		drawing = false;
+		positive = true;
 		setFocusable(true);
 		addKeyListener(this);
 	}
@@ -58,6 +61,24 @@ class MapEditPanel extends JPanel implements KeyListener
 		final int HERE_R = 3;
 		g.setColor(Color.RED);
 		g.drawOval(12*here.x - HERE_R, 12*here.y - HERE_R, 2*HERE_R, 2*HERE_R);
+
+		//draw lines
+		for (int i = 0; i < walls.size(); i++) {
+			walls.get(i).draw(g);		
+		}
+		g.setColor(Color.GREEN);
+		for (int i = 0; i < sticky.size(); i++) {
+			sticky.get(i).draw(g);
+		}
+		System.out.println("Drawing? " + drawing);
+		if (drawing && positive) {
+			System.out.println("Current line: " + start + " " + end);
+			g.setColor(Color.RED);
+			g.drawLine(start.x, start.y, end.x, end.y);
+		} else if (drawing) {
+			g.setColor(Color.BLACK);
+			g.drawLine(start.x, start.y, end.x, end.y);
+		}
 	}
 
 	public void keyTyped(KeyEvent e)
@@ -88,8 +109,21 @@ class MapEditPanel extends JPanel implements KeyListener
 					++here.y;
 				}
 				break;
+			case ' ':
+				if (!drawing) {
+					System.out.println("Setting start to " + here);
+					start = new Point(here);
+					drawing = true;
+				} else {
+					drawing = false;
+					walls.add(new Segment(start.x, start.y, end.x, end.y));
+				}
+				break;
 			default:
 				break;
+		}
+		if (drawing) {
+			end = new Point(here);
 		}
 		repaint();
 	}
@@ -127,5 +161,10 @@ class Segment
 	{
 		p1 = new Point(a, b);
 		p2 = new Point(c, d);
+	}
+
+	public void draw(Graphics g)
+	{
+		g.drawLine(p1.x, p1.y, p2.x, p2.y);
 	}
 }

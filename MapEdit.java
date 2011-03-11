@@ -34,6 +34,10 @@ class MapEditPanel extends JPanel implements KeyListener
 	void paintComponent(Graphics g)
 	{
 	}
+
+	public void keyTyped(KeyEvent e) {}
+	public void keyPressed(KeyEvent e) {}
+	public void keyReleased(KeyEvent e) {}
 }
 
 class Segment

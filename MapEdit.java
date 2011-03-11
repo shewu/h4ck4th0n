@@ -8,8 +8,9 @@ public class MapEdit
 {
 	public static void main(String args[])
 	{
+		// linux title bars take up space, so we need an offset
 		JFrame frame = new JFrame("Holy Balls: The Game Map Editor");
-		frame.setSize(600, 600);
+		frame.setSize(720, 720+30);
 		frame.setResizable(false);
 
 		MapEditPanel p = new MapEditPanel();
@@ -24,7 +25,7 @@ public class MapEdit
 class MapEditPanel extends JPanel implements KeyListener
 {
 	public ArrayList<Segment> walls, sticky;
-	public final int WITDH = 60, HEIGHT = 60;
+	public final int WIDTH = 60, HEIGHT = 60;
 	public Point here;
 	public boolean drawing;
 
@@ -34,38 +35,63 @@ class MapEditPanel extends JPanel implements KeyListener
 		sticky = new ArrayList<Segment>();		
 		here = new Point(0,0);
 		drawing = false;
+		setFocusable(true);
+		addKeyListener(this);
 	}
 
 	public void paintComponent(Graphics g)
 	{
-		final int DOT_R = 2;
-		g.setColor(Color.BLACK);
+		super.paintComponent(g);
 
 		// draw dots
-		for(int i = 0; i <= 30; ++i)
+		final int DOT_R = 2;
+		g.setColor(Color.BLACK);
+		for(int i = 0; i <= 60; ++i)
 		{
-			for(int j = 0; j <= 30; ++j)
+			for(int j = 0; j <= 60; ++j)
 			{
-				g.fillOval(20*j - DOT_R, 20*i - DOT_R, 2*DOT_R, 2*DOT_R);
+				g.fillOval(12*j - DOT_R, 12*i - DOT_R, 2*DOT_R, 2*DOT_R);
 			}
 		}
+
+		// draw where we are
+		final int HERE_R = 3;
+		g.setColor(Color.RED);
+		g.drawOval(12*here.x - HERE_R, 12*here.y - HERE_R, 2*HERE_R, 2*HERE_R);
 	}
 
 	public void keyTyped(KeyEvent e)
 	{
 		switch(e.getKeyChar())
 		{
-			case KeyEvent.VK_LEFT:
+			case 'a':
+				if(here.x > 0)
+				{
+					--here.x;
+				}
 				break;
-			case KeyEvent.VK_RIGHT:
+			case 'd':
+				if(here.x < WIDTH)
+				{
+					++here.x;
+				}
 				break;
-			case KeyEvent.VK_UP:
+			case 'w':
+				if(here.y > 0)
+				{
+					--here.y;
+				}
 				break;
-			case KeyEvent.VK_DOWN:
+			case 's':
+				if(here.y < HEIGHT)
+				{
+					++here.y;
+				}
 				break;
 			default:
 				break;
 		}
+		repaint();
 	}
 	public void keyPressed(KeyEvent e) {}
 	public void keyReleased(KeyEvent e) {}

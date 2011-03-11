@@ -34,7 +34,7 @@ class MapEditPanel extends JPanel implements KeyListener
 		drawing = false;
 	}
 
-	void paintComponent(Graphics g)
+	public void paintComponent(Graphics g)
 	{
 	}
 

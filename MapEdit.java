@@ -1,16 +1,24 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Toolkit;
 import java.awt.event.*;
 import java.util.*;
 import java.io.*;
 
 public class MapEdit
 {
+	public static int SCALE;
 	public static void main(String args[])
 	{
+		// make sure that window is not off the screen
+		Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
+		Dimension screensize = toolkit.getScreenSize();
+		int SWIDTH = screensize.width;
+		int SHEIGHT = screensize.height;
+		SCALE = (SHEIGHT-30)/MapEditPanel.MHEIGHT;
 		// linux title bars take up space, so we need an offset
 		JFrame frame = new JFrame("Holy Balls: The Game Map Editor");
-		frame.setSize(840, 840+30);
+		frame.setSize(MapEditPanel.MWIDTH*SCALE, MapEditPanel.MHEIGHT*SCALE+30);
 		frame.setResizable(false);
 
 		MapEditPanel p = new MapEditPanel();
@@ -25,7 +33,7 @@ public class MapEdit
 class MapEditPanel extends JPanel implements KeyListener
 {
 	public ArrayList<Segment> walls, sticky;
-	public final int WIDTH = 60, HEIGHT = 60;
+	public static final int MWIDTH = 60, MHEIGHT = 60;
 	public Point here;
 	public boolean drawing;
 	public boolean positive;
@@ -51,18 +59,18 @@ class MapEditPanel extends JPanel implements KeyListener
 		// draw dots
 		final int DOT_R = 2;
 		g.setColor(Color.BLACK);
-		for(int i = 0; i <= 60; ++i)
+		for(int i = 0; i <= MHEIGHT; ++i)
 		{
-			for(int j = 0; j <= 60; ++j)
+			for(int j = 0; j <= MWIDTH; ++j)
 			{
-				g.fillOval(14*j - DOT_R, 14*i - DOT_R, 2*DOT_R, 2*DOT_R);
+				g.fillOval(MapEdit.SCALE*j - DOT_R, MapEdit.SCALE*i - DOT_R, 2*DOT_R, 2*DOT_R);
 			}
 		}
 
 		// draw where we are
 		final int HERE_R = 3;
 		g.setColor(Color.RED);
-		g.drawOval(14*here.x - HERE_R, 14*here.y - HERE_R, 2*HERE_R, 2*HERE_R);
+		g.drawOval(MapEdit.SCALE*here.x - HERE_R, MapEdit.SCALE*here.y - HERE_R, 2*HERE_R, 2*HERE_R);
 
 		//draw lines
 		for (int i = 0; i < walls.size(); i++) {
@@ -76,14 +84,14 @@ class MapEditPanel extends JPanel implements KeyListener
 		if (drawing && positive && wall) {
 			System.out.println("Current line: " + start + " " + end);
 			g.setColor(Color.RED);
-			g.drawLine(14*start.x, 14*start.y, 14*end.x, 14*end.y);
+			g.drawLine(MapEdit.SCALE*start.x, MapEdit.SCALE*start.y, MapEdit.SCALE*end.x, MapEdit.SCALE*end.y);
 		} else if (drawing && positive && !wall) {
 			System.out.println("Current line: " + start + " " + end);
 			g.setColor(Color.GREEN);
-			g.drawLine(14*start.x, 14*start.y, 14*end.x, 14*end.y);
+			g.drawLine(MapEdit.SCALE*start.x, MapEdit.SCALE*start.y, MapEdit.SCALE*end.x, MapEdit.SCALE*end.y);
 		} else if (drawing) {
 			g.setColor(Color.BLACK);
-			g.drawLine(14*start.x, 14*start.y, 14*end.x, 14*end.y);
+			g.drawLine(MapEdit.SCALE*start.x, MapEdit.SCALE*start.y, MapEdit.SCALE*end.x, MapEdit.SCALE*end.y);
 		}
 	}
 
@@ -153,14 +161,14 @@ class MapEditPanel extends JPanel implements KeyListener
 
 	  	for (int i = 0; i < walls.size(); i++) {
 				Segment seg = walls.get(i);
-				outfile.write("obs " + (seg.p1.x - WIDTH/2) + " " + (seg.p1.y - HEIGHT/2) + " "
-											 + (seg.p2.x - WIDTH/2)  + " " + (seg.p2.y - HEIGHT/2) + "\n");
+				outfile.write("obs " + (seg.p1.x - MWIDTH/2) + " " + (seg.p1.y - MHEIGHT/2) + " "
+											 + (seg.p2.x - MWIDTH/2)  + " " + (seg.p2.y - MHEIGHT/2) + "\n");
 			}	
 
 	  	for (int i = 0; i < sticky.size(); i++) {
 				Segment seg = sticky.get(i);
-				outfile.write("sobs " + (seg.p1.x - WIDTH/2) + " " + (seg.p1.y - HEIGHT/2) + " "
-											 + (seg.p2.x - WIDTH/2) + " " + (seg.p2.y - HEIGHT/2) + "\n");
+				outfile.write("sobs " + (seg.p1.x - MWIDTH/2) + " " + (seg.p1.y - MHEIGHT/2) + " "
+											 + (seg.p2.x - MWIDTH/2) + " " + (seg.p2.y - MHEIGHT/2) + "\n");
 			}	
 			outfile.close();
 		} catch (Exception e) {
@@ -182,6 +190,7 @@ class Segment
 
 	public void draw(Graphics g)
 	{
-		g.drawLine(14*p1.x, 14*p1.y, 14*p2.x, 14*p2.y);
+		g.drawLine(MapEdit.SCALE*p1.x, MapEdit.SCALE*p1.y, MapEdit.SCALE*p2.x, MapEdit.SCALE*p2.y);
 	}
 }
+

@@ -105,6 +105,8 @@ render(
 			normal = normalize((float4)(obspoints[4*obstacle+1]-obspoints[4*obstacle+3], obspoints[4*obstacle+2]-obspoints[4*obstacle], 0, 0));
 			if (dot(dir, normal) > 0) normal = -normal;
 			hit = true;
+			//EVIL BAD TERRIBLE WALL REFLECTION FUCKS YOU UP
+			//specular = true;
 		}
 		else if (object != -1) {
 			ccolor = (float4)(objcolor[4*object]/255.0, objcolor[4*object+1]/255.0, objcolor[4*object+2]/255.0, objcolor[4*object+3]/255.0);
@@ -120,6 +122,8 @@ render(
 			normal = (float4)(0, 0, 1, 0);
 			when = -z/zdir;
 			hit = true;
+			//EVIL FLOOR DESTROYER!!! BAD
+			specular = true;
 		}
 		when *= (1-EPS);
 		if (hit) {

@@ -29,6 +29,7 @@ class MapEditPanel extends JPanel implements KeyListener
 	public Point here;
 	public boolean drawing;
 	public boolean positive;
+	public boolean wall;
 	public Point start, end;
 
 	public MapEditPanel()
@@ -38,6 +39,7 @@ class MapEditPanel extends JPanel implements KeyListener
 		here = new Point(0,0);
 		drawing = false;
 		positive = true;
+		wall = true;
 		setFocusable(true);
 		addKeyListener(this);
 	}
@@ -71,13 +73,17 @@ class MapEditPanel extends JPanel implements KeyListener
 			sticky.get(i).draw(g);
 		}
 		System.out.println("Drawing? " + drawing);
-		if (drawing && positive) {
+		if (drawing && positive && wall) {
 			System.out.println("Current line: " + start + " " + end);
 			g.setColor(Color.RED);
-			g.drawLine(start.x, start.y, end.x, end.y);
+			g.drawLine(14*start.x, 14*start.y, 14*end.x, 14*end.y);
+		} else if (drawing && positive && !wall) {
+			System.out.println("Current line: " + start + " " + end);
+			g.setColor(Color.GREEN);
+			g.drawLine(14*start.x, 14*start.y, 14*end.x, 14*end.y);
 		} else if (drawing) {
 			g.setColor(Color.BLACK);
-			g.drawLine(start.x, start.y, end.x, end.y);
+			g.drawLine(14*start.x, 14*start.y, 14*end.x, 14*end.y);
 		}
 	}
 
@@ -116,8 +122,18 @@ class MapEditPanel extends JPanel implements KeyListener
 					drawing = true;
 				} else {
 					drawing = false;
-					walls.add(new Segment(start.x, start.y, end.x, end.y));
+					if (wall && positive) {
+						walls.add(new Segment(start.x, start.y, end.x, end.y));
+					} else if (positive) {
+						sticky.add(new Segment(start.x, start.y, end.x, end.y));
+					}
 				}
+				break;
+			case 'p':
+				writeToFile();
+				break;
+			case 'k':
+				wall = !wall;
 				break;
 			default:
 				break;
@@ -130,7 +146,7 @@ class MapEditPanel extends JPanel implements KeyListener
 	public void keyPressed(KeyEvent e) {}
 	public void keyReleased(KeyEvent e) {}
 	
-	public void saveToFile()
+	public void writeToFile()
 	{
 		try {
 			BufferedWriter outfile = new BufferedWriter(new FileWriter("output"));
@@ -146,6 +162,7 @@ class MapEditPanel extends JPanel implements KeyListener
 				outfile.write("sobs " + (seg.p1.x - WIDTH/2) + " " + (seg.p1.y - HEIGHT/2) + " "
 											 + (seg.p2.x - WIDTH/2) + " " + (seg.p2.y - HEIGHT/2) + "\n");
 			}	
+			outfile.close();
 		} catch (Exception e) {
 			System.out.println("Aw crap");
 			System.exit(0);
@@ -165,6 +182,6 @@ class Segment
 
 	public void draw(Graphics g)
 	{
-		g.drawLine(p1.x, p1.y, p2.x, p2.y);
+		g.drawLine(14*p1.x, 14*p1.y, 14*p2.x, 14*p2.y);
 	}
 }

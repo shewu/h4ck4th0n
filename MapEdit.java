@@ -95,6 +95,27 @@ class MapEditPanel extends JPanel implements KeyListener
 	}
 	public void keyPressed(KeyEvent e) {}
 	public void keyReleased(KeyEvent e) {}
+	
+	public void saveToFile()
+	{
+		try {
+			BufferedWriter outfile = new BufferedWriter(new FileWriter("output"));
+
+	  	for (int i = 0; i < walls.size(); i++) {
+				Segment seg = walls.get(i);
+				outfile.write("obs " + seg.p1.x + " " + seg.p1.y + " "
+											 + seg.p2.x + " " + seg.p2.y + "\n");
+			}	
+
+	  	for (int i = 0; i < sticky.size(); i++) {
+				Segment seg = sticky.get(i);
+				outfile.write("sobs " + seg.p1.x + " " + seg.p1.y + " "
+											 + seg.p2.x + " " + seg.p2.y + "\n");
+			}	
+		} catch (Exception e) {
+			System.out.printn("Aw crap");
+			System.exit(0);
+		}
 }
 
 class Segment

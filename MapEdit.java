@@ -5,6 +5,12 @@ import java.awt.event.*;
 import java.util.*;
 import java.io.*;
 
+/*
+ * Holy Balls: The Game
+ * The Official Map Editor
+ * Version 0.6
+ */
+
 public class MapEdit
 {
 	public static int SCALE;

@@ -76,19 +76,16 @@ int main(int argc, char* argv[])
 		cout << "Failed to connect" << endl;
 		exit(1);
 	}
-	angle = 0;
-	int v = 0;
-	sock->receive((char*)&v, 4);
-	myId = ntohl(v);
 	int u;
 	sock->receive((char*)&u, 4);
 	u = ntohl(u);
+	myId = -1;
 	angle = *reinterpret_cast<float*>(&u);
 	
 	int count = 0, oldTime = SDL_GetTicks();
 	for (;;) {
 		while (sock->hasRemaining()) {
-			if (!world.receiveObjects(*sock)) exit(1);
+			if (!world.receiveObjects(*sock, myId)) exit(1);
 			
 			for(vector<pair<char, Vector2D> >::iterator it = world.sounds.begin(); it != world.sounds.end(); it++) {
 				int src = -1;

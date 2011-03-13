@@ -140,6 +140,7 @@ void World::doSimulation(float dt)
 					if (objects[e.t1].nattached == 0) objects[e.t1].rad -= DEATH_RATE*(e.time-knownTime);
 					objects[e.t2].dead = true;
 					objects[e.t2].stopped = false;
+					objects[e.t2].spawny = 0;
 					objects[e.t2].v = -normal*(1/sqrt(normal*normal))*DEATH_RATE;
 					objects[e.t2].nattached = 0;
 					objects[e.t2].attachedTo = e.t1;
@@ -150,6 +151,7 @@ void World::doSimulation(float dt)
 					if (objects[e.t2].nattached == 0) objects[e.t2].rad -= DEATH_RATE*(e.time-knownTime);
 					objects[e.t1].dead = true;
 					objects[e.t1].stopped = false;
+					objects[e.t1].spawny = 0;
 					objects[e.t1].v = normal*(1/sqrt(normal*normal))*DEATH_RATE;
 					objects[e.t1].nattached = 0;
 					objects[e.t1].attachedTo = e.t2;
@@ -190,9 +192,10 @@ void World::doSimulation(float dt)
 				collideTimesObs[pair<int, int>(e.t1, e.t2)] = INFINITY;
 				objects[e.t1].p += (e.time-knownTime)*objects[e.t1].v;
 				Vector2D normal = objects[e.t1].p-obstacles[e.t2].p1;
-				if (obstacles[e.t2].deadly) {
+				if (obstacles[e.t2].sticky) {
 					objects[e.t1].dead = true;
 					objects[e.t1].stopped = false;
+					objects[e.t1].spawny = 0;
 					objects[e.t1].v = -normal*(1/sqrt(normal*normal))*DEATH_RATE;
 					objects[e.t1].nattached = 0;
 					objects[e.t1].attachedTo = -1;
@@ -222,9 +225,10 @@ void World::doSimulation(float dt)
 				collideTimesObs[pair<int, int>(e.t1, e.t2)] = INFINITY;
 				objects[e.t1].p += (e.time-knownTime)*objects[e.t1].v;
 				Vector2D normal = objects[e.t1].p-obstacles[e.t2].p2;
-				if (obstacles[e.t2].deadly) {
+				if (obstacles[e.t2].sticky) {
 					objects[e.t1].dead = true;
 					objects[e.t1].stopped = false;
+					objects[e.t1].spawny = 0;
 					objects[e.t1].v = -normal*(1/sqrt(normal*normal))*DEATH_RATE;
 					objects[e.t1].nattached = 0;
 					objects[e.t1].attachedTo = -1;
@@ -254,9 +258,10 @@ void World::doSimulation(float dt)
 				collideTimesObs[pair<int, int>(e.t1, e.t2)] = INFINITY;
 				objects[e.t1].p += (e.time-knownTime)*objects[e.t1].v;
 				Vector2D normal = (obstacles[e.t2].p2-obstacles[e.t2].p1).getNormalVector();
-				if (obstacles[e.t2].deadly) {
+				if (obstacles[e.t2].sticky) {
 					objects[e.t1].dead = true;
 					objects[e.t1].stopped = false;
+					objects[e.t1].spawny = 0;
 					if (objects[e.t1].v*normal > 0) normal = -normal;
 					objects[e.t1].v = -normal*(1/sqrt(normal*normal))*DEATH_RATE;
 					objects[e.t1].nattached = 0;

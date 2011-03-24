@@ -18,6 +18,11 @@ World world;
 float angle;
 int myId;
 unsigned int albuf[2], alsrcs[ALSRCS];
+int WIDTH = 640;
+int HEIGHT = 480;
+
+#define ALIGNMENT 0x10
+#define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~(ALIGNMENT-1))
 
 void initVideo()
 {
@@ -58,6 +63,23 @@ void initSound()
 
 int main(int argc, char* argv[])
 {
+	if(argc == 2 && (!strcmp(argv[1], "-h") || !strcmp(argv[1], "help")))
+	{
+		printf("Usage:\n"
+				"./unholyballs: to connect to localhost\n"
+				"./unholyballs [ip]: to connect to specified server\n"
+				"./unholyballs [ip] [width] [height]: to connect to specified server and to run at specified resolution\n"
+				"\twhere [width] and [height] are multiples of 16\n");
+		exit(0);
+	}
+	if(argc == 4)
+	{
+		// round up to next highest multiple of 16 if not already a multiple
+		// of 16
+		WIDTH = ALIGN(atoi(argv[2]));
+		HEIGHT = ALIGN(atoi(argv[3]));
+		cout << "Playing at " << WIDTH << "x" << HEIGHT << "\n";
+	}
 	initVideo();
 	initSound();
 	SDL_Thread *thread;
@@ -70,9 +92,13 @@ int main(int argc, char* argv[])
 	hints.ai_socktype = SOCK_STREAM;
 	
 	if(argc > 1)
-		getaddrinfo(argv[1], "55555", &hints, &res);
+	{
+  		getaddrinfo(argv[1], "55555", &hints, &res);
+	}
 	else
+	{
 		getaddrinfo("127.0.0.1", "55555", &hints, &res);
+	}
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	sock = new Socket(sockfd);
 	if (connect(sockfd, res->ai_addr, res->ai_addrlen) == -1) {

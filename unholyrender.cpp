@@ -12,6 +12,8 @@ using namespace std;
 
 GLUquadric* quad;
 unsigned int program;
+extern int WIDTH;
+extern int HEIGHT;
 
 void initGL() {
 	glewInit();

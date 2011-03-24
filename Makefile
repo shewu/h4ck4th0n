@@ -3,7 +3,7 @@
 CC=g++
 LD=g++
 CCFLAGS=-O2 -g
-LDFLAGS=-lSDL -lGL -lGLU -lalut -lOpenCL -lGLEW -lIL -O2 -g
+LDFLAGS=-lSDL -lGL -lGLU -lalut -lGLEW -lIL -O2 -g
 SERVER_TARGET=server
 UNHOLY_BALLS_TARGET=unholyballs
 SERVER_OBJECTS=clcomm.o world.o socket.o object.o vec.o simulate.o

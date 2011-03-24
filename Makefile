@@ -23,3 +23,6 @@ $(UNHOLY_BALLS_TARGET): $(UNHOLY_BALLS_OBJECTS)
 clean:
 	rm -rf $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(SERVER_OBJECTS) $(UNHOLY_BALLS_OBJECTS)
 
+love:
+	echo 'In Soviet Russia, love makes you!'
+

@@ -69,7 +69,10 @@ int main(int argc, char* argv[])
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	
-	getaddrinfo(argv[1], "55555", &hints, &res);
+	if(argc > 1)
+		getaddrinfo(argv[1], "55555", &hints, &res);
+	else
+		getaddrinfo("127.0.0.1", "55555", &hints, &res);
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	sock = new Socket(sockfd);
 	if (connect(sockfd, res->ai_addr, res->ai_addrlen) == -1) {
@@ -191,9 +194,29 @@ int main(int argc, char* argv[])
 		render();
 		if ((++count)%100 == 0) {
 			int time = SDL_GetTicks();
-			cout << "100 frames in " << time-oldTime << " milliseconds" << endl;
+			float fps = 100000./(time - oldTime);
+			printf("\b\b\b\b\b\b\b\b\b");
+			if(fps < 10) {
+				cout << " ";
+			}
+			if(fps < 100) {
+				cout << " ";
+			}
+			if(fps < 1000) {
+				cout << " ";
+			}
+			if(fps < 10000) {
+				cout << " ";
+			}
+			if(fps < 100000) {
+				cout << " ";
+			}
+			cout << (int)fps << "fps";
+//			cout << "100 frames in " << time-oldTime << " milliseconds" << endl;
 			oldTime = time;
+			fflush(stdout);
 		}
 		SDL_GL_SwapBuffers();
 	}
+	cout << "\n";
 }

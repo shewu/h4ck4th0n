@@ -84,6 +84,19 @@ void render()
 	float matrix[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 	
+	GLfloat mat_specular[] = {0.0, 0.0, 0.0, 1.0};
+	GLfloat mat_diffuse[] = {0.8, 0.6, 0.4, 1.0};
+	GLfloat mat_ambient[] = {0.8, 0.6, 0.4, 1.0};
+	GLfloat mat_shininess = {20.0};
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); 
+	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient); 
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
+	glShadeModel(GL_SMOOTH); // enable smooth shading 
+	glEnable(GL_LIGHTING); // enable lighting 
+	glEnable(GL_LIGHT0); // enable light 0
+//	glEnable(GL_LIGHT1);
+
 	glUseProgram(program);
 	glUniform3f(glGetUniformLocation(program, "lightv"), 5*matrix[8]+matrix[12], 5*matrix[9]+matrix[13], 5*matrix[10]+matrix[14]);
 	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {

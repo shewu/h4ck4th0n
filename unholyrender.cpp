@@ -69,6 +69,19 @@ void initGL() {
 	glAttachShader(program, vertexShader);
 	glAttachShader(program, fragmentShader);
 	glLinkProgram(program);
+
+	GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
+	GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+	glEnable(GL_LIGHTING); // enable lighting 
+	glEnable(GL_LIGHT0); // enable light 0
 }
 
 void render()
@@ -86,11 +99,12 @@ void render()
 	float matrix[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 	
+	/*
 	GLfloat mat_specular[] = {0.0, 0.0, 0.0, 1.0};
 	GLfloat mat_diffuse[] = {0.8, 0.6, 0.4, 1.0};
 	GLfloat mat_ambient[] = {0.8, 0.6, 0.4, 1.0};
 	GLfloat mat_shininess[] = {20.0};
-	GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0};
+	
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_SMOOTH); // enable smooth shading 
 
@@ -98,10 +112,8 @@ void render()
 	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient); 
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
-	glEnable(GL_LIGHTING); // enable lighting 
-	glEnable(GL_LIGHT0); // enable light 0
+	glShadeModel(GL_SMOOTH);
+	*/
 	//glEnable(GL_LIGHT1);
 
 	glUseProgram(program);

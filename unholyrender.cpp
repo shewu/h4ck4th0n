@@ -89,12 +89,16 @@ void render()
 	GLfloat mat_specular[] = {0.0, 0.0, 0.0, 1.0};
 	GLfloat mat_diffuse[] = {0.8, 0.6, 0.4, 1.0};
 	GLfloat mat_ambient[] = {0.8, 0.6, 0.4, 1.0};
-	GLfloat mat_shininess = {20.0};
+	GLfloat mat_shininess[] = {20.0};
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glShadeModel(GL_SMOOTH); // enable smooth shading 
+
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); 
 	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient); 
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
-	glShadeModel(GL_SMOOTH); // enable smooth shading 
+	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
 	glEnable(GL_LIGHTING); // enable lighting 
 	glEnable(GL_LIGHT0); // enable light 0
 	//glEnable(GL_LIGHT1);

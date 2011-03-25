@@ -11,4 +11,5 @@ class ClientCommunicator {
 		char buf[4];
 		int pos;
 		double spawnTime;
+		int team;
 };

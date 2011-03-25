@@ -255,5 +255,7 @@ int main(int argc, char* argv[])
 		}
 		SDL_GL_SwapBuffers();
 	}
-	cout << "\n";
+	cout << "\n"; // weird, why isn't this printing?
+	fflush(stdout);
+	SDL_Quit();
 }

@@ -79,9 +79,13 @@ void initGL() {
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	glLightfv(GL_LIGHT1, GL_POSITION, light_position);
+	glLightfv(GL_LIGHT2, GL_POSITION, light_position);
 
 	glEnable(GL_LIGHTING); // enable lighting 
 	glEnable(GL_LIGHT0); // enable light 0
+	glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHT2);
 
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	glEnable(GL_COLOR_MATERIAL);

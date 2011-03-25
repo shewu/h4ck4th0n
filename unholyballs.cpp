@@ -4,6 +4,7 @@
 #include "hack.h"
 #include <SDL/SDL.h>
 #include <AL/alut.h>
+#include <AL/al.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -20,7 +21,7 @@ int myId;
 unsigned int albuf[2], alsrcs[ALSRCS];
 int WIDTH = 640;
 int HEIGHT = 480;
-char* ipaddy = "127.0.0.1";
+char* ipaddy = (char*)"127.0.0.1";
 bool FULLSCREEN;
 
 #define ALIGNMENT 0x10
@@ -55,7 +56,7 @@ void initSound()
 	
 	alGenBuffers(2, albuf);
 	
-	ALenum format;
+	/*ALenum format;
 	void* data;
 	ALsizei size, frequency;
 	ALboolean loop;
@@ -63,6 +64,11 @@ void initSound()
 	alBufferData(albuf[0], format, data, size, frequency);
 	alutLoadWAVFile((ALbyte*)"splat.wav", &format, &data, &size, &frequency, &loop);
 	alBufferData(albuf[1], format, data, size, frequency);
+	alGenSources(ALSRCS, alsrcs);*/
+
+	alutInit(0,NULL);
+	albuf[0] = alutCreateBufferFromFile("boing.wav");
+	albuf[1] = alutCreateBufferFromFile("splat.wav");
 	alGenSources(ALSRCS, alsrcs);
 }
 

@@ -43,18 +43,10 @@ void initSound()
 	ALfloat vel[] = { 0, 0, 0 };
 	ALfloat ori[] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
 	
-	alGenBuffers(3, albuf);
-	
-	ALenum format;
-	void* data;
-	ALsizei size, frequency;
-	ALboolean loop;
-	alutLoadWAVFile((ALbyte*)"boing.wav", &format, &data, &size, &frequency, &loop);
-	alBufferData(albuf[0], format, data, size, frequency);
-	alutLoadWAVFile((ALbyte*)"splat.wav", &format, &data, &size, &frequency, &loop);
-	alBufferData(albuf[1], format, data, size, frequency);
-	alutLoadWAVFile((ALbyte*)"ding.wav", &format, &data, &size, &frequency, &loop);
-	alBufferData(albuf[2], format, data, size, frequency);
+	alutInit(NULL, NULL);
+	albuf[0] = alutCreateBufferFromFile("boing.wav");
+	albuf[1] = alutCreateBufferFromFile("splat.wav");
+	albuf[2] = alutCreateBufferFromFile("ding.wav");
 	alGenSources(ALSRCS, alsrcs);
 }
 

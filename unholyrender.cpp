@@ -97,14 +97,14 @@ void render()
 	glShadeModel(GL_SMOOTH); // enable smooth shading 
 	glEnable(GL_LIGHTING); // enable lighting 
 	glEnable(GL_LIGHT0); // enable light 0
-//	glEnable(GL_LIGHT1);
+	//glEnable(GL_LIGHT1);
 
 	glUseProgram(program);
 	glUniform3f(glGetUniformLocation(program, "lightv"), 5*matrix[8]+matrix[12], 5*matrix[9]+matrix[13], 5*matrix[10]+matrix[14]);
 	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {
 		glPushMatrix();
 		glTranslatef(i->second.p.x, i->second.p.y, 0);
-		glScalef(i->second.rad, i->second.rad, i->second.hrat);
+		glScalef(i->second.rad, i->second.rad, i->second.hrat*i->second.rad);
 		glColor3f(i->second.color.r/255.0, i->second.color.g/255.0, i->second.color.b/255.0);
 		gluSphere(quad, 1.0, 30, 30);
 		glPopMatrix();

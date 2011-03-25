@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	
-	gettaddrinfo(ipaddy, "55555", &hints, &res);
+	getaddrinfo(ipaddy, "55555", &hints, &res);
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	sock = new Socket(sockfd);
 	if (connect(sockfd, res->ai_addr, res->ai_addrlen) == -1) {

@@ -82,6 +82,9 @@ void initGL() {
 
 	glEnable(GL_LIGHTING); // enable lighting 
 	glEnable(GL_LIGHT0); // enable light 0
+
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
 }
 
 void render()

@@ -67,9 +67,9 @@ void initSound()
 	alGenSources(ALSRCS, alsrcs);*/
 
 	alutInit(0,NULL);
-	albuf[0] = alutCreateBufferFromFile("boing2.wav");
-	albuf[1] = alutCreateBufferFromFile("splat2.wav");
-	albuf[2] = alutCreateBufferFromFile("ding.wav");
+	albuf[0] = alutCreateBufferFromFile("sounds/boing2.wav");
+	albuf[1] = alutCreateBufferFromFile("sounds/splat2.wav");
+	albuf[2] = alutCreateBufferFromFile("sounds/ding.wav");
 	alGenSources(ALSRCS, alsrcs);
 }
 

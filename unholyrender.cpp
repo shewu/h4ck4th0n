@@ -70,22 +70,22 @@ void initGL() {
 	glAttachShader(program, fragmentShader);
 	glLinkProgram(program);
 
-	GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
-	GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light_ambient[] = { 0.6, 0.6, 0.6, 1.0 };
+	GLfloat light_diffuse[] = { 0.4, 0.4, 0.4, 1.0 };
 	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 	GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+	GLfloat mat_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+	GLfloat mat_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	glLightfv(GL_LIGHT1, GL_POSITION, light_position);
-	glLightfv(GL_LIGHT2, GL_POSITION, light_position);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
 
 	glEnable(GL_LIGHTING); // enable lighting 
 	glEnable(GL_LIGHT0); // enable light 0
-	glEnable(GL_LIGHT1);
-	glEnable(GL_LIGHT2);
 
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	glEnable(GL_COLOR_MATERIAL);
@@ -106,23 +106,6 @@ void render()
 	float matrix[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 	
-	/*
-	GLfloat mat_specular[] = {0.0, 0.0, 0.0, 1.0};
-	GLfloat mat_diffuse[] = {0.8, 0.6, 0.4, 1.0};
-	GLfloat mat_ambient[] = {0.8, 0.6, 0.4, 1.0};
-	GLfloat mat_shininess[] = {20.0};
-	
-	glClearColor(0.0, 0.0, 0.0, 0.0);
-	glShadeModel(GL_SMOOTH); // enable smooth shading 
-
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); 
-	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient); 
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-	glShadeModel(GL_SMOOTH);
-	*/
-	//glEnable(GL_LIGHT1);
-
 	glUseProgram(program);
 	glUniform3f(glGetUniformLocation(program, "lightv"), 5*matrix[8]+matrix[12], 5*matrix[9]+matrix[13], 5*matrix[10]+matrix[14]);
 	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {

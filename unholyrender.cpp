@@ -35,10 +35,10 @@ void initGL() {
 	ilInit();
 	ilGenImages(1, &image);
 	ilBindImage(image);
-	ILboolean grassExists = ilLoadImage("grass.png");
+	ILboolean grassExists = ilLoadImage((char*)"grass.png");
 	if(grassExists == IL_COULD_NOT_OPEN_FILE)
 	{
-		cerr << "your grass does not exist\n";
+		cout << "your grass does not exist\n";
 	}
 	ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), GL_RGB, GL_UNSIGNED_BYTE, ilGetData());
@@ -79,9 +79,16 @@ void initGL() {
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	glLightfv(GL_LIGHT1, GL_POSITION, light_position);
+	glLightfv(GL_LIGHT2, GL_POSITION, light_position);
 
 	glEnable(GL_LIGHTING); // enable lighting 
 	glEnable(GL_LIGHT0); // enable light 0
+	glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHT2);
+
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
 }
 
 void render()

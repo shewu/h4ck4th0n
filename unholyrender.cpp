@@ -35,7 +35,7 @@ void initGL() {
 	ilInit();
 	ilGenImages(1, &image);
 	ilBindImage(image);
-	ILboolean grassExists = ilLoadImage("grass.png");
+	ILboolean grassExists = ilLoadImage((char*)"grass.png");
 	if(grassExists == IL_COULD_NOT_OPEN_FILE)
 	{
 		cerr << "your grass does not exist\n";

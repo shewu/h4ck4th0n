@@ -11,22 +11,22 @@ World::World() {
 	Obstacle w1, w2, w3, w4;
 	w1.p1 = Vector2D(MIN_X, MIN_Y);
 	w1.p2 = Vector2D(MAX_X, MIN_Y);
-	w1.color = Color(255, 0, 0);
+	w1.color = Color(101, 67, 33);
 	w1.sticky = false;
 	obstacles.push_back(w1);
 	w2.p1 = Vector2D(MIN_X, MAX_Y);
 	w2.p2 = Vector2D(MAX_X, MAX_Y);
-	w2.color = Color(255, 0, 0);
+	w2.color = Color(101, 67, 33);
 	w2.sticky = false;
 	obstacles.push_back(w2);
 	w3.p1 = Vector2D(MIN_X, MIN_Y);
 	w3.p2 = Vector2D(MIN_X, MAX_Y);
-	w3.color = Color(255, 0, 0);
+	w3.color = Color(101, 67, 33);
 	w3.sticky = false;
 	obstacles.push_back(w3);
 	w4.p1 = Vector2D(MAX_X, MIN_Y);
 	w4.p2 = Vector2D(MAX_X, MAX_Y);
-	w4.color = Color(255, 0, 0);
+	w4.color = Color(101, 67, 33);
 	w4.sticky = false;
 	obstacles.push_back(w4);
 	
@@ -40,8 +40,31 @@ World::World() {
 			Obstacle obs;
 			obs.p1 = Vector2D(x1, y1);
 			obs.p2 = Vector2D(x2, y2);
-			obs.color = Color(255, 0, 0);
+			obs.color = Color(101, 67, 33);
 			obs.sticky = false;
+			obs.flag = -1;
+			obstacles.push_back(obs);
+		}
+		else if (cmd == "obs0") {
+			float x1, y1, x2, y2;
+			mapf >> x1 >> y1 >> x2 >> y2;
+			Obstacle obs;
+			obs.p1 = Vector2D(x1, y1);
+			obs.p2 = Vector2D(x2, y2);
+			obs.color = Color(0, 0, 200);
+			obs.sticky = true;
+			obs.flag = 0;
+			obstacles.push_back(obs);
+		}
+		else if (cmd == "obs1") {
+			float x1, y1, x2, y2;
+			mapf >> x1 >> y1 >> x2 >> y2;
+			Obstacle obs;
+			obs.p1 = Vector2D(x1, y1);
+			obs.p2 = Vector2D(x2, y2);
+			obs.color = Color(200, 0, 0);
+			obs.sticky = true;
+			obs.flag = 1;
 			obstacles.push_back(obs);
 		}
 		else if (cmd == "sobs") {
@@ -52,6 +75,7 @@ World::World() {
 			obs.p2 = Vector2D(x2, y2);
 			obs.color = Color(0, 255, 0);
 			obs.sticky = true;
+			obs.flag = -1;
 			obstacles.push_back(obs);
 		}
 		else if (cmd == "spawn") {
@@ -73,7 +97,7 @@ World::World() {
 		else if (cmd == "obj") {
 			int spawnl;
 			mapf >> spawnl;
-			while (spawn(spawnl, -1) == -1);
+			while (spawn(spawnl, -1, -1) == -1);
 		}
 	}
 	
@@ -86,9 +110,12 @@ World::World() {
 	l2.position = Vector3D(0, 30, 20);
 	l2.color = Color(255, 255, 255);
 	lights.push_back(l2);
+	
+	while (spawn(1, -1, 0) == -1);
+	while (spawn(3, -1, 1) == -1);
 }
 
-int World::spawn(int spawnl, int player) {
+int World::spawn(int spawnl, int player, int flag) {
 	if (rand()/float(RAND_MAX) >= SPAWN_PROB) return -1;
 	
 	int oid;
@@ -108,6 +135,7 @@ int World::spawn(int spawnl, int player) {
 	o.dead = false;
 	o.id = oid;
 	o.player = player;
+	o.flag = flag;
 	o.spawnl = spawnl;
 	float min_x = sps[which].xmin + o.rad;
 	float max_x = sps[which].xmax - o.rad;

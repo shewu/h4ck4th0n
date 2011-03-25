@@ -1,10 +1,9 @@
 #include <iostream>
 #include <cstdlib>
-#include "unholyrender.h"
+#include "render.h"
 #include "hack.h"
 #include <SDL/SDL.h>
 #include <AL/alut.h>
-#include <AL/al.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -19,24 +18,14 @@ World world;
 float angle;
 int myId;
 unsigned int albuf[3], alsrcs[ALSRCS];
-int WIDTH = 640;
-int HEIGHT = 480;
-char* ipaddy = (char*)"127.0.0.1";
-bool FULLSCREEN;
-
-#define ALIGNMENT 0x10
-#define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~(ALIGNMENT-1))
 
 void initVideo()
 {
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	if(FULLSCREEN)
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
-	else
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	SDL_ShowCursor(false);
-	SDL_WM_GrabInput(SDL_GRAB_OFF);
+	SDL_WM_GrabInput(SDL_GRAB_ON);
 	
 	initGL();
 }
@@ -56,7 +45,7 @@ void initSound()
 	
 	alGenBuffers(3, albuf);
 	
-	/*ALenum format;
+	ALenum format;
 	void* data;
 	ALsizei size, frequency;
 	ALboolean loop;
@@ -64,47 +53,13 @@ void initSound()
 	alBufferData(albuf[0], format, data, size, frequency);
 	alutLoadWAVFile((ALbyte*)"splat.wav", &format, &data, &size, &frequency, &loop);
 	alBufferData(albuf[1], format, data, size, frequency);
-	alGenSources(ALSRCS, alsrcs);*/
-
-	alutInit(0,NULL);
-	albuf[0] = alutCreateBufferFromFile("boing2.wav");
-	albuf[1] = alutCreateBufferFromFile("splat2.wav");
-	albuf[2] = alutCreateBufferFromFile("ding.wav");
+	alutLoadWAVFile((ALbyte*)"ding.wav", &format, &data, &size, &frequency, &loop);
+	alBufferData(albuf[2], format, data, size, frequency);
 	alGenSources(ALSRCS, alsrcs);
 }
 
 int main(int argc, char* argv[])
 {
-	// process args
-	for(int i = 1; i < argc; ++i)
-	{
-		if(!strcmp(argv[i], "-h"))
-		{
-			printf("Usage:\n"
-					"-h to show this message\n"
-					"-f for fullscreen\n"
-					"-d [width] [height] to specify viewport dimensions\n"
-					"\twhere [width] and [height] are multiples of 16\n"
-					"-i [ip] to connect to specified server\n");
-			exit(0);
-		}
-		else if(!strcmp(argv[i], "-d"))
-		{
-			// round up to next highest multiple of 16 if not already a multiple
-			// of 16
-			WIDTH = ALIGN(atoi(argv[i+1]));
-			HEIGHT = ALIGN(atoi(argv[i+2]));
-			cout << "Playing at " << WIDTH << "x" << HEIGHT << "\n";
-		}
-		else if(!strcmp(argv[i], "-f"))
-		{
-			FULLSCREEN = true;
-		}
-		else if(!strcmp(argv[i], "-i"))
-		{
-			ipaddy = argv[i+1];
-		}
-	}
 	initVideo();
 	initSound();
 	SDL_Thread *thread;
@@ -116,7 +71,7 @@ int main(int argc, char* argv[])
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	
-	getaddrinfo(ipaddy, "55555", &hints, &res);
+	getaddrinfo(argv[1], "55555", &hints, &res);
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	sock = new Socket(sockfd);
 	if (connect(sockfd, res->ai_addr, res->ai_addrlen) == -1) {
@@ -130,7 +85,6 @@ int main(int argc, char* argv[])
 	angle = *reinterpret_cast<float*>(&u);
 	
 	int count = 0, oldTime = SDL_GetTicks();
-	bool tried_to_get_mouse = false;
 	for (;;) {
 		while (sock->hasRemaining()) {
 			if (!world.receiveObjects(*sock, myId)) exit(1);
@@ -145,7 +99,7 @@ int main(int argc, char* argv[])
 						break;
 					}
 				}
-				if (src != -1) {
+				if (src >= 0 && src < 3) {
 					ALfloat alsrcpos[] = { it->second.x, it->second.y, 0 };
 					ALfloat alsrcvel[] = { 0, 0, 0 };
 				
@@ -217,29 +171,6 @@ int main(int argc, char* argv[])
 					break;
 				}
 				case SDL_MOUSEMOTION: {
-					int mouse_left_cutoff = 3*WIDTH/8, mouse_right_cutoff = 5*WIDTH/8;
-					int mouse_top_cutoff = 3*HEIGHT/8, mouse_bottom_cutoff = 5*HEIGHT/8;
-					
-					if(SDL_GetAppState() & SDL_APPINPUTFOCUS) {
-						if(event.motion.x < mouse_left_cutoff) {
-							SDL_WarpMouse(mouse_left_cutoff,event.motion.y);
-						}
-						if(event.motion.x > mouse_right_cutoff) {
-							SDL_WarpMouse(mouse_right_cutoff,event.motion.y);
-						}
-						if(event.motion.y < mouse_top_cutoff) {
-							SDL_WarpMouse(event.motion.x,mouse_top_cutoff);
-						}
-						if(event.motion.y > mouse_bottom_cutoff) {
-							SDL_WarpMouse(event.motion.x,mouse_bottom_cutoff);
-						}
-					}
-					
-					if(event.motion.x - event.motion.xrel < mouse_left_cutoff ||
-					   event.motion.x - event.motion.xrel > mouse_right_cutoff ||
-					   event.motion.y - event.motion.yrel < mouse_top_cutoff ||
-					   event.motion.y - event.motion.yrel > mouse_bottom_cutoff) break;
-					
 					angle -= event.motion.xrel/float(WIDTH);
 					while (angle >= 2*M_PI) angle -= 2*M_PI;
 					while (angle < 0) angle += 2*M_PI;
@@ -250,16 +181,6 @@ int main(int argc, char* argv[])
 					break;
 				}
 			}
-		}
-
-		// If program has focus and mouse isn't inside, move mouse to center of window
-		int state = SDL_GetAppState();
-		if(state & SDL_APPMOUSEFOCUS) {
-			tried_to_get_mouse = false;
-		}
-		if((state & SDL_APPINPUTFOCUS) && !(state & SDL_APPMOUSEFOCUS) && !tried_to_get_mouse) {
-			SDL_WarpMouse(WIDTH/2, HEIGHT/2);
-			tried_to_get_mouse = true;
 		}
 		
 		ALfloat alpos[] = { world.objects[myId].p.x, world.objects[myId].p.y, 0 };
@@ -272,31 +193,9 @@ int main(int argc, char* argv[])
 		render();
 		if ((++count)%100 == 0) {
 			int time = SDL_GetTicks();
-			float fps = 100000./(time - oldTime);
-			printf("\b\b\b\b\b\b\b\b\b");
-			if(fps < 10) {
-				cout << " ";
-			}
-			if(fps < 100) {
-				cout << " ";
-			}
-			if(fps < 1000) {
-				cout << " ";
-			}
-			if(fps < 10000) {
-				cout << " ";
-			}
-			if(fps < 100000) {
-				cout << " ";
-			}
-			cout << (int)fps << "fps";
-//			cout << "100 frames in " << time-oldTime << " milliseconds" << endl;
+			cout << "100 frames in " << time-oldTime << " milliseconds" << endl;
 			oldTime = time;
-			fflush(stdout);
 		}
 		SDL_GL_SwapBuffers();
 	}
-	cout << "\n"; // weird, why isn't this printing?
-	fflush(stdout);
-	SDL_Quit();
 }

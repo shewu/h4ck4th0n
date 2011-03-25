@@ -11,8 +11,8 @@
 #define MAX_DEPTH 100
 #define EPS .000001
 #define SPAWN_TIME 3
-#define SPAWN_TRY .1
-#define SPAWN_PROB .1
+#define SPAWN_TRY .05
+#define SPAWN_PROB .2
 
 #define ALSRCS 32
 

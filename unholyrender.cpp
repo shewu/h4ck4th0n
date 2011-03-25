@@ -90,6 +90,7 @@ void render()
 	GLfloat mat_diffuse[] = {0.8, 0.6, 0.4, 1.0};
 	GLfloat mat_ambient[] = {0.8, 0.6, 0.4, 1.0};
 	GLfloat mat_shininess[] = {20.0};
+	GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0};
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_SMOOTH); // enable smooth shading 
 

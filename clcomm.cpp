@@ -58,6 +58,7 @@ int main() {
 				clcomm.id = rand();
 			} while (clients.count(clcomm.id));
 			
+			clcomm.team = rand()%2;
 			clcomm.sock = Socket(new_fd);
 			clcomm.object_id = -1;
 			clcomm.angle = rand()/float(RAND_MAX)*2*M_PI;
@@ -104,7 +105,7 @@ int main() {
 			}
 			
 			while (it->second.object_id == -1 && (double)tim.tv_sec + (double)tim.tv_usec*1.0e-6 >= it->second.spawnTime) {
-				it->second.object_id = world.spawn(0, it->second.id);
+				it->second.object_id = world.spawn(2*it->second.team, it->second.id, -1);
 				if (it->second.object_id == -1) it->second.spawnTime += SPAWN_TRY;
 			}
 			it = nit;
@@ -151,7 +152,7 @@ int main() {
 			else if (it->second.spawny == 1) {
 				if (it->second.player == -2) it->second.spawny = 2;
 				else while (it->second.spawny == 1 && (double)tim.tv_sec + (double)tim.tv_usec*1.0e-6 > it->second.spawnTime) {
-					int newo = world.spawn(it->second.spawnl, it->second.player);
+					int newo = world.spawn(it->second.spawnl, it->second.player, it->second.flag);
 					if (newo == -1) it->second.spawnTime += SPAWN_TRY;
 					else {
 						it->second.spawny = 2;

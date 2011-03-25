@@ -17,7 +17,7 @@ Socket* sock;
 World world;
 float angle;
 int myId;
-unsigned int albuf[2], alsrcs[ALSRCS];
+unsigned int albuf[3], alsrcs[ALSRCS];
 
 void initVideo()
 {
@@ -43,7 +43,7 @@ void initSound()
 	ALfloat vel[] = { 0, 0, 0 };
 	ALfloat ori[] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
 	
-	alGenBuffers(2, albuf);
+	alGenBuffers(3, albuf);
 	
 	ALenum format;
 	void* data;
@@ -53,6 +53,8 @@ void initSound()
 	alBufferData(albuf[0], format, data, size, frequency);
 	alutLoadWAVFile((ALbyte*)"splat.wav", &format, &data, &size, &frequency, &loop);
 	alBufferData(albuf[1], format, data, size, frequency);
+	alutLoadWAVFile((ALbyte*)"ding.wav", &format, &data, &size, &frequency, &loop);
+	alBufferData(albuf[2], format, data, size, frequency);
 	alGenSources(ALSRCS, alsrcs);
 }
 
@@ -97,7 +99,7 @@ int main(int argc, char* argv[])
 						break;
 					}
 				}
-				if (src != -1) {
+				if (src >= 0 && src < 3) {
 					ALfloat alsrcpos[] = { it->second.x, it->second.y, 0 };
 					ALfloat alsrcvel[] = { 0, 0, 0 };
 				

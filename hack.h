@@ -80,6 +80,7 @@ class Object
 		int nattached;
 		int attachedTo;
 		int player;
+		int flag;
 		
 		bool send(Socket socket);
 		bool receive(Socket socket);
@@ -100,6 +101,7 @@ class Obstacle
 		Vector2D p1, p2;
 		Color color;
 		bool sticky;
+		int flag;
 };
 
 class Light
@@ -113,7 +115,7 @@ class World
 {
 	public:
 		World();
-		int spawn(int spawnl, int player);
+		int spawn(int spawnl, int player, int flag);
 		
 		std::map<int, std::vector<Spawn> > spawns;
 		std::map<int, Object> objects;

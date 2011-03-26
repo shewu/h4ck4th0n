@@ -22,6 +22,8 @@ extern int WIDTH;
 extern int HEIGHT;
 
 void initGL() {
+	glEnable(GL_BLEND);
+
 	vector<cl::Platform> platforms;
 	cl::Platform::get(&platforms);
 	cl_context_properties props[7] = { CL_CONTEXT_PLATFORM, (cl_context_properties)(platforms[0])(), CL_GLX_DISPLAY_KHR, (intptr_t)glXGetCurrentDisplay(), CL_GL_CONTEXT_KHR, (intptr_t)glXGetCurrentContext(), 0 };

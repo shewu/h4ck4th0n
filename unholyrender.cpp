@@ -1,5 +1,6 @@
 #include "unholyrender.h"
 #include <GL/glew.h>
+#include <GL/glu.h>
 #include <iostream>
 #include <fstream>
 #include <SDL/SDL.h>
@@ -17,7 +18,7 @@ extern int HEIGHT;
 
 void initGL() {
 	glewInit();
-	glEnable(GL_DEPTH_TEST);
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0, ((float) WIDTH) / ((float) HEIGHT), 1.0, 100.0);
@@ -76,6 +77,9 @@ void initGL() {
 void render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_BLEND);
+	glEnable(GL_POLYGON_SMOOTH);
+	glEnable(GL_DEPTH_TEST);
 	glLoadIdentity();
 	
 	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
@@ -132,5 +136,6 @@ void render()
 
 		}
 	glEnd();
+	glFlush();
 }
 

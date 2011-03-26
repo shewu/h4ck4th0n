@@ -3,7 +3,7 @@ Version 0.2, now with gameplay!
 
 To build:
 make
-	will build the server and unholyballs binaries
+	see `make all'
 
 make server
 	will build only the server

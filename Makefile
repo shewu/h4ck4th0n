@@ -5,7 +5,7 @@ LD=g++
 
 CCFLAGS=-O2 -g
 UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lGLEW -lIL -O2 -g
-HOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lOpenCL -O2 -g
+HOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lGLEW -lIL -lOpenCL -O2 -g
 
 SERVER_TARGET=server
 UNHOLY_BALLS_TARGET=unholyballs
@@ -15,7 +15,7 @@ SERVER_OBJECTS=clcomm.o world.o socket.o object.o vec.o simulate.o
 UNHOLY_BALLS_OBJECTS=unholyballs.o unholyrender.o socket.o vec.o object.o world.o
 HOLY_BALLS_OBJECTS=client.o render.o socket.o vec.o object.o world.o
 
-all: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET)
+all: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET)
 
 $(SERVER_TARGET): $(SERVER_OBJECTS)
 	$(LD) -o $(SERVER_TARGET) $(SERVER_LDFLAGS) $(SERVER_OBJECTS)

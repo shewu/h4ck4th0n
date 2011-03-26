@@ -4,12 +4,16 @@ Version 0.2, now with gameplay!
 To build:
 make
 	will build the server and unholyballs binaries
+
 make server
 	will build only the server
+
 make holyballs
 	will build holyballs, the ray tracing binary. requires OpenCL and at minimum a GTS450
+
 make unholyballs
 	will build only the unholyballs binary, for people with lesser graphics cards
+
 make all
 	will build all three binaries
 

@@ -244,7 +244,6 @@ int main(int argc, char* argv[])
 				cout << " ";
 			}
 			cout << (int)fps << "fps";
-			//			cout << "100 frames in " << time-oldTime << " milliseconds" << endl;
 			oldTime = time;
 			fflush(stdout);
 		}

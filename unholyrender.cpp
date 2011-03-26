@@ -25,24 +25,6 @@ void initGL() {
 	quad = gluNewQuadric();
 	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 
-	unsigned int texture, image;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	ilInit();
-	ilGenImages(1, &image);
-	ilBindImage(image);
-	ILboolean grassExists = ilLoadImage((char*)"grass.png");
-	if(grassExists == IL_COULD_NOT_OPEN_FILE)
-	{
-		cout << "your grass does not exist\n";
-	}
-	ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), GL_RGB, GL_UNSIGNED_BYTE, ilGetData());
-	
 	string vertexCode;
 	{
 		ifstream code("vertex.glsl");
@@ -128,35 +110,11 @@ void render()
 	}
 	glEnd();
 	
-	// this is the grass
-	/*
-	glEnable(GL_TEXTURE_2D);
-	glColor3f(1.0f, 1.0f, 1.0f);
-	glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(MIN_X, MIN_Y, 0);
-		glTexCoord2f(10.0f, 0.0f);
-		glVertex3f(MAX_X, MIN_Y, 0);
-		glTexCoord2f(10.0f, 10.0f);
-		glVertex3f(MAX_X, MAX_Y, 0);
-		glTexCoord2f(0.0f, 10.0f);
-		glVertex3f(MIN_X, MAX_Y, 0);
-	glEnd();
-	glDisable(GL_TEXTURE_2D);
-	*/
-	unsigned int GridSizeX = MAX_X-MIN_X;
-	unsigned int GridSizeY = MAX_Y-MIN_Y;
-	unsigned int SizeX = 8;
-	unsigned int SizeY = 8;
-
-	/*
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0,GridSizeX*SizeX,0,GridSizeY*SizeY,-1.0,1.0);
-	*/
+	// checkerboard
+	unsigned int GridSizeX = MAX_X/3;
+	unsigned int GridSizeY = MAX_Y/3;
+	unsigned int SizeX = 6;
+	unsigned int SizeY = 6;
 
 	glBegin(GL_QUADS);
 	for (int x =0;x<GridSizeX;++x)

@@ -138,7 +138,7 @@ void World::doSimulation(float dt)
 				float nv1 = objects[e.t1].v*normal, nv2 = objects[e.t2].v*normal;
 				if (objects[e.t1].dead) {
 					if (objects[e.t1].nattached == 0) objects[e.t1].rad -= DEATH_RATE*(e.time-knownTime);
-					if (objects[e.t1].flag == objects[e.t2].flag) {
+					if ((objects[e.t1].flag == -1 && objects[e.t2].flag == -1) || (objects[e.t1].flag != -1 && objects[e.t2].flag != -1 && objects[e.t1].flag != objects[e.t2].flag)) {
 						objects[e.t2].dead = true;
 						objects[e.t2].stopped = false;
 						objects[e.t2].spawny = 0;
@@ -149,13 +149,14 @@ void World::doSimulation(float dt)
 						sounds.push_back(pair<int, Vector2D>(1+(objects[e.t1].flag != -1), objects[e.t1].p+normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 					}
 					else {
-						objects[e.t2].v -= 2*((nv2-nv1)/(normal*normal)+(1/sqrt(normal*normal))*DEATH_RATE)*normal;
+						if (objects[e.t1].nattached != 0) objects[e.t2].v -= 2*(nv2/(normal*normal))*normal;
+						else objects[e.t2].v -= 2*((nv2-nv1)/(normal*normal)+(1/sqrt(normal*normal))*DEATH_RATE)*normal;
 						sounds.push_back(pair<int, Vector2D>(0, objects[e.t1].p+normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 					}
 				}
 				else if (objects[e.t2].dead) {
 					if (objects[e.t2].nattached == 0) objects[e.t2].rad -= DEATH_RATE*(e.time-knownTime);
-					if (objects[e.t1].flag == objects[e.t2].flag) {
+					if ((objects[e.t1].flag == -1 && objects[e.t2].flag == -1) || (objects[e.t1].flag != -1 && objects[e.t2].flag != -1 && objects[e.t1].flag != objects[e.t2].flag)) {
 						objects[e.t1].dead = true;
 						objects[e.t1].stopped = false;
 						objects[e.t1].spawny = 0;
@@ -166,7 +167,8 @@ void World::doSimulation(float dt)
 						sounds.push_back(pair<int, Vector2D>(1+(objects[e.t1].flag != -1), objects[e.t1].p+normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 					}
 					else {
-						objects[e.t1].v -= 2*((nv1-nv2)/(normal*normal)-(1/sqrt(normal*normal))*DEATH_RATE)*normal;
+						if (objects[e.t2].nattached != 0) objects[e.t1].v -= 2*(nv1/(normal*normal))*normal;
+						else objects[e.t1].v -= 2*((nv1-nv2)/(normal*normal)-(1/sqrt(normal*normal))*DEATH_RATE)*normal;
 						sounds.push_back(pair<int, Vector2D>(0, objects[e.t1].p+normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 					}
 				}
@@ -204,7 +206,7 @@ void World::doSimulation(float dt)
 				collideTimesObs[pair<int, int>(e.t1, e.t2)] = INFINITY;
 				objects[e.t1].p += (e.time-knownTime)*objects[e.t1].v;
 				Vector2D normal = objects[e.t1].p-obstacles[e.t2].p1;
-				if (obstacles[e.t2].sticky && objects[e.t1].flag == obstacles[e.t2].flag) {
+				if (obstacles[e.t2].sticky && ((objects[e.t1].flag == -1 && obstacles[e.t2].flag == -1) || (objects[e.t1].flag != -1 && obstacles[e.t2].flag != -1 && objects[e.t1].flag != obstacles[e.t2].flag))) {
 					objects[e.t1].dead = true;
 					objects[e.t1].stopped = false;
 					objects[e.t1].spawny = 0;
@@ -237,7 +239,7 @@ void World::doSimulation(float dt)
 				collideTimesObs[pair<int, int>(e.t1, e.t2)] = INFINITY;
 				objects[e.t1].p += (e.time-knownTime)*objects[e.t1].v;
 				Vector2D normal = objects[e.t1].p-obstacles[e.t2].p2;
-				if (obstacles[e.t2].sticky && objects[e.t1].flag == obstacles[e.t2].flag) {
+				if (obstacles[e.t2].sticky && ((objects[e.t1].flag == -1 && obstacles[e.t2].flag == -1) || (objects[e.t1].flag != -1 && obstacles[e.t2].flag != -1 && objects[e.t1].flag != obstacles[e.t2].flag))) {
 					objects[e.t1].dead = true;
 					objects[e.t1].stopped = false;
 					objects[e.t1].spawny = 0;
@@ -270,7 +272,7 @@ void World::doSimulation(float dt)
 				collideTimesObs[pair<int, int>(e.t1, e.t2)] = INFINITY;
 				objects[e.t1].p += (e.time-knownTime)*objects[e.t1].v;
 				Vector2D normal = (obstacles[e.t2].p2-obstacles[e.t2].p1).getNormalVector();
-				if (obstacles[e.t2].sticky && objects[e.t1].flag == obstacles[e.t2].flag) {
+				if (obstacles[e.t2].sticky && ((objects[e.t1].flag == -1 && obstacles[e.t2].flag == -1) || (objects[e.t1].flag != -1 && obstacles[e.t2].flag != -1 && objects[e.t1].flag != obstacles[e.t2].flag))) {
 					objects[e.t1].dead = true;
 					objects[e.t1].stopped = false;
 					objects[e.t1].spawny = 0;

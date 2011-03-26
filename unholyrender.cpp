@@ -128,6 +128,8 @@ void render()
 	}
 	glEnd();
 	
+	// this is the grass
+	/*
 	glEnable(GL_TEXTURE_2D);
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glBegin(GL_QUADS);
@@ -141,5 +143,36 @@ void render()
 		glVertex3f(MIN_X, MAX_Y, 0);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
+	*/
+	unsigned int GridSizeX = MAX_X-MIN_X;
+	unsigned int GridSizeY = MAX_Y-MIN_Y;
+	unsigned int SizeX = 8;
+	unsigned int SizeY = 8;
+
+	/*
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0,GridSizeX*SizeX,0,GridSizeY*SizeY,-1.0,1.0);
+	*/
+
+	glBegin(GL_QUADS);
+	for (int x =0;x<GridSizeX;++x)
+		for (int y =0;y<GridSizeY;++y)
+		{
+			if (abs(x+y) % 2) //modulo 2
+				glColor3f(1.0f,1.0f,1.0f); //white
+			else
+				glColor3f(0.0f,0.0f,0.0f); //black
+
+			glVertex2f(    x*SizeX + MIN_X,    y*SizeY + MIN_Y);
+			glVertex2f((x+1)*SizeX + MIN_X,    y*SizeY + MIN_Y);
+			glVertex2f((x+1)*SizeX + MIN_X,(y+1)*SizeY + MIN_Y);
+			glVertex2f(    x*SizeX + MIN_X,(y+1)*SizeY + MIN_Y);
+
+		}
+	glEnd();
 }
 

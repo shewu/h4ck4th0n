@@ -20,12 +20,20 @@ int myId;
 unsigned int albuf[3], alsrcs[ALSRCS];
 int WIDTH = 640;
 int HEIGHT = 480;
+char* ipaddy = (char*)"127.0.0.1";
+bool FULLSCREEN;
+
+#define ALIGNMENT 0x10
+#define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~(ALIGNMENT-1))
 
 void initVideo()
 {
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+	if(FULLSCREEN) 
+		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
+	else
+		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	SDL_ShowCursor(false);
 	SDL_WM_GrabInput(SDL_GRAB_ON);
 	
@@ -45,32 +53,46 @@ void initSound()
 	ALfloat vel[] = { 0, 0, 0 };
 	ALfloat ori[] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
 	
-	alGenBuffers(3, albuf);
-	
-	ALenum format;
-	void* data;
-	ALsizei size, frequency;
-	ALboolean loop;
-	alutLoadWAVFile((ALbyte*)"boing.wav", &format, &data, &size, &frequency, &loop);
-	alBufferData(albuf[0], format, data, size, frequency);
-	alutLoadWAVFile((ALbyte*)"splat.wav", &format, &data, &size, &frequency, &loop);
-	alBufferData(albuf[1], format, data, size, frequency);
-	alutLoadWAVFile((ALbyte*)"ding.wav", &format, &data, &size, &frequency, &loop);
-	alBufferData(albuf[2], format, data, size, frequency);
+	alutInit(NULL, NULL);
+	albuf[0] = alutCreateBufferFromFile("sounds/boing2.wav");
+	albuf[1] = alutCreateBufferFromFile("sounds/splat2.wav");
+	albuf[2] = alutCreateBufferFromFile("sounds/ding.wav");
 	alGenSources(ALSRCS, alsrcs);
 }
 
 int main(int argc, char* argv[])
 {
-	if(argc == 4)
+	// process args
+	for(int i = 1; i < argc; ++i)
 	{
-		int tmpWIDTH = atoi(argv[2]);
-		int tmpHEIGHT = atoi(argv[3]);
-		if((tmpWIDTH & 15) == 0)
-			WIDTH = tmpWIDTH;
-		if((tmpHEIGHT & 15) == 0)
-			HEIGHT = tmpHEIGHT;
+		if(!strcmp(argv[i], "-h"))
+		{
+			printf("Usage:\n"
+					"-h to show this message\n"
+					"-f for fullscreen\n"
+					"-d [width] [height] to specify viewport dimensions\n"
+					"\twhere [width] and [height] are multiples of 16\n"
+					"-i [ip] to connect to specified server\n");
+			exit(0);
+		}
+		else if(!strcmp(argv[i], "-d"))
+		{
+			// round up to next highest multiple of 16 if not already a multiple
+			// of 16
+			WIDTH = ALIGN(atoi(argv[i+1]));
+			HEIGHT = ALIGN(atoi(argv[i+2]));
+			cout << "Playing at " << WIDTH << "x" << HEIGHT << "\n";
+		}
+		else if(!strcmp(argv[i], "-f"))
+		{
+			FULLSCREEN = true;
+		}
+		else if(!strcmp(argv[i], "-i"))
+		{
+			ipaddy = argv[i+1];
+		}
 	}
+
 	initVideo();
 	initSound();
 	SDL_Thread *thread;
@@ -82,7 +104,7 @@ int main(int argc, char* argv[])
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	
-	getaddrinfo(argv[1], "55555", &hints, &res);
+	getaddrinfo(ipaddy, "55555", &hints, &res);
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	sock = new Socket(sockfd);
 	if (connect(sockfd, res->ai_addr, res->ai_addrlen) == -1) {

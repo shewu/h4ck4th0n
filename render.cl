@@ -86,20 +86,20 @@ render(
 	xdir = nxdir;
 	ydir = nydir;
 	zdir += (get_global_id(1)-(HEIGHT-1)/2.0)/((float)HEIGHT-1);
-	
+
 	float4 tcolor = (float4)(0, 0, 0, 0), mult = 1;
 	for (int s = 0; s < 6; s++) {
 		int obstacle = -1;
 		int object = -1;
 		float when = castRay(x, y, z, xdir, ydir, zdir, obstacles, obspoints, objects, objpoint, objsize, &obstacle, &object, 100);
-		
+
 		float4 color = (float4)(0, .5, 1, 1);
 		float4 ccolor;
 		float4 normal;
 		float4 dir = normalize((float4)(xdir, ydir, zdir, 0));
 		bool hit = false;
 		bool specular = false;
-	
+
 		if (obstacle != -1) {
 			ccolor = (float4)(obscolor[4*obstacle]/255.0, obscolor[4*obstacle+1]/255.0, obscolor[4*obstacle+2]/255.0, obscolor[4*obstacle+3]/255.0);
 			normal = normalize((float4)(obspoints[4*obstacle+1]-obspoints[4*obstacle+3], obspoints[4*obstacle+2]-obspoints[4*obstacle], 0, 0));
@@ -132,13 +132,13 @@ render(
 				float4 lightdir = (float4)(lightpos[3*i]-x-xdir*when, lightpos[3*i+1]-y-ydir*when, lightpos[3*i+2]-z-zdir*when, 0);
 				float w = castRay(x+xdir*when, y+ydir*when, z+zdir*when, lightdir.x, lightdir.y, lightdir.z, obstacles, obspoints, objects, objpoint, objsize, &obstacle, &object, 1);
 				if (w != 1) continue;
-			
+
 				lightdir = normalize(lightdir);
 				if (dot(lightdir, normal) <= 0) continue;
 				color += .6*dot(lightdir, normal)*ccolor*(float4)(lightcolor[4*i]/255.0, lightcolor[4*i+1]/255.0, lightcolor[4*i+2]/255.0, lightcolor[4*i+3]/255.0);
 			}
 		}
-		
+
 		for (int i = 0; i < lights; i++) {
 			float xdiff = lightpos[3*i]-x, ydiff = lightpos[3*i+1]-y, zdiff = lightpos[3*i+2]-z;
 			float4 diffv = (float4)(xdiff, ydiff, zdiff, 0);
@@ -148,7 +148,7 @@ render(
 			if (xdiff*xdir+ydiff*ydir+zdiff*zdir >= when*(xdir*xdir+ydir*ydir+zdir*zdir)) smallest = (xdiff-when*xdir)*(xdiff-when*xdir)+(ydiff-when*ydir)*(ydiff-when*ydir)+(zdiff-when*zdir)*(zdiff-when*zdir);
 			color += (float4)(lightcolor[4*i]/255.0, lightcolor[4*i+1]/255.0, lightcolor[4*i+2]/255.0, lightcolor[4*i+3]/255.0)*exp(-smallest/8.0)*3;
 		}
-		
+
 		tcolor += color*mult;
 		mult *= .2;
 		if (!specular) break;
@@ -160,6 +160,7 @@ render(
 		ydir = nextdir.y;
 		zdir = nextdir.z;
 	}
-	
+
 	write_imagef(im, (int2)(get_global_id(0), get_global_id(1)), tcolor);
 }
+

@@ -149,7 +149,8 @@ void World::doSimulation(float dt)
 						sounds.push_back(pair<int, Vector2D>(1+(objects[e.t1].flag != -1), objects[e.t1].p+normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 					}
 					else {
-						objects[e.t2].v -= 2*((nv2-nv1)/(normal*normal)+(1/sqrt(normal*normal))*DEATH_RATE)*normal;
+						if (objects[e.t1].nattached != 0) objects[e.t2].v -= 2*(nv2/(normal*normal))*normal;
+						else objects[e.t2].v -= 2*((nv2-nv1)/(normal*normal)+(1/sqrt(normal*normal))*DEATH_RATE)*normal;
 						sounds.push_back(pair<int, Vector2D>(0, objects[e.t1].p+normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 					}
 				}
@@ -166,7 +167,8 @@ void World::doSimulation(float dt)
 						sounds.push_back(pair<int, Vector2D>(1+(objects[e.t1].flag != -1), objects[e.t1].p+normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 					}
 					else {
-						objects[e.t1].v -= 2*((nv1-nv2)/(normal*normal)-(1/sqrt(normal*normal))*DEATH_RATE)*normal;
+						if (objects[e.t2].nattached != 0) objects[e.t1].v -= 2*(nv1/(normal*normal))*normal;
+						else objects[e.t1].v -= 2*((nv1-nv2)/(normal*normal)-(1/sqrt(normal*normal))*DEATH_RATE)*normal;
 						sounds.push_back(pair<int, Vector2D>(0, objects[e.t1].p+normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 					}
 				}

@@ -56,16 +56,6 @@ void initSound()
 	
 	alGenBuffers(3, albuf);
 	
-	/*ALenum format;
-	void* data;
-	ALsizei size, frequency;
-	ALboolean loop;
-	alutLoadWAVFile((ALbyte*)"boing.wav", &format, &data, &size, &frequency, &loop);
-	alBufferData(albuf[0], format, data, size, frequency);
-	alutLoadWAVFile((ALbyte*)"splat.wav", &format, &data, &size, &frequency, &loop);
-	alBufferData(albuf[1], format, data, size, frequency);
-	alGenSources(ALSRCS, alsrcs);*/
-
 	alutInit(0,NULL);
 	albuf[0] = alutCreateBufferFromFile("sounds/boing2.wav");
 	albuf[1] = alutCreateBufferFromFile("sounds/splat2.wav");
@@ -290,7 +280,6 @@ int main(int argc, char* argv[])
 				cout << " ";
 			}
 			cout << (int)fps << "fps";
-//			cout << "100 frames in " << time-oldTime << " milliseconds" << endl;
 			oldTime = time;
 			fflush(stdout);
 		}

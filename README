@@ -17,6 +17,19 @@ make unholyballs
 make all
 	will build all three binaries
 
+To run:
+-h
+	to display help message
+
+-i [ip]
+	to connect to specified server; default is 127.0.0.1
+
+-d [width] [height]
+	to play at specified resolution; default is 640x480
+
+-f
+	to play in fullscreen; will not work if specified resolution is greater than screen resolution
+
 Controls (Game):
 Mouse: Turn
 W: Accelerate forwards

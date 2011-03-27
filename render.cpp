@@ -60,17 +60,36 @@ void render()
 		return;
 	}
 	
+	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
+	if (focusx < MIN_X+14) focusx += (14-focusx+MIN_X)*(14-focusx+MIN_X)/28.0;
+	if (focusx > MAX_X-14) focusx -= (14+focusx-MAX_X)*(14+focusx-MAX_X)/28.0;
+	if (focusy < MIN_Y+14) focusy += (14-focusy+MIN_Y)*(14-focusy+MIN_Y)/28.0;
+	if (focusy > MAX_Y-14) focusy -= (14+focusy-MAX_Y)*(14+focusy-MAX_Y)/28.0;
+	
 	float obspoints[4*world.obstacles.size()];
 	unsigned char obscolor[4*world.obstacles.size()];
-	for (int i = 0; i < world.obstacles.size(); i++) {
-		obspoints[4*i] = world.obstacles[i].p1.x;
-		obspoints[4*i+1] = world.obstacles[i].p1.y;
-		obspoints[4*i+2] = world.obstacles[i].p2.x;
-		obspoints[4*i+3] = world.obstacles[i].p2.y;
-		obscolor[4*i] = world.obstacles[i].color.r;
-		obscolor[4*i+1] = world.obstacles[i].color.g;
-		obscolor[4*i+2] = world.obstacles[i].color.b;
-		obscolor[4*i+3] = world.obstacles[i].color.a;
+	int ti, i2 = 0;
+	for (ti = 0; ; ti++) {
+		while (i2 != world.obstacles.size()) {
+			Vector2D diff = Vector2D(focusx, focusy)-world.obstacles[i2].p1;
+			Vector2D obsdir = world.obstacles[i2].p2-world.obstacles[i2].p1;
+			float smallest;
+			if (diff*obsdir <= 0) smallest = diff*diff;
+			else if (diff*obsdir >= obsdir*obsdir) smallest = (diff-obsdir)*(diff-obsdir);
+			else smallest = diff*diff-(diff*obsdir)*(diff*obsdir)/(obsdir*obsdir);
+			if (smallest <= 56*56*(1+float(WIDTH)*float(WIDTH)/float(HEIGHT)/float(HEIGHT)/4.0)) break;
+			i2++;
+		}
+		if (i2 == world.obstacles.size()) break;
+		obspoints[4*ti] = world.obstacles[i2].p1.x;
+		obspoints[4*ti+1] = world.obstacles[i2].p1.y;
+		obspoints[4*ti+2] = world.obstacles[i2].p2.x;
+		obspoints[4*ti+3] = world.obstacles[i2].p2.y;
+		obscolor[4*ti] = world.obstacles[i2].color.r;
+		obscolor[4*ti+1] = world.obstacles[i2].color.g;
+		obscolor[4*ti+2] = world.obstacles[i2].color.b;
+		obscolor[4*ti+3] = world.obstacles[i2].color.a;
+		i2++;
 	}
 	cl::Buffer obspointsbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.obstacles.size()*sizeof(float), obspoints, NULL);
 	cl::Buffer obscolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.obstacles.size()*sizeof(char), obscolor, NULL);
@@ -79,15 +98,18 @@ void render()
 	float objsize[2*world.objects.size()];
 	unsigned char objcolor[4*world.objects.size()];
 	map<int, Object>::iterator it = world.objects.begin();
-	for (int i = 0; i < world.objects.size(); i++) {
-		objpoint[2*i] = it->second.p.x;
-		objpoint[2*i+1] = it->second.p.y;
-		objsize[2*i] = it->second.rad;
-		objsize[2*i+1] = it->second.hrat;
-		objcolor[4*i] = it->second.color.r;
-		objcolor[4*i+1] = it->second.color.g;
-		objcolor[4*i+2] = it->second.color.b;
-		objcolor[4*i+3] = it->second.color.a;
+	int si;
+	for (si = 0; ; si++) {
+		while (it != world.objects.end() && (focusx-it->second.p.x)*(focusx-it->second.p.x)+(focusy-it->second.p.y)*(focusx-it->second.p.y) > (56*sqrt(1+float(WIDTH)*float(WIDTH)/float(HEIGHT)/float(HEIGHT)/4.0)+it->second.rad)*(56*sqrt(1+float(WIDTH)*float(WIDTH)/float(HEIGHT)/float(HEIGHT)/4.0)+it->second.rad)) it++;
+		if (it == world.objects.end()) break;
+		objpoint[2*si] = it->second.p.x;
+		objpoint[2*si+1] = it->second.p.y;
+		objsize[2*si] = it->second.rad;
+		objsize[2*si+1] = it->second.hrat;
+		objcolor[4*si] = it->second.color.r;
+		objcolor[4*si+1] = it->second.color.g;
+		objcolor[4*si+2] = it->second.color.b;
+		objcolor[4*si+3] = it->second.color.a;
 		it++;
 	}
 	cl::Buffer objpointbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 2*world.objects.size()*sizeof(float), objpoint, NULL);
@@ -108,12 +130,6 @@ void render()
 	cl::Buffer lightposbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 3*world.lights.size()*sizeof(float), lightpos, NULL);
 	cl::Buffer lightcolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.lights.size()*sizeof(char), lightcolor, NULL);
 	
-	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
-	if (focusx < MIN_X+14) focusx += (14-focusx+MIN_X)*(14-focusx+MIN_X)/28.0;
-	if (focusx > MAX_X-14) focusx -= (14+focusx-MAX_X)*(14+focusx-MAX_X)/28.0;
-	if (focusy < MIN_Y+14) focusy += (14-focusy+MIN_Y)*(14-focusy+MIN_Y)/28.0;
-	if (focusy > MAX_Y-14) focusy -= (14+focusy-MAX_Y)*(14+focusy-MAX_Y)/28.0;
-	
 	cq.enqueueAcquireGLObjects(&bs);
 	cl::Kernel renderKern(program, "render", NULL);
 	renderKern.setArg(0, focusx-7*cos(angle));
@@ -122,10 +138,10 @@ void render()
 	renderKern.setArg(3, cos(angle));
 	renderKern.setArg(4, sin(angle));
 	renderKern.setArg(5, -4.0f/7);
-	renderKern.setArg(6, (int)world.obstacles.size());
+	renderKern.setArg(6, ti);
 	renderKern.setArg(7, obspointsbuf);
 	renderKern.setArg(8, obscolorbuf);
-	renderKern.setArg(9, (int)world.objects.size());
+	renderKern.setArg(9, si);
 	renderKern.setArg(10, objpointbuf);
 	renderKern.setArg(11, objsizebuf);
 	renderKern.setArg(12, objcolorbuf);

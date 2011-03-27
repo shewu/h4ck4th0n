@@ -163,7 +163,7 @@ int main(int argc, char* argv[])
 					break;
 				}
 				case SDL_MOUSEMOTION: {
-					angle -= event.motion.xrel/float(WIDTH);
+					angle -= event.motion.xrel/400.0;
 					while (angle >= 2*M_PI) angle -= 2*M_PI;
 					while (angle < 0) angle += 2*M_PI;
 					char buf[5];

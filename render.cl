@@ -51,7 +51,8 @@ __kernel void render(float x, float y, float z, float xdir, float ydir, float zd
 	ydir = nydir;
 	zdir += (get_global_id(1)-(HEIGHT-1)/2.0)/((float)HEIGHT-1);
 	
-	float4 tcolor = (float4)(0, 0, 0, 0), mult = 1;
+	float4 tcolor = (float4)(0, 0, 0, 0);
+	float mult = 1;
 	for (int s = 0; s < 6; s++) {
 		int obstacle = -1;
 		int object = -1;

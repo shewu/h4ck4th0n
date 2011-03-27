@@ -15,6 +15,7 @@
 #define SPAWN_TIME 3
 #define SPAWN_TRY .1
 #define SPAWN_PROB .1
+#define MAX_CLIENTS 32
 
 #define ALSRCS 32
 

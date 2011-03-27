@@ -226,9 +226,30 @@ int main(int argc, char* argv[])
 		render();
 		if ((++count)%100 == 0) {
 			int time = SDL_GetTicks();
-			cout << "100 frames in " << time-oldTime << " milliseconds" << endl;
+			float fps = 100000./(time - oldTime);
+			printf("\b\b\b\b\b\b\b\b\b");
+			if(fps < 10) {
+				cout << " ";
+			}
+			if(fps < 100) {
+				cout << " ";
+			}
+			if(fps < 1000) {
+				cout << " ";
+			}
+			if(fps < 10000) {
+				cout << " ";
+			}
+			if(fps < 100000) {
+				cout << " ";
+			}
+			cout << (int)fps << "fps";
 			oldTime = time;
+			fflush(stdout);
 		}
 		SDL_GL_SwapBuffers();
 	}
+	cout << "\n"; // weird, why isn't this printing?
+	fflush(stdout);
+	SDL_Quit();
 }

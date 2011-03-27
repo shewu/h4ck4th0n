@@ -1,17 +1,43 @@
 Holy Balls: The Game
 Version 0.2, now with gameplay!
 
+Requirements:
+* Hardware
+  * unholyballs requires at least a modern integrated graphics chipset
+  * holyballs require at least an ATi Mobility Radeon HD 4670 to run at 640x480 at 60fps
+* Software
+  * OpenAL is required for both versions
+  * OpenGL is required for both versions
+  * OpenCL is required only for holyballs
+
 To build:
 make
-	will build the server and unholyballs binaries
+	see `make all'
+
 make server
 	will build only the server
+
 make holyballs
 	will build holyballs, the ray tracing binary. requires OpenCL and at minimum a GTS450
+
 make unholyballs
 	will build only the unholyballs binary, for people with lesser graphics cards
+
 make all
 	will build all three binaries
+
+To run:
+-h
+	to display help message
+
+-i [ip]
+	to connect to specified server; default is 127.0.0.1
+
+-d [width] [height]
+	to play at specified resolution; default is 640x480
+
+-f
+	to play in fullscreen; will not work if specified resolution is greater than screen resolution
 
 Controls (Game):
 Mouse: Turn
@@ -27,3 +53,8 @@ K: Toggle Sticky Wall mode
 X: Toggle Delete mode
 Space: Toggle Edit mode
 
+Credits:
+* Sounds from freesound.org
+  * bounce sound from user dreamoron
+  * ding sound from user acclivity
+  * splat sound from user benhillyard

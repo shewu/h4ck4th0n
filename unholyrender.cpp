@@ -1,5 +1,6 @@
 #include "unholyrender.h"
 #include <GL/glew.h>
+#include <GL/glu.h>
 #include <iostream>
 #include <fstream>
 #include <SDL/SDL.h>
@@ -17,7 +18,7 @@ extern int HEIGHT;
 
 void initGL() {
 	glewInit();
-	glEnable(GL_DEPTH_TEST);
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0, ((float) WIDTH) / ((float) HEIGHT), 1.0, 100.0);
@@ -25,24 +26,6 @@ void initGL() {
 	quad = gluNewQuadric();
 	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 
-	unsigned int texture, image;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	ilInit();
-	ilGenImages(1, &image);
-	ilBindImage(image);
-	ILboolean grassExists = ilLoadImage((char*)"grass.png");
-	if(grassExists == IL_COULD_NOT_OPEN_FILE)
-	{
-		cout << "your grass does not exist\n";
-	}
-	ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), GL_RGB, GL_UNSIGNED_BYTE, ilGetData());
-	
 	string vertexCode;
 	{
 		ifstream code("vertex.glsl");
@@ -94,6 +77,9 @@ void initGL() {
 void render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_BLEND);
+	glEnable(GL_POLYGON_SMOOTH);
+	glEnable(GL_DEPTH_TEST);
 	glLoadIdentity();
 	
 	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
@@ -128,18 +114,28 @@ void render()
 	}
 	glEnd();
 	
-	glEnable(GL_TEXTURE_2D);
-	glColor3f(1.0f, 1.0f, 1.0f);
+	// checkerboard
+	unsigned int GridSizeX = MAX_X/3;
+	unsigned int GridSizeY = MAX_Y/3;
+	unsigned int SizeX = 6;
+	unsigned int SizeY = 6;
+
 	glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(MIN_X, MIN_Y, 0);
-		glTexCoord2f(10.0f, 0.0f);
-		glVertex3f(MAX_X, MIN_Y, 0);
-		glTexCoord2f(10.0f, 10.0f);
-		glVertex3f(MAX_X, MAX_Y, 0);
-		glTexCoord2f(0.0f, 10.0f);
-		glVertex3f(MIN_X, MAX_Y, 0);
+	for (int x =0;x<GridSizeX;++x)
+		for (int y =0;y<GridSizeY;++y)
+		{
+			if (abs(x+y) % 2) //modulo 2
+				glColor3f(1.0f,1.0f,1.0f); //white
+			else
+				glColor3f(0.0f,0.0f,0.0f); //black
+
+			glVertex2f(    x*SizeX + MIN_X,    y*SizeY + MIN_Y);
+			glVertex2f((x+1)*SizeX + MIN_X,    y*SizeY + MIN_Y);
+			glVertex2f((x+1)*SizeX + MIN_X,(y+1)*SizeY + MIN_Y);
+			glVertex2f(    x*SizeX + MIN_X,(y+1)*SizeY + MIN_Y);
+
+		}
 	glEnd();
-	glDisable(GL_TEXTURE_2D);
+	glFlush();
 }
 

@@ -17,7 +17,12 @@ extern int WIDTH;
 extern int HEIGHT;
 
 void initGL() {
-	glewInit();
+	GLenum err = glewInit();
+	if(err != GLEW_OK)
+	{
+		cout << "glewInit failed; " << glewGetErrorString(err) << "\n";
+		exit(-1);
+	}
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -78,8 +83,10 @@ void render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_BLEND);
-	glEnable(GL_POLYGON_SMOOTH);
 	glEnable(GL_DEPTH_TEST);
+
+	glEnable(GL_MULTISAMPLE_ARB);
+
 	glLoadIdentity();
 	
 	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
@@ -136,6 +143,9 @@ void render()
 
 		}
 	glEnd();
+
+	glDisable(GL_MULTISAMPLE_ARB);
+
 	glFlush();
 }
 

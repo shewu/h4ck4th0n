@@ -23,6 +23,7 @@ int WIDTH = 640;
 int HEIGHT = 480;
 char* ipaddy = (char*)"127.0.0.1";
 bool FULLSCREEN;
+bool NORAPE;
 
 #define ALIGNMENT 0x10
 #define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~(ALIGNMENT-1))
@@ -30,9 +31,12 @@ bool FULLSCREEN;
 void initVideo()
 {
 	SDL_Init(SDL_INIT_VIDEO);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+	if(!NORAPE)
+	{
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+	}
 	if(FULLSCREEN)
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
 	else
@@ -77,7 +81,8 @@ int main(int argc, char* argv[])
 					"-f for fullscreen\n"
 					"-d [width] [height] to specify viewport dimensions\n"
 					"\twhere [width] and [height] are multiples of 16\n"
-					"-i [ip] to connect to specified server\n");
+					"-i [ip] to connect to specified server\n"
+					"-norape to turn off antialiasing\n");
 			exit(0);
 		}
 		else if(!strcmp(argv[i], "-d"))
@@ -95,6 +100,10 @@ int main(int argc, char* argv[])
 		else if(!strcmp(argv[i], "-i"))
 		{
 			ipaddy = argv[i+1];
+		}
+		else if(!strcmp(argv[i], "-norape"))
+		{
+			NORAPE = true;
 		}
 	}
 	initVideo();

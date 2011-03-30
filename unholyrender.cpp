@@ -16,6 +16,10 @@ unsigned int program;
 extern int WIDTH;
 extern int HEIGHT;
 
+void drawFloor(float);
+void drawObjects(float*);
+void drawWalls(void);
+
 void initGL() {
 	GLenum err = glewInit();
 	if(err != GLEW_OK)
@@ -64,7 +68,7 @@ void initGL() {
 	GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
 	GLfloat mat_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 	GLfloat mat_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
-	GLfloat mat_specular[] = { 0.5, 0.5, 0.5, 0.0 };
+	GLfloat mat_specular[] = { 0.6, 0.6, 0.6, 0.0 };
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
@@ -102,17 +106,33 @@ void render()
 	float matrix[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 	
+	drawWalls();
+
 	glUseProgram(program);
 	glUniform3f(glGetUniformLocation(program, "lightv"), 5*matrix[8]+matrix[12], 5*matrix[9]+matrix[13], 5*matrix[10]+matrix[14]);
-	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {
-		glPushMatrix();
-		glTranslatef(i->second.p.x, i->second.p.y, 0);
-		glScalef(i->second.rad, i->second.rad, i->second.hrat*i->second.rad);
-		glColor3f(i->second.color.r/255.0, i->second.color.g/255.0, i->second.color.b/255.0);
-		gluSphere(quad, 1.0, 30, 30);
-		glPopMatrix();
-	}
+
+	glPushMatrix();
+		glScalef(1, 1, -1);
+		drawObjects(matrix);
+	glPopMatrix();
+
+	glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glColor4f(1.0, 1.0, 1.0, 1.0);
+		drawFloor(0.82);
+	glDisable(GL_BLEND);
+
+	drawObjects(matrix);
 	
+
+	glDisable(GL_MULTISAMPLE_ARB);
+
+	glFlush();
+}
+
+void drawWalls()
+{
+	// obstacles
 	glUseProgram(0);
 	glBegin(GL_QUADS);
 	for (vector<Obstacle>::iterator i = world.obstacles.begin(); i != world.obstacles.end(); i++) {
@@ -123,7 +143,22 @@ void render()
 		glVertex3f(i->p1.x, i->p1.y, 1);
 	}
 	glEnd();
-	
+}
+
+void drawObjects(float* matrix)
+{
+	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {
+		glPushMatrix();
+		glTranslatef(i->second.p.x, i->second.p.y, 0);
+		glScalef(i->second.rad, i->second.rad, i->second.hrat*i->second.rad);
+		glColor3f(i->second.color.r/255.0, i->second.color.g/255.0, i->second.color.b/255.0);
+		gluSphere(quad, 1.0, 30, 30);
+		glPopMatrix();
+	}
+}
+
+void drawFloor(float alpha)
+{
 	// checkerboard
 	unsigned int GridSizeX = MAX_X/3;
 	unsigned int GridSizeY = MAX_Y/3;
@@ -131,15 +166,15 @@ void render()
 	unsigned int SizeY = 6;
 
 	glEnable(GL_NORMALIZE);
-
 	glBegin(GL_QUADS);
 	for (int x =0;x<GridSizeX;++x)
+	{
 		for (int y =0;y<GridSizeY;++y)
 		{
-			if (abs(x+y) % 2) //modulo 2
-				glColor3f(1.0f,1.0f,1.0f); //white
+			if (abs(x+y) & 1) //modulo 2
+				glColor4f(1.0f,1.0f,1.0f, alpha); //white
 			else
-				glColor3f(0.0f,0.0f,0.0f); //black
+				glColor4f(0.0f,0.0f,0.0f, alpha); //black
 
 			glNormal3f(                  0,                  0, 1);
 			glVertex3f(    x*SizeX + MIN_X,    y*SizeY + MIN_Y, 0);
@@ -148,10 +183,8 @@ void render()
 			glVertex3f(    x*SizeX + MIN_X,(y+1)*SizeY + MIN_Y, 0);
 
 		}
+	}
 	glEnd();
-
-	glDisable(GL_MULTISAMPLE_ARB);
-
-	glFlush();
+	glDisable(GL_NORMALIZE);
 }
 

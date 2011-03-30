@@ -64,6 +64,7 @@ void initGL() {
 	GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
 	GLfloat mat_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 	GLfloat mat_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
+	GLfloat mat_specular[] = { 0.5, 0.5, 0.5, 0.0 };
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
@@ -71,6 +72,8 @@ void initGL() {
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
+	glMaterialf( GL_FRONT_AND_BACK, GL_SHININESS, 200.0);
 
 	glEnable(GL_LIGHTING); // enable lighting 
 	glEnable(GL_LIGHT0); // enable light 0
@@ -127,6 +130,8 @@ void render()
 	unsigned int SizeX = 6;
 	unsigned int SizeY = 6;
 
+	glEnable(GL_NORMALIZE);
+
 	glBegin(GL_QUADS);
 	for (int x =0;x<GridSizeX;++x)
 		for (int y =0;y<GridSizeY;++y)
@@ -136,10 +141,11 @@ void render()
 			else
 				glColor3f(0.0f,0.0f,0.0f); //black
 
-			glVertex2f(    x*SizeX + MIN_X,    y*SizeY + MIN_Y);
-			glVertex2f((x+1)*SizeX + MIN_X,    y*SizeY + MIN_Y);
-			glVertex2f((x+1)*SizeX + MIN_X,(y+1)*SizeY + MIN_Y);
-			glVertex2f(    x*SizeX + MIN_X,(y+1)*SizeY + MIN_Y);
+			glNormal3f(                  0,                  0, 1);
+			glVertex3f(    x*SizeX + MIN_X,    y*SizeY + MIN_Y, 0);
+			glVertex3f((x+1)*SizeX + MIN_X,    y*SizeY + MIN_Y, 0);
+			glVertex3f((x+1)*SizeX + MIN_X,(y+1)*SizeY + MIN_Y, 0);
+			glVertex3f(    x*SizeX + MIN_X,(y+1)*SizeY + MIN_Y, 0);
 
 		}
 	glEnd();

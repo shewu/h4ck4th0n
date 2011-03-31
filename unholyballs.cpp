@@ -273,7 +273,7 @@ int main(int argc, char* argv[])
 		render();
 		if ((++count)%100 == 0) {
 			int time = SDL_GetTicks();
-			float fps = 100000./(time - oldTime);
+			float fps = (100*1000.)/(time - oldTime);
 			printf("\b\b\b\b\b\b\b\b\b");
 			if(fps < 10) {
 				cout << " ";

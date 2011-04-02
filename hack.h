@@ -117,6 +117,7 @@ class World
 		World();
 		int spawn(int spawnl, int player, int flag);
 		
+		int minX, maxX, minY, maxY;
 		std::map<int, std::vector<Spawn> > spawns;
 		std::map<int, Object> objects;
 		std::vector<Light> lights;

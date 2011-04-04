@@ -38,9 +38,9 @@ void initVideo()
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 	}
 	if(FULLSCREEN)
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
+		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 0, SDL_OPENGL | SDL_FULLSCREEN);
 	else
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 0, SDL_OPENGL);
 	
 	if(screen == NULL) {
 		printf("SDL_SetVideoMode failed: %s\n",SDL_GetError());

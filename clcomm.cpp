@@ -25,6 +25,10 @@ map<int, ClientCommunicator> clients;
 timeval tim;
 
 int main() {
+	if(FRICTION < 0.0f) {
+		cout << "your friction is negative and will cause the game to fail\n";
+		exit(-1);
+	}
 	srand((unsigned int)time(NULL));
 	
 	gettimeofday(&tim, NULL);

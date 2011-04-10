@@ -10,6 +10,7 @@
 #include <netdb.h>
 #include <cmath>
 #include "client.h"
+#include "menu.h"
 
 using namespace std;
 
@@ -23,29 +24,37 @@ int WIDTH = 640;
 int HEIGHT = 480;
 char* ipaddy = (char*)"127.0.0.1";
 bool FULLSCREEN;
+menu *mainmenu;
+bool iskeydown[256];
 bool NORAPE;
 
 #define ALIGNMENT 0x10
 #define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~(ALIGNMENT-1))
 
+void initMenus()
+{
+	mainmenu = new menu();
+	menu *menu1 = new menu();
+	menu *menu2 = new menu();
+	menu1->add_menuitem(new submenuitem(new menu(), (char*)"menu 1 item 1"));
+	menu1->add_menuitem(new submenuitem(new menu(), (char*)"menu 1 item 2"));
+	menu2->add_menuitem(new submenuitem(new menu(), (char*)"menu 2 item 1"));
+	menu2->add_menuitem(new submenuitem(new menu(), (char*)"menu 2 item 2"));
+
+	mainmenu->add_menuitem(new submenuitem(menu1, (char*)"sub menu 1 :)"));
+	mainmenu->add_menuitem(new submenuitem(menu2, (char*)"sub menu 2 :)"));
+}
+
 void initVideo()
 {
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	if(!NORAPE)
-	{
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-	}
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 	if(FULLSCREEN)
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 0, SDL_OPENGL | SDL_FULLSCREEN);
+		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
 	else
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 0, SDL_OPENGL);
-	
-	if(screen == NULL) {
-		printf("SDL_SetVideoMode failed: %s\n",SDL_GetError());
-	}
-
+		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	SDL_ShowCursor(false);
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	
@@ -76,6 +85,11 @@ void initSound()
 
 int main(int argc, char* argv[])
 {
+	initMenus();
+
+	for(int i = 0; i < 256; i++)
+		iskeydown[i] = false;
+
 	// process args
 	for(int i = 1; i < argc; ++i)
 	{
@@ -86,8 +100,7 @@ int main(int argc, char* argv[])
 					"-f for fullscreen\n"
 					"-d [width] [height] to specify viewport dimensions\n"
 					"\twhere [width] and [height] are multiples of 16\n"
-					"-i [ip] to connect to specified server\n"
-					"-norape to turn off antialiasing\n");
+					"-i [ip] to connect to specified server\n");
 			exit(0);
 		}
 		else if(!strcmp(argv[i], "-d"))
@@ -105,10 +118,6 @@ int main(int argc, char* argv[])
 		else if(!strcmp(argv[i], "-i"))
 		{
 			ipaddy = argv[i+1];
-		}
-		else if(!strcmp(argv[i], "-norape"))
-		{
-			NORAPE = true;
 		}
 	}
 	initVideo();
@@ -134,6 +143,8 @@ int main(int argc, char* argv[])
 	u = ntohl(u);
 	myId = -1;
 	angle = *reinterpret_cast<float*>(&u);
+
+	
 	
 	int count = 0, oldTime = SDL_GetTicks();
 	bool tried_to_get_mouse = false;
@@ -171,6 +182,12 @@ int main(int argc, char* argv[])
 			switch(event.type) {
 				case SDL_KEYDOWN:
 				{
+					bool isinitialpress = !iskeydown[event.key.keysym.sym];
+					iskeydown[event.key.keysym.sym] = true;
+
+					//if(isinitialpress)
+					//	mainmenu->key_input(event.key.keysym.sym);
+					
 					char b = -1;
 					switch (event.key.keysym.sym) {
 						case SDLK_ESCAPE:
@@ -196,6 +213,8 @@ int main(int argc, char* argv[])
 				}
 				case SDL_KEYUP:
 				{
+					iskeydown[event.key.keysym.sym] = false;
+
 					char b = -1;
 					switch (event.key.keysym.sym) {
 						case SDLK_a:
@@ -276,11 +295,26 @@ int main(int argc, char* argv[])
 		alListenerfv(AL_ORIENTATION, alori);
 		
 		render();
+		//mainmenu->draw();
 		if ((++count)%100 == 0) {
 			int time = SDL_GetTicks();
-			float fps = (100*1000.)/(time - oldTime);
-			printf("\r");
-			cout.width(6);
+			float fps = 100000./(time - oldTime);
+			printf("\b\b\b\b\b\b\b\b\b");
+			if(fps < 10) {
+				cout << " ";
+			}
+			if(fps < 100) {
+				cout << " ";
+			}
+			if(fps < 1000) {
+				cout << " ";
+			}
+			if(fps < 10000) {
+				cout << " ";
+			}
+			if(fps < 100000) {
+				cout << " ";
+			}
 			cout << (int)fps << "fps";
 			oldTime = time;
 			fflush(stdout);

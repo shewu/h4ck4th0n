@@ -8,6 +8,7 @@
 #include <cmath>
 #include "constants.h"
 #include "client.h"
+#include "font.h"
 
 using namespace std;
 
@@ -84,6 +85,8 @@ void initGL() {
 
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	glEnable(GL_COLOR_MATERIAL);
+
+	init_font();
 }
 
 void render()

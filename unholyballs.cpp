@@ -26,6 +26,7 @@ char* ipaddy = (char*)"127.0.0.1";
 bool FULLSCREEN;
 menu *mainmenu;
 bool iskeydown[256];
+bool NORAPE;
 
 #define ALIGNMENT 0x10
 #define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~(ALIGNMENT-1))

@@ -68,7 +68,7 @@ void initGL() {
 	GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
 	GLfloat mat_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 	GLfloat mat_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
-	GLfloat mat_specular[] = { 0.6, 0.6, 0.6, 0.0 };
+	GLfloat mat_specular[] = { 0.8, 0.8, 0.8, 0.0 };
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
@@ -147,14 +147,16 @@ void drawWalls()
 
 void drawObjects(float* matrix)
 {
+	glEnable(GL_NORMALIZE);
 	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {
 		glPushMatrix();
 		glTranslatef(i->second.p.x, i->second.p.y, 0);
 		glScalef(i->second.rad, i->second.rad, i->second.hrat*i->second.rad);
 		glColor3f(i->second.color.r/255.0, i->second.color.g/255.0, i->second.color.b/255.0);
-		gluSphere(quad, 1.0, 30, 30);
+		gluSphere(quad, 1.0, 50, 50);
 		glPopMatrix();
 	}
+	glDisable(GL_NORMALIZE);
 }
 
 void drawFloor(float alpha)

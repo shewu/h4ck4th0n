@@ -3,7 +3,7 @@
 menu::menu() {
 	current_index = 0;
 	is_item_active = false;
-	is_menu_active = true;
+	is_menu_active = false;
 	setAppearanceMiddle();
 }
 

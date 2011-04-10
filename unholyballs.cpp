@@ -185,9 +185,6 @@ int main(int argc, char* argv[])
 					bool isinitialpress = !iskeydown[event.key.keysym.sym];
 					iskeydown[event.key.keysym.sym] = true;
 
-					//if(isinitialpress)
-					//	mainmenu->key_input(event.key.keysym.sym);
-					
 					char b = -1;
 					switch (event.key.keysym.sym) {
 						case SDLK_ESCAPE:
@@ -215,6 +212,8 @@ int main(int argc, char* argv[])
 				{
 					iskeydown[event.key.keysym.sym] = false;
 
+					mainmenu->key_input(event.key.keysym.sym);
+
 					char b = -1;
 					switch (event.key.keysym.sym) {
 						case SDLK_a:
@@ -228,6 +227,10 @@ int main(int argc, char* argv[])
 							break;
 						case SDLK_s:
 							b = 3;
+							break;
+						case SDLK_m:
+							mainmenu->set_active(!mainmenu->is_active());
+							mainmenu->key_input(event.key.keysym.sym);
 							break;
 					}
 					if (b != -1) {
@@ -295,7 +298,8 @@ int main(int argc, char* argv[])
 		alListenerfv(AL_ORIENTATION, alori);
 		
 		render();
-		//mainmenu->draw();
+		if(mainmenu->is_active())
+			mainmenu->draw();
 		if ((++count)%100 == 0) {
 			int time = SDL_GetTicks();
 			float fps = 100000./(time - oldTime);

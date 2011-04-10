@@ -12,8 +12,8 @@ UNHOLY_BALLS_TARGET=unholyballs
 HOLY_BALLS_TARGET=holyballs
 
 SERVER_OBJECTS=clcomm.o world.o socket.o object.o vec.o simulate.o
-UNHOLY_BALLS_OBJECTS=unholyballs.o unholyrender.o socket.o vec.o object.o world.o
-HOLY_BALLS_OBJECTS=client.o render.o socket.o vec.o object.o world.o
+UNHOLY_BALLS_OBJECTS=unholyballs.o unholyrender.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o
+HOLY_BALLS_OBJECTS=client.o render.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o
 
 all: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET)
 

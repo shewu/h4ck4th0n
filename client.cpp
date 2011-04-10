@@ -35,7 +35,7 @@ void initVideo()
 	else
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	SDL_ShowCursor(false);
-	SDL_WM_GrabInput(SDL_GRAB_ON);
+	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	
 	initGL();
 }
@@ -118,6 +118,7 @@ int main(int argc, char* argv[])
 	angle = *reinterpret_cast<float*>(&u);
 	
 	int count = 0, oldTime = SDL_GetTicks();
+	bool tried_to_get_mouse = false;
 	for (;;) {
 		while (sock->hasRemaining()) {
 			if (!world.receiveObjects(*sock, myId)) exit(1);
@@ -204,6 +205,29 @@ int main(int argc, char* argv[])
 					break;
 				}
 				case SDL_MOUSEMOTION: {
+					int mouse_left_cutoff = 3*WIDTH/8, mouse_right_cutoff = 5*WIDTH/8;
+					int mouse_top_cutoff = 3*HEIGHT/8, mouse_bottom_cutoff = 5*HEIGHT/8;
+					
+					if(SDL_GetAppState() & SDL_APPINPUTFOCUS) {
+						if(event.motion.x < mouse_left_cutoff) {
+							SDL_WarpMouse(mouse_left_cutoff,event.motion.y);
+						}
+						if(event.motion.x > mouse_right_cutoff) {
+							SDL_WarpMouse(mouse_right_cutoff,event.motion.y);
+						}
+						if(event.motion.y < mouse_top_cutoff) {
+							SDL_WarpMouse(event.motion.x,mouse_top_cutoff);
+						}
+						if(event.motion.y > mouse_bottom_cutoff) {
+							SDL_WarpMouse(event.motion.x,mouse_bottom_cutoff);
+						}
+					}
+					
+					if(event.motion.x - event.motion.xrel < mouse_left_cutoff ||
+					   event.motion.x - event.motion.xrel > mouse_right_cutoff ||
+					   event.motion.y - event.motion.yrel < mouse_top_cutoff ||
+					   event.motion.y - event.motion.yrel > mouse_bottom_cutoff) break;
+					
 					angle -= event.motion.xrel/float(WIDTH);
 					while (angle >= 2*M_PI) angle -= 2*M_PI;
 					while (angle < 0) angle += 2*M_PI;
@@ -214,6 +238,16 @@ int main(int argc, char* argv[])
 					break;
 				}
 			}
+		}
+
+		// If program has focus and mouse isn't inside, move mouse to center of window
+		int state = SDL_GetAppState();
+		if(state & SDL_APPMOUSEFOCUS) {
+			tried_to_get_mouse = false;
+		}
+		if((state & SDL_APPINPUTFOCUS) && !(state & SDL_APPMOUSEFOCUS) && !tried_to_get_mouse) {
+			SDL_WarpMouse(WIDTH/2, HEIGHT/2);
+			tried_to_get_mouse = true;
 		}
 		
 		ALfloat alpos[] = { world.objects[myId].p.x, world.objects[myId].p.y, 0 };

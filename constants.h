@@ -6,7 +6,11 @@
 #define MIN_Y -30.0f
 #define MAX_Y 30.0f
 #define FRICTION 0.2
+<<<<<<< HEAD
 #define KEYPRESS_ACCELERATION 4.0f//2.0f
+=======
+#define KEYPRESS_ACCELERATION 5.0f//2.0f
+>>>>>>> 8bdcf4d76d7e4a9f6497214e42b32233fa3875e7
 #define DEATH_RATE .05
 #define MAX_DEPTH 100
 #define EPS .000001

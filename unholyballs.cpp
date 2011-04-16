@@ -28,7 +28,7 @@ menu *mainmenu;
 bool iskeydown[256];
 bool NORAPE;
 
-const uint16_t fourbythree[][] = 
+const uint16_t fourbythree[][2] = 
 {
 	{640, 480}, 
 	{800, 600}, 
@@ -38,7 +38,7 @@ const uint16_t fourbythree[][] =
 	{1600, 1200}, 
 	{2048, 1536}
 };
-const uint16_t sixteenbyten[] = 
+const uint16_t sixteenbyten[][2] = 
 {
 	{800, 500}, 
 	{1024, 640}, 
@@ -49,7 +49,7 @@ const uint16_t sixteenbyten[] =
 	{2560, 1600}, 
 	{3840, 2400}
 };
-const uint16_t sixteenbynine[] = 
+const uint16_t sixteenbynine[][2] = 
 {
 	{854, 480}, 
 	{1024, 576}, 
@@ -106,6 +106,13 @@ void initVideo()
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 	}
+	// detect aspect ratio
+	float ratio = (float)SDL_GetVideoInfo()->current_w / SDL_GetVideoInfo()->current_h;
+
+	cout << "SDL_GetVideoInfo()->current_w = " << SDL_GetVideoInfo()->current_w << "\n";
+	cout << "SDL_GetVideoInfo()->current_h = " << SDL_GetVideoInfo()->current_h << "\n";
+	cout << "aspect ratio = " << ratio << "\n";
+
 	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	SDL_ShowCursor(false);
 	SDL_WM_GrabInput(SDL_GRAB_OFF);

@@ -121,7 +121,7 @@ bool inputmenuitem::shouldMenuBeDrawn() {
 //togglemenuitem
 togglemenuitem::~togglemenuitem() { }
 
-togglemenuitem::togglemenuitem(char *name1, bool state1, void (*act)()) {
+togglemenuitem::togglemenuitem(char *name1, bool state1, void (*act)(bool)) {
 	name = name1;
 	state = state1;
 	action = act;
@@ -130,7 +130,7 @@ togglemenuitem::togglemenuitem(char *name1, bool state1, void (*act)()) {
 bool togglemenuitem::activate() {
 	state = !state;
 	if(action != NULL)
-		action();
+		action(state);
 	return false;
 }
 

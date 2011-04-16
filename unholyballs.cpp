@@ -201,9 +201,6 @@ int main(int argc, char* argv[])
 
 					char b = -1;
 					switch (event.key.keysym.sym) {
-						case SDLK_ESCAPE:
-							exit(0);
-							break;
 						case SDLK_a:
 							b = 0;
 							break;
@@ -242,7 +239,7 @@ int main(int argc, char* argv[])
 						case SDLK_s:
 							b = 3;
 							break;
-						case SDLK_m:
+						case SDLK_ESCAPE:
 							mainmenu->set_active(!mainmenu->is_active());
 							mainmenu->key_input(event.key.keysym.sym);
 							break;

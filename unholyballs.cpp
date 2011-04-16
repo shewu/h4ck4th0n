@@ -38,7 +38,7 @@ bool action_quit()
 }
 
 bool validator_test(char *a) {
-	return a[0] == 'A';
+	return a[0] == 'a';
 }
 void initMenus()
 {
@@ -52,7 +52,7 @@ void initMenus()
 
 	mainmenu->add_menuitem(new submenuitem(menu1, (char*)"sub menu 1 :)"));
 	mainmenu->add_menuitem(new submenuitem(menu2, (char*)"sub menu 2 :)"));
-	mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with A", (char *)"Enter stuff", (char *)"Stuff"));
+	mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with a", (char *)"Enter stuff", (char *)"Stuff"));
 	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Some boolean", false, NULL));
 }

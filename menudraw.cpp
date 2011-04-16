@@ -148,6 +148,17 @@ void inputmenuitem::drawAsActive(unsigned char alpha) {
 		draw_str(tq, input);
 	}
 
+	if(displayError && invalidInputError != NULL) {
+		textquad tq(input_left + input_textfield_left + 0.02f,
+				input_top + input_textfield_top + input_textfield_height + 0.02f,
+				0.0f,
+				input_left + input_textfield_left + 0.02f,
+				input_top + input_textfield_top + input_textfield_height + font_size + 0.02f,
+				0.0f,
+				0.05f, 0.0f, 0.0f);
+		draw_str(tq, invalidInputError);
+	}
+
 	glDisable(GL_TEXTURE_2D);
 
 }	

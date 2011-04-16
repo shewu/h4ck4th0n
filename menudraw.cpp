@@ -21,7 +21,7 @@
 #define input_textfield_left	0.02f
 #define input_textfield_top	0.09f
 #define input_textfield_width	0.66f
-#define input_textfield_height	0.2f
+#define input_textfield_height	0.07f
 
 #define menu_alpha 200
 
@@ -149,6 +149,7 @@ void inputmenuitem::drawAsActive(unsigned char alpha) {
 	}
 
 	if(displayError && invalidInputError != NULL) {
+		glColor4ub(255,0,0,255);
 		textquad tq(input_left + input_textfield_left + 0.02f,
 				input_top + input_textfield_top + input_textfield_height + 0.02f,
 				0.0f,

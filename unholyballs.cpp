@@ -37,6 +37,9 @@ bool action_quit()
 	return true;
 }
 
+bool validator_test(char *a) {
+	return a[0] == 'A';
+}
 void initMenus()
 {
 	mainmenu = new menu();
@@ -51,7 +54,7 @@ void initMenus()
 	mainmenu->add_menuitem(new submenuitem(menu2, (char*)"sub menu 2 :)"));
 	mainmenu->add_menuitem(new inputmenuitem(20, NULL, (char *)"", NULL, (char *)"Enter stuff", (char *)"Stuff"));
 	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
-	mainmenu->add_menuitem(new togglemenuitem((char*)"Some boolean", false));
+	mainmenu->add_menuitem(new togglemenuitem((char*)"Some boolean", false, NULL));
 }
 
 void initVideo()

@@ -13,11 +13,17 @@
 #define input_right		0.85f
 #define input_top		0.3f
 #define input_bottom		0.7f
+#define input_title_left	0.02f
+#define input_title_top		0.02f
 
 #define menu_alpha 200
 
 void menu::draw() {
-	if(!is_item_active || menuitems[current_index]->shouldMenuBeDrawn()) {
+	draw(true);
+}
+
+void menu::draw(bool should_set_matrices) {
+	if(should_set_matrices) {
 
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
@@ -28,7 +34,9 @@ void menu::draw() {
 		//glOrtho(0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f);
 		glOrtho(-x1/(x2-x1),(1.0f-x2)/(x2-x1)+1.0f,(1.0f-y2)/(y2-y1)+1.0f,-y1/(y2-y1),-1.0f,1.0f);
 		glDisable(GL_DEPTH_TEST);
+	}
 
+	if(!is_item_active || menuitems[current_index]->shouldMenuBeDrawn()) {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -54,7 +62,7 @@ void menu::draw() {
 	if(is_item_active)
 		menuitems[current_index]->drawAsActive(transparent?menu_alpha:255);
 
-	if(!is_item_active || menuitems[current_index]->shouldMenuBeDrawn()) {
+	if(should_set_matrices) {
 		glEnable(GL_DEPTH_TEST);
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
@@ -89,7 +97,7 @@ void menuitem::draw(bool selected, float x, float y, float width, float height, 
 }
 
 void submenuitem::drawAsActive(unsigned char alpha) {
-	m->draw();
+	m->draw(false);
 }
 
 void inputmenuitem::drawAsActive(unsigned char alpha) {
@@ -100,4 +108,20 @@ void inputmenuitem::drawAsActive(unsigned char alpha) {
 	glVertex3f(input_right, input_bottom, 0.0f);
 	glVertex3f(input_right, input_top, 0.0f);
 	glEnd();
+
+	glColor4ub(0,0,0,255); //Make text opaque
+
+	if(text != NULL) {
+		textquad tq(input_left + input_title_left,
+				input_top + input_title_top,
+				0.0f,
+				input_left + input_title_left,
+				input_top + input_title_top + font_size,
+				0.0f,
+				0.05f, 0.0f, 0.0f);
+		draw_str(tq, text);
+	}
+
+	glDisable(GL_TEXTURE_2D);
+
 }	

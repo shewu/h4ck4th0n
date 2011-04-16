@@ -34,6 +34,7 @@ class menu {
 		void key_input(int key);
 		bool is_active();
 		void set_active(bool);
+		void draw(bool);
 		void draw();
 
 		void setAppearance(bool transparent,float x1,float x2,float y1,float y2);

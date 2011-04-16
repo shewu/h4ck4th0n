@@ -59,6 +59,7 @@ class submenuitem : public menuitem {
 		virtual bool key_input(int key);
 		virtual void drawAsActive(unsigned char alpha);
 		virtual bool shouldMenuBeDrawn();
+		virtual void draw(bool,float,float,float,float,unsigned char);
 
 	private:
 		menu *m;

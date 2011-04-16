@@ -8,7 +8,7 @@
 #define button_height		0.15f
 #define button_separation	0.05f
 #define font_size		0.05f
-#define button_text_padding	0.025f
+#define button_text_padding	0.055f
 
 #define toggle_dist_from_back	0.2f
 
@@ -101,6 +101,15 @@ void menuitem::drawAsActive(unsigned char alpha) {}
 
 void menuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
 	draw_button(selected, name, x, y, width, height, alpha);
+}
+
+void submenuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
+	draw_button(selected, name, x, y, width, height, alpha);
+	glBegin(GL_TRIANGLES);
+	glVertex3f(x + 0.01f, y + 0.03f, 0.0f);
+	glVertex3f(x + 0.01f, y + 0.12f, 0.0f);
+	glVertex3f(x + 0.045f, y + 0.075f, 0.0f);
+	glEnd();
 }
 
 void submenuitem::drawAsActive(unsigned char alpha) {

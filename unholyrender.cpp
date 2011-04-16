@@ -133,6 +133,10 @@ void render()
 	glFlush();
 }
 
+void drawMiniMap()
+{
+}
+
 void drawWalls()
 {
 	// obstacles
@@ -172,9 +176,9 @@ void drawFloor(float alpha)
 
 	glEnable(GL_NORMALIZE);
 	glBegin(GL_QUADS);
-	for (int x =0;x<GridSizeX;++x)
+	for (int x = 0; x < GridSizeX; ++x)
 	{
-		for (int y =0;y<GridSizeY;++y)
+		for (int y = 0; y < GridSizeY; ++y)
 		{
 			if (abs(x+y) & 1) //modulo 2
 				glColor4f(1.0f,1.0f,1.0f, alpha); //white

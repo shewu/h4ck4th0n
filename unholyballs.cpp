@@ -43,6 +43,7 @@ void initMenus()
 
 	mainmenu->add_menuitem(new submenuitem(menu1, (char*)"sub menu 1 :)"));
 	mainmenu->add_menuitem(new submenuitem(menu2, (char*)"sub menu 2 :)"));
+	mainmenu->add_menuitem(new inputmenuitem(20, NULL, (char *)"", NULL, (char *)"Enter stuff", (char *)"Stuff"));
 }
 
 void initVideo()

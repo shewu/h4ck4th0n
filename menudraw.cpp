@@ -9,47 +9,58 @@
 #define button_separation	0.05f
 #define font_size		0.05f
 
+#define input_left		0.15f
+#define input_right		0.85f
+#define input_top		0.3f
+#define input_bottom		0.7f
+
 #define menu_alpha 200
 
 void menu::draw() {
-	if(is_item_active) {
-		menuitems[current_index]->drawAsActive();
-		return;
-	}
+	if(!is_item_active || menuitems[current_index]->shouldMenuBeDrawn()) {
 
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
-	//glOrtho(0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f);
-	glOrtho(-x1/(x2-x1),(1.0f-x2)/(x2-x1)+1.0f,(1.0f-y2)/(y2-y1)+1.0f,-y1/(y2-y1),-1.0f,1.0f);
-	glDisable(GL_DEPTH_TEST);
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
+		//glOrtho(0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f);
+		glOrtho(-x1/(x2-x1),(1.0f-x2)/(x2-x1)+1.0f,(1.0f-y2)/(y2-y1)+1.0f,-y1/(y2-y1),-1.0f,1.0f);
+		glDisable(GL_DEPTH_TEST);
 
-	glColor4ub(167,155,155,transparent?menu_alpha:255);
-	glBegin(GL_QUADS);
-	glVertex3f(0.0f, 0.0f, 0.0f);
-	glVertex3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(1.0f, 1.0f, 0.0f);
-	glVertex3f(1.0f, 0.0f, 0.0f);
-	glEnd();
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glColor4ub(167,155,155,transparent?menu_alpha:255);
+		glBegin(GL_QUADS);
+		glVertex3f(0.0f, 0.0f, 0.0f);
+		glVertex3f(0.0f, 1.0f, 0.0f);
+		glVertex3f(1.0f, 1.0f, 0.0f);
+		glVertex3f(1.0f, 0.0f, 0.0f);
+		glEnd();
 	
-	for(int i = 0; i < menuitems.size(); i++) {
-		menuitems[i]->draw(i == current_index, 
-			button_left,
-			button_top + i * (button_height + button_separation),
-			button_width,
-			button_height,
-			transparent ? menu_alpha : 255	
-		);
+		for(int i = 0; i < menuitems.size(); i++) {
+			menuitems[i]->draw(i == current_index, 
+				button_left,
+				button_top + i * (button_height + button_separation),
+				button_width,
+				button_height,
+				transparent ? menu_alpha : 255	
+			);
+		}
 	}
 
-	glEnable(GL_DEPTH_TEST);
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
+	if(is_item_active)
+		menuitems[current_index]->drawAsActive(transparent?menu_alpha:255);
+
+	if(!is_item_active || menuitems[current_index]->shouldMenuBeDrawn()) {
+		glEnable(GL_DEPTH_TEST);
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+	}
 }
 
 void draw_button(bool selected, char *text, float x, float y, float width, float height, GLubyte alpha) {
@@ -71,14 +82,22 @@ void draw_button(bool selected, char *text, float x, float y, float width, float
 	glDisable(GL_TEXTURE_2D);
 }
 
-void menuitem::draw(bool,float,float,float,float,unsigned char) {}
-void menuitem::drawAsActive() {}
+void menuitem::drawAsActive(unsigned char alpha) {}
 
-void submenuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
+void menuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
 	draw_button(selected, name, x, y, width, height, alpha);
 }
 
-void submenuitem::drawAsActive() {
+void submenuitem::drawAsActive(unsigned char alpha) {
 	m->draw();
 }
 
+void inputmenuitem::drawAsActive(unsigned char alpha) {
+	glColor4ub(75,75,75,alpha);
+	glBegin(GL_QUADS);
+	glVertex3f(input_left, input_top, 0.0f);
+	glVertex3f(input_left, input_bottom, 0.0f);
+	glVertex3f(input_right, input_bottom, 0.0f);
+	glVertex3f(input_right, input_top, 0.0f);
+	glEnd();
+}	

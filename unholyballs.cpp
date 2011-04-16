@@ -212,6 +212,11 @@ int main(int argc, char* argv[])
 					bool isinitialpress = !iskeydown[event.key.keysym.sym];
 					iskeydown[event.key.keysym.sym] = true;
 
+					if(mainmenu->is_active())
+					{
+						break;
+					}
+
 					char b = -1;
 					switch (event.key.keysym.sym) {
 						case SDLK_a:
@@ -238,6 +243,17 @@ int main(int argc, char* argv[])
 
 					mainmenu->key_input(event.key.keysym.sym);
 
+					if(event.key.keysym.sym == SDLK_ESCAPE)
+					{
+						mainmenu->set_active(!mainmenu->is_active());
+						mainmenu->key_input(event.key.keysym.sym);
+					}
+
+					if(mainmenu->is_active())
+					{
+						break;
+					}
+
 					char b = -1;
 					switch (event.key.keysym.sym) {
 						case SDLK_a:
@@ -251,10 +267,6 @@ int main(int argc, char* argv[])
 							break;
 						case SDLK_s:
 							b = 3;
-							break;
-						case SDLK_ESCAPE:
-							mainmenu->set_active(!mainmenu->is_active());
-							mainmenu->key_input(event.key.keysym.sym);
 							break;
 					}
 					if (b != -1) {

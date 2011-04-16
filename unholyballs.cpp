@@ -31,6 +31,12 @@ bool NORAPE;
 #define ALIGNMENT 0x10
 #define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~(ALIGNMENT-1))
 
+bool action_quit()
+{
+	exit(0);
+	return true;
+}
+
 void initMenus()
 {
 	mainmenu = new menu();
@@ -44,6 +50,7 @@ void initMenus()
 	mainmenu->add_menuitem(new submenuitem(menu1, (char*)"sub menu 1 :)"));
 	mainmenu->add_menuitem(new submenuitem(menu2, (char*)"sub menu 2 :)"));
 	mainmenu->add_menuitem(new inputmenuitem(20, NULL, (char *)"", NULL, (char *)"Enter stuff", (char *)"Stuff"));
+	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
 }
 
 void initVideo()

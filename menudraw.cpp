@@ -15,6 +15,10 @@
 #define input_bottom		0.7f
 #define input_title_left	0.02f
 #define input_title_top		0.02f
+#define input_textfield_left	0.02f
+#define input_textfield_top	0.09f
+#define input_textfield_width	0.66f
+#define input_textfield_height	0.2f
 
 #define menu_alpha 200
 
@@ -101,12 +105,20 @@ void submenuitem::drawAsActive(unsigned char alpha) {
 }
 
 void inputmenuitem::drawAsActive(unsigned char alpha) {
-	glColor4ub(75,75,75,alpha);
 	glBegin(GL_QUADS);
+	glColor4ub(75,75,75,alpha);
 	glVertex3f(input_left, input_top, 0.0f);
 	glVertex3f(input_left, input_bottom, 0.0f);
 	glVertex3f(input_right, input_bottom, 0.0f);
 	glVertex3f(input_right, input_top, 0.0f);
+	glColor4ub(150,150,150,alpha);
+	glVertex3f(input_left + input_textfield_left, input_top + input_textfield_top, 0.0f);
+	glVertex3f(input_left + input_textfield_left + input_textfield_width, 
+			input_top + input_textfield_top, 0.0f);
+	glVertex3f(input_left + input_textfield_left + input_textfield_width,
+			input_top + input_textfield_top + input_textfield_height, 0.0f);
+	glVertex3f(input_left + input_textfield_left,
+			input_top + input_textfield_top + input_textfield_height, 0.0f);
 	glEnd();
 
 	glColor4ub(0,0,0,255); //Make text opaque
@@ -120,6 +132,17 @@ void inputmenuitem::drawAsActive(unsigned char alpha) {
 				0.0f,
 				0.05f, 0.0f, 0.0f);
 		draw_str(tq, text);
+	}
+
+	if(input != NULL) {
+		textquad tq(input_left + input_textfield_left + 0.02f,
+				input_top + input_textfield_top + 0.02f,
+				0.0f,
+				input_left + input_textfield_left + 0.02f,
+				input_top + input_textfield_top + font_size + 0.02f,
+				0.0f,
+				0.05f, 0.0f, 0.0f);
+		draw_str(tq, input);
 	}
 
 	glDisable(GL_TEXTURE_2D);

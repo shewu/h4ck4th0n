@@ -18,7 +18,7 @@ extern int WIDTH;
 extern int HEIGHT;
 
 void drawFloor(float);
-void drawObjects(float*);
+void drawObjects(void);
 void drawWalls(void);
 
 void initGL() {
@@ -148,7 +148,7 @@ void drawWalls()
 	glEnd();
 }
 
-void drawObjects(float* matrix)
+void drawObjects()
 {
 	glEnable(GL_NORMALIZE);
 	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {

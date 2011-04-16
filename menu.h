@@ -105,4 +105,14 @@ class inputmenuitem : public menuitem {
 		bool (*vali)(char *);
 };
 
-
+class togglemenuitem :  public menuitem {
+	public:
+		togglemenuitem(char *name, bool defaultstate);
+		virtual ~togglemenuitem();
+		virtual bool activate();
+		bool get_state();
+		virtual void draw(bool selected, float x1, float y1, float width, float height, unsigned char alpha);
+	private:
+		bool state;
+		
+};

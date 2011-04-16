@@ -51,6 +51,7 @@ void initMenus()
 	mainmenu->add_menuitem(new submenuitem(menu2, (char*)"sub menu 2 :)"));
 	mainmenu->add_menuitem(new inputmenuitem(20, NULL, (char *)"", NULL, (char *)"Enter stuff", (char *)"Stuff"));
 	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
+	mainmenu->add_menuitem(new togglemenuitem((char*)"Some boolean", false));
 }
 
 void initVideo()

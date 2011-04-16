@@ -118,4 +118,19 @@ bool inputmenuitem::shouldMenuBeDrawn() {
 	return true;
 }
 
+//togglemenuitem
+togglemenuitem::~togglemenuitem() { }
 
+togglemenuitem::togglemenuitem(char *name1, bool state1) {
+	name = name1;
+	state = state1;
+}
+
+bool togglemenuitem::activate() {
+	state = !state;
+	return false;
+}
+
+bool togglemenuitem::get_state() {
+	return state;
+}

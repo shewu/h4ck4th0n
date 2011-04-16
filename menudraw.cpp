@@ -8,6 +8,9 @@
 #define button_height		0.15f
 #define button_separation	0.05f
 #define font_size		0.05f
+#define button_text_padding	0.025f
+
+#define toggle_dist_from_back	0.2f
 
 #define input_left		0.15f
 #define input_right		0.85f
@@ -88,7 +91,7 @@ void draw_button(bool selected, char *text, float x, float y, float width, float
 	glEnd();
 
 	glColor4ub(255,255,255,menu_alpha);
-	textquad tq(x + 0.025f, y + (height - font_size) * 0.5f, 0.0f, x + 0.025f, y + (height + font_size) * 0.5f, 0.0f, 0.05f, 0.0f, 0.0f);
+	textquad tq(x + button_text_padding, y + (height - font_size) * 0.5f, 0.0f, x + button_text_padding, y + (height + font_size) * 0.5f, 0.0f, 0.05f, 0.0f, 0.0f);
 	draw_str(tq, text);
 
 	glDisable(GL_TEXTURE_2D);
@@ -148,3 +151,22 @@ void inputmenuitem::drawAsActive(unsigned char alpha) {
 	glDisable(GL_TEXTURE_2D);
 
 }	
+
+void togglemenuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
+	draw_button(selected, name, x, y, width, height, alpha);
+	textquad tq(x + width - toggle_dist_from_back,
+			y + (height - font_size) * 0.5f,
+			0.0f,
+			x + width - toggle_dist_from_back,
+			y + (height + font_size) * 0.5f,
+			0.0f, 0.05f, 0.0f, 0.0f);
+	if(state) {
+		glColor4ub(0,255,0,alpha);
+		draw_str(tq, (char*)"ON");
+	} else {
+		glColor4ub(255,0,0,alpha);
+		draw_str(tq, (char*)"OFF");
+	}
+
+	glDisable(GL_TEXTURE_2D);
+}

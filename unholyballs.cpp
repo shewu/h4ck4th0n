@@ -28,6 +28,10 @@ menu *mainmenu;
 bool iskeydown[256];
 bool NORAPE;
 
+const float FOUR_BY_THREE = 1.33333f;
+const float SIXTEEN_BY_TEN = 1.6f;
+const float SIXTEEN_BY_NINE = 1.777777f;
+
 const uint16_t fourbythree[][2] = 
 {
 	{640, 480}, 
@@ -102,22 +106,42 @@ void initVideo()
 {
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	if(!NORAPE) {
+	if(!NORAPE)
+	{
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 	}
 	// detect aspect ratio
 	float ratio = (float)SDL_GetVideoInfo()->current_w / SDL_GetVideoInfo()->current_h;
 
-	cout << "SDL_GetVideoInfo()->current_w = " << SDL_GetVideoInfo()->current_w << "\n";
-	cout << "SDL_GetVideoInfo()->current_h = " << SDL_GetVideoInfo()->current_h << "\n";
-	cout << "aspect ratio = " << ratio << "\n";
+	float d16x9 = abs(ratio - SIXTEEN_BY_NINE);
+	float d16x10 = abs(ratio - SIXTEEN_BY_TEN);
+	float d4x3 = abs(ratio - FOUR_BY_THREE);
+
+	if(d16x9 < d16x10 && d16x9 < d4x3)
+	{
+		WIDTH = sixteenbynine[0][0];
+		HEIGHT = sixteenbynine[0][1];
+	}
+	else if(d16x10 < d16x9 && d16x10 < d4x3)
+	{
+		WIDTH = sixteenbyten[0][0];
+		HEIGHT = sixteenbyten[0][1];
+	}
+	else if(d4x3 < d16x10 && d4x3 < d16x9)
+	{
+		WIDTH = fourbythree[0][0];
+		HEIGHT = fourbythree[0][1];
+	}
 
 	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	SDL_ShowCursor(false);
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	
 	initGL();
+
+	cout << "using resolution " << WIDTH << "x" << HEIGHT << "\n";
+	return;
 }
 
 void initSound()

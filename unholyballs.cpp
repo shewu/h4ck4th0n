@@ -9,6 +9,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <cmath>
+#include <stdint.h>
 #include "client.h"
 #include "menu.h"
 
@@ -23,10 +24,41 @@ unsigned int albuf[3], alsrcs[ALSRCS];
 int WIDTH = 640;
 int HEIGHT = 480;
 char* ipaddy = (char*)"127.0.0.1";
-bool FULLSCREEN;
 menu *mainmenu;
 bool iskeydown[256];
 bool NORAPE;
+
+const uint16_t fourbythree[][] = 
+{
+	{640, 480}, 
+	{800, 600}, 
+	{1024, 768}, 
+	{1280, 960}, 
+	{1400, 1050}, 
+	{1600, 1200}, 
+	{2048, 1536}
+};
+const uint16_t sixteenbyten[] = 
+{
+	{800, 500}, 
+	{1024, 640}, 
+	{1280, 800}, 
+	{1440, 900}, 
+	{1680, 1050}, 
+	{1920, 1200}, 
+	{2560, 1600}, 
+	{3840, 2400}
+};
+const uint16_t sixteenbynine[] = 
+{
+	{854, 480}, 
+	{1024, 576}, 
+	{1280, 720}, 
+	{1366, 768}, 
+	{1600, 900}, 
+	{1920, 1080}, 
+	{2560, 1440}
+};
 
 #define ALIGNMENT 0x10
 #define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~(ALIGNMENT-1))
@@ -74,10 +106,7 @@ void initVideo()
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 	}
-	if(FULLSCREEN)
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
-	else
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	SDL_ShowCursor(false);
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	
@@ -120,7 +149,6 @@ int main(int argc, char* argv[])
 		{
 			printf("Usage:\n"
 					"-h to show this message\n"
-					"-f for fullscreen\n"
 					"-d [width] [height] to specify viewport dimensions\n"
 					"\twhere [width] and [height] are multiples of 16\n"
 					"-i [ip] to connect to specified server\n");
@@ -133,10 +161,6 @@ int main(int argc, char* argv[])
 			WIDTH = ALIGN(atoi(argv[i+1]));
 			HEIGHT = ALIGN(atoi(argv[i+2]));
 			cout << "Playing at " << WIDTH << "x" << HEIGHT << "\n";
-		}
-		else if(!strcmp(argv[i], "-f"))
-		{
-			FULLSCREEN = true;
 		}
 		else if(!strcmp(argv[i], "-i"))
 		{

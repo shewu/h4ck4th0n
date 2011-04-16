@@ -31,6 +31,12 @@ bool NORAPE;
 #define ALIGNMENT 0x10
 #define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~(ALIGNMENT-1))
 
+bool action_quit()
+{
+	exit(0);
+	return true;
+}
+
 void initMenus()
 {
 	mainmenu = new menu();
@@ -44,6 +50,7 @@ void initMenus()
 	mainmenu->add_menuitem(new submenuitem(menu1, (char*)"sub menu 1 :)"));
 	mainmenu->add_menuitem(new submenuitem(menu2, (char*)"sub menu 2 :)"));
 	mainmenu->add_menuitem(new inputmenuitem(20, NULL, (char *)"", NULL, (char *)"Enter stuff", (char *)"Stuff"));
+	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
 }
 
 void initVideo()
@@ -194,9 +201,6 @@ int main(int argc, char* argv[])
 
 					char b = -1;
 					switch (event.key.keysym.sym) {
-						case SDLK_ESCAPE:
-							exit(0);
-							break;
 						case SDLK_a:
 							b = 0;
 							break;
@@ -235,7 +239,7 @@ int main(int argc, char* argv[])
 						case SDLK_s:
 							b = 3;
 							break;
-						case SDLK_m:
+						case SDLK_ESCAPE:
 							mainmenu->set_active(!mainmenu->is_active());
 							mainmenu->key_input(event.key.keysym.sym);
 							break;

@@ -18,10 +18,13 @@ class menuitem {
 		virtual bool activate();
 		virtual bool key_input(int key);
 		virtual void draw(bool selected, float x1, float y1, float width, float height, unsigned char alpha);
-		virtual void drawAsActive();
-	private:
+		virtual void drawAsActive(unsigned char alpha);
+		virtual bool shouldMenuBeDrawn();
+	protected:
+		char *name;
 		
 };
+
 
 class menu {
 	public:
@@ -53,15 +56,16 @@ class submenuitem : public menuitem {
 
 		virtual bool activate();
 		virtual bool key_input(int key);
-		virtual void draw(bool,float,float,float,float,unsigned char);
-		virtual void drawAsActive();
+		virtual void drawAsActive(unsigned char alpha);
+		virtual bool shouldMenuBeDrawn();
 
 	private:
 		menu *m;
 		bool isActive;
-		char *name;
 };
 
+//Don't really know how this one is going to work yet
+//Would not suggest using it
 class actionmenuitem : public menuitem {
 	public:
 		virtual ~actionmenuitem();
@@ -69,11 +73,11 @@ class actionmenuitem : public menuitem {
 
 		virtual bool activate();
 		virtual bool key_input(int key);
+		virtual bool shouldMenuBeDrawn();
 
 	private:
 		bool (*init)();
 		bool (*ki)(int);
-		char *name;
 };
 
 class inputmenuitem : public menuitem {
@@ -81,16 +85,22 @@ class inputmenuitem : public menuitem {
 		inputmenuitem(  int maxInputLen, 
 				bool (*inputValidator)(char *),
 				char *initInput,
-				char *invalidInputError);
+				char *invalidInputError,
+				char *text,
+				char *name);
 		virtual ~inputmenuitem();
 		virtual bool activate();
 		virtual bool key_input(int key);
+		virtual void drawAsActive(unsigned char alpha);
+		virtual bool shouldMenuBeDrawn();
 		char *get_input();
 	private:
-		char *input;
+		char *input, *text;
 		int maxlen, len;
 
 		char *invalidInputError;
 		bool displayError;
 		bool (*vali)(char *);
 };
+
+

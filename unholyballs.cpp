@@ -37,6 +37,15 @@ bool action_quit()
 	return true;
 }
 
+void action_toggle_fullscreen(bool b)
+{
+	if(b)
+		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
+	else
+		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+	return;
+}
+
 bool validator_test(char *a) {
 	return a[0] == 'a';
 }
@@ -53,8 +62,8 @@ void initMenus()
 	mainmenu->add_menuitem(new submenuitem(menu1, (char*)"sub menu 1 :)"));
 	mainmenu->add_menuitem(new submenuitem(menu2, (char*)"sub menu 2 :)"));
 	mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with a", (char *)"Enter stuff", (char *)"Stuff"));
+	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
 	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
-	mainmenu->add_menuitem(new togglemenuitem((char*)"Some boolean", false, NULL));
 }
 
 void initVideo()

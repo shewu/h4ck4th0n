@@ -193,7 +193,7 @@ int World::receiveObjects(SocketConnection* sc, int& obj) {
 	if (numObjects < 0 || numObjects > 2*MAX_CLIENTS || len < 35*numObjects+12) return 0;
 	
 	int numSounds = ntohl(*reinterpret_cast<int*>(buffer+35*numObjects+8));
-	if (numSounds < 0 || numSounds > MAX_SOUNDS || len != 35*numObjects+9*numSounds+12) return 0;
+	if (numSounds < 0 || numSounds > MAX_EVENTS || len != 35*numObjects+9*numSounds+12) return 0;
 	
 	obj = ntohl(*reinterpret_cast<int*>(buffer));
 	

@@ -159,63 +159,60 @@ int World::spawn(int spawnl, int player, int flag) {
 	return oid;
 }
 
-bool World::sendObjects(Socket socket, int obj) {
+void World::sendObjects(SocketConnection* sc, int obj) {
 	int o = htonl(obj);
-	if (!socket.send((char*)(&o), 4))
-		return false;
+	sc->add((char*)(&o), 4);
 	
 	int a = htonl(objects.size());
-	if (!socket.send((char*)(&a), 4))
-		return false;
+	sc->add((char*)(&a), 4);
 	
 	int s = objects.size();
 	for(map<int, Object>::iterator it = objects.begin(); it != objects.end(); it++) {
-		if (!it->second.send(socket))
-			return false;
+		it->second.send(sc);
 		s--;
 	}
 	
 	int b = htonl(sounds.size());
-	if (!socket.send((char*)(&b), 4))
-		return false;
+	sc->add((char*)(&b), 4);
 	for(vector<pair<char, Vector2D> >::iterator it = sounds.begin(); it != sounds.end(); it++) {
 		char buf[9];
 		buf[0] = it->first;
 		*((int*)(buf+1)) = htonl(*reinterpret_cast<int*>(&it->second.x));
 		*((int*)(buf+5)) = htonl(*reinterpret_cast<int*>(&it->second.y));
-		if (!socket.send(buf, 9))
-			return false;
+		sc->add(buf, 9);
 	}
-	return true;
+	sc->send();
 }
 
-bool World::receiveObjects(Socket socket, int& obj) {
-	if (!socket.receive((char*)(&obj), 4)) return false;
-	obj = ntohl(obj);
+int World::receiveObjects(SocketConnection* sc, int& obj) {
+	char buffer[MAXPACKET];
+	int len;
+	if ((len = sc->receive(buffer, MAXPACKET)) < 12) return (len >= 0 ? 0 : -1);
 	
-	int a;
-	if (!socket.receive((char*)(&a), 4)) return false;
-	int numObjects = ntohl(a);
+	int numObjects = ntohl(*reinterpret_cast<int*>(buffer+4));
+	if (numObjects < 0 || numObjects > 2*MAX_CLIENTS || len < 35*numObjects+12) return 0;
+	
+	int numSounds = ntohl(*reinterpret_cast<int*>(buffer+35*numObjects+8));
+	if (numSounds < 0 || numSounds > MAX_EVENTS || len != 35*numObjects+9*numSounds+12) return 0;
+	
+	obj = ntohl(*reinterpret_cast<int*>(buffer));
+	
 	objects.clear();
+	char* c = buffer+8;
 	for (int i = 0; i < numObjects; i++) {
 		Object o;
-		if(!o.receive(socket))
-			return false;
+		c = o.get(c);
 		objects[o.id] = o;
 	}
 	
-	int b;
-	socket.receive((char*)(&b), 4);
-	int numSounds = ntohl(b);
 	sounds.clear();
 	sounds.reserve(numSounds);
+	c += 4;
 	for (int i = 0; i < numSounds; i++) {
-		char buf[9];
-		if (!socket.receive(buf, 9))
-			return false;
-		*((int*)(buf+1)) = ntohl(*((int*)(buf+1)));
-		*((int*)(buf+5)) = ntohl(*((int*)(buf+5)));
-		sounds.push_back(pair<char, Vector2D>(buf[0], Vector2D(*reinterpret_cast<float*>(buf+1), *reinterpret_cast<float*>(buf+5))));
+		*((int*)(c+1)) = ntohl(*((int*)(c+1)));
+		*((int*)(c+5)) = ntohl(*((int*)(c+5)));
+		sounds.push_back(pair<char, Vector2D>(c[0], Vector2D(*reinterpret_cast<float*>(c+1), *reinterpret_cast<float*>(c+5))));
+		c += 9;
 	}
 	return true;
 }

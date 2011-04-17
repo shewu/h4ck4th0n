@@ -3,8 +3,6 @@
 #include <cmath>
 #include <stdio.h>
 
-#define MAX_EVENTS 10
-
 using namespace std;
 
 float collideCircles(Vector2D diff, float r, Vector2D vel);

@@ -16,6 +16,12 @@
 #define SPAWN_TRY .1
 #define SPAWN_PROB .1
 #define MAX_CLIENTS 32
+#define MAX_SOUNDS 32
+
+#define PROTMAGIC 0xee76f6a8
+#define MAXPACKET 10240
+#define MAXQUEUE 10000
+#define TIMEOUT 5
 
 #define ALSRCS 32
 

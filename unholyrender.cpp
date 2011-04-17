@@ -116,7 +116,7 @@ void render()
 
 	glPushMatrix();
 		glScalef(1, 1, -1);
-		drawObjects(matrix);
+		drawObjects();
 	glPopMatrix();
 
 	glEnable(GL_BLEND);

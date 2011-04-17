@@ -125,7 +125,7 @@ void render()
 		drawFloor(0.82);
 	glDisable(GL_BLEND);
 
-	drawObjects(matrix);
+	drawObjects();
 	
 
 	glDisable(GL_MULTISAMPLE_ARB);

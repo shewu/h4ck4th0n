@@ -4,11 +4,13 @@
 #include "hack.h"
 #include <SDL/SDL.h>
 #include <AL/alut.h>
+#include <AL/al.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
 #include <cmath>
 #include "client.h"
+#include "menu.h"
 
 using namespace std;
 
@@ -21,20 +23,80 @@ unsigned int albuf[3], alsrcs[ALSRCS];
 int WIDTH = 640;
 int HEIGHT = 480;
 char* ipaddy = (char*)"127.0.0.1";
-bool FULLSCREEN;
+menu* mainmenu;
+bool iskeydown[256];
+
+bool action_quit()
+{
+	exit(0);
+	return true;
+}
+
+void action_toggle_fullscreen(bool b)
+{
+	if(b)
+		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
+	else
+		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+	return;
+}
+
+bool validator_test(char *a) {
+	return a[0] == 'a';
+}
+
+void initMenus()
+{
+	mainmenu = new menu();
+	menu *menu1 = new menu();
+	menu *menu2 = new menu();
+	menu1->add_menuitem(new submenuitem(new menu(), (char*)"menu 1 item 1"));
+	menu1->add_menuitem(new submenuitem(new menu(), (char*)"menu 1 item 2"));
+	menu2->add_menuitem(new submenuitem(new menu(), (char*)"menu 2 item 1"));
+	menu2->add_menuitem(new submenuitem(new menu(), (char*)"menu 2 item 2"));
+
+	mainmenu->add_menuitem(new submenuitem(menu1, (char*)"sub menu 1 :)"));
+	mainmenu->add_menuitem(new submenuitem(menu2, (char*)"sub menu 2 :)"));
+	mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with a", (char *)"Enter stuff", (char *)"Stuff"));
+	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
+	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
+}
 
 void initVideo()
 {
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	if(FULLSCREEN) 
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
-	else
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+	// detect aspect ratio
+	float ratio = (float)SDL_GetVideoInfo()->current_w / SDL_GetVideoInfo()->current_h;
+
+	float d16x9 = abs(ratio - SIXTEEN_BY_NINE);
+	float d16x10 = abs(ratio - SIXTEEN_BY_TEN);
+	float d4x3 = abs(ratio - FOUR_BY_THREE);
+
+	if(d16x9 < d16x10 && d16x9 < d4x3)
+	{
+		WIDTH = sixteenbynine[0][0];
+		HEIGHT = sixteenbynine[0][1];
+	}
+	else if(d16x10 < d16x9 && d16x10 < d4x3)
+	{
+		WIDTH = sixteenbyten[0][0];
+		HEIGHT = sixteenbyten[0][1];
+	}
+	else if(d4x3 < d16x10 && d4x3 < d16x9)
+	{
+		WIDTH = fourbythree[0][0];
+		HEIGHT = fourbythree[0][1];
+	}
+
+	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	SDL_ShowCursor(false);
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	
 	initGL();
+
+	cout << "using resolution " << WIDTH << "x" << HEIGHT << "\n";
+	return;
 }
 
 void initSound()
@@ -67,7 +129,6 @@ int main(int argc, char* argv[])
 		{
 			printf("Usage:\n"
 					"-h to show this message\n"
-					"-f for fullscreen\n"
 					"-d [width] [height] to specify viewport dimensions\n"
 					"\twhere [width] and [height] are multiples of 16\n"
 					"-i [ip] to connect to specified server\n");
@@ -80,10 +141,6 @@ int main(int argc, char* argv[])
 			WIDTH = ALIGN(atoi(argv[i+1]));
 			HEIGHT = ALIGN(atoi(argv[i+2]));
 			cout << "Playing at " << WIDTH << "x" << HEIGHT << "\n";
-		}
-		else if(!strcmp(argv[i], "-f"))
-		{
-			FULLSCREEN = true;
 		}
 		else if(!strcmp(argv[i], "-i"))
 		{

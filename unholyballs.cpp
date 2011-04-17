@@ -9,7 +9,6 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <cmath>
-#include <stdint.h>
 #include "client.h"
 #include "menu.h"
 
@@ -46,6 +45,7 @@ void action_toggle_fullscreen(bool b)
 bool validator_test(char *a) {
 	return a[0] == 'a';
 }
+
 void initMenus()
 {
 	mainmenu = new menu();
@@ -143,6 +143,7 @@ int main(int argc, char* argv[])
 					"-h to show this message\n"
 					"-d [width] [height] to specify viewport dimensions\n"
 					"\twhere [width] and [height] are multiples of 16\n"
+					"-norape to disable antialiasing\n"
 					"-i [ip] to connect to specified server\n");
 			exit(0);
 		}

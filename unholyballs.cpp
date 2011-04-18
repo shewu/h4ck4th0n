@@ -205,7 +205,6 @@ int main(int argc, char* argv[])
 	
 	int count = 0, oldTime = SDL_GetTicks();
 	bool tried_to_get_mouse = false;
-	int ooldTime = oldTime;
 	for (;;) {
 		int status;
 		while ((status = world.receiveObjects(sc, myId)) != -1) {
@@ -309,19 +308,20 @@ int main(int argc, char* argv[])
 			tried_to_get_mouse = true;
 		}
 		
+		Uint8* keystate = SDL_GetKeyState(NULL);
+		char buf[5];
+		*((int*)buf) = htonl(*reinterpret_cast<int*>(&angle));
+		buf[4] = 0;
 		if(!mainmenu->is_active())
 		{
-			Uint8* keystate = SDL_GetKeyState(NULL);
-			char buf[5];
-			*((int*)buf) = htonl(*reinterpret_cast<int*>(&angle));
-			buf[4] = 0;
 			if (keystate[SDLK_a]) buf[4] ^= 1;
 			if (keystate[SDLK_d]) buf[4] ^= 2;
 			if (keystate[SDLK_w]) buf[4] ^= 4;
 			if (keystate[SDLK_s]) buf[4] ^= 8;
-			sc->add(buf, 5);
 		}
-
+		sc->add(buf, 5);
+		sc->send();
+		
 		ALfloat alpos[] = { world.objects[myId].p.x, world.objects[myId].p.y, 0 };
 		ALfloat alvel[] = { world.objects[myId].v.x, world.objects[myId].v.y, 0 };
 		ALfloat alori[] = { 0.0, cos(angle), sin(angle), 0.0, 1.0, 0.0 };
@@ -354,16 +354,12 @@ int main(int argc, char* argv[])
 			if(fps < 100000) {
 				cout << " ";
 			}
-			cout << (int)fps << "fps";
+			cout << (int)fps << "fps" << flush;
 			oldTime = time;
-			fflush(stdout);
 		}
-
-		if (time-ooldTime > 500) sc->send();
 		
 		SDL_GL_SwapBuffers();
 	}
-	cout << "\n"; // weird, why isn't this printing?
-	fflush(stdout);
+	cout << endl;
 	SDL_Quit();
 }

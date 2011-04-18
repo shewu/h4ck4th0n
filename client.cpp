@@ -189,7 +189,6 @@ int main(int argc, char* argv[])
 	
 	int count = 0, oldTime = SDL_GetTicks();
 	bool tried_to_get_mouse = false;
-	int ooldTime = oldTime;
 	for (;;) {
 		int status;
 		while ((status = world.receiveObjects(sc, myId)) != -1) {
@@ -286,6 +285,7 @@ int main(int argc, char* argv[])
 		if (keystate[SDLK_w]) buf[4] ^= 4;
 		if (keystate[SDLK_s]) buf[4] ^= 8;
 		sc->add(buf, 5);
+		sc->send();
 		
 		ALfloat alpos[] = { world.objects[myId].p.x, world.objects[myId].p.y, 0 };
 		ALfloat alvel[] = { world.objects[myId].v.x, world.objects[myId].v.y, 0 };
@@ -315,16 +315,12 @@ int main(int argc, char* argv[])
 			if(fps < 100000) {
 				cout << " ";
 			}
-			cout << (int)fps << "fps";
+			cout << (int)fps << "fps" << flush;
 			oldTime = time;
-			fflush(stdout);
 		}
-		
-		if (time-ooldTime > 500) sc->send();
 		
 		SDL_GL_SwapBuffers();
 	}
-	cout << "\n"; // weird, why isn't this printing?
-	fflush(stdout);
+	cout << endl;
 	SDL_Quit();
 }

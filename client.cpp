@@ -28,6 +28,12 @@ bool iskeydown[256];
 
 bool action_quit()
 {
+	if(sc)
+	{
+		char q = 0;
+		sc->add(&q, 1);
+		sc->send();
+	}
 	exit(0);
 	return true;
 }
@@ -229,9 +235,17 @@ int main(int argc, char* argv[])
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
-				case SDL_KEYDOWN:
+				case SDL_KEYUP:
 				{
-					if (event.key.keysym.sym != SDLK_ESCAPE) break;
+					mainmenu->key_input(event.key.keysym.sym);
+
+					if(event.key.keysym.sym == SDLK_ESCAPE)
+					{
+						mainmenu->set_active(!mainmenu->is_active());
+						mainmenu->key_input(event.key.keysym.sym);
+					}
+
+					break;
 				}
 				case SDL_QUIT:
 				{
@@ -288,10 +302,13 @@ int main(int argc, char* argv[])
 		char buf[5];
 		*((int*)buf) = htonl(*reinterpret_cast<int*>(&angle));
 		buf[4] = 0;
-		if (keystate[SDLK_a]) buf[4] ^= 1;
-		if (keystate[SDLK_d]) buf[4] ^= 2;
-		if (keystate[SDLK_w]) buf[4] ^= 4;
-		if (keystate[SDLK_s]) buf[4] ^= 8;
+		if(!mainmenu->is_active())
+		{
+			if (keystate[SDLK_a]) buf[4] ^= 1;
+			if (keystate[SDLK_d]) buf[4] ^= 2;
+			if (keystate[SDLK_w]) buf[4] ^= 4;
+			if (keystate[SDLK_s]) buf[4] ^= 8;
+		}
 		sc->add(buf, 5);
 		sc->send();
 		

@@ -24,11 +24,16 @@ int WIDTH = -1;
 int HEIGHT = -1;
 char* ipaddy = (char*)"127.0.0.1";
 menu* mainmenu;
-bool iskeydown[256];
 bool NORAPE;
 
 bool action_quit()
 {
+	if(sc)
+	{
+		char q = 0;
+		sc->add(&q, 1);
+		sc->send();
+	}
 	exit(0);
 	return true;
 }
@@ -139,9 +144,6 @@ int main(int argc, char* argv[])
 {
 	initMenus();
 
-	for(int i = 0; i < 256; i++)
-		iskeydown[i] = false;
-
 	// process args
 	for(int i = 1; i < argc; ++i)
 	{
@@ -245,16 +247,8 @@ int main(int argc, char* argv[])
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
-				case SDL_KEYDOWN:
-				{
-					bool isinitialpress = !iskeydown[event.key.keysym.sym];
-					iskeydown[event.key.keysym.sym] = true;
-					break;
-				}
 				case SDL_KEYUP:
 				{
-					iskeydown[event.key.keysym.sym] = false;
-
 					mainmenu->key_input(event.key.keysym.sym);
 
 					if(event.key.keysym.sym == SDLK_ESCAPE)

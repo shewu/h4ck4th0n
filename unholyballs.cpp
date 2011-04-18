@@ -266,7 +266,31 @@ int main(int argc, char* argv[])
 					break;
 				}
 				case SDL_MOUSEMOTION: {
+					int mouse_left_cutoff = 3*WIDTH/8, mouse_right_cutoff = 5*WIDTH/8;
+					int mouse_top_cutoff = 3*HEIGHT/8, mouse_bottom_cutoff = 5*HEIGHT/8;
+					
+					if(SDL_GetAppState() & SDL_APPINPUTFOCUS) {
+						if(event.motion.x < mouse_left_cutoff) {
+							SDL_WarpMouse(mouse_left_cutoff,event.motion.y);
+						}
+						if(event.motion.x > mouse_right_cutoff) {
+							SDL_WarpMouse(mouse_right_cutoff,event.motion.y);
+						}
+						if(event.motion.y < mouse_top_cutoff) {
+							SDL_WarpMouse(event.motion.x,mouse_top_cutoff);
+						}
+						if(event.motion.y > mouse_bottom_cutoff) {
+							SDL_WarpMouse(event.motion.x,mouse_bottom_cutoff);
+						}
+					}
+					
+					if(event.motion.x - event.motion.xrel < mouse_left_cutoff ||
+					   event.motion.x - event.motion.xrel > mouse_right_cutoff ||
+					   event.motion.y - event.motion.yrel < mouse_top_cutoff ||
+					   event.motion.y - event.motion.yrel > mouse_bottom_cutoff) break;
+					
 					angle -= event.motion.xrel/400.0;
+
 					while (angle >= 2*M_PI) angle -= 2*M_PI;
 					while (angle < 0) angle += 2*M_PI;
 					break;

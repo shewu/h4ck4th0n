@@ -1,42 +1,61 @@
-Object
-* position
-* velocity
-* mass
-* radius
-* color
-* height
+Holy Balls: The Game
+Version 0.2, now with gameplay!
 
-Light
-* 3D positions
-* color
-* intensity
+Requirements:
+* Hardware
+  * unholyballs requires at least a modern integrated graphics chipset
+  * holyballs require at least an ATi Mobility Radeon HD 4670 to run at 640x480 at 60fps
+* Software
+  * OpenAL is required for both versions
+  * OpenGL is required for both versions
+  * OpenCL is required only for holyballs
 
-Obstacle
-* point1, point2
-* deadly
-* color
+To build:
+make
+	see `make all'
 
-World
-* list<Object>
-* list<Light>
-* list<Obstacle>
-* ground texture
-* sky texture
+make server
+	will build only the server
 
-Server
-* map file name
-* ???
-* list of client communicator
+make holyballs
+	will build holyballs, the ray tracing binary. requires OpenCL and at minimum a GTS450
 
-Client
-* world
-* object id
-* rotation
+make unholyballs
+	will build only the unholyballs binary, for people with lesser graphics cards
 
-Client communicator
-* socket
-* object id
+make all
+	will build all three binaries
 
-Server to client
-* number of objects
+To run:
+-h
+	to display help message
+
+-i [ip]
+	to connect to specified server; default is 127.0.0.1
+
+-d [width] [height]
+	to play at specified resolution; default is 640x480
+
+-f
+	to play in fullscreen; will not work if specified resolution is greater than screen resolution
+
+Controls (Game):
+Mouse: Turn
+W: Accelerate forwards
+A: Accelerate left
+S: Accelerate backwards
+D: Accelerate right
+
+Controls (Editor)
+WASD: Move cursor
+P: Write to file "output" on disk
+K: Toggle Sticky Wall mode
+X: Toggle Delete mode
+Space: Toggle Edit mode
+
+Credits:
+* Sounds from freesound.org
+  * bounce sound from user dreamoron
+  * ding sound from user acclivity
+  * splat sound from user benhillyard
 

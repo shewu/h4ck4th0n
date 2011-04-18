@@ -14,7 +14,7 @@
 
 using namespace std;
 
-SDL_Surface *screen;
+SDL_Surface* screen;
 SocketConnection* sc;
 World world;
 float angle;
@@ -23,7 +23,7 @@ unsigned int albuf[3], alsrcs[ALSRCS];
 int WIDTH = -1;
 int HEIGHT = -1;
 char* ipaddy = (char*)"127.0.0.1";
-menu *mainmenu;
+menu* mainmenu;
 bool iskeydown[256];
 bool NORAPE;
 

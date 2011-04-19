@@ -26,9 +26,16 @@ char* ipaddy = (char*)"127.0.0.1";
 menu* mainmenu;
 bool iskeydown[256];
 
+void quit() {
+	char q = 0;
+	sc->add(&q, 1);
+	sc->send();
+	exit(0);
+}
+
 bool action_quit()
 {
-	exit(0);
+	quit();
 	return true;
 }
 
@@ -98,7 +105,7 @@ void initVideo()
 	}
 	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	SDL_ShowCursor(false);
-	SDL_WM_GrabInput(SDL_GRAB_OFF);
+	SDL_WM_GrabInput(SDL_GRAB_ON);
 	
 	initGL();
 
@@ -157,6 +164,7 @@ int main(int argc, char* argv[])
 	
 	initVideo();
 	initSound();
+	initMenus();
 	SDL_Thread *thread;
 	cout << "Starting client" << endl;
 	
@@ -195,7 +203,6 @@ int main(int argc, char* argv[])
 	angle = *reinterpret_cast<float*>(u);
 	
 	int count = 0, oldTime = SDL_GetTicks();
-	bool tried_to_get_mouse = false;
 	for (;;) {
 		int status;
 		while ((status = world.receiveObjects(sc, myId)) != -1) {
@@ -230,40 +237,27 @@ int main(int argc, char* argv[])
 			switch(event.type) {
 				case SDL_KEYDOWN:
 				{
-					if (event.key.keysym.sym != SDLK_ESCAPE) break;
+					if(event.key.keysym.sym == SDLK_ESCAPE) {
+						if (mainmenu->is_active()) {
+							SDL_ShowCursor(false);
+							SDL_WM_GrabInput(SDL_GRAB_ON);
+							mainmenu->set_active(false);
+						}
+						else {
+							SDL_ShowCursor(true);
+							SDL_WM_GrabInput(SDL_GRAB_OFF);
+							mainmenu->set_active(true);
+						}
+					}
+					mainmenu->key_input(event.key.keysym.sym);
+					break;
 				}
 				case SDL_QUIT:
 				{
-					char q = 0;
-					sc->add(&q, 1);
-					sc->send();
-					exit(0);
+					quit();
 					break;
 				}
 				case SDL_MOUSEMOTION: {
-					int mouse_left_cutoff = 3*WIDTH/8, mouse_right_cutoff = 5*WIDTH/8;
-					int mouse_top_cutoff = 3*HEIGHT/8, mouse_bottom_cutoff = 5*HEIGHT/8;
-					
-					if(SDL_GetAppState() & SDL_APPINPUTFOCUS) {
-						if(event.motion.x < mouse_left_cutoff) {
-							SDL_WarpMouse(mouse_left_cutoff,event.motion.y);
-						}
-						if(event.motion.x > mouse_right_cutoff) {
-							SDL_WarpMouse(mouse_right_cutoff,event.motion.y);
-						}
-						if(event.motion.y < mouse_top_cutoff) {
-							SDL_WarpMouse(event.motion.x,mouse_top_cutoff);
-						}
-						if(event.motion.y > mouse_bottom_cutoff) {
-							SDL_WarpMouse(event.motion.x,mouse_bottom_cutoff);
-						}
-					}
-					
-					if(event.motion.x - event.motion.xrel < mouse_left_cutoff ||
-					   event.motion.x - event.motion.xrel > mouse_right_cutoff ||
-					   event.motion.y - event.motion.yrel < mouse_top_cutoff ||
-					   event.motion.y - event.motion.yrel > mouse_bottom_cutoff) break;
-					
 					angle -= event.motion.xrel/400.0;
 
 					while (angle >= 2*M_PI) angle -= 2*M_PI;
@@ -272,25 +266,18 @@ int main(int argc, char* argv[])
 				}
 			}
 		}
-
-		// If program has focus and mouse isn't inside, move mouse to center of window
-		int state = SDL_GetAppState();
-		if(state & SDL_APPMOUSEFOCUS) {
-			tried_to_get_mouse = false;
-		}
-		if((state & SDL_APPINPUTFOCUS) && !(state & SDL_APPMOUSEFOCUS) && !tried_to_get_mouse) {
-			SDL_WarpMouse(WIDTH/2, HEIGHT/2);
-			tried_to_get_mouse = true;
-		}
 		
 		Uint8* keystate = SDL_GetKeyState(NULL);
 		char buf[5];
 		*((int*)buf) = htonl(*reinterpret_cast<int*>(&angle));
 		buf[4] = 0;
-		if (keystate[SDLK_a]) buf[4] ^= 1;
-		if (keystate[SDLK_d]) buf[4] ^= 2;
-		if (keystate[SDLK_w]) buf[4] ^= 4;
-		if (keystate[SDLK_s]) buf[4] ^= 8;
+		if(!mainmenu->is_active())
+		{
+			if (keystate[SDLK_a]) buf[4] ^= 1;
+			if (keystate[SDLK_d]) buf[4] ^= 2;
+			if (keystate[SDLK_w]) buf[4] ^= 4;
+			if (keystate[SDLK_s]) buf[4] ^= 8;
+		}
 		sc->add(buf, 5);
 		sc->send();
 		
@@ -302,6 +289,7 @@ int main(int argc, char* argv[])
 		alListenerfv(AL_ORIENTATION, alori);
 		
 		render();
+		if (mainmenu->is_active()) mainmenu->drawMenu();
 		int time = SDL_GetTicks();
 		if ((++count)%100 == 0) {
 			int time = SDL_GetTicks();

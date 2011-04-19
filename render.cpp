@@ -20,10 +20,9 @@ vector<cl::Device> devices;
 cl::CommandQueue cq;
 extern int WIDTH;
 extern int HEIGHT;
+GLuint texture;
 
 void initGL() {
-	glEnable(GL_BLEND);
-
 	vector<cl::Platform> platforms;
 	cl::Platform::get(&platforms);
 	cl_context_properties props[7] = { CL_CONTEXT_PLATFORM, (cl_context_properties)(platforms[0])(), CL_GLX_DISPLAY_KHR, (intptr_t)glXGetCurrentDisplay(), CL_GL_CONTEXT_KHR, (intptr_t)glXGetCurrentContext(), 0 };
@@ -47,7 +46,6 @@ void initGL() {
 	glOrtho(-1, 1, -1, 1, -1, 1);
 	
 	glEnable(GL_TEXTURE_2D);
-	GLuint texture;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -55,10 +53,12 @@ void initGL() {
 	igl = cl::Image2DGL(context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, texture, NULL);
 	bs.push_back(igl);
 	cq = cl::CommandQueue(context, devices[0], 0, NULL);
+	glDisable(GL_TEXTURE_2D);
 }
 
 void render()
 {
+	glDisable(GL_DEPTH_TEST);
 	if (myId == -1) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		return;
@@ -159,6 +159,8 @@ void render()
 	cq.enqueueReleaseGLObjects(&bs);
 	cq.finish();
 	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0, 0);
 		glVertex2f(-1, -1);
@@ -169,4 +171,6 @@ void render()
 		glTexCoord2f(1, 0);
 		glVertex2f(1, -1);
 	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_DEPTH_TEST);
 }

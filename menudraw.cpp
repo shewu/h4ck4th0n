@@ -25,28 +25,28 @@
 
 #define menu_alpha 200
 
-void menu::draw() {
-	draw(true);
+void menu::drawMenu() {
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(-x1/(x2-x1),(1.0f-x2)/(x2-x1)+1.0f,(1.0f-y2)/(y2-y1)+1.0f,-y1/(y2-y1),-1.0f,1.0f);
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	draw();
+	glDisable(GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 }
 
-void menu::draw(bool should_set_matrices) {
-	if(should_set_matrices) {
-
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glLoadIdentity();
-		//glOrtho(0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f);
-		glOrtho(-x1/(x2-x1),(1.0f-x2)/(x2-x1)+1.0f,(1.0f-y2)/(y2-y1)+1.0f,-y1/(y2-y1),-1.0f,1.0f);
-		glDisable(GL_DEPTH_TEST);
-	}
-
+void menu::draw() {
 	if(!is_item_active || menuitems[current_index]->shouldMenuBeDrawn()) {
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 		glColor4ub(167,155,155,transparent?menu_alpha:255);
 		glBegin(GL_QUADS);
 		glVertex3f(0.0f, 0.0f, 0.0f);
@@ -68,14 +68,6 @@ void menu::draw(bool should_set_matrices) {
 
 	if(is_item_active)
 		menuitems[current_index]->drawAsActive(transparent?menu_alpha:255);
-
-	if(should_set_matrices) {
-		glEnable(GL_DEPTH_TEST);
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
-	}
 }
 
 #define selected_r 		40
@@ -101,8 +93,6 @@ void draw_button(bool selected, char *text, float x, float y, float width, float
 	glColor4ub(255,255,255,menu_alpha);
 	textquad tq(x + button_text_padding, y + (height - font_size) * 0.5f, 0.0f, x + button_text_padding, y + (height + font_size) * 0.5f, 0.0f, 0.05f, 0.0f, 0.0f);
 	draw_str(tq, text);
-
-	glDisable(GL_TEXTURE_2D);
 }
 
 void menuitem::drawAsActive(unsigned char alpha) {}
@@ -121,7 +111,7 @@ void submenuitem::draw(bool selected, float x, float y, float width, float heigh
 }
 
 void submenuitem::drawAsActive(unsigned char alpha) {
-	m->draw(false);
+	m->draw();
 }
 
 void inputmenuitem::drawAsActive(unsigned char alpha) {
@@ -177,8 +167,6 @@ void inputmenuitem::drawAsActive(unsigned char alpha) {
 		draw_str(tq, invalidInputError);
 	}
 
-	glDisable(GL_TEXTURE_2D);
-
 }	
 
 void togglemenuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
@@ -196,8 +184,6 @@ void togglemenuitem::draw(bool selected, float x, float y, float width, float he
 		glColor4ub(255,0,0,alpha);
 		draw_str(tq, (char*)"OFF");
 	}
-
-	glDisable(GL_TEXTURE_2D);
 }
 
 #define slider_left		0.15f

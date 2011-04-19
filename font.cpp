@@ -110,7 +110,7 @@ void draw_str(textquad tq, char *text) {
 	//glTexCoord2f(0.0f, 0.5f); glVertex3f(0.0f, 0.5f, 0.0f);
 	//glTexCoord2f(0.5f, 0.5f); glVertex3f(0.5f, 0.5f, 0.0f);
 	//glTexCoord2f(0.5f, 0.0f); glVertex3f(0.5f, 0.0f, 0.0f);
-	glDisable(GL_TEXTURE_2D);
 	glEnd();
+	glDisable(GL_TEXTURE_2D);
 }
 

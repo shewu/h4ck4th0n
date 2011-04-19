@@ -18,8 +18,6 @@ cl::Program program;
 vector<cl::Memory> bs;
 vector<cl::Device> devices;
 cl::CommandQueue cq;
-extern int WIDTH;
-extern int HEIGHT;
 GLuint texture;
 
 void initGL() {

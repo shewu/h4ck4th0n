@@ -11,6 +11,7 @@
 #include <cmath>
 #include "client.h"
 #include "menu.h"
+#include "font.h"
 
 using namespace std;
 
@@ -20,11 +21,14 @@ World world;
 float angle;
 int myId;
 unsigned int albuf[3], alsrcs[ALSRCS];
-int WIDTH = 640;
-int HEIGHT = 480;
+int WIDTH = -1;
+int HEIGHT = -1;
 char* ipaddy = (char*)"127.0.0.1";
 menu* mainmenu;
-bool iskeydown[256];
+
+#ifdef UNHOLY
+bool NORAPE;
+#endif
 
 void quit() {
 	char q = 0;
@@ -73,6 +77,13 @@ void initVideo()
 {
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+#ifdef UNHOLY
+	if(!NORAPE)
+	{
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+	}
+#endif
 	// detect aspect ratio
 	float ratio = (float)SDL_GetVideoInfo()->current_w / SDL_GetVideoInfo()->current_h;
 
@@ -144,6 +155,9 @@ int main(int argc, char* argv[])
 			printf("Usage:\n"
 					"-h to show this message\n"
 					"-d [width] [height] to specify viewport dimensions\n"
+#ifdef UNHOLY
+					"-norape to avoid antialiasing"
+#endif
 					"\twhere [width] and [height] are multiples of 16\n"
 					"-i [ip] to connect to specified server\n");
 			exit(0);
@@ -160,11 +174,18 @@ int main(int argc, char* argv[])
 		{
 			ipaddy = argv[i+1];
 		}
+#ifdef UNHOLY
+		else if(!strcmp(argv[i], "-norape"))
+		{
+			NORAPE = true;
+		}
+#endif
 	}
 	
 	initVideo();
 	initSound();
 	initMenus();
+	init_font();
 	SDL_Thread *thread;
 	cout << "Starting client" << endl;
 	
@@ -258,6 +279,7 @@ int main(int argc, char* argv[])
 					break;
 				}
 				case SDL_MOUSEMOTION: {
+					if (mainmenu->is_active()) break;
 					angle -= event.motion.xrel/400.0;
 
 					while (angle >= 2*M_PI) angle -= 2*M_PI;
@@ -271,7 +293,7 @@ int main(int argc, char* argv[])
 		char buf[5];
 		*((int*)buf) = htonl(*reinterpret_cast<int*>(&angle));
 		buf[4] = 0;
-		if(!mainmenu->is_active())
+		if (!mainmenu->is_active())
 		{
 			if (keystate[SDLK_a]) buf[4] ^= 1;
 			if (keystate[SDLK_d]) buf[4] ^= 2;

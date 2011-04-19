@@ -1,5 +1,6 @@
 #include "menu.h"
 #include "font.h"
+#include "render.h"
 #include <GL/gl.h>
 
 #define button_left		0.05f
@@ -32,7 +33,7 @@ void menu::drawMenu() {
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
-	glOrtho(-x1/(x2-x1),(1.0f-x2)/(x2-x1)+1.0f,(1.0f-y2)/(y2-y1)+1.0f,-y1/(y2-y1),-1.0f,1.0f);
+	glOrtho((-x1-WIDTH/float(HEIGHT)/2.0f+1/2.0f)/(x2-x1),(1.0f-x1+WIDTH/float(HEIGHT)/2.0f-1/2.0f)/(x2-x1),(1.0f-y1)/(y2-y1),-y1/(y2-y1),-1.0f,1.0f);
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

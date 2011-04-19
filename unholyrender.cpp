@@ -1,4 +1,4 @@
-#include "unholyrender.h"
+#include "render.h"
 #include <GL/glew.h>
 #include <GL/glu.h>
 #include <iostream>
@@ -8,14 +8,11 @@
 #include <cmath>
 #include "constants.h"
 #include "client.h"
-#include "font.h"
 
 using namespace std;
 
 GLUquadric* quad;
 unsigned int program;
-extern int WIDTH;
-extern int HEIGHT;
 
 void drawFloor(float);
 void drawObjects(void);
@@ -85,8 +82,6 @@ void initGL() {
 
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	glEnable(GL_COLOR_MATERIAL);
-
-	init_font();
 }
 
 void render()

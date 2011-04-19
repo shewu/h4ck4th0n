@@ -12,7 +12,7 @@ UNHOLY_BALLS_TARGET=unholyballs
 HOLY_BALLS_TARGET=holyballs
 
 SERVER_OBJECTS=clcomm.o world.o socket.o object.o vec.o simulate.o
-UNHOLY_BALLS_OBJECTS=unholyballs.o unholyrender.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o
+UNHOLY_BALLS_OBJECTS=unholy.o unholyrender.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o
 HOLY_BALLS_OBJECTS=client.o render.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o
 
 all: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET)
@@ -28,6 +28,9 @@ $(HOLY_BALLS_TARGET): $(HOLY_BALLS_OBJECTS)
 
 %.o: %.cpp *.h
 	$(CC) -c $(CCFLAGS) $<
+
+unholy.o: client.cpp *.h
+	$(CC) -c $(CCFLAGS) -DUNHOLY -o unholy.o $<
 
 clean:
 	rm -rf $(SERVER_TARGET) $(HOLY_BALLS_TARGET) $(UNHOLY_BALLS_TARGET) $(SERVER_OBJECTS) $(UNHOLY_BALLS_OBJECTS) $(HOLY_BALLS_TARGET)

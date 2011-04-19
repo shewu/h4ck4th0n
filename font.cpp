@@ -1,5 +1,6 @@
 #include <GL/gl.h>
 #include "font.h"
+#include "render.h"
 #include <cstdio>
 #include <cstdlib>
 

@@ -18,7 +18,7 @@ extern int WIDTH;
 extern int HEIGHT;
 
 void drawFloor(float);
-void drawObjects(float*);
+void drawObjects(void);
 void drawWalls(void);
 
 void initGL() {
@@ -116,7 +116,7 @@ void render()
 
 	glPushMatrix();
 		glScalef(1, 1, -1);
-		drawObjects(matrix);
+		drawObjects();
 	glPopMatrix();
 
 	glEnable(GL_BLEND);
@@ -125,12 +125,16 @@ void render()
 		drawFloor(0.82);
 	glDisable(GL_BLEND);
 
-	drawObjects(matrix);
+	drawObjects();
 	
 
 	glDisable(GL_MULTISAMPLE_ARB);
 
 	glFlush();
+}
+
+void drawMiniMap()
+{
 }
 
 void drawWalls()
@@ -148,7 +152,7 @@ void drawWalls()
 	glEnd();
 }
 
-void drawObjects(float* matrix)
+void drawObjects()
 {
 	glEnable(GL_NORMALIZE);
 	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {
@@ -172,9 +176,9 @@ void drawFloor(float alpha)
 
 	glEnable(GL_NORMALIZE);
 	glBegin(GL_QUADS);
-	for (int x =0;x<GridSizeX;++x)
+	for (int x = 0; x < GridSizeX; ++x)
 	{
-		for (int y =0;y<GridSizeY;++y)
+		for (int y = 0; y < GridSizeY; ++y)
 		{
 			if (abs(x+y) & 1) //modulo 2
 				glColor4f(1.0f,1.0f,1.0f, alpha); //white

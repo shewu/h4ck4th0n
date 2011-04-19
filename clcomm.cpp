@@ -110,8 +110,8 @@ int main() {
 			else while ((n = it->second.sc->receive(data, 5)) >= 0) {
 				if (n == 0) {
 					int angle = htonl(*reinterpret_cast<int*>(&it->second.angle));
-					clients[it->second.id].sc->add((char*)(&angle), 4);
-					clients[it->second.id].sc->send();
+					it->second.sc->add((char*)(&angle), 4);
+					it->second.sc->send();
 				}
 				if (n == 1 && data[0] == 0) {
 					if (it->second.object_id != -1) {
@@ -158,8 +158,8 @@ int main() {
 			}
 			if (value != 0) {
 				acceleration = acceleration.getNormalVector()*KEYPRESS_ACCELERATION;
-				if (!world.objects[it->second.object_id].dead) world.objects[it->second.object_id].v += acceleration*dt;
-			}			
+				if (it->second.object_id != -1 && !world.objects[it->second.object_id].dead) world.objects[it->second.object_id].v += acceleration*dt;
+			}
 		}
 		
 		for (map<int, Object>::iterator it = world.objects.begin(); it != world.objects.end();) {

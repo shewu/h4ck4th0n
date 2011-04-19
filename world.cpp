@@ -31,7 +31,9 @@ World::World() {
 	obstacles.push_back(w4);
 	
 	std::ifstream mapf("map");
-	int nobs = 0;
+	
+	mapf >> minX >> maxX >> minY >> maxY;
+	
 	std::string cmd;
 	while (mapf >> cmd) {
 		if (cmd == "obs") {

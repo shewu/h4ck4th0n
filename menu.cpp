@@ -62,4 +62,7 @@ void menu::key_input(int key) {
 	else if(key == MENU_KEY_BACK) {
 		is_menu_active = false;
 	}
+	else {
+		menuitems[current_index]->key_input_non_active(key);
+	}
 }

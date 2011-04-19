@@ -4,17 +4,7 @@
 #include <map>
 #include <vector>
 #include "constants.h"
-
-class Socket
-{
-	public:
-		Socket() { socket = 0; }
-		Socket(int sock) { socket = sock; }
-		int socket;
-		bool send(char* stuff, int size);
-		bool receive(char* stuff, int size);
-		bool hasRemaining();
-};
+#include "socket.h"
 
 class Vector2D
 {
@@ -82,8 +72,8 @@ class Object
 		int player;
 		int flag;
 		
-		bool send(Socket socket);
-		bool receive(Socket socket);
+		void send(SocketConnection* sc);
+		char* get(char* buf);
 };
 
 class Spawn {
@@ -117,6 +107,7 @@ class World
 		World();
 		int spawn(int spawnl, int player, int flag);
 		
+		int minX, maxX, minY, maxY;
 		std::map<int, std::vector<Spawn> > spawns;
 		std::map<int, Object> objects;
 		std::vector<Light> lights;
@@ -124,8 +115,8 @@ class World
 		std::vector<std::pair<char, Vector2D> > sounds;
 		void doSimulation(float dt);
 		
-		bool sendObjects(Socket socket, int obj);
-		bool receiveObjects(Socket socket, int& obj);
+		void sendObjects(SocketConnection* sc, int obj);
+		int receiveObjects(SocketConnection* sc, int& obj);
 };
 
 #endif

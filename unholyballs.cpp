@@ -15,21 +15,17 @@
 using namespace std;
 
 SDL_Surface *screen;
-Socket* sock;
+SocketConnection* sc;
 World world;
 float angle;
 int myId;
 unsigned int albuf[3], alsrcs[ALSRCS];
-int WIDTH = 640;
-int HEIGHT = 480;
+int WIDTH = -1;
+int HEIGHT = -1;
 char* ipaddy = (char*)"127.0.0.1";
-bool FULLSCREEN;
 menu *mainmenu;
 bool iskeydown[256];
 bool NORAPE;
-
-#define ALIGNMENT 0x10
-#define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~(ALIGNMENT-1))
 
 bool action_quit()
 {
@@ -49,6 +45,7 @@ void action_toggle_fullscreen(bool b)
 bool validator_test(char *a) {
 	return a[0] == 'a';
 }
+
 void initMenus()
 {
 	mainmenu = new menu();
@@ -72,18 +69,50 @@ void initVideo()
 {
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	if(!NORAPE) {
+	if(!NORAPE)
+	{
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 	}
-	if(FULLSCREEN)
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
-	else
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+	// detect aspect ratio
+	float ratio = (float)SDL_GetVideoInfo()->current_w / SDL_GetVideoInfo()->current_h;
+
+	float d16x9 = abs(ratio - SIXTEEN_BY_NINE);
+	float d16x10 = abs(ratio - SIXTEEN_BY_TEN);
+	float d4x3 = abs(ratio - FOUR_BY_THREE);
+
+	if(WIDTH == -1 || HEIGHT == -1)
+	{
+		if(d16x9 < d16x10 && d16x9 < d4x3)
+		{
+			WIDTH = sixteenbynine[0][0];
+			HEIGHT = sixteenbynine[0][1];
+		}
+		else if(d16x10 < d16x9 && d16x10 < d4x3)
+		{
+			WIDTH = sixteenbyten[0][0];
+			HEIGHT = sixteenbyten[0][1];
+		}
+		else if(d4x3 < d16x10 && d4x3 < d16x9)
+		{
+			WIDTH = fourbythree[0][0];
+			HEIGHT = fourbythree[0][1];
+		}
+		else
+		{
+			WIDTH = 640;
+			HEIGHT = 480;
+		}
+	}
+
+	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	SDL_ShowCursor(false);
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	
 	initGL();
+
+	cout << "using resolution " << WIDTH << "x" << HEIGHT << "\n";
+	return;
 }
 
 void initSound()
@@ -122,9 +151,9 @@ int main(int argc, char* argv[])
 		{
 			printf("Usage:\n"
 					"-h to show this message\n"
-					"-f for fullscreen\n"
 					"-d [width] [height] to specify viewport dimensions\n"
 					"\twhere [width] and [height] are multiples of 16\n"
+					"-norape to disable antialiasing\n"
 					"-i [ip] to connect to specified server\n");
 			exit(0);
 		}
@@ -135,10 +164,6 @@ int main(int argc, char* argv[])
 			WIDTH = ALIGN(atoi(argv[i+1]));
 			HEIGHT = ALIGN(atoi(argv[i+2]));
 			cout << "Playing at " << WIDTH << "x" << HEIGHT << "\n";
-		}
-		else if(!strcmp(argv[i], "-f"))
-		{
-			FULLSCREEN = true;
 		}
 		else if(!strcmp(argv[i], "-i"))
 		{
@@ -158,29 +183,42 @@ int main(int argc, char* argv[])
 	
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_UNSPEC;
-	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_socktype = SOCK_DGRAM;
 	
 	getaddrinfo(ipaddy, "55555", &hints, &res);
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-	sock = new Socket(sockfd);
-	if (connect(sockfd, res->ai_addr, res->ai_addrlen) == -1) {
+	Socket sock(sockfd);
+	sc = sock.connect(*res->ai_addr, res->ai_addrlen);
+	
+	int u[2];
+	bool done = false;
+	for (int i = 0; i < 10 && !done; i++) {
+		sc->send();
+		SDL_Delay(200);
+		int n;
+		while ((n = sc->receive((char*)&u, 8)) != -1) {
+			if (n == 4) {
+				done = true;
+				break;
+			}
+		}
+	}
+	sc->packetnum = 10;
+	if (!done) {
 		cout << "Failed to connect" << endl;
 		exit(1);
 	}
-	int u;
-	sock->receive((char*)&u, 4);
-	u = ntohl(u);
-	myId = -1;
-	angle = *reinterpret_cast<float*>(&u);
-
 	
+	u[0] = ntohl(u[0]);
+	myId = -1;
+	angle = *reinterpret_cast<float*>(u);
 	
 	int count = 0, oldTime = SDL_GetTicks();
 	bool tried_to_get_mouse = false;
 	for (;;) {
-		while (sock->hasRemaining()) {
-			if (!world.receiveObjects(*sock, myId)) exit(1);
-			
+		int status;
+		while ((status = world.receiveObjects(sc, myId)) != -1) {
+			if (status == 0) continue;
 			for(vector<pair<char, Vector2D> >::iterator it = world.sounds.begin(); it != world.sounds.end(); it++) {
 				int src = -1;
 				for (int s = 0; s < ALSRCS; s++) {
@@ -191,7 +229,7 @@ int main(int argc, char* argv[])
 						break;
 					}
 				}
-				if (src != -1) {
+				if (src >= 0 && src < 3) {
 					ALfloat alsrcpos[] = { it->second.x, it->second.y, 0 };
 					ALfloat alsrcvel[] = { 0, 0, 0 };
 				
@@ -213,30 +251,6 @@ int main(int argc, char* argv[])
 				{
 					bool isinitialpress = !iskeydown[event.key.keysym.sym];
 					iskeydown[event.key.keysym.sym] = true;
-
-					if(mainmenu->is_active())
-					{
-						break;
-					}
-
-					char b = -1;
-					switch (event.key.keysym.sym) {
-						case SDLK_a:
-							b = 0;
-							break;
-						case SDLK_d:
-							b = 1;
-							break;
-						case SDLK_w:
-							b = 2;
-							break;
-						case SDLK_s:
-							b = 3;
-							break;
-					}
-					if (b != -1) {
-						sock->send(&b, 1);
-					}
 					break;
 				}
 				case SDL_KEYUP:
@@ -251,34 +265,13 @@ int main(int argc, char* argv[])
 						mainmenu->key_input(event.key.keysym.sym);
 					}
 
-					if(mainmenu->is_active())
-					{
-						break;
-					}
-
-					char b = -1;
-					switch (event.key.keysym.sym) {
-						case SDLK_a:
-							b = 0;
-							break;
-						case SDLK_d:
-							b = 1;
-							break;
-						case SDLK_w:
-							b = 2;
-							break;
-						case SDLK_s:
-							b = 3;
-							break;
-					}
-					if (b != -1) {
-						b ^= 4;
-						sock->send(&b, 1);
-					}
 					break;
 				}
 				case SDL_QUIT:
 				{
+					char q = 0;
+					sc->add(&q, 1);
+					sc->send();
 					exit(0);
 					break;
 				}
@@ -306,13 +299,10 @@ int main(int argc, char* argv[])
 					   event.motion.y - event.motion.yrel < mouse_top_cutoff ||
 					   event.motion.y - event.motion.yrel > mouse_bottom_cutoff) break;
 					
-					angle -= event.motion.xrel/float(WIDTH);
+					angle -= event.motion.xrel/400.0;
+
 					while (angle >= 2*M_PI) angle -= 2*M_PI;
 					while (angle < 0) angle += 2*M_PI;
-					char buf[5];
-					buf[0] = 8;
-					*((int*)(buf+1)) = htonl(*reinterpret_cast<int*>(&angle));
-					sock->send(buf, 5);
 					break;
 				}
 			}
@@ -328,6 +318,20 @@ int main(int argc, char* argv[])
 			tried_to_get_mouse = true;
 		}
 		
+		Uint8* keystate = SDL_GetKeyState(NULL);
+		char buf[5];
+		*((int*)buf) = htonl(*reinterpret_cast<int*>(&angle));
+		buf[4] = 0;
+		if(!mainmenu->is_active())
+		{
+			if (keystate[SDLK_a]) buf[4] ^= 1;
+			if (keystate[SDLK_d]) buf[4] ^= 2;
+			if (keystate[SDLK_w]) buf[4] ^= 4;
+			if (keystate[SDLK_s]) buf[4] ^= 8;
+		}
+		sc->add(buf, 5);
+		sc->send();
+		
 		ALfloat alpos[] = { world.objects[myId].p.x, world.objects[myId].p.y, 0 };
 		ALfloat alvel[] = { world.objects[myId].v.x, world.objects[myId].v.y, 0 };
 		ALfloat alori[] = { 0.0, cos(angle), sin(angle), 0.0, 1.0, 0.0 };
@@ -337,7 +341,10 @@ int main(int argc, char* argv[])
 		
 		render();
 		if(mainmenu->is_active())
+		{
 			mainmenu->draw();
+		}
+		int time = SDL_GetTicks();
 		if ((++count)%100 == 0) {
 			int time = SDL_GetTicks();
 			float fps = 100000./(time - oldTime);
@@ -357,13 +364,12 @@ int main(int argc, char* argv[])
 			if(fps < 100000) {
 				cout << " ";
 			}
-			cout << (int)fps << "fps";
+			cout << (int)fps << "fps" << flush;
 			oldTime = time;
-			fflush(stdout);
 		}
+		
 		SDL_GL_SwapBuffers();
 	}
-	cout << "\n"; // weird, why isn't this printing?
-	fflush(stdout);
+	cout << endl;
 	SDL_Quit();
 }

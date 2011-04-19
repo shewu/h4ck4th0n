@@ -2,7 +2,7 @@
 #include <netinet/in.h>
 #include <stdio.h>
 
-bool Object::send(Socket socket) {
+void Object::send(SocketConnection* sc) {
 	char buf[35];
 	*((int*)buf) = htonl(*reinterpret_cast<int*>(&p.x));
 	*((int*)(buf + 4)) = htonl(*reinterpret_cast<int*>(&p.y));
@@ -15,13 +15,10 @@ bool Object::send(Socket socket) {
 	*(buf + 26) = color.b;
 	*((int*)(buf + 27)) = htonl(*reinterpret_cast<int*>(&hrat));
 	*((int*)(buf + 31)) = htonl(id);
-	return socket.send(buf, 35);
+	sc->add(buf, 35);
 }
 
-bool Object::receive(Socket socket) {
-	char buf[35];
-	if(!socket.receive(buf, 35))
-		return false;
+char* Object::get(char* buf) {
 	*((int*)(buf)) = ntohl(*((int*)(buf)));
 	*((int*)(buf+4)) = ntohl(*((int*)(buf+4)));
 	*((int*)(buf+8)) = ntohl(*((int*)(buf+8)));
@@ -41,5 +38,5 @@ bool Object::receive(Socket socket) {
 	color.b = *(buf + 26);
 	hrat = *reinterpret_cast<float*>(buf + 27);
 	id = ntohl(*((int*)(buf + 31)));
-	return true;
+	return buf+35;
 }

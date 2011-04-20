@@ -8,30 +8,31 @@
 using namespace std;
 
 World::World() {
+	std::ifstream mapf("map");
+	mapf >> minX >> maxX >> minY >> maxY;
+	
 	Obstacle w1, w2, w3, w4;
-	w1.p1 = Vector2D(MIN_X, MIN_Y);
-	w1.p2 = Vector2D(MAX_X, MIN_Y);
+	w1.p1 = Vector2D(minX, minY);
+	w1.p2 = Vector2D(maxX, minY);
 	w1.color = Color(101, 67, 33);
 	w1.sticky = false;
 	obstacles.push_back(w1);
-	w2.p1 = Vector2D(MIN_X, MAX_Y);
-	w2.p2 = Vector2D(MAX_X, MAX_Y);
+	w2.p1 = Vector2D(minX, maxY);
+	w2.p2 = Vector2D(maxX, maxY);
 	w2.color = Color(101, 67, 33);
 	w2.sticky = false;
 	obstacles.push_back(w2);
-	w3.p1 = Vector2D(MIN_X, MIN_Y);
-	w3.p2 = Vector2D(MIN_X, MAX_Y);
+	w3.p1 = Vector2D(minX, minY);
+	w3.p2 = Vector2D(minX, maxY);
 	w3.color = Color(101, 67, 33);
 	w3.sticky = false;
 	obstacles.push_back(w3);
-	w4.p1 = Vector2D(MAX_X, MIN_Y);
-	w4.p2 = Vector2D(MAX_X, MAX_Y);
+	w4.p1 = Vector2D(maxX, minY);
+	w4.p2 = Vector2D(maxX, maxY);
 	w4.color = Color(101, 67, 33);
 	w4.sticky = false;
 	obstacles.push_back(w4);
 	
-	std::ifstream mapf("map");
-	int nobs = 0;
 	std::string cmd;
 	while (mapf >> cmd) {
 		if (cmd == "obs") {

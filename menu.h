@@ -2,6 +2,8 @@
 #include <SDL/SDL.h>
 using namespace std;
 
+#define MENU_KEY_LEFT		SDLK_LEFT
+#define MENU_KEY_RIGHT		SDLK_RIGHT
 #define MENU_KEY_UP 		SDLK_UP
 #define MENU_KEY_DOWN 		SDLK_DOWN
 #define MENU_KEY_ENTER 		SDLK_RETURN
@@ -17,6 +19,7 @@ class menuitem {
 		//Return whether or not the menuitem is still active
 		virtual bool activate();
 		virtual bool key_input(int key);
+		virtual void key_input_non_active(int key);
 		virtual void draw(bool selected, float x1, float y1, float width, float height, unsigned char alpha);
 		virtual void drawAsActive(unsigned char alpha);
 		virtual bool shouldMenuBeDrawn();
@@ -34,8 +37,8 @@ class menu {
 		void key_input(int key);
 		bool is_active();
 		void set_active(bool);
-		void draw(bool);
 		void draw();
+		void drawMenu();
 
 		void setAppearance(bool transparent,float x1,float x2,float y1,float y2);
 		void setAppearanceFull();
@@ -117,4 +120,17 @@ class togglemenuitem : public menuitem {
 		bool state;
 		void (*action)(bool);
 		
+};
+
+class slidermenuitem : public menuitem {
+	public:
+		slidermenuitem(char *name, char** states, int len, int defaultstate, void (*act)(int));
+		virtual ~slidermenuitem();
+		virtual void key_input_non_active(int key);
+		bool get_state();
+		virtual void draw(bool,float,float,float,float,unsigned char);
+	private:
+		char** states;
+		int curstate, len;
+		void (*action)(int);
 };

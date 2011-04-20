@@ -18,12 +18,9 @@ cl::Program program;
 vector<cl::Memory> bs;
 vector<cl::Device> devices;
 cl::CommandQueue cq;
-extern int WIDTH;
-extern int HEIGHT;
+GLuint texture;
 
 void initGL() {
-	glEnable(GL_BLEND);
-
 	vector<cl::Platform> platforms;
 	cl::Platform::get(&platforms);
 	cl_context_properties props[7] = { CL_CONTEXT_PLATFORM, (cl_context_properties)(platforms[0])(), CL_GLX_DISPLAY_KHR, (intptr_t)glXGetCurrentDisplay(), CL_GL_CONTEXT_KHR, (intptr_t)glXGetCurrentContext(), 0 };
@@ -47,7 +44,6 @@ void initGL() {
 	glOrtho(-1, 1, -1, 1, -1, 1);
 	
 	glEnable(GL_TEXTURE_2D);
-	GLuint texture;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -55,20 +51,22 @@ void initGL() {
 	igl = cl::Image2DGL(context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, texture, NULL);
 	bs.push_back(igl);
 	cq = cl::CommandQueue(context, devices[0], 0, NULL);
+	glDisable(GL_TEXTURE_2D);
 }
 
 void render()
 {
+	glDisable(GL_DEPTH_TEST);
 	if (myId == -1) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		return;
 	}
 	
 	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
-	if (focusx < MIN_X+14) focusx += (14-focusx+MIN_X)*(14-focusx+MIN_X)/28.0;
-	if (focusx > MAX_X-14) focusx -= (14+focusx-MAX_X)*(14+focusx-MAX_X)/28.0;
-	if (focusy < MIN_Y+14) focusy += (14-focusy+MIN_Y)*(14-focusy+MIN_Y)/28.0;
-	if (focusy > MAX_Y-14) focusy -= (14+focusy-MAX_Y)*(14+focusy-MAX_Y)/28.0;
+	if (focusx < world.minX+14) focusx += (14-focusx+world.minX)*(14-focusx+world.minX)/28.0;
+	if (focusx > world.maxX-14) focusx -= (14+focusx-world.maxX)*(14+focusx-world.maxX)/28.0;
+	if (focusy < world.minY+14) focusy += (14-focusy+world.minY)*(14-focusy+world.minY)/28.0;
+	if (focusy > world.maxY-14) focusy -= (14+focusy-world.maxY)*(14+focusy-world.maxY)/28.0;
 	
 	float obspoints[4*world.obstacles.size()];
 	unsigned char obscolor[4*world.obstacles.size()];
@@ -155,10 +153,16 @@ void render()
 	renderKern.setArg(16, igl);
 	renderKern.setArg(17, WIDTH);
 	renderKern.setArg(18, HEIGHT);
+	renderKern.setArg(19, world.minX);
+	renderKern.setArg(20, world.maxX);
+	renderKern.setArg(21, world.minY);
+	renderKern.setArg(22, world.maxY);
 	cq.enqueueNDRangeKernel(renderKern, cl::NullRange, cl::NDRange((WIDTH+15)/16*16, (HEIGHT+15)/16*16), cl::NDRange(16, 16));
 	cq.enqueueReleaseGLObjects(&bs);
 	cq.finish();
 	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0, 0);
 		glVertex2f(-1, -1);
@@ -169,4 +173,6 @@ void render()
 		glTexCoord2f(1, 0);
 		glVertex2f(1, -1);
 	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_DEPTH_TEST);
 }

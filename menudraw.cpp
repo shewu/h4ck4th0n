@@ -1,10 +1,11 @@
 #include "menu.h"
 #include "font.h"
+#include "render.h"
 #include <GL/gl.h>
 
 #define button_left		0.05f
 #define button_top		0.05f
-#define button_width		1.0f - 2.0f * button_left //0.75f
+#define button_width		(1.0f - 2.0f * button_left) //0.75f
 #define button_height		0.15f
 #define button_separation	0.05f
 #define font_size		0.05f
@@ -25,28 +26,28 @@
 
 #define menu_alpha 200
 
-void menu::draw() {
-	draw(true);
+void menu::drawMenu() {
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho((-x1-WIDTH/float(HEIGHT)/2.0f+1/2.0f)/(x2-x1),(1.0f-x1+WIDTH/float(HEIGHT)/2.0f-1/2.0f)/(x2-x1),(1.0f-y1)/(y2-y1),-y1/(y2-y1),-1.0f,1.0f);
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	draw();
+	glDisable(GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 }
 
-void menu::draw(bool should_set_matrices) {
-	if(should_set_matrices) {
-
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glLoadIdentity();
-		//glOrtho(0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f);
-		glOrtho(-x1/(x2-x1),(1.0f-x2)/(x2-x1)+1.0f,(1.0f-y2)/(y2-y1)+1.0f,-y1/(y2-y1),-1.0f,1.0f);
-		glDisable(GL_DEPTH_TEST);
-	}
-
+void menu::draw() {
 	if(!is_item_active || menuitems[current_index]->shouldMenuBeDrawn()) {
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 		glColor4ub(167,155,155,transparent?menu_alpha:255);
 		glBegin(GL_QUADS);
 		glVertex3f(0.0f, 0.0f, 0.0f);
@@ -68,21 +69,21 @@ void menu::draw(bool should_set_matrices) {
 
 	if(is_item_active)
 		menuitems[current_index]->drawAsActive(transparent?menu_alpha:255);
-
-	if(should_set_matrices) {
-		glEnable(GL_DEPTH_TEST);
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
-	}
 }
+
+#define selected_r 		40
+#define selected_g 		78
+#define selected_b 		202
+#define unselected_r		120
+#define unselected_g		140
+#define unselected_b		214
 
 void draw_button(bool selected, char *text, float x, float y, float width, float height, GLubyte alpha) {
 	if(selected)
-		glColor4ub(40,78,202,alpha);
+		glColor4ub(selected_r,selected_g,selected_b,alpha);
 	else
-		glColor4ub(120,140,214,alpha);
+		glColor4ub(unselected_r,unselected_g,unselected_b,alpha);
+
 	glBegin(GL_QUADS);
 	glVertex3f(x, y, 0.0f);
 	glVertex3f(x, y+height, 0.0f);
@@ -93,8 +94,6 @@ void draw_button(bool selected, char *text, float x, float y, float width, float
 	glColor4ub(255,255,255,menu_alpha);
 	textquad tq(x + button_text_padding, y + (height - font_size) * 0.5f, 0.0f, x + button_text_padding, y + (height + font_size) * 0.5f, 0.0f, 0.05f, 0.0f, 0.0f);
 	draw_str(tq, text);
-
-	glDisable(GL_TEXTURE_2D);
 }
 
 void menuitem::drawAsActive(unsigned char alpha) {}
@@ -113,7 +112,7 @@ void submenuitem::draw(bool selected, float x, float y, float width, float heigh
 }
 
 void submenuitem::drawAsActive(unsigned char alpha) {
-	m->draw(false);
+	m->draw();
 }
 
 void inputmenuitem::drawAsActive(unsigned char alpha) {
@@ -169,8 +168,6 @@ void inputmenuitem::drawAsActive(unsigned char alpha) {
 		draw_str(tq, invalidInputError);
 	}
 
-	glDisable(GL_TEXTURE_2D);
-
 }	
 
 void togglemenuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
@@ -188,6 +185,39 @@ void togglemenuitem::draw(bool selected, float x, float y, float width, float he
 		glColor4ub(255,0,0,alpha);
 		draw_str(tq, (char*)"OFF");
 	}
+}
 
-	glDisable(GL_TEXTURE_2D);
+#define slider_left		0.15f
+#define slider_right		0.90f
+#define slider_slide_width	0.03f
+#define slider_slide_height	0.47f
+#define slider_tick_top		0.1f
+#define slider_tick_bottom	0.5f
+#define slider_line_height	0.3f
+
+void slidermenuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
+	glColor4ub(0,0,0,alpha);
+	glBegin(GL_LINES);
+	glVertex3f(x + slider_left  * width, y + slider_line_height * height, 0.0f);
+	glVertex3f(x + slider_right * width, y + slider_line_height * height, 0.0f);
+	for(int i = 0; i < len; i++) {
+		float tickx = x + width*(slider_right*(float)i + slider_left*(float)(len-1-i)) / (float)(len-1);
+		glVertex3f(tickx, y + slider_tick_top * height, 0.0f);
+		glVertex3f(tickx, y + slider_tick_bottom * height, 0.0f);
+	}
+	glEnd();
+
+	if(selected)
+		glColor4ub(selected_r,selected_g,selected_b,alpha);
+	else
+		glColor4ub(unselected_r,unselected_g,unselected_b,alpha);
+	float rectx1 = x + width * ((slider_right * (float)curstate + slider_left * (float)(len-1-curstate))/(float)(len-1) - 0.5f * slider_slide_width);
+	float recty1 = y + height * (slider_line_height - 0.5f*slider_slide_height);
+	float recty2 = y + height * (slider_line_height + 0.5f*slider_slide_height);
+	glBegin(GL_QUADS);
+	glVertex3f(rectx1, recty1, 0.0f);
+	glVertex3f(rectx1, recty2, 0.0f);
+	glVertex3f(rectx1 + slider_slide_width * width, recty2, 0.0f);
+	glVertex3f(rectx1 + slider_slide_width * width, recty1, 0.0f);
+	glEnd();
 }

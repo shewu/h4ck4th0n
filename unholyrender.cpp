@@ -95,10 +95,10 @@ void render()
 	glLoadIdentity();
 	
 	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
-	if (focusx < MIN_X+6) focusx = MIN_X+6;
-	if (focusx > MAX_X-6) focusx = MAX_X-6;
-	if (focusy < MIN_Y+6) focusy = MIN_Y+6;
-	if (focusy > MAX_Y-6) focusy = MAX_Y-6;
+	if (focusx < world.minX+6) focusx = world.minX+6;
+	if (focusx > world.maxX-6) focusx = world.maxX-6;
+	if (focusy < world.minY+6) focusy = world.minY+6;
+	if (focusy > world.maxY-6) focusy = world.maxY-6;
 	
 	gluLookAt(focusx-6*cos(angle), focusy-6*sin(angle), 3, focusx, focusy, 0.0, 0.0, 0.0, 1.0);
 	float matrix[16];
@@ -164,8 +164,8 @@ void drawObjects()
 void drawFloor(float alpha)
 {
 	// checkerboard
-	unsigned int GridSizeX = MAX_X/3;
-	unsigned int GridSizeY = MAX_Y/3;
+	unsigned int GridSizeX = world.maxX/3;
+	unsigned int GridSizeY = world.maxY/3;
 	unsigned int SizeX = 6;
 	unsigned int SizeY = 6;
 
@@ -181,10 +181,10 @@ void drawFloor(float alpha)
 				glColor4f(0.0f,0.0f,0.0f, alpha); //black
 
 			glNormal3f(                  0,                  0, 1);
-			glVertex3f(    x*SizeX + MIN_X,    y*SizeY + MIN_Y, 0);
-			glVertex3f((x+1)*SizeX + MIN_X,    y*SizeY + MIN_Y, 0);
-			glVertex3f((x+1)*SizeX + MIN_X,(y+1)*SizeY + MIN_Y, 0);
-			glVertex3f(    x*SizeX + MIN_X,(y+1)*SizeY + MIN_Y, 0);
+			glVertex3f(    x*SizeX + world.minX,    y*SizeY + world.minY, 0);
+			glVertex3f((x+1)*SizeX + world.minX,    y*SizeY + world.minY, 0);
+			glVertex3f((x+1)*SizeX + world.minX,(y+1)*SizeY + world.minY, 0);
+			glVertex3f(    x*SizeX + world.minX,(y+1)*SizeY + world.minY, 0);
 
 		}
 	}

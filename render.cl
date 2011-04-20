@@ -1,7 +1,5 @@
 #include "constants.h"
 
-#define EPS .000001
-
 const sampler_t texSample = CLK_NORMALIZED_COORDS_TRUE|CLK_ADDRESS_REPEAT|CLK_FILTER_LINEAR;
 
 float castRay(
@@ -79,7 +77,11 @@ render(
 		__constant unsigned char* lightcolor, 
 		__write_only image2d_t im,
 		int WIDTH,
-		int HEIGHT
+		int HEIGHT,
+		float minX,
+		float maxX,
+		float minY,
+		float maxY
 	) {
 	float nxdir = xdir+((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*ydir);
 	float nydir = ydir-((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*xdir);
@@ -113,7 +115,7 @@ render(
 			hit = true;
 			specular = true;
 		}
-		else if (zdir < 0 && x-xdir*z/zdir >= MIN_X && x-xdir*z/zdir <= MAX_X && y-ydir*z/zdir >= MIN_Y && y-ydir*z/zdir <= MAX_Y) {
+		else if (zdir < 0 && x-xdir*z/zdir >= minX && x-xdir*z/zdir <= maxX && y-ydir*z/zdir >= minY && y-ydir*z/zdir <= maxY) {
 			float xp = (x-xdir*z/zdir)/3, yp = (y-ydir*z/zdir)/3;
 			if (xp < 0) xp += (int)(fabs(xp)/2+1)*2;
 			if (yp < 0) yp += (int)(fabs(yp)/2+1)*2;

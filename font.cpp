@@ -115,3 +115,11 @@ void draw_str(textquad tq, char *text) {
 	glDisable(GL_TEXTURE_2D);
 }
 
+void draw_str_center(textquad tq, char *text) {
+	float width = 0.0f;
+	for(int i = 0; text[i] != '\0'; i++) {
+		width += character_x2[text[i]] - character_x1[text[i]];
+	}
+	tq.inc(-width * 8.0f);
+	draw_str(tq, text);
+}

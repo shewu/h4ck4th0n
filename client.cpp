@@ -60,6 +60,8 @@ bool validator_test(char *a) {
 	return a[0] == 'a';
 }
 
+char * state [] = {(char*)"abc", (char*)"bad", (char*)"cat!"};
+
 void initMenus()
 {
 	mainmenu = new menu();
@@ -72,7 +74,7 @@ void initMenus()
 
 	mainmenu->add_menuitem(new submenuitem(menu1, (char*)"sub menu 1 :)"));
 	mainmenu->add_menuitem(new submenuitem(menu2, (char*)"sub menu 2 :)"));
-	char * state [] = {(char*)"a", (char*)"b", (char*)"c"};
+//	char * state [] = {(char*)"abc", (char*)"bad", (char*)"cat!"};
 	mainmenu->add_menuitem(new slidermenuitem((char*)"Slider!", state, 3, 0, NULL));
 	//mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with a", (char *)"Enter stuff", (char *)"Stuff"));
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));

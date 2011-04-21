@@ -1,5 +1,5 @@
 Holy Balls: The Game
-Version 0.2, now with gameplay!
+Version 0.3, now with gameplay and a menu!
 
 Requirements:
 * Hardware
@@ -45,6 +45,7 @@ W: Accelerate forwards
 A: Accelerate left
 S: Accelerate backwards
 D: Accelerate right
+Escape: Bring up menu
 
 Controls (Editor)
 WASD: Move cursor

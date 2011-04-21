@@ -219,5 +219,13 @@ void slidermenuitem::draw(bool selected, float x, float y, float width, float he
 	glVertex3f(rectx1, recty2, 0.0f);
 	glVertex3f(rectx1 + slider_slide_width * width, recty2, 0.0f);
 	glVertex3f(rectx1 + slider_slide_width * width, recty1, 0.0f);
+	if(curstate != newcurstate) {
+		glColor4ub(selected_r,selected_g,selected_b,50);
+		rectx1 = x + width * ((slider_right * (float)newcurstate + slider_left * (float)(len-1-newcurstate))/(float)(len-1) - 0.5f * slider_slide_width);
+		glVertex3f(rectx1, recty1, 0.0f);
+		glVertex3f(rectx1, recty2, 0.0f);
+		glVertex3f(rectx1 + slider_slide_width * width, recty2, 0.0f);
+		glVertex3f(rectx1 + slider_slide_width * width, recty1, 0.0f);
+	}
 	glEnd();
 }

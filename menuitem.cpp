@@ -9,6 +9,8 @@ bool menuitem::activate() { return false; }
 bool menuitem::key_input(int key) { return false; }
 void menuitem::key_input_non_active(int key) { }
 bool menuitem::shouldMenuBeDrawn() { return false; }
+void menuitem::onSelect() { }
+void menuitem::onDeselect() { }
 
 //submenuitem
 submenuitem::~submenuitem() { }
@@ -147,6 +149,7 @@ slidermenuitem::slidermenuitem(char *name1, char** states1, int len1, int cursta
        states = states1;
        len = len1;
        curstate = curstate1;
+       newcurstate = curstate1;
        action = act;
 }
 
@@ -156,15 +159,26 @@ bool slidermenuitem::get_state() {
 
 void slidermenuitem::key_input_non_active(int key) {
 	if(key == MENU_KEY_LEFT) {
-		if(curstate > 0) {
-			curstate--;
-			if(action != NULL) action(curstate);
+		if(newcurstate > 0) {
+			newcurstate--;
+			//if(action != NULL) action(curstate); //now somewhere else
 		}
 	}
 	else if(key == MENU_KEY_RIGHT) {
-		if(curstate < len - 1) {
-			curstate++;
-			if(action != NULL) action(curstate);
+		if(newcurstate < len - 1) {
+			newcurstate++;
+			//if(action != NULL) action(curstate);
 		}
 	}
+}
+
+bool slidermenuitem::activate() {
+	curstate = newcurstate;
+	if(action != NULL)
+		action(curstate);
+	return false;
+}
+
+void slidermenuitem::onDeselect() {
+	newcurstate = curstate;
 }

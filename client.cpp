@@ -68,7 +68,9 @@ void initMenus()
 
 	mainmenu->add_menuitem(new submenuitem(menu1, (char*)"sub menu 1 :)"));
 	mainmenu->add_menuitem(new submenuitem(menu2, (char*)"sub menu 2 :)"));
-	mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with a", (char *)"Enter stuff", (char *)"Stuff"));
+	char * state [] = {(char*)"a", (char*)"b", (char*)"c"};
+	mainmenu->add_menuitem(new slidermenuitem((char*)"Slider!", state, 3, 0, NULL));
+	//mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with a", (char *)"Enter stuff", (char *)"Stuff"));
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
 	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
 }

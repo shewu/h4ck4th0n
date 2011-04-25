@@ -1,4 +1,3 @@
-#pragma OPENCL EXTENSION cl_amd_printf:enable
 #include "constants.h"
 
 const sampler_t texSample = CLK_NORMALIZED_COORDS_TRUE|CLK_ADDRESS_REPEAT|CLK_FILTER_LINEAR;

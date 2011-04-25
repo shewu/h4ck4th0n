@@ -85,11 +85,13 @@ render(
 		float maxY,
 		int offset
 	) {
-	float nxdir = xdir+((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*ydir);
-	float nydir = ydir-((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*xdir);
+	float4 pcolor = (float4)(0, 0, 0, 0);
+	for (int xaa = 0; xaa < 4; xaa++) for (int yaa = 0; yaa < 4; yaa++)
+	float nxdir = xdir+((4*get_global_id(0)+xaa-(4*WIDTH-1)/2.0)/((float)4*HEIGHT-1)*ydir);
+	float nydir = ydir-((4*get_global_id(0)+xaa-(4*WIDTH-1)/2.0)/((float)4*HEIGHT-1)*xdir);
 	xdir = nxdir;
 	ydir = nydir;
-	zdir += (get_global_id(1)+offset-(HEIGHT-1)/2.0)/((float)HEIGHT-1);
+	zdir += (4*get_global_id(1)+offset+yaa-(4*HEIGHT-1)/2.0)/((float)4*HEIGHT-1);
 	
 	float4 tcolor = (float4)(0, 0, 0, 0);
 	float mult = 1;
@@ -160,7 +162,8 @@ render(
 		ydir = nextdir.y;
 		zdir = nextdir.z;
 	}
-	
-	write_imagef(im, (int2)(get_global_id(0), get_global_id(1)), tcolor);
+	pcolor += tcolor;
+	}	
+	write_imagef(im, (int2)(get_global_id(0), get_global_id(1)), pcolor/4.0);
 }
 

@@ -160,7 +160,7 @@ void render()
 		renderKern.setArg(20, world.maxX);
 		renderKern.setArg(21, world.minY);
 		renderKern.setArg(22, world.maxY);
-		renderKern.setArg(23, ((i*(HEIGHT/16))/devices.size())*16);
+		renderKern.setArg(23, int(((i*(HEIGHT/16))/devices.size())*16));
 		cqs[i].enqueueNDRangeKernel(renderKern, cl::NullRange, cl::NDRange(WIDTH, (((i+1)*(HEIGHT/16))/devices.size()-(i*(HEIGHT/16))/devices.size())*16), cl::NDRange(16, 16));
 		cl::size_t<3> offset, sz;
 		offset.push_back(0);
@@ -168,7 +168,7 @@ void render()
 		offset.push_back(0);
 		sz.push_back(WIDTH);
 		sz.push_back((((i+1)*(HEIGHT/16))/devices.size()-(i*(HEIGHT/16))/devices.size())*16);
-		sz.push_back(0);
+		sz.push_back(1);
 		cqs[i].enqueueReadImage(images[i], false, offset, sz, 0, 0, pixels+((i*(HEIGHT/16))/devices.size())*16*WIDTH);
 	}
 	for (int i = 0; i < devices.size(); i++) cqs[i].finish();

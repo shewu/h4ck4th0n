@@ -159,7 +159,7 @@ render(
 		ydir = nextdir.y;
 		zdir = nextdir.z;
 	}
-
+	
 	write_imagef(im, (int2)(get_global_id(0), get_global_id(1)), tcolor);
 }
 

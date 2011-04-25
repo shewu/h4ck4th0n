@@ -122,6 +122,10 @@ void initVideo()
 			HEIGHT = 480;
 		}
 	}
+
+	WIDTH = ALIGN(WIDTH);
+	HEIGHT = ALIGN(HEIGHT);
+
 	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	SDL_ShowCursor(false);
 	SDL_WM_GrabInput(SDL_GRAB_ON);

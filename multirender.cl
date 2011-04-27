@@ -59,12 +59,12 @@ float castRay(
 
 __kernel void 
 render(
-		float x, 
-		float y, 
-		float z, 
-		float xdir, 
-		float ydir, 
-		float zdir, 
+		float xx, 
+		float yy, 
+		float zz, 
+		float xdirr, 
+		float ydirr, 
+		float zdirr, 
 		int obstacles, 
 		__constant float* obspoints, 
 		__constant unsigned char* obscolor, 
@@ -85,14 +85,13 @@ render(
 		int offset
 	) {
 	float4 pcolor = (float4)(0, 0, 0, 0);
-	for (int xaa = 0; xaa < 4; xaa++) for (int yaa = 0; yaa < 4; yaa++)
-	float nxdir = xdir+((4*get_global_id(0)+xaa-(4*WIDTH-1)/2.0)/((float)4*HEIGHT-1)*ydir);
-	float nydir = ydir-((4*get_global_id(0)+xaa-(4*WIDTH-1)/2.0)/((float)4*HEIGHT-1)*xdir);
-	xdir = nxdir;
-	ydir = nydir;
-	zdir += (4*get_global_id(1)+offset+yaa-(4*HEIGHT-1)/2.0)/((float)4*HEIGHT-1);
+	for (int xaa = 0; xaa < AA; xaa++) for (int yaa = 0; yaa < AA; yaa++) {
+	float x = xx, y = yy, z = zz;
+	float xdir = xdirr + ((AA * get_global_id(0) + xaa - (AA * WIDTH - 1) / 2.0) / ((float) AA * HEIGHT - 1) * ydirr);
+	float ydir = ydirr - ((AA * get_global_id(0) + xaa - (AA * WIDTH - 1) / 2.0) / ((float) AA * HEIGHT - 1) * xdirr);
+	float zdir = zdirr + (AA * (get_global_id(1) + offset) + yaa - (AA * HEIGHT - 1) / 2.0) / ((float) AA * HEIGHT - 1);
 	
-	float4 tcolor = (float4)(0, 0, 0, 0);
+	float4 tcolor = (float4) (0, 0, 0, 0);
 	float mult = 1;
 	for (int s = 0; s < 6; s++) {
 		int obstacle = -1;
@@ -125,6 +124,8 @@ render(
 			normal = (float4)(0, 0, 1, 0);
 			when = -z/zdir;
 			hit = true;
+			//FLOOR REFLECTION!!!
+			specular = true;
 		}
 		when *= (1-EPS);
 		if (hit) {
@@ -163,6 +164,6 @@ render(
 	}
 	pcolor += tcolor;
 	}	
-	write_imagef(im, (int2)(get_global_id(0), get_global_id(1)), pcolor/4.0);
+	write_imagef(im, (int2)(get_global_id(0), get_global_id(1)), pcolor/(AA * AA));
 }
 

@@ -19,4 +19,6 @@
 
 #define ALSRCS 32
 
+#define AA 2
+
 #endif

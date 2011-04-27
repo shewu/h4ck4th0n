@@ -26,20 +26,21 @@ void initGL() {
 	cl_context_properties props[7] = { CL_CONTEXT_PLATFORM, (cl_context_properties)(platforms[0])(), CL_GLX_DISPLAY_KHR, (intptr_t)glXGetCurrentDisplay(), CL_GL_CONTEXT_KHR, (intptr_t)glXGetCurrentContext(), 0 };
 	context = cl::Context(CL_DEVICE_TYPE_GPU, props, NULL, NULL, NULL);
 	devices = context.getInfo<CL_CONTEXT_DEVICES>();
-	
+	if (devices.size() <=0) {
+		cout << "No OpenCL devices found. Quitting." << endl;
+		exit(1);
+	}
 	string clCode;
 	{
 		ifstream code("render.cl");
 		clCode = string((std::istreambuf_iterator<char>(code)), std::istreambuf_iterator<char>());
 	}
-	
 	cl::Program::Sources clSource(1, pair<const char*, int>(clCode.c_str(), clCode.length()+1));
 	program = cl::Program(context, clSource);
 	if (program.build(devices, "-I.")) {
 		cout << program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(devices[0]) << endl;
 		exit(1);
 	}
-	
 	glViewport(0, 0, WIDTH, HEIGHT);
 	glOrtho(-1, 1, -1, 1, -1, 1);
 	

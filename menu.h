@@ -23,6 +23,8 @@ class menuitem {
 		virtual void draw(bool selected, float x1, float y1, float width, float height, unsigned char alpha);
 		virtual void drawAsActive(unsigned char alpha);
 		virtual bool shouldMenuBeDrawn();
+		virtual void onSelect();
+		virtual void onDeselect();
 	protected:
 		char *name;
 		
@@ -128,9 +130,11 @@ class slidermenuitem : public menuitem {
 		virtual ~slidermenuitem();
 		virtual void key_input_non_active(int key);
 		bool get_state();
+		virtual bool activate();
 		virtual void draw(bool,float,float,float,float,unsigned char);
+		virtual void onDeselect();
 	private:
 		char** states;
-		int curstate, len;
+		int curstate, len, newcurstate;
 		void (*action)(int);
 };

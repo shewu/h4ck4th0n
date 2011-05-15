@@ -15,7 +15,7 @@
 
 using namespace std;
 
-SDL_Surface *screen;
+SDL_Surface* screen;
 SocketConnection* sc;
 World world;
 float angle;
@@ -31,9 +31,13 @@ bool NORAPE;
 #endif
 
 void quit() {
-	char q = 0;
-	sc->add(&q, 1);
-	sc->send();
+	// check for null pointers!
+	if(sc)
+	{
+		char q = 0;
+		sc->add(&q, 1);
+		sc->send();
+	}
 	exit(0);
 }
 
@@ -56,6 +60,8 @@ bool validator_test(char *a) {
 	return a[0] == 'a';
 }
 
+char * state [] = {(char*)"abc", (char*)"bad", (char*)"cat!"};
+
 void initMenus()
 {
 	mainmenu = new menu();
@@ -68,7 +74,9 @@ void initMenus()
 
 	mainmenu->add_menuitem(new submenuitem(menu1, (char*)"sub menu 1 :)"));
 	mainmenu->add_menuitem(new submenuitem(menu2, (char*)"sub menu 2 :)"));
-	mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with a", (char *)"Enter stuff", (char *)"Stuff"));
+//	char * state [] = {(char*)"abc", (char*)"bad", (char*)"cat!"};
+	mainmenu->add_menuitem(new slidermenuitem((char*)"Slider!", state, 3, 0, NULL));
+	//mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with a", (char *)"Enter stuff", (char *)"Stuff"));
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
 	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
 }
@@ -114,6 +122,10 @@ void initVideo()
 			HEIGHT = 480;
 		}
 	}
+
+	WIDTH = ALIGN(WIDTH);
+	HEIGHT = ALIGN(HEIGHT);
+
 	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	SDL_ShowCursor(false);
 	SDL_WM_GrabInput(SDL_GRAB_ON);
@@ -256,7 +268,7 @@ int main(int argc, char* argv[])
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
-				case SDL_KEYDOWN:
+				case SDL_KEYUP:
 				{
 					if(event.key.keysym.sym == SDLK_ESCAPE) {
 						if (mainmenu->is_active()) {
@@ -293,7 +305,7 @@ int main(int argc, char* argv[])
 		char buf[5];
 		*((int*)buf) = htonl(*reinterpret_cast<int*>(&angle));
 		buf[4] = 0;
-		if (!mainmenu->is_active())
+		if(!mainmenu->is_active())
 		{
 			if (keystate[SDLK_a]) buf[4] ^= 1;
 			if (keystate[SDLK_d]) buf[4] ^= 2;
@@ -316,22 +328,8 @@ int main(int argc, char* argv[])
 		if ((++count)%100 == 0) {
 			int time = SDL_GetTicks();
 			float fps = 100000./(time - oldTime);
-			printf("\b\b\b\b\b\b\b\b\b");
-			if(fps < 10) {
-				cout << " ";
-			}
-			if(fps < 100) {
-				cout << " ";
-			}
-			if(fps < 1000) {
-				cout << " ";
-			}
-			if(fps < 10000) {
-				cout << " ";
-			}
-			if(fps < 100000) {
-				cout << " ";
-			}
+			printf("\r");
+			cout.width(6);
 			cout << (int)fps << "fps" << flush;
 			oldTime = time;
 		}

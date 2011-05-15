@@ -21,6 +21,10 @@ bool menu::is_active() {
 
 void menu::set_active(bool a) {
 	is_menu_active = a;
+	if(a)
+		menuitems[current_index]->onSelect();
+	else
+		menuitems[current_index]->onDeselect();
 }
 
 void menu::setAppearance(bool a, float b, float c, float d, float e) {
@@ -44,22 +48,27 @@ void menu::key_input(int key) {
 	}
 
 	if(key == MENU_KEY_UP) {
+		menuitems[current_index]->onDeselect();
 		if(current_index == 0)
 			current_index = menuitems.size() - 1;
 		else
 			current_index--;
+		menuitems[current_index]->onSelect();
 	}
 	else if(key == MENU_KEY_DOWN) {
+		menuitems[current_index]->onDeselect();
 		if(current_index == menuitems.size() - 1)
 			current_index = 0;
 		else
 			current_index++;
+		menuitems[current_index]->onSelect();
 	}
 	else if(key == MENU_KEY_ENTER) {
 		menuitem *item = menuitems[current_index];
 		is_item_active = item->activate();
 	}
 	else if(key == MENU_KEY_BACK) {
+		menuitems[current_index]->onDeselect();
 		is_menu_active = false;
 	}
 	else {

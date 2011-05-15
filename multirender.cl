@@ -59,12 +59,12 @@ float castRay(
 
 __kernel void 
 render(
-		float x, 
-		float y, 
-		float z, 
-		float xdir, 
-		float ydir, 
-		float zdir, 
+		float xx, 
+		float yy, 
+		float zz, 
+		float xdirr, 
+		float ydirr, 
+		float zdirr, 
 		int obstacles, 
 		__constant float* obspoints, 
 		__constant unsigned char* obscolor, 
@@ -81,15 +81,17 @@ render(
 		float minX,
 		float maxX,
 		float minY,
-		float maxY
+		float maxY,
+		int offset
 	) {
-	float nxdir = xdir+((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*ydir);
-	float nydir = ydir-((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*xdir);
-	xdir = nxdir;
-	ydir = nydir;
-	zdir += (get_global_id(1)-(HEIGHT-1)/2.0)/((float)HEIGHT-1);
+	float4 pcolor = (float4)(0, 0, 0, 0);
+	for (int xaa = 0; xaa < AA; xaa++) for (int yaa = 0; yaa < AA; yaa++) {
+	float x = xx, y = yy, z = zz;
+	float xdir = xdirr + ((AA * get_global_id(0) + xaa - (AA * WIDTH - 1) / 2.0) / ((float) AA * HEIGHT - 1) * ydirr);
+	float ydir = ydirr - ((AA * get_global_id(0) + xaa - (AA * WIDTH - 1) / 2.0) / ((float) AA * HEIGHT - 1) * xdirr);
+	float zdir = zdirr + (AA * (get_global_id(1) + offset) + yaa - (AA * HEIGHT - 1) / 2.0) / ((float) AA * HEIGHT - 1);
 	
-	float4 tcolor = (float4)(0, 0, 0, 0);
+	float4 tcolor = (float4) (0, 0, 0, 0);
 	float mult = 1;
 	for (int s = 0; s < 6; s++) {
 		int obstacle = -1;
@@ -102,7 +104,6 @@ render(
 		float4 dir = normalize((float4)(xdir, ydir, zdir, 0));
 		bool hit = false;
 		bool specular = false;
-
 		if (obstacle != -1) {
 			ccolor = (float4)(obscolor[4*obstacle]/255.0, obscolor[4*obstacle+1]/255.0, obscolor[4*obstacle+2]/255.0, obscolor[4*obstacle+3]/255.0);
 			normal = normalize((float4)(obspoints[4*obstacle+1]-obspoints[4*obstacle+3], obspoints[4*obstacle+2]-obspoints[4*obstacle], 0, 0));
@@ -123,6 +124,8 @@ render(
 			normal = (float4)(0, 0, 1, 0);
 			when = -z/zdir;
 			hit = true;
+			//FLOOR REFLECTION!!!
+			specular = true;
 		}
 		when *= (1-EPS);
 		if (hit) {
@@ -159,7 +162,8 @@ render(
 		ydir = nextdir.y;
 		zdir = nextdir.z;
 	}
-	
-	write_imagef(im, (int2)(get_global_id(0), get_global_id(1)), tcolor);
+	pcolor += tcolor;
+	}	
+	write_imagef(im, (int2)(get_global_id(0), get_global_id(1)), pcolor/(AA * AA));
 }
 

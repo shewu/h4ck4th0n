@@ -1,10 +1,10 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#define FRICTION 0.2
-#define KEYPRESS_ACCELERATION 4.0f
+#define FRICTION 0.3
+#define KEYPRESS_ACCELERATION 6.0f
 #define DEATH_RATE .05
-#define MAX_DEPTH 100
+#define MAX_DEPTH 200
 #define EPS .000001
 #define MAX_EVENTS 10
 #define SPAWN_TIME 3
@@ -18,5 +18,7 @@
 #define TIMEOUT 5
 
 #define ALSRCS 32
+
+#define AA 2
 
 #endif

@@ -187,13 +187,18 @@ void togglemenuitem::draw(bool selected, float x, float y, float width, float he
 	}
 }
 
-#define slider_left		0.15f
+#define slider_left		0.25f
 #define slider_right		0.90f
 #define slider_slide_width	0.03f
 #define slider_slide_height	0.47f
 #define slider_tick_top		0.1f
 #define slider_tick_bottom	0.5f
 #define slider_line_height	0.3f
+#define slider_text_top		0.6f
+#define slider_text_bottom	0.9f
+#define slider_text_name_top	0.1f
+#define slider_text_name_bottom	0.4f
+#define slider_text_name_left	button_left + 0.02f
 
 void slidermenuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
 	glColor4ub(0,0,0,alpha);
@@ -219,5 +224,29 @@ void slidermenuitem::draw(bool selected, float x, float y, float width, float he
 	glVertex3f(rectx1, recty2, 0.0f);
 	glVertex3f(rectx1 + slider_slide_width * width, recty2, 0.0f);
 	glVertex3f(rectx1 + slider_slide_width * width, recty1, 0.0f);
+	if(curstate != newcurstate) {
+		glColor4ub(selected_r,selected_g,selected_b,50);
+		rectx1 = x + width * ((slider_right * (float)newcurstate + slider_left * (float)(len-1-newcurstate))/(float)(len-1) - 0.5f * slider_slide_width);
+		glVertex3f(rectx1, recty1, 0.0f);
+		glVertex3f(rectx1, recty2, 0.0f);
+		glVertex3f(rectx1 + slider_slide_width * width, recty2, 0.0f);
+		glVertex3f(rectx1 + slider_slide_width * width, recty1, 0.0f);
+	}
 	glEnd();
+
+	glColor4ub(0,0,0,255);
+	for(int i = 0; i < len; i++) {
+		//printf("\n\ni = %d\n", i);
+		float tickx = x + width*(slider_right*(float)i + slider_left*(float)(len-1-i)) / (float)(len-1);
+		textquad tq(tickx, y+slider_text_top*height, 0.0f,
+				tickx, y+slider_text_bottom*height, 0.0f,
+				(slider_text_bottom-slider_text_top)*height, 0.0f, 0.0f);
+		//printf("meh\n");
+		//printf("%s\n", states[i]);
+		draw_str_center(tq, states[i]);
+	}
+	textquad tq(    slider_text_name_left * width, y+slider_text_name_top*height, 0.0f,
+			slider_text_name_left * width, y+slider_text_name_bottom*height, 0.0f,
+			(slider_text_name_bottom-slider_text_name_top)*height, 0.0f, 0.0f);
+	draw_str(tq, name);
 }

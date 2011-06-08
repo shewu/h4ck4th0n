@@ -33,33 +33,6 @@ void initGL() {
 	quad = gluNewQuadric();
 	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 
-	string vertexCode;
-	{
-		ifstream code("vertex.glsl");
-		vertexCode = string((std::istreambuf_iterator<char>(code)), std::istreambuf_iterator<char>());
-	}
-	int vlength = vertexCode.length();
-	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	const char* vc = vertexCode.c_str();
-	glShaderSource(vertexShader, 1, &vc, &vlength);
-	glCompileShader(vertexShader);
-	
-	string fragmentCode;
-	{
-		ifstream code("fragment.glsl");
-		fragmentCode = string((std::istreambuf_iterator<char>(code)), std::istreambuf_iterator<char>());
-	}
-	int flength = fragmentCode.length();
-	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	const char* fc = fragmentCode.c_str();
-	glShaderSource(fragmentShader, 1, &fc, &flength);
-	glCompileShader(fragmentShader);
-	
-	program = glCreateProgram();
-	glAttachShader(program, vertexShader);
-	glAttachShader(program, fragmentShader);
-	glLinkProgram(program);
-
 	GLfloat light_ambient[] = { 0.6, 0.6, 0.6, 1.0 };
 	GLfloat light_diffuse[] = { 0.4, 0.4, 0.4, 1.0 };
 	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };

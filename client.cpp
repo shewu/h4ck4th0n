@@ -167,10 +167,10 @@ int main(int argc, char* argv[])
 			printf("Usage:\n"
 					"-h to show this message\n"
 					"-d [width] [height] to specify viewport dimensions\n"
-#ifdef UNHOLY
-					"-norape to avoid antialiasing"
-#endif
 					"\twhere [width] and [height] are multiples of 16\n"
+#ifdef UNHOLY
+					"-norape to avoid antialiasing\n"
+#endif
 					"-i [ip] to connect to specified server\n");
 			exit(0);
 		}

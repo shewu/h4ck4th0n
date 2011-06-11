@@ -25,7 +25,11 @@ map<int, ClientCommunicator> clients;
 
 timeval tim;
 
+#ifdef __APPLE__
+int main(int argc, char** argv) {
+#else
 int main() {
+#endif
 	if(FRICTION < 0.0f) {
 		cout << "your friction is negative and will cause the game to fail\n";
 		exit(-1);

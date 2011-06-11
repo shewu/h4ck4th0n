@@ -43,3 +43,6 @@ clean:
 love:
 	echo 'In Soviet Russia, love makes you!'
 
+macserver:
+	g++ -O2 -g clcomm.cpp world.cpp socket.cpp object.cpp vec.cpp simulate.cpp SDLMain.m -I/Library/Frameworks/SDL.framework/Headers -framework SDL -framework Cocoa -o macserver
+

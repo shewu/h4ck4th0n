@@ -47,5 +47,5 @@ macserver:
 	g++ -O2 -g clcomm.cpp world.cpp socket.cpp object.cpp vec.cpp simulate.cpp SDLMain.m -I/Library/Frameworks/SDL.framework/Headers -framework SDL -framework Cocoa -o macserver
 
 mac:
- 	g++ -O2 client.cpp font.cpp menu.cpp menudraw.cpp menuitem.cpp object.cpp unholyrender.cpp socket.cpp vec.cpp world.cpp SDLMain.m -framework SDL -framework OpenGL -framework Cocoa -framework GLUT -I/Library/Frameworks/SDL.framework/Headers -o unholyballs
+	g++ -O2 client.cpp font.cpp menu.cpp menudraw.cpp menuitem.cpp object.cpp unholyrender.cpp socket.cpp vec.cpp world.cpp SDLMain.m -framework SDL -framework OpenGL -framework Cocoa -framework GLUT -I/Library/Frameworks/SDL.framework/Headers -o unholyballs
 

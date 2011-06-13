@@ -1,10 +1,17 @@
 #include "render.h"
+#ifndef __APPLE__
 #include <GL/glew.h>
 #include <GL/glu.h>
+#else
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#endif
 #include <iostream>
 #include <fstream>
 #include <SDL/SDL.h>
+#ifndef __APPLE__
 #include <IL/il.h>
+#endif
 #include <cmath>
 #include "constants.h"
 #include "client.h"
@@ -19,12 +26,14 @@ void drawObjects(void);
 void drawWalls(void);
 
 void initGL() {
+#ifndef __APPLE__
 	GLenum err = glewInit();
 	if(err != GLEW_OK)
 	{
 		cout << "glewInit failed; " << glewGetErrorString(err) << "\n";
 		exit(-1);
 	}
+#endif
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();

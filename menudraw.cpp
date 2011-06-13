@@ -1,7 +1,11 @@
 #include "menu.h"
 #include "font.h"
 #include "render.h"
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 
 #define button_left		0.05f
 #define button_top		0.05f

@@ -2,10 +2,16 @@
 #include <iostream>
 #include <fstream>
 #include <SDL/SDL.h>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <OpenCL/opencl.h>
+#else
 #include <GL/glx.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <CL/cl.hpp>
+#endif
+#include "cl.hpp"
 #include <cmath>
 #include "client.h"
 

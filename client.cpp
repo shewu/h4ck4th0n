@@ -3,8 +3,10 @@
 #include "render.h"
 #include "hack.h"
 #include <SDL/SDL.h>
+#ifndef __APPLE__
 #include <AL/alut.h>
 #include <AL/al.h>
+#endif
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -23,7 +25,7 @@ int myId;
 unsigned int albuf[3], alsrcs[ALSRCS];
 int WIDTH = -1;
 int HEIGHT = -1;
-char* ipaddy = (char*)"127.0.0.1";
+char* ipaddy = (char*)"18.248.6.168";
 menu* mainmenu;
 
 #ifdef UNHOLY
@@ -138,6 +140,7 @@ void initVideo()
 
 void initSound()
 {
+#ifndef __APPLE__
 	ALCdevice* dev;
 	ALCcontext* con;
 	
@@ -154,6 +157,7 @@ void initSound()
 	albuf[1] = alutCreateBufferFromFile("sounds/splat2.wav");
 	albuf[2] = alutCreateBufferFromFile("sounds/ding.wav");
 	alGenSources(ALSRCS, alsrcs);
+#endif
 }
 
 int main(int argc, char* argv[])
@@ -240,6 +244,7 @@ int main(int argc, char* argv[])
 		int status;
 		while ((status = world.receiveObjects(sc, myId)) != -1) {
 			if (status == 0) continue;
+#ifndef __APPLE__
 			for(vector<pair<char, Vector2D> >::iterator it = world.sounds.begin(); it != world.sounds.end(); it++) {
 				int src = -1;
 				for (int s = 0; s < ALSRCS; s++) {
@@ -263,6 +268,7 @@ int main(int argc, char* argv[])
 					alSourcePlay(alsrcs[src]);
 				}
 			}
+#endif
 		}
 		
 		SDL_Event event;
@@ -315,12 +321,14 @@ int main(int argc, char* argv[])
 		sc->add(buf, 5);
 		sc->send();
 		
+#ifndef __APPLE__
 		ALfloat alpos[] = { world.objects[myId].p.x, world.objects[myId].p.y, 0 };
 		ALfloat alvel[] = { world.objects[myId].v.x, world.objects[myId].v.y, 0 };
 		ALfloat alori[] = { 0.0, cos(angle), sin(angle), 0.0, 1.0, 0.0 };
 		alListenerfv(AL_POSITION, alpos);
 		alListenerfv(AL_VELOCITY, alvel);
 		alListenerfv(AL_ORIENTATION, alori);
+#endif
 		
 		render();
 		if (mainmenu->is_active()) mainmenu->drawMenu();

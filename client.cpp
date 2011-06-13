@@ -79,7 +79,9 @@ void initMenus()
 //	char * state [] = {(char*)"abc", (char*)"bad", (char*)"cat!"};
 	mainmenu->add_menuitem(new slidermenuitem((char*)"Slider!", state, 3, 0, NULL));
 	//mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with a", (char *)"Enter stuff", (char *)"Stuff"));
+#ifndef __APPLE__
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
+#endif
 	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
 }
 

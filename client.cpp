@@ -206,7 +206,6 @@ int main(int argc, char* argv[])
 	initSound();
 	initMenus();
 	init_font();
-	SDL_Thread *thread;
 	cout << "Starting client" << endl;
 	
 	addrinfo hints, *res;

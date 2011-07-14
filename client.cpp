@@ -25,7 +25,7 @@ int myId;
 unsigned int albuf[3], alsrcs[ALSRCS];
 int WIDTH = -1;
 int HEIGHT = -1;
-char* ipaddy = (char*)"18.248.6.168";
+char* ipaddy = (char*)"127.0.0.1";
 menu* mainmenu;
 
 #ifdef UNHOLY
@@ -51,14 +51,16 @@ bool action_quit()
 
 void action_toggle_fullscreen(bool b)
 {
-	if(b)
+	if(b) {
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
-	else
+	} else {
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+	}
 	return;
 }
 
 bool validator_test(char *a) {
+	printf("entered text = %s\n", a);
 	return a[0] == 'a';
 }
 
@@ -74,11 +76,11 @@ void initMenus()
 	menu2->add_menuitem(new submenuitem(new menu(), (char*)"menu 2 item 1"));
 	menu2->add_menuitem(new submenuitem(new menu(), (char*)"menu 2 item 2"));
 
-	mainmenu->add_menuitem(new submenuitem(menu1, (char*)"sub menu 1 :)"));
-	mainmenu->add_menuitem(new submenuitem(menu2, (char*)"sub menu 2 :)"));
+	//mainmenu->add_menuitem(new submenuitem(menu1, (char*)"sub menu 1 :)"));
+	//mainmenu->add_menuitem(new submenuitem(menu2, (char*)"sub menu 2 :)"));
 //	char * state [] = {(char*)"abc", (char*)"bad", (char*)"cat!"};
 	mainmenu->add_menuitem(new slidermenuitem((char*)"Slider!", state, 3, 0, NULL));
-	//mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with a", (char *)"Enter stuff", (char *)"Stuff"));
+	mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with a", (char *)"Enter stuff", (char *)"Stuff"));
 #ifndef __APPLE__
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
 #endif

@@ -7,28 +7,28 @@
 #include <GL/gl.h>
 #endif
 
-#define button_left		0.05f
-#define button_top		0.05f
-#define button_width		(1.0f - 2.0f * button_left) //0.75f
-#define button_height		0.15f
-#define button_separation	0.05f
-#define font_size		0.05f
-#define button_text_padding	0.055f
+const float button_left = 0.05f;
+const float button_top = 0.05f;
+const float button_width = 1.0f - 2.0f * button_left;
+const float button_height = 0.15f;
+const float button_separation = 0.05f;
+const float font_size = 0.05f;
+const float button_text_padding = 0.055f;
 
-#define toggle_dist_from_back	0.2f
+const float toggle_dist_from_back = 0.2f;
 
-#define input_left		0.15f
-#define input_right		0.85f
-#define input_top		0.3f
-#define input_bottom		0.7f
-#define input_title_left	0.02f
-#define input_title_top		0.02f
-#define input_textfield_left	0.02f
-#define input_textfield_top	0.09f
-#define input_textfield_width	0.66f
-#define input_textfield_height	0.07f
+const float input_left = 0.15f;
+const float input_right = 0.85f;
+const float input_top = 0.3f;
+const float input_bottom = 0.7f;
+const float input_title_left = 0.02f;
+const float input_title_top = 0.02f;
+const float input_textfield_left = 0.02f;
+const float input_textfield_top = 0.09f;
+const float input_textfield_width = 0.66f;
+const float input_textfield_height = 0.07f;
 
-#define menu_alpha 200
+const int menu_alpha = 200;
 
 void menu::drawMenu() {
 	glMatrixMode(GL_PROJECTION);

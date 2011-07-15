@@ -29,9 +29,51 @@ GLuint texture;
 void initGL() {
 	vector<cl::Platform> platforms;
 	cl::Platform::get(&platforms);
-	cl_context_properties props[7] = { CL_CONTEXT_PLATFORM, (cl_context_properties)(platforms[0])(), CL_GLX_DISPLAY_KHR, (intptr_t)glXGetCurrentDisplay(), CL_GL_CONTEXT_KHR, (intptr_t)glXGetCurrentContext(), 0 };
+#ifdef __APPLE__
+	/* based on the Apple OpenCL documentation */
+	// declare memory to hold the device id
+	cl_device_id device_id;
+	
+	// ask OpenCL for exactly 1 GPU
+	cl_int err = clGetDeviceIDs(
+								NULL,				// platform ID
+								CL_DEVICE_TYPE_GPU,	// look only for GPUs
+								1,					// return an ID for only one GPU
+								&device_id,			// on return, the device ID
+								NULL);				// don't return the number of devices
+	
+	// make sure nothing went wrong
+	if (err != CL_SUCCESS) {
+		cout << "Something, somewhere went terribly wrong.\n";
+		exit(1);
+	}
+	
+	context = clCreateContext(
+							  0, 
+							  numDevices,	// the number of devices in the devices parameter
+							  &devices,		// a pointer to the list of device IDs from clGetDeviceIDs
+							  NULL,			// a pointer to an error notice callback function (if any)
+							  NULL,			// data to pass as a param to the callback function
+							  &err);		// on return, points to a result code
+	
+	// again, make sure nothing went wrong
+	if (err != CL_SUCCESS) {
+		cout << "Something, somewhere went terribly wrong.\n";
+		exit(1);
+	}
+#else
+	cl_context_properties props[7] = {
+		CL_CONTEXT_PLATFORM, 
+		(cl_context_properties)(platforms[0])(), 
+		CL_GLX_DISPLAY_KHR, 
+		(intptr_t)glXGetCurrentDisplay(), 
+		CL_GL_CONTEXT_KHR, 
+		(intptr_t)glXGetCurrentContext(), 
+		0 
+	};
 	context = cl::Context(CL_DEVICE_TYPE_GPU, props, NULL, NULL, NULL);
 	devices = context.getInfo<CL_CONTEXT_DEVICES>();
+#endif
 	if (devices.size() <=0) {
 		cout << "No OpenCL devices found. Quitting." << endl;
 		exit(1);

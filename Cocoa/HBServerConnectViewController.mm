@@ -22,7 +22,11 @@
 
 - (IBAction)connectToServer:(id)sender
 {
-	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[ipField stringValue] forKey:@"ip"];
+	NSString* theIP = [ipField stringValue];
+	if (!theIP || [theIP isEqualToString:@""]) {
+		theIP = @"127.0.0.1";
+	}
+	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:theIP forKey:@"ip"];
 	[[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"HBReceivedIPNotification" object:self userInfo:userInfo]];
 }
 

@@ -17,14 +17,15 @@
 
 using namespace std;
 
+int WIDTH = -1;
+int HEIGHT = -1;
+
 SDL_Surface* screen;
 SocketConnection* sc;
 World world;
 float angle;
 int myId;
 unsigned int albuf[3], alsrcs[ALSRCS];
-int WIDTH = -1;
-int HEIGHT = -1;
 char* ipaddy = (char*)"18.248.6.168";
 menu* mainmenu;
 

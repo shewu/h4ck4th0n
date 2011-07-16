@@ -1,16 +1,23 @@
 Holy Balls: The Game
-Version 0.3, now with gameplay and a menu!
+A free and open source capture-the-flag game.
+Version 0.4, now with gameplay and a menu *and* Mac OS X support!
 
-Requirements:
-* Hardware
-  * unholyballs requires at least a modern integrated graphics chipset
-  * holyballs require at least an ATi Mobility Radeon HD 4670 to run at 640x480 at 60fps
-* Software
-  * OpenAL is required for both versions
-  * OpenGL is required for both versions
-  * OpenCL is required only for holyballs
+===Game===
 
-To build:
+==Requirements==
+* Linux
+  * Hardware
+    * unholyballs requires at least a modern integrated graphics chipset
+    * holyballs require at least an ATi Mobility Radeon HD 4670 to run at 640x480 at 60fps
+  * Software
+	* SDL is required for both versions
+    * OpenAL is required for both versions
+    * OpenGL and GLEW is required for both versions
+    * OpenCL is required only for holyballs
+* The Mac version requires an Intel Mac running Mac OS X 10.5 Leopard or higher.
+
+==Building==
+* Linux
 make
 	see `make all'
 
@@ -26,7 +33,9 @@ make unholyballs
 make all
 	will build all three binaries
 
-To run:
+* Mac: open the .xcodeproj file in Xcode and hit the build button.
+
+==Run==
 -h
 	to display help message
 
@@ -39,7 +48,9 @@ To run:
 -f
 	to play in fullscreen; will not work if specified resolution is greater than screen resolution
 
-Controls (Game):
+* Mac: double click on the .app to run or click the Run or Build and Run button in Xcode
+
+==Playing==
 Mouse: Turn
 W: Accelerate forwards
 A: Accelerate left
@@ -47,16 +58,24 @@ S: Accelerate backwards
 D: Accelerate right
 Escape: Bring up menu
 
-Controls (Editor)
+==Credits==
+* Sounds from freesound.org
+  * bounce sound from user dreamoron
+  * ding sound from user acclivity
+  * splat sound from user benhillyard
+
+===Map Editor===
+
+==Requirements==
+* Hardware
+  * Anything that runs a JVM, really
+* Software
+  * Something with a recent-ish JVM
+
+==Controls==
 WASD: Move cursor
 P: Write to file "output" on disk
 K: Toggle Sticky Wall mode
 X: Toggle Delete mode
 Space: Toggle Edit mode
-
-Credits:
-* Sounds from freesound.org
-  * bounce sound from user dreamoron
-  * ding sound from user acclivity
-  * splat sound from user benhillyard
 

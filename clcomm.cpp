@@ -5,8 +5,6 @@
 #include <netinet/in.h>
 #include <fcntl.h>
 #include <netdb.h>
-#include <vector>
-#include <map>
 #include <cstring>
 #include <sys/time.h>
 #include <ctime>

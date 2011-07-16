@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'Holy Balls' target in the 'Holy Balls' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif

@@ -1,6 +1,8 @@
 #include <cstring>
 #include <cstdio>
 
+#include "ServerConnectViewController.h"
+
 extern char* ipaddy;
 
 static bool menuGetIP(char* a) {
@@ -16,7 +18,7 @@ static void menuQuit() {
 	exit(0);
 }
 
-ServerConnectViewConroller::ServerConnectViewConroller() {
+ServerConnectViewController::ServerConnectViewController() {
 	finishedView = false;
 
 	serverConnectMenu = new menu();
@@ -26,11 +28,11 @@ ServerConnectViewConroller::ServerConnectViewConroller() {
 	serverConnectMenu->set_active(true);
 }
 
-ServerConnectViewConroller::~ServerConnectViewConroller() {
+ServerConnectViewController::~ServerConnectViewController() {
 	delete serverConnectMenu;
 }
 
-bool ServerConnectViewConroller::didFinishView() {
+bool ServerConnectViewController::didFinishView() {
 	return finishedView;
 }
 

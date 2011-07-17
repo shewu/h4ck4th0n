@@ -3,6 +3,9 @@
  * TODO: separate out ViewController tasks and View tasks.
  */
 
+#ifndef HB_VIEW_CONTROLLER
+#define HB_VIEW_CONTROLLER
+
 class HBViewController {
 	public:
 		/* process is for non-drawing related tasks that need to be done every frame. */
@@ -10,4 +13,6 @@ class HBViewController {
 		/* render is for all drawing-related tasks done each frame. */
 		virtual void render() = 0;
 };
+
+#endif
 

@@ -80,8 +80,8 @@ int main(int argc, char* argv[]) {
 		else if (!strcmp(argv[i], "-d")) {
 			// round up to next highest multiple of 16 if not already a multiple
 			// of 16
-			WIDTH = ALIGN(atoi(argv[i+1]));
-			HEIGHT = ALIGN(atoi(argv[i+2]));
+			//WIDTH = ALIGN(atoi(argv[i+1]));
+			//HEIGHT = ALIGN(atoi(argv[i+2]));
 			cout << "Playing at " << WIDTH << "x" << HEIGHT << "\n";
 		}
 		else if (!strcmp(argv[i], "-i")) {
@@ -102,23 +102,22 @@ int main(int argc, char* argv[]) {
 			svc->process();
 			svc->render();
 		}
+		delete svc;
 		
 		ServerConnectViewController* scvc = new ServerConnectViewController();
 		while (!scvc->didFinishView()) {
 			scvc->process();
 			scvc->render();
 		}
+		delete scvc;
 
 		GameViewController* gvc = new GameViewController();
 		while (!gvc->didFinishView()) {
 			gvc->process();
 			gvc->render();
 		}
+		delete gvc;
 	}
-
-	delete svc;
-	delete scvc;
-	delete gvc;
 
 	return 0;
 }

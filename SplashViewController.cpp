@@ -1,21 +1,28 @@
 #include <cstring>
 #include <cstdio>
+#ifndef __APPLE__
+#include <GL/glew.h>
+#include <GL/glu.h>
+#endif
 
-static void menuFinishedView() {
-	finishedView = true;
+#include "SplashViewController.h"
+
+bool SplashViewController::menuFinishedView() {
+	return (finishedView = true);
 }
 
-static void menuQuit() {
+static bool menuQuit() {
 	printf("Exiting\n");
 	exit(0);
+	return true;
 }
 
 SplashViewController::SplashViewController() {
 	finishedView = false;
 
 	splashMenu = new menu();
-	splashMenu->addmenuitem(new actionmenuitem(menuFinishedView, NULL, (char *)"Play Game"));
-	splashMenu->addmenuitem(new actionmenuitem(menuQuit, NULL, (char *)"Quit"));
+	splashMenu->add_menuitem(new actionmenuitem(&SplashViewController::menuFinishedView, NULL, (char *)"Play Game"));
+	splashMenu->add_menuitem(new actionmenuitem(menuQuit, NULL, (char *)"Quit"));
 
 	splashMenu->set_active(true);
 }

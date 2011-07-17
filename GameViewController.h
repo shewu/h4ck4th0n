@@ -24,9 +24,14 @@ class GameViewController : public HBViewController {
 		bool NORAPE;
 #endif
 		void initGL();
+		bool finishedView;
 
 	public:
 		GameViewController();
 		~GameViewController();
+
+		bool didFinishView();
+		void process();
+		void render();
 };
 

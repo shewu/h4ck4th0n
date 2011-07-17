@@ -1,3 +1,6 @@
+#ifndef __MENU_H__
+#define __MENU_H__
+
 #include <vector>
 #include <SDL/SDL.h>
 using namespace std;
@@ -138,3 +141,6 @@ class slidermenuitem : public menuitem {
 		int curstate, len, newcurstate;
 		void (*action)(int);
 };
+
+#endif
+

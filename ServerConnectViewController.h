@@ -2,14 +2,18 @@
 #include "font.h"
 #include "HBViewController.h"
 
-class ServerConnectViewConroller : public HBViewController {
+class ServerConnectViewController : public HBViewController {
 	private:
 		menu* serverConnectMenu;
 		bool finishedView;
+
 	public:
+		ServerConnectViewController();
+		~ServerConnectViewController();
+
 		bool didFinishView();
-		ServerConnectViewConroller();
-		~ServerConnectViewConroller();
+		void process();
+		void render();
 };
 
 

@@ -13,7 +13,8 @@ HOLY_BALLS_TARGET=holyballs
 MOLY_BALLS_TARGET=molyballs
 
 SERVER_OBJECTS=clcomm.o world.o socket.o object.o vec.o simulate.o
-UNHOLY_BALLS_OBJECTS=unholy.o unholyrender.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o
+#UNHOLY_BALLS_OBJECTS=unholy.o unholyrender.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o
+UNHOLY_BALLS_OBJECTS=newclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o GameView.o
 HOLY_BALLS_OBJECTS=client.o render.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o
 MOLY_BALLS_OBJECTS=client.o multirender.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o
 
@@ -32,6 +33,9 @@ $(MOLY_BALLS_TARGET): $(MOLY_BALLS_OBJECTS)
 	$(LD) -o $(MOLY_BALLS_TARGET) $(HOLY_LDFLAGS) $(MOLY_BALLS_OBJECTS)
 
 %.o: %.cpp *.h
+	$(CC) -c $(CCFLAGS) $<
+
+GameView.o: GameViewController.cpp GameViewController_render.cpp *.h
 	$(CC) -c $(CCFLAGS) $<
 
 unholy.o: client.cpp *.h

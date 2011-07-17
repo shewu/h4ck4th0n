@@ -35,6 +35,10 @@ void action_toggle_fullscreen(bool b) {
 	return;
 }
 
+void action_toggle_leave_game() {
+	finishedView = true;
+}
+
 bool validator_test(char *a) {
 	return a[0] == 'a';
 }
@@ -55,16 +59,8 @@ void initMenus() {
 	mainmenu = new menu();
 	menu *menu1 = new menu();
 	menu *menu2 = new menu();
-	menu1->add_menuitem(new submenuitem(new menu(), (char*)"menu 1 item 1"));
-	menu1->add_menuitem(new submenuitem(new menu(), (char*)"menu 1 item 2"));
-	menu2->add_menuitem(new submenuitem(new menu(), (char*)"menu 2 item 1"));
-	menu2->add_menuitem(new submenuitem(new menu(), (char*)"menu 2 item 2"));
 
-	mainmenu->add_menuitem(new submenuitem(menu1, (char*)"sub menu 1 :)"));
-	mainmenu->add_menuitem(new submenuitem(menu2, (char*)"sub menu 2 :)"));
-//	char * state [] = {(char*)"abc", (char*)"bad", (char*)"cat!"};
-	mainmenu->add_menuitem(new slidermenuitem((char*)"Slider!", state, 3, 0, NULL));
-	//mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with a", (char *)"Enter stuff", (char *)"Stuff"));
+	mainmenu->add_menuitem(new actionmenuitem(action_leave_game, NULL, (char *)"Leave Game"));
 #ifndef __APPLE__
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
 #endif
@@ -132,15 +128,21 @@ GameViewController::GameViewController() {
 	u[0] = ntohl(u[0]);
 	myId = -1;
 	angle = *reinterpret_cast<float*>(u);
-	
-	int count = 0, oldTime = SDL_GetTicks();
 }
 
 GameViewController::~GameViewController() {
+	delete sc;
+	delete mainmenu;
+}
+
+bool didFinishView() {
+	return finishedView;
 }
 
 void GameViewController::process() {
 	int status;
+	
+	int count = 0, oldTime = SDL_GetTicks();
 	while ((status = world.receiveObjects(sc, myId)) != -1) {
 		if (status == 0) continue;
 #ifndef __APPLE__
@@ -227,7 +229,7 @@ void GameViewController::process() {
 	}
 
 	int time = SDL_GetTicks();
-	if ((++count)%100 == 0) {
+	if (((++count)%=100) == 0) {
 		int time = SDL_GetTicks();
 		float fps = 100000./(time - oldTime);
 		printf("\r");

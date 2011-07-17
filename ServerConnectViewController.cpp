@@ -1,21 +1,7 @@
 #include <cstring>
 #include <cstdio>
 
-#include "menu.h"
-#include "font.h"
-#include "HBViewController.h"
-
 extern char* ipaddy;
-
-class ServerConnectViewConroller : public HBViewController {
-	private:
-		menu* serverConnectMenu;
-		bool finishedView;
-	public:
-		bool didFinishView();
-		ServerConnectViewConroller();
-		~ServerConnectViewConroller();
-};
 
 static bool menuGetIP(char* a) {
 	// note: strcmp returns 0 if equal

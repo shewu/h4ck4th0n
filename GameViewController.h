@@ -3,6 +3,7 @@
 #include <AL/al.h>
 #endif
 
+#include "HBViewController.h"
 #include "menu.h"
 #include "font.h"
 #include "hack.h"

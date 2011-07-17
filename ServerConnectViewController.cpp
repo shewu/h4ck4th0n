@@ -3,6 +3,7 @@
 
 #include "menu.h"
 #include "font.h"
+#include "HBViewController.h"
 
 extern char* ipaddy;
 

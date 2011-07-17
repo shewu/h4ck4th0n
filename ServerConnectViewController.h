@@ -5,7 +5,6 @@
 class ServerConnectViewController : public HBViewController {
 	private:
 		menu* serverConnectMenu;
-		bool finishedView;
 
 	public:
 		ServerConnectViewController();

@@ -4,6 +4,7 @@
 #include "ServerConnectViewController.h"
 
 extern char* ipaddy;
+static bool finishedView = false;
 
 static bool menuGetIP(char* a) {
 	// note: strcmp returns 0 if equal

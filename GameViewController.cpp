@@ -8,7 +8,7 @@
 
 #include "GameViewController.h"
 
-extern char* ipaddy;
+static void finishedView = false;
 
 void quit() {
 	// check for null pointers!
@@ -35,7 +35,7 @@ void action_toggle_fullscreen(bool b) {
 	return;
 }
 
-void action_toggle_leave_game() {
+static bool action_leave_game() {
 	finishedView = true;
 }
 
@@ -49,6 +49,7 @@ void initMenus() {
 	mainmenu = new menu();
 	//mainmenu->add_menuitem(new slidermenuitem((char*)"Slider!", state, 3, 0, NULL));
 	//mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with a", (char *)"Enter stuff", (char *)"Stuff"));
+	mainmenu->add_menuitem(new actionmenuitem(action_leave_game, NULL, (char *)"Quit"));
 #ifndef __APPLE__
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
 #endif

@@ -7,9 +7,7 @@
 
 #include "SplashViewController.h"
 
-bool SplashViewController::menuFinishedView() {
-	return (finishedView = true);
-}
+static bool finishedView = false;
 
 static bool menuQuit() {
 	printf("Exiting\n");
@@ -17,11 +15,15 @@ static bool menuQuit() {
 	return true;
 }
 
+static bool menuFinishedView() {
+	return finishedView = true;
+}
+
 SplashViewController::SplashViewController() {
 	finishedView = false;
 
 	splashMenu = new menu();
-	splashMenu->add_menuitem(new actionmenuitem(&SplashViewController::menuFinishedView, NULL, (char *)"Play Game"));
+	splashMenu->add_menuitem(new actionmenuitem(menuFinishedView, NULL, (char *)"Play Game"));
 	splashMenu->add_menuitem(new actionmenuitem(menuQuit, NULL, (char *)"Quit"));
 
 	splashMenu->set_active(true);

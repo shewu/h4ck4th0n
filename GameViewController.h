@@ -9,6 +9,7 @@
 #include "menu.h"
 #include "font.h"
 
+extern char* ipaddy;
 extern int WIDTH;
 extern int HEIGHT;
 
@@ -24,7 +25,6 @@ class GameViewController : public HBViewController {
 		bool NORAPE;
 #endif
 		void initGL();
-		bool finishedView;
 
 	public:
 		GameViewController();

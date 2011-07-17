@@ -10,7 +10,9 @@ extern char* ipaddy;
 class ServerConnectViewConroller : public HBViewController {
 	private:
 		menu* serverConnectMenu;
+		bool finishedView;
 	public:
+		bool didFinishView();
 		ServerConnectViewConroller();
 		~ServerConnectViewConroller();
 };
@@ -19,7 +21,7 @@ static bool menuGetIP(char* a) {
 	// note: strcmp returns 0 if equal
 	ipaddy = a;
 	printf("Entered IP = %s\n", a);
-	return strcmp(a, "");
+	return finishedView = strcmp(a, "");
 }
 
 static void menuQuit() {
@@ -29,6 +31,8 @@ static void menuQuit() {
 }
 
 ServerConnectViewConroller::ServerConnectViewConroller() {
+	finishedView = false;
+
 	serverConnectMenu = new menu();
 	serverConnectMenu->add_menuitem(new inputmenuitem(20, menuGetIP, (char *)"", (char *)"Must not be empty", (char *)"Enter Server IP Address", (char *)"Stuff"));
 	serverConnectMenu->add_menuitem(new actionmenuitem(menuQuit, NULL, (char *)"Quit"));
@@ -38,6 +42,10 @@ ServerConnectViewConroller::ServerConnectViewConroller() {
 
 ServerConnectViewConroller::~ServerConnectViewConroller() {
 	delete serverConnectMenu;
+}
+
+bool ServerConnectViewConroller::didFinishView() {
+	return finishedView;
 }
 
 void ServerConnectViewController::process() {

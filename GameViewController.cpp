@@ -1,40 +1,15 @@
 #include <iostream>
 #include <cstdlib>
 #include <SDL/SDL.h>
-#ifndef __APPLE__
-#include <AL/alut.h>
-#include <AL/al.h>
-#endif
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
 #include <cmath>
 
-#include "hack.h"
 #include "render.h"
-#include "menu.h"
-#include "font.h"
+#include "GameViewController.h"
 
 extern char* ipaddy;
-
-class GameViewController : public HBViewController {
-	private:
-		unsigned int albuf[3], alsrcs[ALSRCS];
-		SocketConnection* sc;
-		World world;
-		float angle;
-		int myId;
-		menu* mainmenu;
-#ifdef UNHOLY
-		bool NORAPE;
-#endif
-
-	public:
-		GameViewController();
-		~GameViewController();
-		void process();
-		void render();
-};
 
 void quit() {
 	// check for null pointers!
@@ -47,18 +22,17 @@ void quit() {
 	exit(0);
 }
 
-bool action_quit()
-{
+bool action_quit() {
 	quit();
 	return true;
 }
 
-void action_toggle_fullscreen(bool b)
-{
-	if(b)
+void action_toggle_fullscreen(bool b) {
+	if(b) {
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
-	else
+	} else {
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+	}
 	return;
 }
 
@@ -68,8 +42,7 @@ bool validator_test(char *a) {
 
 char * state [] = {(char*)"abc", (char*)"bad", (char*)"cat!"};
 
-void initMenus()
-{
+void initMenus() {
 	mainmenu = new menu();
 	//mainmenu->add_menuitem(new slidermenuitem((char*)"Slider!", state, 3, 0, NULL));
 	//mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with a", (char *)"Enter stuff", (char *)"Stuff"));
@@ -79,8 +52,7 @@ void initMenus()
 	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
 }
 
-void initMenus()
-{
+void initMenus() {
 	mainmenu = new menu();
 	menu *menu1 = new menu();
 	menu *menu2 = new menu();
@@ -100,8 +72,7 @@ void initMenus()
 	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
 }
 
-void initSound()
-{
+void initSound() {
 #ifndef __APPLE__
 	ALCdevice* dev;
 	ALCcontext* con;

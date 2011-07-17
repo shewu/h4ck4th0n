@@ -7,14 +7,11 @@
 extern char* ipaddy;
 
 class ServerConnectViewConroller : public HBViewController {
-	public:
+	private:
 		menu* serverConnectMenu;
+	public:
 		ServerConnectViewConroller();
 		~ServerConnectViewConroller();
-		/* tell the menu to draw. */
-		void process();
-		/* draw a black background for now. */
-		void render();
 };
 
 static bool menuGetIP(char* a) {

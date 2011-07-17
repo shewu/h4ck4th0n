@@ -35,8 +35,7 @@ bool NORAPE;
 
 void quit() {
 	// check for null pointers!
-	if(sc)
-	{
+	if(sc) {
 		char q = 0;
 		sc->add(&q, 1);
 		sc->send();
@@ -44,14 +43,12 @@ void quit() {
 	exit(0);
 }
 
-bool action_quit()
-{
+bool action_quit() {
 	quit();
 	return true;
 }
 
-void action_toggle_fullscreen(bool b)
-{
+void action_toggle_fullscreen(bool b) {
 	if(b)
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
 	else
@@ -65,8 +62,7 @@ bool validator_test(char *a) {
 
 char * state [] = {(char*)"abc", (char*)"bad", (char*)"cat!"};
 
-void initMenus()
-{
+void initMenus() {
 	mainmenu = new menu();
 	menu *menu1 = new menu();
 	menu *menu2 = new menu();
@@ -86,8 +82,7 @@ void initMenus()
 	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
 }
 
-void initVideo()
-{
+void initVideo() {
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 #ifdef UNHOLY

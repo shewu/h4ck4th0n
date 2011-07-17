@@ -4,9 +4,13 @@
 #endif
 
 #include "HBViewController.h"
+#include "hack.h"
+#include "constants.h"
 #include "menu.h"
 #include "font.h"
-#include "hack.h"
+
+extern int WIDTH;
+extern int HEIGHT;
 
 class GameViewController : public HBViewController {
 	private:
@@ -19,6 +23,7 @@ class GameViewController : public HBViewController {
 #ifdef UNHOLY
 		bool NORAPE;
 #endif
+		void initGL();
 
 	public:
 		GameViewController();

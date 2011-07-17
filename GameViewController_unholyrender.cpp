@@ -12,7 +12,8 @@
 #include <IL/il.h>
 #endif
 #include <cmath>
-#include "constants.h"
+
+#include "GameViewController.h"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ void drawFloor(float);
 void drawObject(void);
 void drawWalls(void);
 
-void initGL() {
+void GameViewController::initGL() {
 #ifndef __APPLE__
 	GLenum err = glewInit();
 	if(err != GLEW_OK)

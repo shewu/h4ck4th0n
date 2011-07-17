@@ -6,7 +6,6 @@
 #include <netdb.h>
 #include <cmath>
 
-#include "render.h"
 #include "GameViewController.h"
 
 extern char* ipaddy;
@@ -94,6 +93,7 @@ void initSound() {
 }
 
 GameViewController::GameViewController() {
+	initGL();
 	initSound();
 	initMenus();
 	init_font();

@@ -10,12 +10,16 @@ using namespace std;
 
 int WIDTH = 640;
 int HEIGHT = 480;
+bool NORAPE = true;
 
 SDL_Surface* screen;
 char* ipaddy = (char *)"127.0.0.1";
 
 void initVideo() {
-	SDL_Init(SDL_INIT_VIDEO);
+	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+		printf("Something went wrong!\n");
+		exit(-1);
+	}
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 #ifdef UNHOLY
 	if (!NORAPE) {
@@ -55,8 +59,11 @@ void initVideo() {
 	*/
 
 	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
-	SDL_ShowCursor(false);
-	SDL_WM_GrabInput(SDL_GRAB_ON);
+	//SDL_ShowCursor(false);
+	//SDL_WM_GrabInput(SDL_GRAB_ON);
+
+	glClearColor(1, 0, 0, 0);
+	glViewport(0, 0, WIDTH, HEIGHT);
 	
 	cout << "using resolution " << WIDTH << "x" << HEIGHT << "\n";
 	return;
@@ -76,15 +83,13 @@ int main(int argc, char* argv[]) {
 #endif
 					"-i [ip] to connect to specified server\n");
 			exit(0);
-		}
-		else if (!strcmp(argv[i], "-d")) {
+		} else if (!strcmp(argv[i], "-d")) {
 			// round up to next highest multiple of 16 if not already a multiple
 			// of 16
 			//WIDTH = ALIGN(atoi(argv[i+1]));
 			//HEIGHT = ALIGN(atoi(argv[i+2]));
 			cout << "Playing at " << WIDTH << "x" << HEIGHT << "\n";
-		}
-		else if (!strcmp(argv[i], "-i")) {
+		} else if (!strcmp(argv[i], "-i")) {
 			ipaddy = argv[i+1];
 		}
 #ifdef UNHOLY
@@ -101,7 +106,16 @@ int main(int argc, char* argv[]) {
 		while (!svc->didFinishView()) {
 			printf("hi\n");
 			svc->process();
-			svc->render();
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glClearColor(1, 1, 1, 0);
+			glColor3f(1.0f, 0.85f, 0.35f);
+			glBegin(GL_TRIANGLES); {
+				glVertex3f(0.0, 0.6, 0.0);
+				glVertex3f(-0.2, -0.3, 0.0);
+				glVertex3f(0.2, -0.3, 0.0);
+			} glEnd();
+			glFlush();
+			//svc->render();
 		}
 		delete svc;
 		

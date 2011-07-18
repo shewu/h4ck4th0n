@@ -18,6 +18,9 @@ extern SDL_Surface* screen;
 extern char* ipaddy;
 extern int WIDTH;
 extern int HEIGHT;
+#ifdef UNHOLY
+extern bool NORAPE;
+#endif
 
 class GameViewController : public HBViewController {
 	private:
@@ -29,9 +32,6 @@ class GameViewController : public HBViewController {
 		menu* mainmenu;
 		int program;
 		GLUquadric* quad;
-#ifdef UNHOLY
-		bool NORAPE;
-#endif
 		void initGL();
 		void initMenus();
 		void initSound();

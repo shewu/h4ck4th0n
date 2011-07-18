@@ -8,25 +8,14 @@
 
 #include "GameViewController.h"
 
-static void finishedView = false;
+static bool finishedView = false;
 
-void quit() {
-	// check for null pointers!
-	if(sc)
-	{
-		char q = 0;
-		sc->add(&q, 1);
-		sc->send();
-	}
+static bool action_quit() {
 	exit(0);
-}
-
-bool action_quit() {
-	quit();
 	return true;
 }
 
-void action_toggle_fullscreen(bool b) {
+static void action_toggle_fullscreen(bool b) {
 	if(b) {
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
 	} else {
@@ -36,19 +25,17 @@ void action_toggle_fullscreen(bool b) {
 }
 
 static bool action_leave_game() {
-	finishedView = true;
+	return finishedView = true;
 }
 
-bool validator_test(char *a) {
+static bool validator_test(char *a) {
 	return a[0] == 'a';
 }
 
 char * state [] = {(char*)"abc", (char*)"bad", (char*)"cat!"};
 
-void initMenus() {
+void GameViewController::initMenus() {
 	mainmenu = new menu();
-	//mainmenu->add_menuitem(new slidermenuitem((char*)"Slider!", state, 3, 0, NULL));
-	//mainmenu->add_menuitem(new inputmenuitem(20, validator_test, (char *)"", (char*)"Must start with a", (char *)"Enter stuff", (char *)"Stuff"));
 	mainmenu->add_menuitem(new actionmenuitem(action_leave_game, NULL, (char *)"Quit"));
 #ifndef __APPLE__
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
@@ -56,19 +43,7 @@ void initMenus() {
 	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
 }
 
-void initMenus() {
-	mainmenu = new menu();
-	menu *menu1 = new menu();
-	menu *menu2 = new menu();
-
-	mainmenu->add_menuitem(new actionmenuitem(action_leave_game, NULL, (char *)"Leave Game"));
-#ifndef __APPLE__
-	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
-#endif
-	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
-}
-
-void initSound() {
+void GameViewController::initSound() {
 #ifndef __APPLE__
 	ALCdevice* dev;
 	ALCcontext* con;
@@ -136,7 +111,7 @@ GameViewController::~GameViewController() {
 	delete mainmenu;
 }
 
-bool didFinishView() {
+bool GameViewController::didFinishView() {
 	return finishedView;
 }
 
@@ -191,7 +166,7 @@ void GameViewController::process() {
 				mainmenu->key_input(event.key.keysym.sym);
 				break;
 			case SDL_QUIT:
-				quit();
+				action_quit();
 				break;
 			case SDL_MOUSEMOTION:
 				if (mainmenu->is_active()) break;

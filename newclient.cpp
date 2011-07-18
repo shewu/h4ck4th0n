@@ -99,6 +99,7 @@ int main(int argc, char* argv[]) {
 	while (true) {
 		SplashViewController* svc = new SplashViewController();
 		while (!svc->didFinishView()) {
+			printf("hi\n");
 			svc->process();
 			svc->render();
 		}

@@ -14,7 +14,7 @@ MOLY_BALLS_TARGET=molyballs
 
 SERVER_OBJECTS=clcomm.o world.o socket.o object.o vec.o simulate.o
 #UNHOLY_BALLS_OBJECTS=unholy.o unholyrender.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o
-UNHOLY_BALLS_OBJECTS=newclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o GameViewController.o GameView.o
+UNHOLY_BALLS_OBJECTS=newclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o GameViewController.o
 HOLY_BALLS_OBJECTS=client.o render.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o
 MOLY_BALLS_OBJECTS=client.o multirender.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o
 

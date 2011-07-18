@@ -1,6 +1,11 @@
 #ifndef __APPLE__
 #include <AL/alut.h>
 #include <AL/al.h>
+#include <GL/glew.h>
+#include <GL/glu.h>
+#else
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #endif
 
 #include "HBViewController.h"
@@ -22,12 +27,18 @@ class GameViewController : public HBViewController {
 		float angle;
 		int myId;
 		menu* mainmenu;
+		int program;
+		GLUquadric* quad;
 #ifdef UNHOLY
 		bool NORAPE;
 #endif
 		void initGL();
 		void initMenus();
 		void initSound();
+		void drawMiniMap();
+		void drawWalls();
+		void drawObjects();
+		void drawFloor(float);
 
 	public:
 		GameViewController();

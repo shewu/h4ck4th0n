@@ -5,7 +5,8 @@ Version 0.4, now with gameplay and a menu *and* Mac OS X support!
 Game
 ====
 
-==Requirements==
+Requirements
+------------
 * Linux
   * Hardware
     * unholyballs requires at least a modern integrated graphics chipset
@@ -17,26 +18,33 @@ Game
     * OpenCL is required only for holyballs
 * The Mac version requires an Intel Mac running Mac OS X 10.5 Leopard or higher.
 
-==Building==
-* Linux
-make
-	see `make all'
+Building
+--------
+Linux
+~~~~~
+	- make
+		see 'make all'
 
-make server
-	will build only the server
+	- make server
+		will build only the server
 
-make holyballs
-	will build holyballs, the ray tracing binary. requires OpenCL and at minimum a GTS450
+	- make holyballs
+		will build holyballs, the ray tracing binary. requires OpenCL and at minimum a GTS450
 
-make unholyballs
-	will build only the unholyballs binary, for people with lesser graphics cards
+	- make unholyballs
+		will build only the unholyballs binary, for people with lesser graphics cards
 
-make all
-	will build all three binaries
+	- make all
+		will build all three binaries
 
-* Mac: open the .xcodeproj file in Xcode and hit the build button.
+Mac 
+~~~
+	open the .xcodeproj file in Xcode and hit the build button.
 
-==Run==
+Run
+---
+Linux
+~~~~~
 -h
 	to display help message
 
@@ -49,9 +57,12 @@ make all
 -f
 	to play in fullscreen; will not work if specified resolution is greater than screen resolution
 
-* Mac: double click on the .app to run or click the Run or Build and Run button in Xcode
+Mac
+~~~
+double click on the .app to run or click the Run or Build and Run button in Xcode
 
-==Playing==
+Playing
+-------
 Mouse: Turn
 W: Accelerate forwards
 A: Accelerate left
@@ -59,21 +70,25 @@ S: Accelerate backwards
 D: Accelerate right
 Escape: Bring up menu
 
-==Credits==
+Credits
+-------
 * Sounds from freesound.org
   * bounce sound from user dreamoron
   * ding sound from user acclivity
   * splat sound from user benhillyard
 
-===Map Editor===
+Map Editor
+==========
 
-==Requirements==
+Requirements
+------------
 * Hardware
   * Anything that runs a JVM, really
 * Software
   * Something with a recent-ish JVM
 
-==Controls==
+Controls
+--------
 WASD: Move cursor
 P: Write to file "output" on disk
 K: Toggle Sticky Wall mode

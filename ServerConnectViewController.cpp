@@ -1,5 +1,9 @@
 #include <cstring>
 #include <cstdio>
+#ifndef __APPLE__
+#include <GL/glew.h>
+#include <GL/glu.h>
+#endif
 
 #include "ServerConnectViewController.h"
 
@@ -13,10 +17,11 @@ static bool menuGetIP(char* a) {
 	return finishedView = strcmp(a, "");
 }
 
-static void menuQuit() {
+static bool menuQuit() {
 	// we need to deallocate memory
 	printf("Exiting\n");
 	exit(0);
+	return true;
 }
 
 ServerConnectViewController::ServerConnectViewController() {

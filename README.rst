@@ -63,19 +63,19 @@ double click on the .app to run or click the Run or Build and Run button in Xcod
 
 Playing
 -------
-Mouse: Turn
-W: Accelerate forwards
-A: Accelerate left
-S: Accelerate backwards
-D: Accelerate right
-Escape: Bring up menu
+* Mouse: Turn
+* W: Accelerate forwards
+* A: Accelerate left
+* S: Accelerate backwards
+* D: Accelerate right
+* Escape: Bring up menu
 
 Credits
 -------
 * Sounds from freesound.org
-  * bounce sound from user dreamoron
-  * ding sound from user acclivity
-  * splat sound from user benhillyard
+	- bounce sound from user dreamoron
+	- ding sound from user acclivity
+	- splat sound from user benhillyard
 
 Map Editor
 ==========
@@ -83,15 +83,15 @@ Map Editor
 Requirements
 ------------
 * Hardware
-  * Anything that runs a JVM, really
+	- Anything that runs a JVM, really
 * Software
-  * Something with a recent-ish JVM
+	- Something with a recent-ish JVM
 
 Controls
 --------
-WASD: Move cursor
-P: Write to file "output" on disk
-K: Toggle Sticky Wall mode
-X: Toggle Delete mode
-Space: Toggle Edit mode
+* WASD: Move cursor
+* P: Write to file "output" on disk
+* K: Toggle Sticky Wall mode
+* X: Toggle Delete mode
+* Space: Toggle Edit mode
 

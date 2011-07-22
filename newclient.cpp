@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <SDL/SDL.h>
+#include <unistd.h>
 
 #include "SplashViewController.h"
 #include "ServerConnectViewController.h"
@@ -106,16 +107,17 @@ int main(int argc, char* argv[]) {
 		while (!svc->didFinishView()) {
 			printf("hi\n");
 			svc->process();
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glClearColor(1, 1, 1, 0);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glColor3f(1.0f, 0.85f, 0.35f);
-			glBegin(GL_TRIANGLES); {
-				glVertex3f(0.0, 0.6, 0.0);
-				glVertex3f(-0.2, -0.3, 0.0);
-				glVertex3f(0.2, -0.3, 0.0);
-			} glEnd();
-			glFlush();
-			//svc->render();
+//			glBegin(GL_TRIANGLES); {
+//				glVertex3f(0.0, 0.6, 0.0);
+//				glVertex3f(-0.2, -0.3, 0.0);
+//				glVertex3f(0.2, -0.3, 0.0);
+//			} glEnd();
+//			glFlush();
+			svc->render();
+			SDL_GL_SwapBuffers();
 		}
 		delete svc;
 		
@@ -132,6 +134,7 @@ int main(int argc, char* argv[]) {
 			gvc->render();
 		}
 		delete gvc;
+
 	}
 
 	return 0;

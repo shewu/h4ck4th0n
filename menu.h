@@ -74,9 +74,6 @@ class submenuitem : public menuitem {
 		bool isActive;
 };
 
-// //Don't really know how this one is going to work yet
-// //Would not suggest using it
-//Hm yeah actually it is probably fine
 class actionmenuitem : public menuitem {
 	public:
 		virtual ~actionmenuitem();

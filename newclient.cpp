@@ -63,7 +63,6 @@ void initVideo() {
 	//SDL_ShowCursor(false);
 	//SDL_WM_GrabInput(SDL_GRAB_ON);
 
-	glClearColor(1, 0, 0, 0);
 	glViewport(0, 0, WIDTH, HEIGHT);
 	
 	cout << "using resolution " << WIDTH << "x" << HEIGHT << "\n";
@@ -105,16 +104,7 @@ int main(int argc, char* argv[]) {
 	while (true) {
 		SplashViewController* svc = new SplashViewController();
 		while (!svc->didFinishView()) {
-			printf("hi\n");
 			svc->process();
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glColor3f(1.0f, 0.85f, 0.35f);
-			glBegin(GL_TRIANGLES); {
-				glVertex3f(0.0, 0.6, 0.0);
-				glVertex3f(-0.2, -0.3, 0.0);
-				glVertex3f(0.2, -0.3, 0.0);
-			} glEnd();
-			glFlush();
 			svc->render();
 			SDL_GL_SwapBuffers();
 		}

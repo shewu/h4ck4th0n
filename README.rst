@@ -8,14 +8,14 @@ Game
 Requirements
 ------------
 * Linux
-  * Hardware
-    * unholyballs requires at least a modern integrated graphics chipset
-    * holyballs require at least an ATi Mobility Radeon HD 4670 to run at 640x480 at 60fps
-  * Software
-	* SDL is required for both versions
-    * OpenAL is required for both versions
-    * OpenGL and GLEW is required for both versions
-    * OpenCL is required only for holyballs
+	* Hardware
+		* unholyballs requires at least a modern integrated graphics chipset
+		* holyballs require at least an ATi Mobility Radeon HD 4670 to run at 640x480 at 60fps
+	* Software
+		* SDL is required for both versions
+	    * OpenAL is required for both versions
+	    * OpenGL and GLEW is required for both versions
+	    * OpenCL is required only for holyballs
 * The Mac version requires an Intel Mac running Mac OS X 10.5 Leopard or higher.
 
 Building

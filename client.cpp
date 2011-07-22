@@ -29,13 +29,33 @@ unsigned int albuf[3], alsrcs[ALSRCS];
 char* ipaddy = (char*)"18.248.6.168";
 menu* mainmenu;
 bool is_fullscreen;
+int original_w, original_h;
 
 #ifdef UNHOLY
 bool NORAPE;
 #endif
 
+void action_toggle_fullscreen(bool b)
+{
+	if(b) {
+		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
+		is_fullscreen = true;
+		SDL_WM_GrabInput(SDL_GRAB_ON);
+	} else {
+		screen = SDL_SetVideoMode(original_w, original_h, 24, SDL_OPENGL | SDL_FULLSCREEN);
+		screen = SDL_SetVideoMode(original_w, original_h, 24, SDL_OPENGL);
+		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+		is_fullscreen = false;
+		SDL_WM_GrabInput(SDL_GRAB_OFF);
+	}
+	return;
+}
+
 void quit() {
 	// check for null pointers!
+	if(is_fullscreen) {
+		action_toggle_fullscreen(false);
+	}
 	if(sc)
 	{
 		char q = 0;
@@ -49,20 +69,6 @@ bool action_quit()
 {
 	quit();
 	return true;
-}
-
-void action_toggle_fullscreen(bool b)
-{
-	if(b) {
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
-		is_fullscreen = true;
-		SDL_WM_GrabInput(SDL_GRAB_ON);
-	} else {
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
-		is_fullscreen = false;
-		SDL_WM_GrabInput(SDL_GRAB_OFF);
-	}
-	return;
 }
 
 bool validator_test(char *a) {
@@ -95,6 +101,11 @@ void initMenus()
 void initVideo()
 {
 	SDL_Init(SDL_INIT_VIDEO);
+	
+	const SDL_VideoInfo* originalVideoInfo = SDL_GetVideoInfo();
+	original_w = originalVideoInfo->current_w;
+	original_h = originalVideoInfo->current_h;
+
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 #ifdef UNHOLY
 	if(!NORAPE)

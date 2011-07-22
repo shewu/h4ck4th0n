@@ -82,9 +82,7 @@ void draw_str(textquad tq, char *text) {
 		glTexCoord2f(x2, y2); glVertex3f(tq.x2 + tq.dx * s, tq.y2 + tq.dy * s, tq.z2 + tq.dz * s);
 		glTexCoord2f(x2, y1); glVertex3f(tq.x1 + tq.dx * s, tq.y1 + tq.dy * s, tq.z1 + tq.dz * s);
 		tq.inc(s);
-#ifdef DEBUG
 		printf("c = %c, s = %f\n", text[i], s);
-#endif
 	}
 	glEnd();
 	glDisable(GL_TEXTURE_2D);

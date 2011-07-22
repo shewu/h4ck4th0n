@@ -21,6 +21,7 @@ static bool menuFinishedView() {
 }
 
 SplashViewController::SplashViewController() {
+	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	finishedView = false;
 
 	splashMenu = new menu();
@@ -39,6 +40,14 @@ bool SplashViewController::didFinishView() {
 }
 
 void SplashViewController::process() {
+	SDL_Event event;
+	while (SDL_PollEvent(&event)) {
+		switch (event.type) {
+			case SDL_KEYUP:
+				splashMenu->key_input(event.key.keysym.sym);
+				break;
+		}
+	}
 	return;
 }
 

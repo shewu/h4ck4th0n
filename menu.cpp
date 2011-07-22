@@ -63,7 +63,7 @@ void menu::key_input(int key) {
 			current_index++;
 		menuitems[current_index]->onSelect();
 	}
-	else if(key == MENU_KEY_ENTER) {
+	else if(key == MENU_KEY_ENTER || key == MENU_KEY_ENTER2) {
 		menuitem *item = menuitems[current_index];
 		is_item_active = item->activate();
 	}

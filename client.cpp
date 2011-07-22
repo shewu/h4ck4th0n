@@ -28,6 +28,7 @@ int myId;
 unsigned int albuf[3], alsrcs[ALSRCS];
 char* ipaddy = (char*)"18.248.6.168";
 menu* mainmenu;
+bool is_fullscreen;
 
 #ifdef UNHOLY
 bool NORAPE;
@@ -52,10 +53,15 @@ bool action_quit()
 
 void action_toggle_fullscreen(bool b)
 {
-	if(b)
+	if(b) {
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
-	else
+		is_fullscreen = true;
+		SDL_WM_GrabInput(SDL_GRAB_ON);
+	} else {
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+		is_fullscreen = false;
+		SDL_WM_GrabInput(SDL_GRAB_OFF);
+	}
 	return;
 }
 
@@ -133,7 +139,7 @@ void initVideo()
 
 	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	SDL_ShowCursor(false);
-	SDL_WM_GrabInput(SDL_GRAB_ON);
+	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	
 	initGL();
 
@@ -282,12 +288,11 @@ int main(int argc, char* argv[])
 					if(event.key.keysym.sym == SDLK_ESCAPE) {
 						if (mainmenu->is_active()) {
 							SDL_ShowCursor(false);
-							SDL_WM_GrabInput(SDL_GRAB_ON);
-							mainmenu->set_active(false);
+							//mainmenu->set_active(false);
+							mainmenu->key_input(MENU_KEY_BACK);
 						}
 						else {
 							SDL_ShowCursor(true);
-							SDL_WM_GrabInput(SDL_GRAB_OFF);
 							mainmenu->set_active(true);
 						}
 					}
@@ -301,10 +306,36 @@ int main(int argc, char* argv[])
 				}
 				case SDL_MOUSEMOTION: {
 					if (mainmenu->is_active()) break;
-					angle -= event.motion.xrel/400.0;
+					if (!(SDL_GetAppState() & SDL_APPINPUTFOCUS)) break;
+					int prex = event.motion.x - event.motion.xrel;
+					int prey = event.motion.y - event.motion.yrel;
+					if(prex >= WIDTH/3 && prex <= 2*WIDTH/3 && prey >= HEIGHT/3 && prey <= 2*HEIGHT/3) {
+						// Real event
+						angle -= event.motion.xrel/400.0;
+					}
+					if(event.motion.x > 2*WIDTH/3 || event.motion.x < WIDTH/3 || event.motion.y > 2*HEIGHT/3 || event.motion.y < HEIGHT/3) {
+						SDL_WarpMouse(WIDTH/2, HEIGHT/2);
+					}
 
 					while (angle >= 2*M_PI) angle -= 2*M_PI;
 					while (angle < 0) angle += 2*M_PI;
+					break;
+				}
+				case SDL_ACTIVEEVENT: {
+					if(event.active.gain == 1) {
+						if(event.active.state == SDL_APPINPUTFOCUS) {
+							SDL_WarpMouse(WIDTH/2, HEIGHT/2);
+							SDL_ShowCursor(false);
+						}
+					} else {
+						int state = SDL_GetAppState();
+						if(event.active.state == SDL_APPMOUSEFOCUS && (state & SDL_APPINPUTFOCUS)) {
+							SDL_WarpMouse(WIDTH/2, HEIGHT/2);
+						}
+						if(event.active.state == SDL_APPINPUTFOCUS) {
+							SDL_ShowCursor(true);
+						}
+					}
 					break;
 				}
 			}

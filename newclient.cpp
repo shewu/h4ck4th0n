@@ -107,15 +107,14 @@ int main(int argc, char* argv[]) {
 		while (!svc->didFinishView()) {
 			printf("hi\n");
 			svc->process();
-			glClearColor(1, 1, 1, 0);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glColor3f(1.0f, 0.85f, 0.35f);
-//			glBegin(GL_TRIANGLES); {
-//				glVertex3f(0.0, 0.6, 0.0);
-//				glVertex3f(-0.2, -0.3, 0.0);
-//				glVertex3f(0.2, -0.3, 0.0);
-//			} glEnd();
-//			glFlush();
+			glBegin(GL_TRIANGLES); {
+				glVertex3f(0.0, 0.6, 0.0);
+				glVertex3f(-0.2, -0.3, 0.0);
+				glVertex3f(0.2, -0.3, 0.0);
+			} glEnd();
+			glFlush();
 			svc->render();
 			SDL_GL_SwapBuffers();
 		}
@@ -125,6 +124,7 @@ int main(int argc, char* argv[]) {
 		while (!scvc->didFinishView()) {
 			scvc->process();
 			scvc->render();
+			SDL_GL_SwapBuffers();
 		}
 		delete scvc;
 
@@ -132,9 +132,9 @@ int main(int argc, char* argv[]) {
 		while (!gvc->didFinishView()) {
 			gvc->process();
 			gvc->render();
+			SDL_GL_SwapBuffers();
 		}
 		delete gvc;
-
 	}
 
 	return 0;

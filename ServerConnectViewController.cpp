@@ -25,6 +25,7 @@ static bool menuQuit() {
 }
 
 ServerConnectViewController::ServerConnectViewController() {
+	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	finishedView = false;
 
 	serverConnectMenu = new menu();
@@ -43,7 +44,14 @@ bool ServerConnectViewController::didFinishView() {
 }
 
 void ServerConnectViewController::process() {
-	serverConnectMenu->drawMenu();
+	SDL_Event event;
+	while (SDL_PollEvent(&event)) {
+		switch (event.type) {
+			case SDL_KEYUP:
+				serverConnectMenu->key_input(event.key.keysym.sym);
+				break;
+		}
+	}
 	return;
 }
 
@@ -51,6 +59,7 @@ void ServerConnectViewController::render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	serverConnectMenu->drawMenu();
 	glFlush();
 }
 

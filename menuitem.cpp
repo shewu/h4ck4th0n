@@ -91,6 +91,7 @@ bool inputmenuitem::activate() {
 	return true;
 }
 
+/* i see we handle characters here -- we need to handle dots for IP addresses */
 bool inputmenuitem::key_input(int key) {
 	if(key == MENU_KEY_BACKSPACE) {
 		if(len > 0)

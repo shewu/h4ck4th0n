@@ -19,6 +19,13 @@ float character_y2[256];
 GLuint font_texture;
 unsigned char * bitmapdata;
 
+#define DEBUG
+#ifdef DEBUG
+#define P(x) printf x
+#else
+#define P(x)
+#endif
+
 textquad::textquad(float a, float b, float c, float d, float e, float f, float g, float h, float i) {
 	x1 = a;
 	y1 = b;
@@ -59,8 +66,10 @@ void init_font() {
 	free(bitmapdata);
 
 	FILE *fontdata = fopen("font.dat","r");
-	freadresult = fread((char *)character_x1, 1, 256*4, fontdata);
-	freadresult = fread((char *)character_x2, 1, 256*4, fontdata);
+	freadresult = fread((char *)character_x1, 1, 256*4, fontdata); // this seems to be slightly wonky...
+	printf("freadresult = %zu\n", freadresult);
+	freadresult = fread((char *)character_x2, 1, 256*4, fontdata); // this too...
+	printf("freadresult = %zu\n", freadresult);
 	freadresult = fread((char *)character_y1, 1, 256*4, fontdata);
 	freadresult = fread((char *)character_y2, 1, 256*4, fontdata);
 	fclose(fontdata);
@@ -77,12 +86,13 @@ void draw_str(textquad tq, char *text) {
 		float y1 = character_y1[text[i]];
 		float y2 = character_y2[text[i]];
 		float s = (x2 - x1) * 16.0f;
+		//P(("x1 = %f, x2 = %f\n", x1, x2)); // oh, x1 and x2 are both 0...
 		glTexCoord2f(x1, y1); glVertex3f(tq.x1, tq.y1, tq.z1);
 		glTexCoord2f(x1, y2); glVertex3f(tq.x2, tq.y2, tq.z2);
 		glTexCoord2f(x2, y2); glVertex3f(tq.x2 + tq.dx * s, tq.y2 + tq.dy * s, tq.z2 + tq.dz * s);
 		glTexCoord2f(x2, y1); glVertex3f(tq.x1 + tq.dx * s, tq.y1 + tq.dy * s, tq.z1 + tq.dz * s);
 		tq.inc(s);
-		printf("c = %c, s = %f\n", text[i], s);
+		//P(("c = %c, s = %f\n", text[i], s)); // ugh why is s = 0? that's why characters are not drawn...
 	}
 	glEnd();
 	glDisable(GL_TEXTURE_2D);

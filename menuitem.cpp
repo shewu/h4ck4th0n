@@ -96,22 +96,24 @@ bool inputmenuitem::key_input(int key) {
 	if(key == MENU_KEY_BACKSPACE) {
 		if(len > 0)
 			input[--len] = '\0';
-	}
-	else if(key == MENU_KEY_ENTER) {
+	} else if(key == MENU_KEY_ENTER) {
 		if(vali == NULL || (*vali)(input)) 
 			return false;
 		else
 			displayError = true;
-	}
-	else if(key >= MENU_KEY_A && key <= MENU_KEY_A + 25) {
+	} else if(key >= MENU_KEY_A && key <= MENU_KEY_A + 25) {
 		if(len < maxlen) {
 			input[len++] = 'a' + key - MENU_KEY_A;
 			input[len] = '\0';
 		}
-	}
-	else if(key >= MENU_KEY_0 && key <= MENU_KEY_0 + 9) {
+	} else if(key >= MENU_KEY_0 && key <= MENU_KEY_0 + 9) {
 		if(len < maxlen) {
 			input[len++] = '0' + key - MENU_KEY_0;
+			input[len] = '\0';
+		}
+	} else if (key == (int)'.') {
+		if (len < maxlen) {
+			input[len++] = '.';
 			input[len] = '\0';
 		}
 	}

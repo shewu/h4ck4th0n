@@ -99,6 +99,7 @@ int main(int argc, char* argv[]) {
 #endif
 	}
 	initVideo();
+	init_font();
 	cout << "Starting client\n";
 
 	while (true) {

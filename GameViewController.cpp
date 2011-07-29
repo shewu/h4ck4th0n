@@ -70,7 +70,6 @@ GameViewController::GameViewController() {
 	initGL();
 	initSound();
 	initMenus();
-	init_font();
 	cout << "Starting client\n";
 	
 	addrinfo hints, *res;

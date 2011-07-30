@@ -32,13 +32,12 @@ class GameViewController : public HBViewController {
 		menu* mainmenu;
 		int program;
 		GLUquadric* quad;
-		void initGL();
-		void initMenus();
-		void initSound();
-		void drawMiniMap();
-		void drawWalls();
-		void drawObjects();
-		void drawFloor(float);
+		void _initGL();
+		void _initMenus();
+		void _initSound();
+		void _drawWalls();
+		void _drawObjects();
+		void _drawFloor(float);
 
 	public:
 		GameViewController();

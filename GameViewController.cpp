@@ -36,7 +36,7 @@ static bool validator_test(char *a) {
 
 char * state [] = {(char*)"abc", (char*)"bad", (char*)"cat!"};
 
-void GameViewController::initMenus() {
+void GameViewController::_initMenus() {
 	mainmenu = new menu();
 	mainmenu->add_menuitem(new actionmenuitem(action_leave_game, NULL, (char *)"Quit"));
 #ifndef __APPLE__
@@ -45,7 +45,7 @@ void GameViewController::initMenus() {
 	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
 }
 
-void GameViewController::initSound() {
+void GameViewController::_initSound() {
 #ifndef __APPLE__
 	ALCdevice* dev;
 	ALCcontext* con;
@@ -67,9 +67,9 @@ void GameViewController::initSound() {
 }
 
 GameViewController::GameViewController() {
-	initGL();
-	initSound();
-	initMenus();
+	_initGL();
+	_initSound();
+	_initMenus();
 	cout << "Starting client\n";
 	
 	addrinfo hints, *res;
@@ -218,11 +218,10 @@ void GameViewController::process() {
 	SDL_GL_SwapBuffers();
 }
 
-void GameViewController::initGL() {
+void GameViewController::_initGL() {
 #ifndef __APPLE__
 	GLenum err = glewInit();
-	if(err != GLEW_OK)
-	{
+	if(err != GLEW_OK) {
 		cout << "glewInit failed; " << glewGetErrorString(err) << "\n";
 		exit(-1);
 	}
@@ -259,8 +258,7 @@ void GameViewController::initGL() {
 	glEnable(GL_COLOR_MATERIAL);
 }
 
-void GameViewController::render()
-{
+void GameViewController::render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
@@ -279,23 +277,23 @@ void GameViewController::render()
 	float matrix[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 	
-	drawWalls();
+	_drawWalls();
 
 	glUseProgram(program);
 	glUniform3f(glGetUniformLocation(program, "lightv"), 5*matrix[8]+matrix[12], 5*matrix[9]+matrix[13], 5*matrix[10]+matrix[14]);
 
 	glPushMatrix();
 		glScalef(1, 1, -1);
-		drawObjects();
+		_drawObjects();
 	glPopMatrix();
 
 	glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glColor4f(1.0, 1.0, 1.0, 1.0);
-		drawFloor(0.82);
+		_drawFloor(0.82);
 	glDisable(GL_BLEND);
 
-	drawObjects();
+	_drawObjects();
 	
 
 	glDisable(GL_MULTISAMPLE_ARB);
@@ -303,10 +301,7 @@ void GameViewController::render()
 	glFlush();
 }
 
-void GameViewController::drawMiniMap() {
-}
-
-void GameViewController::drawWalls() {
+void GameViewController::_drawWalls() {
 	// obstacles
 	glUseProgram(0);
 	glBegin(GL_QUADS);
@@ -320,7 +315,7 @@ void GameViewController::drawWalls() {
 	glEnd();
 }
 
-void GameViewController::drawObjects() {
+void GameViewController::_drawObjects() {
 	glEnable(GL_NORMALIZE);
 	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {
 		glPushMatrix();
@@ -333,7 +328,7 @@ void GameViewController::drawObjects() {
 	glDisable(GL_NORMALIZE);
 }
 
-void GameViewController::drawFloor(float alpha) {
+void GameViewController::_drawFloor(float alpha) {
 	// checkerboard
 	unsigned int GridSizeX = world.maxX/3;
 	unsigned int GridSizeY = world.maxY/3;

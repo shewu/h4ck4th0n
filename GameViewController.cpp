@@ -120,7 +120,10 @@ void GameViewController::process() {
 	int status;
 	
 	int count = 0, oldTime = SDL_GetTicks();
+	P(("process\n"));
+	// seems like this is crashing on the second time it's called
 	while ((status = world.receiveObjects(sc, myId)) != -1) {
+		P(("receiving objects from server\n"));
 		if (status == 0) continue;
 #ifndef __APPLE__
 		for(vector<pair<char, Vector2D> >::iterator it = world.sounds.begin(); it != world.sounds.end(); it++) {
@@ -149,6 +152,7 @@ void GameViewController::process() {
 #endif
 	}
 
+	P(("polling events\n"));
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		switch(event.type) {
@@ -179,6 +183,7 @@ void GameViewController::process() {
 		}
 	}
 
+	P(("sending key state\n"));
 	Uint8* keystate = SDL_GetKeyState(NULL);
 	char buf[5];
 	*((int*)buf) = htonl(*reinterpret_cast<int*>(&angle));
@@ -201,6 +206,7 @@ void GameViewController::process() {
 	alListenerfv(AL_ORIENTATION, alori);
 #endif
 
+	P(("deciding whether to draw main menu\n"));
 	if (mainmenu->is_active()) {
 		mainmenu->drawMenu();
 	}
@@ -215,6 +221,7 @@ void GameViewController::process() {
 		oldTime = time;
 	}
 
+	P(("swapping GL buffers\n"));
 	SDL_GL_SwapBuffers();
 }
 
@@ -259,6 +266,7 @@ void GameViewController::_initGL() {
 }
 
 void GameViewController::render() {
+	P(("render\n"));
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
@@ -277,28 +285,33 @@ void GameViewController::render() {
 	float matrix[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 	
+	P(("drawing walls\n"));
 	_drawWalls();
 
 	glUseProgram(program);
 	glUniform3f(glGetUniformLocation(program, "lightv"), 5*matrix[8]+matrix[12], 5*matrix[9]+matrix[13], 5*matrix[10]+matrix[14]);
 
+	P(("drawing upsidedown objects\n"));
 	glPushMatrix();
 		glScalef(1, 1, -1);
 		_drawObjects();
 	glPopMatrix();
 
+	P(("drawing reflective floor\n"));
 	glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glColor4f(1.0, 1.0, 1.0, 1.0);
 		_drawFloor(0.82);
 	glDisable(GL_BLEND);
 
+	P(("drawing objects\n"));
 	_drawObjects();
 	
 
 	glDisable(GL_MULTISAMPLE_ARB);
 
 	glFlush();
+	P(("finished render\n"));
 }
 
 void GameViewController::run() {

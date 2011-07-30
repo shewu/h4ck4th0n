@@ -6,6 +6,12 @@
 #include "constants.h"
 #include "socket.h"
 
+#ifdef DEBUG
+#define P(x) printf x
+#else
+#define P(x)
+#endif
+
 class Vector2D
 {
 	public:

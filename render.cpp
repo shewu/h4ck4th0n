@@ -11,7 +11,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #endif
-#include "cl.hpp"
+#include <CL/cl.hpp>
 #include <cmath>
 #include "client.h"
 

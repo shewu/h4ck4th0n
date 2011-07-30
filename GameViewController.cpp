@@ -301,6 +301,11 @@ void GameViewController::render() {
 	glFlush();
 }
 
+void GameViewController::run() {
+	process();
+	render();
+}
+
 void GameViewController::_drawWalls() {
 	// obstacles
 	glUseProgram(0);

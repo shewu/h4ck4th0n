@@ -121,8 +121,7 @@ int main(int argc, char* argv[]) {
 
 		GameViewController* gvc = new GameViewController();
 		while (!gvc->didFinishView()) {
-			gvc->process();
-			gvc->render();
+			gvc->run();
 			SDL_GL_SwapBuffers();
 		}
 		delete gvc;

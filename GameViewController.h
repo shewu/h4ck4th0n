@@ -46,5 +46,6 @@ class GameViewController : public HBViewController {
 		bool didFinishView();
 		void process();
 		void render();
+		void run();
 };
 

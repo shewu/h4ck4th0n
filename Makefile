@@ -9,16 +9,11 @@ HOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -lIL -lOpenCL -O2 -g
 
 SERVER_TARGET=server
 UNHOLY_BALLS_TARGET=unholyballs
-HOLY_BALLS_TARGET=holyballs
-MOLY_BALLS_TARGET=molyballs
 
 SERVER_OBJECTS=clcomm.o world.o socket.o object.o vec.o simulate.o
-#UNHOLY_BALLS_OBJECTS=unholy.o unholyrender.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o
 UNHOLY_BALLS_OBJECTS=newclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o GameViewController.o
-HOLY_BALLS_OBJECTS=client.o render.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o
-MOLY_BALLS_OBJECTS=client.o multirender.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o
 
-all: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET) $(MOLY_BALLS_TARGET)
+all: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET)
 
 $(SERVER_TARGET): $(SERVER_OBJECTS)
 	$(LD) -o $(SERVER_TARGET) $(SERVER_LDFLAGS) $(SERVER_OBJECTS)
@@ -26,23 +21,14 @@ $(SERVER_TARGET): $(SERVER_OBJECTS)
 $(UNHOLY_BALLS_TARGET): $(UNHOLY_BALLS_OBJECTS)
 	$(LD) -o $(UNHOLY_BALLS_TARGET) $(UNHOLY_LDFLAGS) $(UNHOLY_BALLS_OBJECTS)
 
-$(HOLY_BALLS_TARGET): $(HOLY_BALLS_OBJECTS)
-	$(LD) -o $(HOLY_BALLS_TARGET) $(HOLY_LDFLAGS) $(HOLY_BALLS_OBJECTS)
-
-$(MOLY_BALLS_TARGET): $(MOLY_BALLS_OBJECTS)
-	$(LD) -o $(MOLY_BALLS_TARGET) $(HOLY_LDFLAGS) $(MOLY_BALLS_OBJECTS)
-
 %.o: %.cpp *.h
 	$(CC) -c $(CCFLAGS) $<
 
 unholy.o: client.cpp *.h
 	$(CC) -c $(CCFLAGS) -DUNHOLY -o unholy.o $<
 
-GameView.o: GameViewController.cpp GameViewController_unholyrender.cpp *.h
-	$(CC) -c $(CCFLAGS) -o GameView.o $<
-
 clean:
-	rm -rf $(SERVER_TARGET) $(HOLY_BALLS_TARGET) $(UNHOLY_BALLS_TARGET) $(SERVER_OBJECTS) $(UNHOLY_BALLS_OBJECTS) $(HOLY_BALLS_TARGET)
+	rm -rf $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(SERVER_OBJECTS) $(UNHOLY_BALLS_OBJECTS)
 
 love:
 	echo 'In Soviet Russia, love makes you!'

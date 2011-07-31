@@ -82,6 +82,7 @@ GameViewController::GameViewController() {
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	Socket sock(sockfd);
 	sc = sock.connect(*res->ai_addr, res->ai_addrlen);
+	P(("sc = %p\n", sc));
 	
 	int u[2];
 	bool done = false;
@@ -117,6 +118,7 @@ bool GameViewController::didFinishView() {
 }
 
 void GameViewController::process() {
+	P(("sc = %p\n", sc));
 	int status;
 	
 	int count = 0, oldTime = SDL_GetTicks();

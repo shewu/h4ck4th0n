@@ -1,4 +1,5 @@
 #include "socket.h"
+#include "hack.h"
 #include <arpa/inet.h>
 #include <cstdio>
 #include <cstring>
@@ -13,15 +14,20 @@ Socket::Socket(int sock) {
 }
 
 void Socket::receivePackets() {
+	P(("receivePackets\n"));
 	char stuff[MAXPACKET];
 	sockaddr addr;
 	socklen_t addrlen;
 	int a;
 	while ((addrlen = sizeof(sockaddr)) && (a = recvfrom(socket, stuff, MAXPACKET, MSG_DONTWAIT, &addr, &addrlen)) >= 0) {
+		P(("receiving...\n"));
 		if (a < 20) continue;
 		string s((char*)(&addr), addrlen);
 		if (ntohl(*(int*)(stuff)) != PROTMAGIC) continue;
 		int v = ntohl(*(int*)(stuff+4));
+
+		/* trying to do anything with the connections map on the second iteration of the main loop will cause the game to crash. gdb reports a bunch of errors in accessing one element of the red-black tree. why is that? */
+		P(("counting connections...\n"));
 		if (connections.count(pair<string, int>(s, v))) {
 			SocketConnection* c = connections[pair<string, int>(s, v)];
 			int p = ntohl(*(int*)(stuff+8));

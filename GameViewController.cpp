@@ -70,6 +70,8 @@ GameViewController::GameViewController() {
 	_initGL();
 	_initSound();
 	_initMenus();
+	SDL_ShowCursor(false);
+	SDL_WM_GrabInput(SDL_GRAB_ON);
 	cout << "Starting client\n";
 	
 	addrinfo hints, *res;
@@ -109,6 +111,8 @@ GameViewController::GameViewController() {
 }
 
 GameViewController::~GameViewController() {
+	SDL_ShowCursor(true);
+	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	delete sc;
 	delete mainmenu;
 }
@@ -208,9 +212,12 @@ void GameViewController::process() {
 	alListenerfv(AL_ORIENTATION, alori);
 #endif
 
+	render();
 	P(("deciding whether to draw main menu\n"));
 	if (mainmenu->is_active()) {
+		glDisable(GL_LIGHTING);
 		mainmenu->drawMenu();
+		glEnable(GL_LIGHTING);
 	}
 
 	int time = SDL_GetTicks();
@@ -222,9 +229,6 @@ void GameViewController::process() {
 		cout << (int)fps << "fps" << flush;
 		oldTime = time;
 	}
-
-	P(("swapping GL buffers\n"));
-	SDL_GL_SwapBuffers();
 }
 
 void GameViewController::_initGL() {
@@ -316,11 +320,6 @@ void GameViewController::render() {
 	P(("finished render\n"));
 }
 
-void GameViewController::run() {
-	process();
-	render();
-}
-
 void GameViewController::_drawWalls() {
 	// obstacles
 	glUseProgram(0);
@@ -337,6 +336,7 @@ void GameViewController::_drawWalls() {
 
 void GameViewController::_drawObjects() {
 	glEnable(GL_NORMALIZE);
+	int howMany = 0;
 	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {
 		glPushMatrix();
 		glTranslatef(i->second.p.x, i->second.p.y, 0);

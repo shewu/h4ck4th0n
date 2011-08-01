@@ -38,7 +38,7 @@ char * state [] = {(char*)"abc", (char*)"bad", (char*)"cat!"};
 
 void GameViewController::_initMenus() {
 	mainmenu = new menu();
-	mainmenu->add_menuitem(new actionmenuitem(action_leave_game, NULL, (char *)"Quit"));
+	mainmenu->add_menuitem(new actionmenuitem(action_leave_game, NULL, (char *)"Leave Game"));
 #ifndef __APPLE__
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
 #endif

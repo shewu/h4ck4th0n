@@ -14,8 +14,12 @@
 #include "client.h"
 #include "menu.h"
 #include "font.h"
+//#define __FUCKME__
 
 using namespace std;
+
+int WIDTH = -1;
+int HEIGHT = -1;
 
 SDL_Surface* screen;
 SocketConnection* sc;
@@ -23,17 +27,36 @@ World world;
 float angle;
 int myId;
 unsigned int albuf[3], alsrcs[ALSRCS];
-int WIDTH = -1;
-int HEIGHT = -1;
-char* ipaddy = (char*)"127.0.0.1";
+char* ipaddy = (char*)"18.248.6.168";
 menu* mainmenu;
+bool is_fullscreen;
+int original_w, original_h;
 
 #ifdef UNHOLY
 bool NORAPE;
 #endif
 
+void action_toggle_fullscreen(bool b)
+{
+	if(b) {
+		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
+		is_fullscreen = true;
+		SDL_WM_GrabInput(SDL_GRAB_ON);
+	} else {
+		screen = SDL_SetVideoMode(original_w, original_h, 24, SDL_OPENGL | SDL_FULLSCREEN);
+		screen = SDL_SetVideoMode(original_w, original_h, 24, SDL_OPENGL);
+		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+		is_fullscreen = false;
+		SDL_WM_GrabInput(SDL_GRAB_OFF);
+	}
+	return;
+}
+
 void quit() {
 	// check for null pointers!
+	if(is_fullscreen) {
+		action_toggle_fullscreen(false);
+	}
 	if(sc)
 	{
 		char q = 0;
@@ -47,16 +70,6 @@ bool action_quit()
 {
 	quit();
 	return true;
-}
-
-void action_toggle_fullscreen(bool b)
-{
-	if(b) {
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
-	} else {
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
-	}
-	return;
 }
 
 bool validator_test(char *a) {
@@ -90,6 +103,11 @@ void initMenus()
 void initVideo()
 {
 	SDL_Init(SDL_INIT_VIDEO);
+	
+	const SDL_VideoInfo* originalVideoInfo = SDL_GetVideoInfo();
+	original_w = originalVideoInfo->current_w;
+	original_h = originalVideoInfo->current_h;
+
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 #ifdef UNHOLY
 	if(!NORAPE)
@@ -134,7 +152,7 @@ void initVideo()
 
 	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	SDL_ShowCursor(false);
-	SDL_WM_GrabInput(SDL_GRAB_ON);
+	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	
 	initGL();
 
@@ -242,7 +260,8 @@ int main(int argc, char* argv[])
 	myId = -1;
 	angle = *reinterpret_cast<float*>(u);
 	
-	int count = 0, oldTime = SDL_GetTicks();
+	int count = 0, oldTime = SDL_GetTicks(), ticktock = SDL_GetTicks();
+	bool updated;
 	for (;;) {
 		int status;
 		while ((status = world.receiveObjects(sc, myId)) != -1) {
@@ -282,12 +301,11 @@ int main(int argc, char* argv[])
 					if(event.key.keysym.sym == SDLK_ESCAPE) {
 						if (mainmenu->is_active()) {
 							SDL_ShowCursor(false);
-							SDL_WM_GrabInput(SDL_GRAB_ON);
-							mainmenu->set_active(false);
+							//mainmenu->set_active(false);
+							mainmenu->key_input(MENU_KEY_BACK);
 						}
 						else {
 							SDL_ShowCursor(true);
-							SDL_WM_GrabInput(SDL_GRAB_OFF);
 							mainmenu->set_active(true);
 						}
 					}
@@ -301,10 +319,36 @@ int main(int argc, char* argv[])
 				}
 				case SDL_MOUSEMOTION: {
 					if (mainmenu->is_active()) break;
-					angle -= event.motion.xrel/400.0;
+					if (!(SDL_GetAppState() & SDL_APPINPUTFOCUS)) break;
+					int prex = event.motion.x - event.motion.xrel;
+					int prey = event.motion.y - event.motion.yrel;
+					if(prex >= WIDTH/3 && prex <= 2*WIDTH/3 && prey >= HEIGHT/3 && prey <= 2*HEIGHT/3) {
+						// Real event
+						angle -= event.motion.xrel/400.0;
+					}
+					if(event.motion.x > 2*WIDTH/3 || event.motion.x < WIDTH/3 || event.motion.y > 2*HEIGHT/3 || event.motion.y < HEIGHT/3) {
+						SDL_WarpMouse(WIDTH/2, HEIGHT/2);
+					}
 
 					while (angle >= 2*M_PI) angle -= 2*M_PI;
 					while (angle < 0) angle += 2*M_PI;
+					break;
+				}
+				case SDL_ACTIVEEVENT: {
+					if(event.active.gain == 1) {
+						if(event.active.state == SDL_APPINPUTFOCUS) {
+							SDL_WarpMouse(WIDTH/2, HEIGHT/2);
+							SDL_ShowCursor(false);
+						}
+					} else {
+						int state = SDL_GetAppState();
+						if(event.active.state == SDL_APPMOUSEFOCUS && (state & SDL_APPINPUTFOCUS)) {
+							SDL_WarpMouse(WIDTH/2, HEIGHT/2);
+						}
+						if(event.active.state == SDL_APPINPUTFOCUS) {
+							SDL_ShowCursor(true);
+						}
+					}
 					break;
 				}
 			}
@@ -332,19 +376,40 @@ int main(int argc, char* argv[])
 		alListenerfv(AL_VELOCITY, alvel);
 		alListenerfv(AL_ORIENTATION, alori);
 #endif
-		
+
+#ifndef __FUCKME__		
+		if (SDL_GetTicks() - oldTime > 1000.0 / 60.0) {	
+			render();
+			if (mainmenu->is_active()) mainmenu->drawMenu();
+			updated = true;
+		} else {
+			updated = false;
+		}
+		if (updated) {
+			int time = SDL_GetTicks();
+			if ((++count) % 100 == 0) {
+				int time = SDL_GetTicks();
+				float fps = 100000./(time - ticktock);
+				printf("\r");
+				cout.width(6);
+				cout << (int)fps << "fps" << flush;
+				ticktock = time;
+			}
+			oldTime = time;
+		}	
+#else
 		render();
 		if (mainmenu->is_active()) mainmenu->drawMenu();
 		int time = SDL_GetTicks();
-		if ((++count)%100 == 0) {
+		if ((++count) % 100 == 0) {
 			int time = SDL_GetTicks();
 			float fps = 100000./(time - oldTime);
 			printf("\r");
 			cout.width(6);
-			cout << (int)fps << "fps" << flush;
+			cout << (int) fps << "fps" << flush;
 			oldTime = time;
 		}
-		
+#endif
 		SDL_GL_SwapBuffers();
 	}
 	cout << endl;

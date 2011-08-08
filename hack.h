@@ -6,6 +6,8 @@
 #include "constants.h"
 #include "socket.h"
 
+#define DEBUG
+
 #ifdef DEBUG
 #define P(x) printf x
 #else

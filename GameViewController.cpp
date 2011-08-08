@@ -73,6 +73,7 @@ GameViewController::GameViewController() {
 	SDL_ShowCursor(false);
 	SDL_WM_GrabInput(SDL_GRAB_ON);
 	cout << "Starting client\n";
+	P(("at starting client"));
 	
 	addrinfo hints, *res;
 	
@@ -108,6 +109,8 @@ GameViewController::GameViewController() {
 	u[0] = ntohl(u[0]);
 	myId = -1;
 	angle = *reinterpret_cast<float*>(u);
+
+	P(("initialized GameViewController"));
 }
 
 GameViewController::~GameViewController() {
@@ -293,8 +296,10 @@ void GameViewController::render() {
 	
 	P(("drawing walls\n"));
 	_drawWalls();
+	P(("after _drawWalls()"));
 
 	glUseProgram(program);
+	P(("after glUseProgram(program)"));
 	glUniform3f(glGetUniformLocation(program, "lightv"), 5*matrix[8]+matrix[12], 5*matrix[9]+matrix[13], 5*matrix[10]+matrix[14]);
 
 	P(("drawing upsidedown objects\n"));

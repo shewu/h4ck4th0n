@@ -25,7 +25,7 @@ void Socket::receivePackets() {
 		string s((char*)(&addr), addrlen);
 		if (ntohl(*(int*)(stuff)) != PROTMAGIC) continue;
 		int v = ntohl(*(int*)(stuff+4));
-
+		
 		/* trying to do anything with the connections map on the second iteration of the main loop will cause the game to crash. gdb reports a bunch of errors in accessing one element of the red-black tree. why is that? */
 		P(("counting connections...\n"));
 		if (connections.count(pair<string, int>(s, v))) {

@@ -82,8 +82,8 @@ GameViewController::GameViewController() {
 	
 	getaddrinfo(ipaddy, "55555", &hints, &res);
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-	Socket sock(sockfd);
-	sc = sock.connect(*res->ai_addr, res->ai_addrlen);
+	Socket* sock = new Socket(sockfd);
+	sc = sock->connect(*res->ai_addr, res->ai_addrlen);
 	P(("sc = %p\n", sc));
 	
 	int u[2];
@@ -113,6 +113,7 @@ GameViewController::GameViewController() {
 GameViewController::~GameViewController() {
 	SDL_ShowCursor(true);
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
+	delete sc->sock;
 	delete sc;
 	delete mainmenu;
 }
@@ -157,7 +158,7 @@ void GameViewController::process() {
 		}
 #endif
 	}
-
+	
 	P(("polling events\n"));
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
@@ -188,7 +189,7 @@ void GameViewController::process() {
 				break;
 		}
 	}
-
+	
 	P(("sending key state\n"));
 	Uint8* keystate = SDL_GetKeyState(NULL);
 	char buf[5];
@@ -202,7 +203,7 @@ void GameViewController::process() {
 	}
 	sc->add(buf, 5);
 	sc->send();
-
+	
 #ifndef __APPLE__
 	ALfloat alpos[] = { world.objects[myId].p.x, world.objects[myId].p.y, 0 };
 	ALfloat alvel[] = { world.objects[myId].v.x, world.objects[myId].v.y, 0 };
@@ -211,8 +212,9 @@ void GameViewController::process() {
 	alListenerfv(AL_VELOCITY, alvel);
 	alListenerfv(AL_ORIENTATION, alori);
 #endif
-
+	
 	render();
+
 	P(("deciding whether to draw main menu\n"));
 	if (mainmenu->is_active()) {
 		glDisable(GL_LIGHTING);

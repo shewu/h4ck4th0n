@@ -3,9 +3,9 @@
 CC=g++
 LD=g++
 
-CCFLAGS=-O2 -g
-UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
-HOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -lIL -lOpenCL -O2 -g
+CCFLAGS= -g
+UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -g
+HOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -lIL -lOpenCL -g
 
 SERVER_TARGET=server
 UNHOLY_BALLS_TARGET=unholyballs

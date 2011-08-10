@@ -1,11 +1,17 @@
 # The lines of interest to you are SERVER_OBJECTS and UNHOLY_BALLS_OBJECTS, which specify the object files that are required for the server and unholyballs, respectively
 
+ifeq ($(DEBUG_MODE),on)
+ DEBUG_FLAGS=-DDEBUG
+else
+ DEBUG_FLAGS=
+endif
+
 CC=g++
 LD=g++
 
-CCFLAGS= -g
-UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -g
-HOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -lIL -lOpenCL -g
+CCFLAGS=-O2 -g $(DEBUG_FLAGS)
+UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
+HOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -lIL -lOpenCL -O2 -g
 
 SERVER_TARGET=server
 UNHOLY_BALLS_TARGET=unholyballs

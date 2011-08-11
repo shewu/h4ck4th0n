@@ -28,12 +28,18 @@ static bool menuQuit() {
 	return true;
 }
 
+static bool goBack() {
+	finishedView = kHBMainMenuView;
+	return true;
+}
+
 ServerConnectViewController::ServerConnectViewController() {
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	finishedView = kHBNoView;
 
 	serverConnectMenu = new menu();
 	serverConnectMenu->add_menuitem(new inputmenuitem(20, menuGetIP, (char *)"", (char *)"Must not be empty", (char *)"Enter Server IP Address", (char *)"Stuff"));
+	serverConnectMenu->add_menuitem(new actionmenuitem(goBack, NULL, (char *)"Back"));
 	serverConnectMenu->add_menuitem(new actionmenuitem(menuQuit, NULL, (char *)"Quit"));
 
 	serverConnectMenu->set_active(true);

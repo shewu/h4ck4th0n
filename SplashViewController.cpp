@@ -16,7 +16,7 @@ static bool menuQuit() {
 	return true;
 }
 
-static bool menuFinishedView() {
+static bool menuConnectToServer() {
 	finishedView = kHBServerConnectView;
 	return true;
 }
@@ -26,7 +26,7 @@ SplashViewController::SplashViewController() {
 	finishedView = kHBNoView;
 
 	splashMenu = new menu();
-	splashMenu->add_menuitem(new actionmenuitem(menuFinishedView, NULL, (char *)"Play Game"));
+	splashMenu->add_menuitem(new actionmenuitem(menuConnectToServer, NULL, (char *)"Play Game"));
 	splashMenu->add_menuitem(new actionmenuitem(menuQuit, NULL, (char *)"Quit"));
 
 	splashMenu->set_active(true);

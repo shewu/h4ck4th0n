@@ -21,4 +21,11 @@
 
 #define AA 2
 
+typedef enum {
+	kHBNoView,
+	kHBMainMenuView,
+	kHBServerConnectView,
+	kHBGameView
+} HBViewMode;
+
 #endif

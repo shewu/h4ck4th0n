@@ -10,7 +10,6 @@
 
 #include "HBViewController.h"
 #include "hack.h"
-#include "constants.h"
 #include "menu.h"
 #include "font.h"
 
@@ -43,7 +42,7 @@ class GameViewController : public HBViewController {
 		GameViewController();
 		~GameViewController();
 
-		bool didFinishView();
+		HBViewMode didFinishView();
 		void process();
 		void render();
 };

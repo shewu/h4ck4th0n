@@ -10,7 +10,7 @@ class ServerConnectViewController : public HBViewController {
 		ServerConnectViewController();
 		~ServerConnectViewController();
 
-		bool didFinishView();
+		HBViewMode didFinishView();
 		void process();
 		void render();
 };

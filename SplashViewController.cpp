@@ -8,7 +8,7 @@
 
 #include "SplashViewController.h"
 
-static bool finishedView = false;
+static HBViewMode finishedView = kHBNoView;
 
 static bool menuQuit() {
 	printf("Exiting\n");
@@ -17,12 +17,13 @@ static bool menuQuit() {
 }
 
 static bool menuFinishedView() {
-	return finishedView = true;
+	finishedView = kHBServerConnectView;
+	return true;
 }
 
 SplashViewController::SplashViewController() {
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
-	finishedView = false;
+	finishedView = kHBNoView;
 
 	splashMenu = new menu();
 	splashMenu->add_menuitem(new actionmenuitem(menuFinishedView, NULL, (char *)"Play Game"));
@@ -32,10 +33,11 @@ SplashViewController::SplashViewController() {
 }
 
 SplashViewController::~SplashViewController() {
+	finishedView = kHBNoView;
 	delete splashMenu;
 }
 
-bool SplashViewController::didFinishView() {
+HBViewMode SplashViewController::didFinishView() {
 	return finishedView;
 }
 

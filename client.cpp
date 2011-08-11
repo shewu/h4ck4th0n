@@ -6,6 +6,7 @@
 #include "SplashViewController.h"
 #include "ServerConnectViewController.h"
 #include "GameViewController.h"
+#include "constants.h"
 
 using namespace std;
 
@@ -84,8 +85,6 @@ int main(int argc, char* argv[]) {
 					"-i [ip] to connect to specified server\n");
 			exit(0);
 		} else if (!strcmp(argv[i], "-d")) {
-			// round up to next highest multiple of 16 if not already a multiple
-			// of 16
 			//WIDTH = ALIGN(atoi(argv[i+1]));
 			//HEIGHT = ALIGN(atoi(argv[i+2]));
 			cout << "Playing at " << WIDTH << "x" << HEIGHT << "\n";
@@ -102,32 +101,47 @@ int main(int argc, char* argv[]) {
 	init_font();
 	cout << "Starting client\n";
 	
+	HBViewMode viewToDisplay = kHBMainMenuView;
 	while (true) {
-		SplashViewController* svc = new SplashViewController();
-		while (!svc->didFinishView()) {
-			svc->process();
-			svc->render();
-			SDL_GL_SwapBuffers();
+		switch (viewToDisplay) {
+			case kHBMainMenuView: {
+				SplashViewController* svc = new SplashViewController();
+				while ((viewToDisplay = svc->didFinishView()) == kHBNoView) {
+					svc->process();
+					svc->render();
+					SDL_GL_SwapBuffers();
+				}
+				delete svc;
+				break;
+			}
+			case kHBServerConnectView: {
+				P(("drawing server connect view\n"));
+				ServerConnectViewController* scvc = new ServerConnectViewController();
+				while ((viewToDisplay = scvc->didFinishView()) == kHBNoView) {
+					scvc->process();
+					scvc->render();
+					SDL_GL_SwapBuffers();
+				}
+				delete scvc;
+				break;
+			}
+			case kHBGameView: {
+				P(("drawing game view\n"));
+				GameViewController* gvc = new GameViewController();
+				while ((viewToDisplay = gvc->didFinishView()) == kHBNoView) {
+					gvc->process();
+					gvc->render();
+					SDL_GL_SwapBuffers();
+				}
+				delete gvc;
+				break;
+			}
+			default: {
+				break;
+			}
 		}
-		delete svc;
-		
-		ServerConnectViewController* scvc = new ServerConnectViewController();
-		while (!scvc->didFinishView()) {
-			scvc->process();
-			scvc->render();
-			SDL_GL_SwapBuffers();
-		}
-		delete scvc;
-		
-		GameViewController* gvc = new GameViewController();
-		while (!gvc->didFinishView()) {
-			gvc->process();
-			gvc->render();
-			SDL_GL_SwapBuffers();
-		}
-		delete gvc;
 	}
-	
+
 	return 0;
 }
 

@@ -10,7 +10,7 @@
 
 #include "GameViewController.h"
 
-static bool finishedView = false;
+static HBViewMode finishedView = kHBNoView;
 
 static bool action_quit() {
 	exit(0);
@@ -27,7 +27,7 @@ static void action_toggle_fullscreen(bool b) {
 }
 
 static bool action_leave_game() {
-	return finishedView = true;
+	return finishedView = kHBServerConnectView;
 }
 
 static bool validator_test(char *a) {
@@ -65,13 +65,13 @@ void GameViewController::_initSound() {
 }
 
 GameViewController::GameViewController() {
+	finishedView = kHBNoView;
 	_initGL();
 	_initSound();
 	_initMenus();
 	SDL_ShowCursor(false);
 	SDL_WM_GrabInput(SDL_GRAB_ON);
 	cout << "Starting client\n";
-	P(("at starting client"));
 	
 	addrinfo hints, *res;
 	
@@ -83,7 +83,6 @@ GameViewController::GameViewController() {
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	Socket* sock = new Socket(sockfd);
 	sc = sock->connect(*res->ai_addr, res->ai_addrlen);
-	P(("sc = %p\n", sc));
 	
 	int u[2];
 	bool done = false;
@@ -108,26 +107,24 @@ GameViewController::GameViewController() {
 	myId = -1;
 	angle = *reinterpret_cast<float*>(u);
 
-	P(("initialized GameViewController"));
 }
 
 GameViewController::~GameViewController() {
+	finishedView = kHBNoView;
 	SDL_ShowCursor(true);
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	delete sc;
 	delete mainmenu;
 }
 
-bool GameViewController::didFinishView() {
+HBViewMode GameViewController::didFinishView() {
 	return finishedView;
 }
 
 void GameViewController::process() {
-	P(("sc = %p\n", sc));
 	int status;
 	
 	int count = 0, oldTime = SDL_GetTicks();
-	P(("process\n"));
 	// seems like this is crashing on the second time it's called
 	while ((status = world.receiveObjects(sc, myId)) != -1) {
 		int time = SDL_GetTicks();
@@ -140,7 +137,6 @@ void GameViewController::process() {
 			oldTime = time;
 		}
 
-		P(("receiving objects from server\n"));
 		if (status == 0) continue;
 #ifndef __APPLE__
 		for(vector<pair<char, Vector2D> >::iterator it = world.sounds.begin(); it != world.sounds.end(); it++) {
@@ -169,7 +165,6 @@ void GameViewController::process() {
 #endif
 	}
 	
-	P(("polling events\n"));
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		switch(event.type) {
@@ -200,7 +195,6 @@ void GameViewController::process() {
 		}
 	}
 	
-	P(("sending key state\n"));
 	Uint8* keystate = SDL_GetKeyState(NULL);
 	char buf[5];
 	*((int*)buf) = htonl(*reinterpret_cast<int*>(&angle));
@@ -265,7 +259,6 @@ void GameViewController::_initGL() {
 }
 
 void GameViewController::render() {
-	P(("render\n"));
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
@@ -284,37 +277,29 @@ void GameViewController::render() {
 	float matrix[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 	
-	P(("drawing walls\n"));
 	_drawWalls();
-	P(("after _drawWalls()"));
 
 	glUseProgram(program);
-	P(("after glUseProgram(program)"));
 	glUniform3f(glGetUniformLocation(program, "lightv"), 5*matrix[8]+matrix[12], 5*matrix[9]+matrix[13], 5*matrix[10]+matrix[14]);
 
-	P(("drawing upsidedown objects\n"));
 	glPushMatrix();
 		glScalef(1, 1, -1);
 		_drawObjects();
 	glPopMatrix();
 
-	P(("drawing reflective floor\n"));
 	glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glColor4f(1.0, 1.0, 1.0, 1.0);
 		_drawFloor(0.82);
 	glDisable(GL_BLEND);
 
-	P(("drawing objects\n"));
 	_drawObjects();
 	
 
 	glDisable(GL_MULTISAMPLE_ARB);
 
 	glFlush();
-	P(("finished render\n"));
 
-	P(("deciding whether to draw main menu\n"));
 	if (mainmenu->is_active()) {
 		glDisable(GL_LIGHTING);
 		mainmenu->drawMenu();

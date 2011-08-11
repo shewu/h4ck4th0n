@@ -10,7 +10,7 @@ class SplashViewController : public HBViewController {
 		SplashViewController();
 		~SplashViewController();
 
-		bool didFinishView();
+		HBViewMode didFinishView();
 		void process();
 		void render();
 };

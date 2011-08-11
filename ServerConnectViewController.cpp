@@ -8,13 +8,17 @@
 #include "ServerConnectViewController.h"
 
 extern char* ipaddy;
-static bool finishedView = false;
+static HBViewMode finishedView = kHBNoView;
 
 static bool menuGetIP(char* a) {
 	// note: strcmp returns 0 if equal
 	ipaddy = a;
 	printf("Entered IP = %s\n", a);
-	return finishedView = strcmp(a, "");
+	if (strcmp(a, "")) {
+		return finishedView = kHBGameView;
+	} else {
+		return false;
+	}
 }
 
 static bool menuQuit() {
@@ -26,7 +30,7 @@ static bool menuQuit() {
 
 ServerConnectViewController::ServerConnectViewController() {
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
-	finishedView = false;
+	finishedView = kHBNoView;
 
 	serverConnectMenu = new menu();
 	serverConnectMenu->add_menuitem(new inputmenuitem(20, menuGetIP, (char *)"", (char *)"Must not be empty", (char *)"Enter Server IP Address", (char *)"Stuff"));
@@ -36,10 +40,11 @@ ServerConnectViewController::ServerConnectViewController() {
 }
 
 ServerConnectViewController::~ServerConnectViewController() {
+	finishedView = kHBNoView;
 	delete serverConnectMenu;
 }
 
-bool ServerConnectViewController::didFinishView() {
+HBViewMode ServerConnectViewController::didFinishView() {
 	return finishedView;
 }
 

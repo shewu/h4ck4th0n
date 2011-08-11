@@ -34,8 +34,6 @@ static bool validator_test(char *a) {
 	return a[0] == 'a';
 }
 
-char * state [] = {(char*)"abc", (char*)"bad", (char*)"cat!"};
-
 void GameViewController::_initMenus() {
 	mainmenu = new menu();
 	mainmenu->add_menuitem(new actionmenuitem(action_leave_game, NULL, (char *)"Leave Game"));
@@ -116,7 +114,6 @@ GameViewController::GameViewController() {
 GameViewController::~GameViewController() {
 	SDL_ShowCursor(true);
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
-	delete sc->sock;
 	delete sc;
 	delete mainmenu;
 }
@@ -133,6 +130,16 @@ void GameViewController::process() {
 	P(("process\n"));
 	// seems like this is crashing on the second time it's called
 	while ((status = world.receiveObjects(sc, myId)) != -1) {
+		int time = SDL_GetTicks();
+		if (((++count)%=100) == 0) {
+			int time = SDL_GetTicks();
+			float fps = 100000./(time - oldTime);
+			printf("\r");
+			cout.width(6);
+			cout << (int)fps << "fps" << flush;
+			oldTime = time;
+		}
+
 		P(("receiving objects from server\n"));
 		if (status == 0) continue;
 #ifndef __APPLE__
@@ -215,25 +222,6 @@ void GameViewController::process() {
 	alListenerfv(AL_VELOCITY, alvel);
 	alListenerfv(AL_ORIENTATION, alori);
 #endif
-	
-	render();
-
-	P(("deciding whether to draw main menu\n"));
-	if (mainmenu->is_active()) {
-		glDisable(GL_LIGHTING);
-		mainmenu->drawMenu();
-		glEnable(GL_LIGHTING);
-	}
-
-	int time = SDL_GetTicks();
-	if (((++count)%=100) == 0) {
-		int time = SDL_GetTicks();
-		float fps = 100000./(time - oldTime);
-		printf("\r");
-		cout.width(6);
-		cout << (int)fps << "fps" << flush;
-		oldTime = time;
-	}
 }
 
 void GameViewController::_initGL() {
@@ -325,6 +313,13 @@ void GameViewController::render() {
 
 	glFlush();
 	P(("finished render\n"));
+
+	P(("deciding whether to draw main menu\n"));
+	if (mainmenu->is_active()) {
+		glDisable(GL_LIGHTING);
+		mainmenu->drawMenu();
+		glEnable(GL_LIGHTING);
+	}
 }
 
 void GameViewController::_drawWalls() {

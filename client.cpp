@@ -77,20 +77,19 @@ int main(int argc, char* argv[]) {
 		if (!strcmp(argv[i], "-h")) {
 			printf("Usage:\n"
 					"-h to show this message\n"
-					"-d [width] [height] to specify viewport dimensions\n"
-					"\twhere [width] and [height] are multiples of 16\n"
 #ifdef UNHOLY
 					"-norape to avoid antialiasing\n"
 #endif
-					"-i [ip] to connect to specified server\n");
+					);
 			exit(0);
-		} else if (!strcmp(argv[i], "-d")) {
+		}
+		//else if (!strcmp(argv[i], "-d")) {
 			//WIDTH = ALIGN(atoi(argv[i+1]));
 			//HEIGHT = ALIGN(atoi(argv[i+2]));
-			cout << "Playing at " << WIDTH << "x" << HEIGHT << "\n";
-		} else if (!strcmp(argv[i], "-i")) {
-			ipaddy = argv[i+1];
-		}
+			//cout << "Playing at " << WIDTH << "x" << HEIGHT << "\n";
+		//} else if (!strcmp(argv[i], "-i")) {
+		//	ipaddy = argv[i+1];
+		//}
 #ifdef UNHOLY
 		else if (!strcmp(argv[i], "-norape")) {
 			NORAPE = true;

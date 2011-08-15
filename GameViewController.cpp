@@ -277,7 +277,6 @@ void GameViewController::render() {
 	float matrix[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 	
-	_drawWalls();
 
 	glUseProgram(program);
 	glUniform3f(glGetUniformLocation(program, "lightv"), 5*matrix[8]+matrix[12], 5*matrix[9]+matrix[13], 5*matrix[10]+matrix[14]);
@@ -285,6 +284,7 @@ void GameViewController::render() {
 	glPushMatrix();
 		glScalef(1, 1, -1);
 		_drawObjects();
+		_drawWalls();
 	glPopMatrix();
 
 	glEnable(GL_BLEND);
@@ -294,7 +294,7 @@ void GameViewController::render() {
 	glDisable(GL_BLEND);
 
 	_drawObjects();
-	
+	_drawWalls();
 
 	glDisable(GL_MULTISAMPLE_ARB);
 

@@ -50,6 +50,7 @@
 	NSAssert(gameViewController, @"bad gameViewController");
 	[gameViewController.view setFrame:[self.view bounds]];
 	[[self view] replaceSubview:[serverConnectController view] with:[gameViewController view]];
+	[self.view setNeedsDisplay:YES];
 	NSLog(@"%s finished", __PRETTY_FUNCTION__);
 }
 

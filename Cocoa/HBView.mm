@@ -14,6 +14,20 @@
 
 - (void)initGL {
 	NSLog(@"%s: balls pointer is %p", __PRETTY_FUNCTION__, balls);
+	// do other things
+	NSLog(@"initialized HBView");
+	if (!_context) {
+		NSOpenGLPixelFormatAttribute attrs[] = {
+			NSOpenGLPFADoubleBuffer,
+			NSOpenGLPFADepthSize, 32,
+			0
+		};
+		
+		NSOpenGLPixelFormat* format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];	
+		_context = [[NSOpenGLContext alloc] initWithFormat:format 
+											  shareContext:nil];
+	}
+
 	// do context stuff
 	[_context clearDrawable];
 	[_context setView:self]; // causes "invalid drawable" error -- fixed by moving NSOpenGLContext allocation to viewDidMoveToWindow
@@ -68,7 +82,6 @@
 	[_context makeCurrentContext];
 	
 	// seems like this needs a nop to draw, otherwise it's just all blue?!
-	NSLog(@"the main view has %lu subviews", [[[self superview] subviews] count]);
 	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_BLEND);
@@ -118,7 +131,6 @@
 	glScalef(1, 1, -1);
 	LOCK(); { /* begin draw objects */
 		glEnable(GL_NORMALIZE);
-		NSLog(@"objects size = %lu", balls.world->objects.size());
 		for (std::map<int, Object>::const_iterator i = balls.world->objects.begin(); i != balls.world->objects.end(); ++i) {
 			glPushMatrix();
 			glTranslatef(i->second.p.x, i->second.p.y, 0);
@@ -137,7 +149,6 @@
 	
 	LOCK(); { /* begin draw floor */
 		// checkerboard
-		NSLog(@"floor side size = %f", balls.world->maxX/3);
 		unsigned int GridSizeX = balls.world->maxX/3;
 		unsigned int GridSizeY = balls.world->maxY/3;
 		unsigned int SizeX = 6;
@@ -211,8 +222,6 @@
 	if (self = [super initWithFrame:frameRect]) {
 		_context = [[NSOpenGLContext alloc] initWithFormat:pixelFormat 
 											  shareContext:nil];
-		// do other things
-		NSLog(@"initialized HBView");
 	}
 	return self;
 }
@@ -225,20 +234,8 @@
 #pragma mark -
 #pragma mark Keyboard/Mouse Handling
 
-- (void)viewDidMoveToWindow
-{
+- (void)viewDidMoveToWindow {
 	NSLog(@"%s", __PRETTY_FUNCTION__);
-	if (!_context) {
-		NSOpenGLPixelFormatAttribute attrs[] = {
-			NSOpenGLPFADoubleBuffer,
-			NSOpenGLPFADepthSize, 32,
-			0
-		};
-		
-		NSOpenGLPixelFormat* format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];	
-		_context = [[NSOpenGLContext alloc] initWithFormat:format 
-											  shareContext:nil];
-	}
 	[[self window] setAcceptsMouseMovedEvents:YES];
 	_trackingTag = [self addTrackingRect:[self bounds] 
 								  owner:self 
@@ -259,7 +256,6 @@
 
 - (void)mouseMoved:(NSEvent *)theEvent {
 	if(_mouseInArea) {
-		NSLog(@"mouse moved");
 		_xCurLoc = [NSEvent mouseLocation].x;
 		if(_xPrevLoc == -1) {
 			_xPrevLoc = [NSEvent mouseLocation].x;
@@ -280,14 +276,12 @@
 }
 
 - (void)mouseExited:(NSEvent *)theEvent {
-//	NSLog(@"mouse exited");
 	_mouseInArea = NO;
     [[self window] setAcceptsMouseMovedEvents:_wasAcceptingMouseEvents];
 	[self setNeedsDisplay:YES];
 }
 
 - (void)keyDown:(NSEvent *)theEvent {
-	NSLog(@"keyDown");
 	if(!_keysPressed) {
 		_keysPressed = [[NSMutableSet alloc] init];
 	}
@@ -306,7 +300,6 @@
 }
 
 - (void)keyUp:(NSEvent *)theEvent {
-	NSLog(@"keyUp");
 	if(!_keysPressed) {
 		_keysPressed = [[NSMutableSet alloc] init];
 	}

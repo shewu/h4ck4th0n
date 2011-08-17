@@ -16,83 +16,52 @@
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
 		_ipaddy = ip;
 		NSLog(@"ip address is %@", _ipaddy);
+		
+		balls.width = [self.view bounds].size.width;
+		balls.height = [self.view bounds].size.height;
+		
+		srand(time(NULL));
+		
+		addrinfo hints, *res;
+		memset(&hints, 0, sizeof(hints));
+		hints.ai_family = AF_UNSPEC;
+		hints.ai_socktype = SOCK_DGRAM;
+		
+		getaddrinfo([_ipaddy cStringUsingEncoding:NSASCIIStringEncoding], "55555", &hints, &res);
+		int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+		_sock = new Socket(sockfd);
+		_sc = _sock->connect(*res->ai_addr, res->ai_addrlen);
+		
+		int u[2];
+		bool done = false;
+		int tries = 10;
+		for (int i = 0; i < tries && !done; ++i) {
+			_sc->send();
+			[NSThread sleepForTimeInterval:0.02];
+			int n;
+			while (!done && (n = _sc->receive((char *)&u, 8)) != -1) {
+				done |= (n == 4);
+			}
+		}
+		_sc->packetnum = 10;
+		if (!done) {
+			NSLog(@"Failed to connect");
+			// TODO: post notification to go back to ip address view
+			exit(-1);
+		}
+		u[0] = ntohl(u[0]);
+		[(HBView *)self.view initGL];
+		
+		balls.myId = -1;
+		balls.angle = *reinterpret_cast<float*>(u);
+		
 		[NSThread detachNewThreadSelector:@selector(loop:) toTarget:self withObject:nil];
 	}
 	NSLog(@"%s", __PRETTY_FUNCTION__);
 	return self;
 }
-/*
-- (void)awakeFromNib { // this is called
-	NSLog(@"%s", __PRETTY_FUNCTION__);
-	NSLog(@"width = %f", [[self view] bounds].size.width);
-	NSLog(@"height = %f", [[self view] bounds].size.height);
-	
-	notificationCenter = [NSNotificationCenter defaultCenter];
-	
-	// spawn the main thread here - causes _sc corruption
-}
-*/
-- (void)loop:(id)args {
-	NSAutoreleasePool* outerPool = [[NSAutoreleasePool alloc] init];
-	
-	// get width and height
-	balls.width = [[self view] bounds].size.width;
-	balls.height = [[self view] bounds].size.height;
-	NSLog(@"%s: width = %d, height = %d", __PRETTY_FUNCTION__, balls.width, balls.height);
-	
-	// assume this is the same balls as in the view is valid!
-	NSLog(@"%s: balls pointer is %p", __PRETTY_FUNCTION__, balls);
-	NSLog(@"ip address is %@", _ipaddy);
 
-	srand(time(NULL));
-	
-	addrinfo hints, *res;
-	
-	memset(&hints, 0, sizeof(hints));
-	hints.ai_family = AF_UNSPEC;
-	hints.ai_socktype = SOCK_DGRAM;
-	
-	getaddrinfo([_ipaddy cStringUsingEncoding:NSASCIIStringEncoding], "55555", &hints, &res);
-	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-	printf("sockfd = %d\n", sockfd);
-	Socket sock(sockfd);
-	_sc = sock.connect(*res->ai_addr, res->ai_addrlen);
-	NSLog(@"socketconnection = %p", _sc);
-	
-	int u[2];
-	bool done = false;
-	int tries = 10;
-	for (int i = 0; i < tries && !done; i++) {
-		_sc->send();
-		[NSThread sleepForTimeInterval:0.2];
-		int n;
-		while (!done && (n = _sc->receive((char*)&u, 8)) != -1) {
-			done |= (n == 4);
-		}
-	}
-	_sc->packetnum = 10;
-	if (!done) {
-		NSLog(@"Failed to Connect");
-		// TODO: post a notification and go back to the ip address view
-		exit(-1);
-	}
-	NSLog(@"%d: here", __LINE__);
-	
-	u[0] = ntohl(u[0]);
-	
-	NSLog(@"%d: here", __LINE__);
-	
-	[(HBView *)[self view] initGL];
-	
-	NSLog(@"%d: here", __LINE__);
-	
-	balls.myId = -1;
-	balls.angle = *reinterpret_cast<float*>(u);
-	
-	NSLog(@"connections size = %lu", _sc->sock->connections.size());
-	
-	[outerPool drain];
-	
+- (void)loop:(id)args {
 	while (true) {
 		int status;
 		[balls lock];

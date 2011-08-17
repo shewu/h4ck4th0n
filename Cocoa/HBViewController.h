@@ -19,6 +19,7 @@
 @interface HBViewController : NSViewController {
     IBOutlet HBModel *balls;
 	
+	Socket* _sock;
 	SocketConnection* _sc;
 	NSString* _ipaddy;
 	NSNotificationCenter* notificationCenter;

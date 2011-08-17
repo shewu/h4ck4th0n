@@ -209,11 +209,7 @@
 
 - (id)initWithFrame:(NSRect)frameRect {
 	if (self = [super initWithFrame:frameRect]) {
-		NSLog(@"%s: initialized HBView", __PRETTY_FUNCTION__);
-		NSLog(@"%s: balls pointer is %p", __PRETTY_FUNCTION__, balls);
-		
 		_initGLDone = NO;
-		NSLog(@"self = %p", self);
 	}
 	return self;	
 }
@@ -235,7 +231,6 @@
 #pragma mark Keyboard/Mouse Handling
 
 - (void)viewDidMoveToWindow {
-	NSLog(@"%s", __PRETTY_FUNCTION__);
 	[[self window] setAcceptsMouseMovedEvents:YES];
 	_trackingTag = [self addTrackingRect:[self bounds] 
 								  owner:self 
@@ -245,7 +240,6 @@
 }
 
 - (void)mouseEntered:(NSEvent *)theEvent {
-	NSLog(@"mouse entered");
     _wasAcceptingMouseEvents = [[self window] acceptsMouseMovedEvents];
     [[self window] setAcceptsMouseMovedEvents:YES];
     [[self window] makeFirstResponder:self];

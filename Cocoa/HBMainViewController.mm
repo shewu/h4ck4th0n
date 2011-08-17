@@ -45,13 +45,10 @@
 	[[self view] replaceSubview:[gameViewController view] with:[serverConnectController view]];
 }
 
-// [FIXED] bug: the nib is being loaded twice, so there are two controllers and two views!
 - (void)showGameViewWithIP:(NSString *)ip {
 	gameViewController = [[HBViewController alloc] initWithNibName:@"HBViewController" bundle:nil IP:ip];
 	NSAssert(gameViewController, @"bad gameViewController");
 	[gameViewController.view setFrame:[self.view bounds]];
-//	[serverConnectController.view removeFromSuperview];
-//	[self.view addSubview:gameViewController.view];
 	[[self view] replaceSubview:[serverConnectController view] with:[gameViewController view]];
 	NSLog(@"%s finished", __PRETTY_FUNCTION__);
 }

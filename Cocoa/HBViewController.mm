@@ -57,7 +57,6 @@
 		
 		[NSThread detachNewThreadSelector:@selector(loop:) toTarget:self withObject:nil];
 	}
-	NSLog(@"%s", __PRETTY_FUNCTION__);
 	return self;
 }
 
@@ -71,11 +70,11 @@
 		[balls unlock];
 		
 		// le speed limiter -- 0.02 seems to be the sweet spot
-		[NSThread sleepForTimeInterval:0.02];
+		[NSThread sleepForTimeInterval:0.019];
 		
 		NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 		[self sendKeypressData:[(HBView *)[self view] getKeypresses]];		
-		[[self view] setNeedsDisplay:YES];
+		[self.view setNeedsDisplay:YES];
 		[pool drain];
 	}
 }
@@ -101,8 +100,6 @@
 	if (_sc) {
 		 _sc->add(buf, bufsize);
 		 _sc->send();
-	} else {
-		 NSLog(@"socket connection sc is NULL!");
 	}
 }
 

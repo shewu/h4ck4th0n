@@ -56,6 +56,9 @@ int main() {
 	s.listen();
 	
 	int teamCount[2];
+	teamCount[0] = 0;
+	teamCount[1] = 0;
+
 	while (true) {
 		sockaddr_storage their_addr;
 		socklen_t addr_size = sizeof their_addr;
@@ -77,7 +80,7 @@ int main() {
 			if (teamCount[RED] == teamCount[BLU]) {
 				clcomm.team = rand() % 2;
 			} else {
-				clcomm.team = teamCount[RED] > teamCount[BLU];
+				clcomm.team = (teamCount[RED] > teamCount[BLU] ? BLU : RED);
 			}
 			teamCount[clcomm.team]++;
 			clcomm.sc = sc;
@@ -128,6 +131,7 @@ int main() {
 						if (!world.objects[it->second.object_id].dead) world.objects.erase(it->second.object_id);
 						else world.objects[it->second.object_id].player = -2;
 					}
+					teamCount[it->second.team]--;
 					delete it->second.sc;
 					clients.erase(it);
 					printf("Client disconnected size = %zu\n", clients.size());

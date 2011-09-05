@@ -10,20 +10,29 @@
 #include <GL/glx.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#endif
 #include <CL/cl.hpp>
+#endif
 #include <cmath>
 #include "client.h"
 
 using namespace std;
 
 GLUquadric* quad;
+#ifdef __APPLE__
+cl_context context;
+cl_program program;
+vector<cl_device_id> devices;
+cl_command_queue cq;
+vector<cl_mem> bs;
+cl_image igl;
+#else
 cl::Context context;
-cl::Image2DGL igl;
 cl::Program program;
-vector<cl::Memory> bs;
 vector<cl::Device> devices;
 cl::CommandQueue cq;
+vector<cl::Memory> bs;
+cl::Image2DGL igl;
+#endif
 GLuint texture;
 
 void initGL() {

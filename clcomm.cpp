@@ -24,11 +24,12 @@ map<int, ClientCommunicator> clients;
 
 timeval tim;
 
-#ifdef __APPLE__
-int main(int argc, char** argv) {
-#else
+enum {
+	RED,
+	BLU,
+};
+
 int main() {
-#endif
 	if(FRICTION < 0.0f) {
 		cout << "your friction is negative and will cause the game to fail\n";
 		exit(-1);
@@ -54,6 +55,7 @@ int main() {
 	Socket s(sockfd);
 	s.listen();
 	
+	int teamCount[2];
 	while (true) {
 		sockaddr_storage their_addr;
 		socklen_t addr_size = sizeof their_addr;
@@ -72,7 +74,12 @@ int main() {
 				clcomm.id = rand();
 			} while (clients.count(clcomm.id));
 			
-			clcomm.team = rand()%2;
+			if (teamCount[RED] == teamCount[BLU]) {
+				clcomm.team = rand() % 2;
+			} else {
+				clcomm.team = teamCount[RED] > teamCount[BLU];
+			}
+			teamCount[clcomm.team]++;
 			clcomm.sc = sc;
 			clcomm.object_id = -1;
 			clcomm.angle = rand()/float(RAND_MAX)*2*M_PI;

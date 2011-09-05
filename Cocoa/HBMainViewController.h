@@ -16,8 +16,6 @@
 @interface HBMainViewController : NSViewController {
 	HBServerConnectViewController* serverConnectController;
 	HBViewController* gameViewController;
-	
-	NSNotificationCenter* notificationCenter;
 }
 
 - (void)awakeFromNib;

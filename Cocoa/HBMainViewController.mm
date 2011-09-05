@@ -20,13 +20,12 @@
 
 - (void)awakeFromNib {
 	
-	notificationCenter = [NSNotificationCenter defaultCenter];
 	serverConnectController = [[HBServerConnectViewController alloc] initWithNibName:@"HBServerConnectViewController" bundle:nil];
 	[[serverConnectController view] setFrame:[[self view] bounds]];
 	[[self view] addSubview:[serverConnectController view]];
 
-	[notificationCenter addObserver:self selector:@selector(receivedIP:) name:@"HBReceivedIPNotification" object:nil];
-	[notificationCenter addObserver:self selector:@selector(connectToServer:) name:@"HBServerUnavailable" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivedIP:) name:@"HBReceivedIPNotification" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectToServer:) name:@"HBServerUnavailable" object:nil];
 }
 
 - (void)receivedIP:(NSNotification *)notification {
@@ -56,7 +55,7 @@
 
 - (void)dealloc
 {
-	[notificationCenter removeObserver:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[super dealloc];
 }
 

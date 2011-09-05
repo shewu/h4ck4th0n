@@ -261,7 +261,6 @@ int main(int argc, char* argv[])
 	angle = *reinterpret_cast<float*>(u);
 	
 	int count = 0, oldTime = SDL_GetTicks(), ticktock = SDL_GetTicks();
-	bool updated;
 	for (;;) {
 		int status;
 		while ((status = world.receiveObjects(sc, myId)) != -1) {
@@ -377,39 +376,24 @@ int main(int argc, char* argv[])
 		alListenerfv(AL_ORIENTATION, alori);
 #endif
 
-#ifndef __FUCKME__		
-		if (SDL_GetTicks() - oldTime > 1000.0 / 60.0) {	
-			render();
-			if (mainmenu->is_active()) mainmenu->drawMenu();
-			updated = true;
-		} else {
-			updated = false;
-		}
-		if (updated) {
-			int time = SDL_GetTicks();
-			if ((++count) % 100 == 0) {
-				int time = SDL_GetTicks();
-				float fps = 100000./(time - ticktock);
-				printf("\r");
-				cout.width(6);
-				cout << (int)fps << "fps" << flush;
-				ticktock = time;
-			}
-			oldTime = time;
-		}	
-#else
 		render();
 		if (mainmenu->is_active()) mainmenu->drawMenu();
 		int time = SDL_GetTicks();
+		#ifndef __FUCKME__
+		if (time - oldTime < 16) {
+			SDL_Delay(16 - time + oldTime);
+			time = oldTime + 16;
+		}
+		oldTime = time;
+		#endif
 		if ((++count) % 100 == 0) {
 			int time = SDL_GetTicks();
-			float fps = 100000./(time - oldTime);
+			float fps = 100000./(time - ticktock);
 			printf("\r");
 			cout.width(6);
 			cout << (int) fps << "fps" << flush;
-			oldTime = time;
+			ticktock = time;
 		}
-#endif
 		SDL_GL_SwapBuffers();
 	}
 	cout << endl;

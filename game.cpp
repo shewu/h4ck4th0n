@@ -2,6 +2,7 @@
 #include "constants.h"
 
 #include <cmath>
+#include <cstdio>
 #include <cstdlib>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -58,11 +59,17 @@ void Game::remove_player(int id) {
     players.erase(id);
 }
 
-void Game::send_world(int id, SocketConnection *sc) {
-    world.sendObjects(sc, id);
+void Game::send_world() {
+    for(map<int, Player>::iterator p = players.begin();
+            p != players.end(); ++p) {
+        world.sendObjects(p->second.cl.sc, p->second.object_id);
+    }
 }
 
 void Game::process_packet(int id, char *buf, int length) {
+    if(players.count(id) == 0)
+        return;
+
     if(length != 5)
         return;
 
@@ -79,6 +86,7 @@ void Game::update(float dt) {
             p->second.time_until_spawn -= dt;
             while(p->second.object_id == -1 &&
                     p->second.time_until_spawn < 0.0) {
+                printf("time_until_spawn is less than 0\n");
                 p->second.object_id = world.spawn(2 * p->second.team,
                         p->second.cl.id, -1); //wtf does this mean?
                 if(p->second.object_id == -1)
@@ -134,6 +142,7 @@ void Game::update(float dt) {
             if(it->second.player == -2)
                 it->second.spawny = 2;
             else {
+                it->second.time_until_spawn -= dt;
                 while(it->second.spawny == 1 &&
                         it->second.time_until_spawn < 0.0) {
                     int newo = world.spawn(it->second.spawnl,

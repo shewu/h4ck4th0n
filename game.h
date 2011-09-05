@@ -34,7 +34,7 @@ class Game {
         bool add_player(Client cl);
         void remove_player(int id);
 
-        void send_world(int id, SocketConnection *sc);
+        void send_world();
         void process_packet(int id, char *buf, int length);
 
         void update(float dt);

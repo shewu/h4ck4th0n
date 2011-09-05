@@ -118,6 +118,8 @@ World::World() {
 
 int World::spawn(int spawnl, int player, int flag) {
 	if (rand()/float(RAND_MAX) >= SPAWN_PROB) return -1;
+
+    //printf("passed randomness\n");
 	
 	int oid;
 	do {
@@ -146,6 +148,7 @@ int World::spawn(int spawnl, int player, int flag) {
 	o.p.x = rand()/float(RAND_MAX)*(max_x - min_x) + min_x;
 	o.p.y = rand()/float(RAND_MAX)*(max_y - min_y) + min_y;
 	bool fail = false;
+    //printf("about to enter loop\n");
 	for (map<int, Object>::iterator it = objects.begin(); it != objects.end(); it++) {
 		Vector2D d = it->second.p - o.p;
 		if ((!it->second.dead || !it->second.stopped) && (it->second.rad + o.rad) * (it->second.rad + o.rad) > d*d) {
@@ -153,6 +156,7 @@ int World::spawn(int spawnl, int player, int flag) {
 			break;
 		}
 	}
+    //printf("out of loop, fail = %c\n", fail ? 't' : 'f');
 	if (fail)
 		return -1;
 	

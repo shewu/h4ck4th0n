@@ -18,6 +18,8 @@
 
 #include <unistd.h>
 
+#include <sys/poll.h>
+
 using namespace std;
 
 #define MYPORT "55555"
@@ -67,11 +69,24 @@ int main() {
     s.listen();
 
     while(true) {
+        pollfd fds;
+        fds.fd = 0; //0 means stdin
+        fds.events = POLLIN;
+        if(poll(&fds, 1, 0)) { //do we have input from stdin
+            char c = fgetc(stdin);
+            if(c == 'q') {
+                // kill server
+                // should probably also deal with any clients
+                close(sockfd);
+                exit(0);
+            }
+        }
+
         sockaddr_storage their_addr;
 
         SocketConnection *sc = s.receiveConnection();
         if(sc != NULL) {
-            if(clients.size() == MAX_CLIENTS) {
+            if(clients.size() >= MAX_CLIENTS) {
                 delete sc;
                 continue;
             }
@@ -79,11 +94,15 @@ int main() {
             printf("Connection made\n");
 
             Client cl;
-            
+
             do { cl.id = rand(); }
             while(clients.count(cl.id));
 
+            cl.sc = sc;
+
             clients[cl.id] = cl;
+
+            printf("Client added to clients map\n");
         }
 
         for(map<int, Client>::iterator it = clients.begin();
@@ -110,16 +129,20 @@ int main() {
                     
                     //Message of length 0 indicated connection
                     if(n == 0) {
+                        printf("Received connect message\n");
+
                         game.add_player(cl);
 
-                        printf("Player added to game; currently %zu clients\n", 
-                        clients.size());
+                        printf("Player added to game; currently %zu clients\n",
+                                clients.size());
                     }
 
                     //One byte of 0 indictates disconnect
                     else if(n == 1 && buf[0] == 0) {
                         game.remove_player(cl.id);
                         remove_client(cl);
+                        printf("Player disconnected, currently %zu clients\n",
+                                clients.size());
                     }
 
                     else {
@@ -127,8 +150,6 @@ int main() {
                     }
                 }
             }
-
-            game.send_world(cl.id, sc);
 
             it = next_it;
         }
@@ -140,6 +161,8 @@ int main() {
         tim = tim2;
 
         game.update(dt);
+
+        game.send_world();
 
         usleep(TIMESTEP_MICROSECONDS);
     }

@@ -11,8 +11,16 @@
 #include "GameViewController.h"
 
 static HBViewMode finishedView = kHBNoView;
+static SocketConnection *sc_static = NULL;
+
+static void send_disconnect_message() {
+    char q = 0;
+    sc_static->add(&q, 1);
+    sc_static->send();
+}
 
 static bool action_quit() {
+    send_disconnect_message();
 	exit(0);
 	return true;
 }
@@ -27,6 +35,7 @@ static void action_toggle_fullscreen(bool b) {
 }
 
 static bool action_leave_game() {
+    send_disconnect_message();
 	return finishedView = kHBServerConnectView;
 }
 
@@ -83,6 +92,7 @@ GameViewController::GameViewController() {
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	Socket* sock = new Socket(sockfd);
 	sc = sock->connect(*res->ai_addr, res->ai_addrlen);
+    sc_static = sc;
 	
 	int u[2];
 	bool done = false;

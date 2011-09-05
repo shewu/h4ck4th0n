@@ -10,6 +10,8 @@
 
 class SocketConnection;
 
+#define MAX_PACKET_LENGTH_CLIENT_TO_SERVER 5
+
 class Socket
 {
 	public:

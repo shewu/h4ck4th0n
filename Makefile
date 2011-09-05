@@ -16,7 +16,7 @@ HOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -lIL -lOpenCL -O2 -g
 SERVER_TARGET=server
 UNHOLY_BALLS_TARGET=unholyballs
 
-SERVER_OBJECTS=clcomm.o world.o socket.o object.o vec.o simulate.o
+SERVER_OBJECTS=server.o game.o world.o socket.o object.o vec.o simulate.o
 UNHOLY_BALLS_OBJECTS=client.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o GameViewController.o
 
 all: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET)

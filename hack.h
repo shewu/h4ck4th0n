@@ -72,7 +72,7 @@ class Object
 		bool stopped;
 		int spawnl;
 		int spawny;
-		double spawnTime;
+		double time_until_spawn;
 		int nattached;
 		int attachedTo;
 		int player;

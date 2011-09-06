@@ -35,7 +35,9 @@ bool Game::add_player(Client cl) {
 
     players[cl.id] = player;
 
-    int message = htonl(*reinterpret_cast<int*>(&player.angle));
+    int message;
+    memcpy((void *)&message, (void *)&player.angle, 4);
+    int message = htonl(message);
     cl.sc->add((char *)(&message), 4);
     cl.sc->send();
 

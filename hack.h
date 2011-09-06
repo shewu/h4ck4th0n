@@ -98,6 +98,8 @@ class Obstacle
 		Color color;
 		bool sticky;
 		int flag;
+        Obstacle(Vector2D a, Vector2D b, Color c, bool d = false, int e = -1)
+            : p1(a), p2(b), color(c), sticky(d), flag(e) {}
 };
 
 class Light

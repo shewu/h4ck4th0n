@@ -10,74 +10,39 @@ using namespace std;
 World::World() {
 	std::ifstream mapf("map");
 	mapf >> minX >> maxX >> minY >> maxY;
+
+    Color wall_color(101, 67, 33);
 	
-	Obstacle w1, w2, w3, w4;
-	w1.p1 = Vector2D(minX, minY);
-	w1.p2 = Vector2D(maxX, minY);
-	w1.color = Color(101, 67, 33);
-	w1.sticky = false;
-	obstacles.push_back(w1);
-	w2.p1 = Vector2D(minX, maxY);
-	w2.p2 = Vector2D(maxX, maxY);
-	w2.color = Color(101, 67, 33);
-	w2.sticky = false;
-	obstacles.push_back(w2);
-	w3.p1 = Vector2D(minX, minY);
-	w3.p2 = Vector2D(minX, maxY);
-	w3.color = Color(101, 67, 33);
-	w3.sticky = false;
-	obstacles.push_back(w3);
-	w4.p1 = Vector2D(maxX, minY);
-	w4.p2 = Vector2D(maxX, maxY);
-	w4.color = Color(101, 67, 33);
-	w4.sticky = false;
-	obstacles.push_back(w4);
+	obstacles.push_back(Obstacle(Vector2D(minX, minY), Vector2D(maxX, minY), wall_color));
+    obstacles.push_back(Obstacle(Vector2D(minX, maxY), Vector2D(maxX, maxY), wall_color));
+    obstacles.push_back(Obstacle(Vector2D(minX, minY), Vector2D(minX, maxY), wall_color));
+    obstacles.push_back(Obstacle(Vector2D(maxX, minY), Vector2D(maxX, maxY), wall_color));
 	
-	std::string cmd;
+    std::string cmd;
+
 	while (mapf >> cmd) {
 		if (cmd == "obs") {
 			float x1, y1, x2, y2;
 			mapf >> x1 >> y1 >> x2 >> y2;
-			Obstacle obs;
-			obs.p1 = Vector2D(x1, y1);
-			obs.p2 = Vector2D(x2, y2);
-			obs.color = Color(101, 67, 33);
-			obs.sticky = false;
-			obs.flag = -1;
-			obstacles.push_back(obs);
+            obstacles.push_back(Obstacle(Vector2D(x1, y1), Vector2D(x2, y2), wall_color));
 		}
 		else if (cmd == "obs0") {
 			float x1, y1, x2, y2;
 			mapf >> x1 >> y1 >> x2 >> y2;
-			Obstacle obs;
-			obs.p1 = Vector2D(x1, y1);
-			obs.p2 = Vector2D(x2, y2);
-			obs.color = Color(0, 0, 200);
-			obs.sticky = true;
-			obs.flag = 0;
-			obstacles.push_back(obs);
+            obstacles.push_back(Obstacle(Vector2D(x1, y1), Vector2D(x2, y2),
+                        Color(0, 0, 200), true, 0));
 		}
 		else if (cmd == "obs1") {
 			float x1, y1, x2, y2;
 			mapf >> x1 >> y1 >> x2 >> y2;
-			Obstacle obs;
-			obs.p1 = Vector2D(x1, y1);
-			obs.p2 = Vector2D(x2, y2);
-			obs.color = Color(200, 0, 0);
-			obs.sticky = true;
-			obs.flag = 1;
-			obstacles.push_back(obs);
+            obstacles.push_back(Obstacle(Vector2D(x1, y1), Vector2D(x2, y2),
+                        Color(200, 0, 0), true, 1));
 		}
 		else if (cmd == "sobs") {
 			float x1, y1, x2, y2;
 			mapf >> x1 >> y1 >> x2 >> y2;
-			Obstacle obs;
-			obs.p1 = Vector2D(x1, y1);
-			obs.p2 = Vector2D(x2, y2);
-			obs.color = Color(0, 255, 0);
-			obs.sticky = true;
-			obs.flag = -1;
-			obstacles.push_back(obs);
+            obstacles.push_back(Obstacle(Vector2D(x1, y1), Vector2D(x2, y2),
+                        Color(0, 255, 0), true));
 		}
 		else if (cmd == "spawn") {
 			int spawn_id;

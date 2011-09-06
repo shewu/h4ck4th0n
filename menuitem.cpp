@@ -38,18 +38,8 @@ bool submenuitem::shouldMenuBeDrawn() {return false;}
 //actionmenuitem
 actionmenuitem::~actionmenuitem() { }
 
-actionmenuitem::actionmenuitem(bool (*init1)(), bool (*ki1)(int), char *name1) {
-	init = init1;
-	ki = ki1;
-	name = name1;
-}
-
 bool actionmenuitem::activate() {
-	return (*init)();
-}
-
-bool actionmenuitem::key_input(int key) {
-	return (*ki)(key);
+	return init(voidtype());
 }
 
 bool actionmenuitem::shouldMenuBeDrawn() {return true;}
@@ -59,28 +49,7 @@ inputmenuitem::~inputmenuitem() {
 	delete [] input;
 }
 
-inputmenuitem::inputmenuitem(int maxInputLen, bool (*inputValidator)(char *), char *initInput, char *iie, char *t, char *nam) {
-	maxlen = maxInputLen;
-	input = new char[maxlen+1];
-	if(initInput == NULL) {
-		len = 0;
-		input[0] = '\0';
-	} else {
-		strcpy(input, initInput);
-		len = strlen(input);
-	}
-	
-	vali = inputValidator;
-	invalidInputError = iie;
-	displayError = false;
-
-	text = t;
-	name = nam;
-}
-
 char * inputmenuitem::get_input() {
-	if(input == NULL)
-		return NULL;
 	char *ans = new char[len+1];
 	strcpy(ans, input);
 	return ans;
@@ -97,7 +66,7 @@ bool inputmenuitem::key_input(int key) {
 		if(len > 0)
 			input[--len] = '\0';
 	} else if(key == MENU_KEY_ENTER) {
-		if(vali == NULL || (*vali)(input)) 
+		if(vali(input)) 
 			return false;
 		else
 			displayError = true;
@@ -125,18 +94,12 @@ bool inputmenuitem::shouldMenuBeDrawn() {
 }
 
 //togglemenuitem
-togglemenuitem::~togglemenuitem() { }
-
-togglemenuitem::togglemenuitem(char *name1, bool state1, void (*act)(bool)) {
-	name = name1;
-	state = state1;
-	action = act;
+togglemenuitem::~togglemenuitem() {
 }
 
 bool togglemenuitem::activate() {
 	state = !state;
-	if(action != NULL)
-		action(state);
+	action(state);
 	return false;
 }
 
@@ -145,15 +108,7 @@ bool togglemenuitem::get_state() {
 }
 
 //slidermenuitem
-slidermenuitem::~slidermenuitem() { }
-
-slidermenuitem::slidermenuitem(char *name1, char** states1, int len1, int curstate1, void (*act)(int)) {
-       name = name1;
-       states = states1;
-       len = len1;
-       curstate = curstate1;
-       newcurstate = curstate1;
-       action = act;
+slidermenuitem::~slidermenuitem() {
 }
 
 bool slidermenuitem::get_state() {
@@ -177,8 +132,7 @@ void slidermenuitem::key_input_non_active(int key) {
 
 bool slidermenuitem::activate() {
 	curstate = newcurstate;
-	if(action != NULL)
-		action(curstate);
+	action(curstate);
 	return false;
 }
 

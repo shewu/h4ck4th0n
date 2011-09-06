@@ -12,22 +12,36 @@
 
 static HBViewMode finishedView = kHBNoView;
 
-static bool action_quit() {
-	exit(0);
-	return true;
-}
+class quitfunc {
+	public:
+	quitfunc() {}
+	quitfunc(GameViewController* gvc) {
+		_gvc = gvc;
+	}
+	GameViewController* _gvc;
+	bool operator()(voidtype) {
+		return _gvc->quit();
+	}
+};
 
-static void action_toggle_fullscreen(bool b) {
+class leavefunc {
+	public:
+	leavefunc() {}
+	leavefunc(GameViewController* gvc) {
+		_gvc = gvc;
+	}
+	GameViewController* _gvc;
+	bool operator()(voidtype) {
+		return _gvc->leave();
+	}
+};
+
+static voidtype action_toggle_fullscreen(bool b) {
 	if(b) {
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
 	} else {
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	}
-	return;
-}
-
-static bool action_leave_game() {
-	return finishedView = kHBServerConnectView;
 }
 
 static bool validator_test(char *a) {
@@ -36,11 +50,11 @@ static bool validator_test(char *a) {
 
 void GameViewController::_initMenus() {
 	mainmenu = new menu();
-	mainmenu->add_menuitem(new actionmenuitem(action_leave_game, NULL, (char *)"Leave Game"));
+	mainmenu->add_menuitem(new actionmenuitem(leavefunc(this), (char *)"Leave Game"));
 #ifndef __APPLE__
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
 #endif
-	mainmenu->add_menuitem(new actionmenuitem(action_quit, NULL, (char *)"Quit"));
+	mainmenu->add_menuitem(new actionmenuitem(quitfunc(this), (char *)"Quit"));
 }
 
 void GameViewController::_initSound() {
@@ -100,13 +114,12 @@ GameViewController::GameViewController() {
 	sc->packetnum = 10;
 	if (!done) {
 		cout << "Failed to connect" << endl;
-		exit(1);
+		leave();
 	}
 	
 	u[0] = ntohl(u[0]);
 	myId = -1;
 	angle = *reinterpret_cast<float*>(u);
-
 }
 
 GameViewController::~GameViewController() {
@@ -183,7 +196,7 @@ void GameViewController::process() {
 				mainmenu->key_input(event.key.keysym.sym);
 				break;
 			case SDL_QUIT:
-				action_quit();
+				quit();
 				break;
 			case SDL_MOUSEMOTION:
 				if (mainmenu->is_active()) break;
@@ -308,7 +321,7 @@ void GameViewController::render() {
 }
 
 void GameViewController::_drawWalls() {
-	// obstacles
+	// obstaclesGameViewController* gvc;
 	glUseProgram(0);
 	glBegin(GL_QUADS);
 	for (vector<Obstacle>::iterator i = world.obstacles.begin(); i != world.obstacles.end(); i++) {
@@ -365,3 +378,21 @@ void GameViewController::_drawFloor(float alpha) {
 	glDisable(GL_NORMALIZE);
 }
 
+void GameViewController::_disconnect() {
+	if(sc)
+	{
+		char q = 0;
+		sc->add(&q, 1);
+		sc->send();
+	}
+}
+
+bool GameViewController::quit() {
+	_disconnect();
+	exit(0);
+}
+
+bool GameViewController::leave() {
+	_disconnect();
+	return finishedView = kHBServerConnectView;
+}

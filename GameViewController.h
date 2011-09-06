@@ -37,6 +37,7 @@ class GameViewController : public HBViewController {
 		void _drawWalls();
 		void _drawObjects();
 		void _drawFloor(float);
+		void _disconnect();
 
 	public:
 		GameViewController();
@@ -45,5 +46,7 @@ class GameViewController : public HBViewController {
 		HBViewMode didFinishView();
 		void process();
 		void render();
+		bool leave();
+		bool quit();
 };
 

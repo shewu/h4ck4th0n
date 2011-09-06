@@ -10,24 +10,23 @@
 
 static HBViewMode finishedView = kHBNoView;
 
-static bool menuQuit() {
+static bool menuQuit(voidtype) {
 	printf("Exiting\n");
 	exit(0);
 	return true;
 }
 
-static bool menuConnectToServer() {
+static bool menuConnectToServer(voidtype) {
 	finishedView = kHBServerConnectView;
 	return true;
 }
-
 SplashViewController::SplashViewController() {
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	finishedView = kHBNoView;
 
 	splashMenu = new menu();
-	splashMenu->add_menuitem(new actionmenuitem(menuConnectToServer, NULL, (char *)"Play Game"));
-	splashMenu->add_menuitem(new actionmenuitem(menuQuit, NULL, (char *)"Quit"));
+	splashMenu->add_menuitem(new actionmenuitem(menuConnectToServer, (char *)"Play Game"));
+	splashMenu->add_menuitem(new actionmenuitem(menuQuit, (char *)"Quit"));
 
 	splashMenu->set_active(true);
 }

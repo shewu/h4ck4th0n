@@ -2,6 +2,8 @@
 #define SOCKET_H
 
 #include "constants.h"
+#include "packet.h"
+
 #include <string>
 #include <unistd.h>
 #include <sys/types.h>
@@ -15,39 +17,34 @@ class SocketConnection;
 class Socket
 {
 	public:
-		int socket;
 		Socket(int sock);
-		void receivePackets();
+
 		void listen();
 		SocketConnection* receiveConnection();
+        void closeConnection();
+
 		SocketConnection* connect(sockaddr addr, socklen_t addrlen);
+        void disconnect();
 		
-		bool listening;
-		SocketConnection* queue[MAXQUEUE];
-		int qf, qb;
-		std::map<std::pair<std::string, int>, SocketConnection*> connections;
+    private:
+        int socket;
+		bool listening, connected;
+        map<int, SocketConnection*> connections;
 };
 
 class SocketConnection {
 	public:
-		SocketConnection(Socket* s, sockaddr addr, socklen_t addrlen, int v);
-		void add(char* stuff, int size);
-		void send();
-		int receive(char* stuff, int size);
+        int socket;
+
+		SocketConnection(int socket);
+		void send(WritePacket*);
+		ReadPacket* receive();
 		~SocketConnection();
-		
-		sockaddr addr;
-		socklen_t addrlen;
-		int v;
-		Socket* sock;
-		std::string toSend;
-		std::string queue[MAXQUEUE];
-		int qf, qb;
-		
-		int packetnum;
-		int lastReceived;
+
 		int lastTimeReceived;
-		int lastTimeAcknowledged;
+
+    private:
+        int num_sent;
 };
 
 #endif

@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <cstdio>
+#include <cstring>
 #include <sys/socket.h>
 #include <netinet/in.h>
 
@@ -37,7 +38,7 @@ bool Game::add_player(Client cl) {
 
     int message;
     memcpy((void *)&message, (void *)&player.angle, 4);
-    int message = htonl(message);
+    message = htonl(message);
     cl.sc->add((char *)(&message), 4);
     cl.sc->send();
 

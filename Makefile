@@ -9,7 +9,7 @@ endif
 CC=g++
 LD=g++
 
-CCFLAGS=-O2 -g $(DEBUG_FLAGS)
+CCFLAGS=-O2 -g -Wall $(DEBUG_FLAGS)
 UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
 HOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -lIL -lOpenCL -O2 -g
 

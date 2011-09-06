@@ -113,8 +113,14 @@ GameViewController::GameViewController() {
 		exit(1);
 	}
 
-	int local_order = ntohl(u[0]);
+	/*int local_order = ntohl(u[0]);
 	angle = *reinterpret_cast<float*>(&local_order);
+    */
+
+    printf("u[0] = %d\n", u[0]);
+    u[0] = ntohl(u[0]);
+    angle = *reinterpret_cast<float*>(u);
+    printf("%f\n", angle);
 
     myId = -1;
 }

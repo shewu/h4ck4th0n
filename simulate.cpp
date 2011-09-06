@@ -144,7 +144,7 @@ void World::doSimulation(float dt)
 						objects[e.t2].nattached = 0;
 						objects[e.t2].attachedTo = e.t1;
 						objects[e.t1].nattached++;
-						sounds.push_back(pair<int, Vector2D>(1+(objects[e.t1].flag != -1), objects[e.t1].p+normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
+						sounds.push_back(pair<int, Vector2D>(1+(objects[e.t1].flag != NO_TEAM), objects[e.t1].p+normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 					}
 					else {
 						if (objects[e.t1].nattached != 0) objects[e.t2].v -= 2*(nv2/(normal*normal))*normal;
@@ -162,7 +162,7 @@ void World::doSimulation(float dt)
 						objects[e.t1].nattached = 0;
 						objects[e.t1].attachedTo = e.t2;
 						objects[e.t2].nattached++;
-						sounds.push_back(pair<int, Vector2D>(1+(objects[e.t1].flag != -1), objects[e.t1].p+normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
+						sounds.push_back(pair<int, Vector2D>(1+(objects[e.t1].flag != NO_TEAM), objects[e.t1].p+normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 					}
 					else {
 						if (objects[e.t2].nattached != 0) objects[e.t1].v -= 2*(nv1/(normal*normal))*normal;
@@ -204,14 +204,14 @@ void World::doSimulation(float dt)
 				collideTimesObs[pair<int, int>(e.t1, e.t2)] = INFINITY;
 				objects[e.t1].p += (e.time-knownTime)*objects[e.t1].v;
 				Vector2D normal = objects[e.t1].p-obstacles[e.t2].p1;
-				if (obstacles[e.t2].sticky && ((objects[e.t1].flag == -1 && obstacles[e.t2].flag == -1) || (objects[e.t1].flag != -1 && obstacles[e.t2].flag != -1 && objects[e.t1].flag != obstacles[e.t2].flag))) {
+				if (obstacles[e.t2].sticky && ((objects[e.t1].flag == NO_TEAM && obstacles[e.t2].flag == NO_TEAM) || (objects[e.t1].flag != NO_TEAM && obstacles[e.t2].flag != NO_TEAM && objects[e.t1].flag != obstacles[e.t2].flag))) {
 					objects[e.t1].dead = true;
 					objects[e.t1].stopped = false;
 					objects[e.t1].spawny = 0;
 					objects[e.t1].v = -normal*(1/sqrt(normal*normal))*DEATH_RATE;
 					objects[e.t1].nattached = 0;
 					objects[e.t1].attachedTo = -1;
-					sounds.push_back(pair<int, Vector2D>(1+(objects[e.t1].flag != -1), objects[e.t1].p-normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
+					sounds.push_back(pair<int, Vector2D>(1+(objects[e.t1].flag != NO_TEAM), objects[e.t1].p-normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 				}
 				else {
 					float nv1 = objects[e.t1].v*normal;
@@ -237,14 +237,14 @@ void World::doSimulation(float dt)
 				collideTimesObs[pair<int, int>(e.t1, e.t2)] = INFINITY;
 				objects[e.t1].p += (e.time-knownTime)*objects[e.t1].v;
 				Vector2D normal = objects[e.t1].p-obstacles[e.t2].p2;
-				if (obstacles[e.t2].sticky && ((objects[e.t1].flag == -1 && obstacles[e.t2].flag == -1) || (objects[e.t1].flag != -1 && obstacles[e.t2].flag != -1 && objects[e.t1].flag != obstacles[e.t2].flag))) {
+				if (obstacles[e.t2].sticky && ((objects[e.t1].flag == NO_TEAM && obstacles[e.t2].flag == NO_TEAM) || (objects[e.t1].flag != NO_TEAM && obstacles[e.t2].flag != NO_TEAM && objects[e.t1].flag != obstacles[e.t2].flag))) {
 					objects[e.t1].dead = true;
 					objects[e.t1].stopped = false;
 					objects[e.t1].spawny = 0;
 					objects[e.t1].v = -normal*(1/sqrt(normal*normal))*DEATH_RATE;
 					objects[e.t1].nattached = 0;
 					objects[e.t1].attachedTo = -1;
-					sounds.push_back(pair<int, Vector2D>(1+(objects[e.t1].flag != -1), objects[e.t1].p-normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
+					sounds.push_back(pair<int, Vector2D>(1+(objects[e.t1].flag != NO_TEAM), objects[e.t1].p-normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 				}
 				else {
 					float nv1 = objects[e.t1].v*normal;
@@ -270,7 +270,7 @@ void World::doSimulation(float dt)
 				collideTimesObs[pair<int, int>(e.t1, e.t2)] = INFINITY;
 				objects[e.t1].p += (e.time-knownTime)*objects[e.t1].v;
 				Vector2D normal = (obstacles[e.t2].p2-obstacles[e.t2].p1).getNormalVector();
-				if (obstacles[e.t2].sticky && ((objects[e.t1].flag == -1 && obstacles[e.t2].flag == -1) || (objects[e.t1].flag != -1 && obstacles[e.t2].flag != -1 && objects[e.t1].flag != obstacles[e.t2].flag))) {
+				if (obstacles[e.t2].sticky && ((objects[e.t1].flag == NO_TEAM && obstacles[e.t2].flag == NO_TEAM) || (objects[e.t1].flag != NO_TEAM && obstacles[e.t2].flag != NO_TEAM && objects[e.t1].flag != obstacles[e.t2].flag))) {
 					objects[e.t1].dead = true;
 					objects[e.t1].stopped = false;
 					objects[e.t1].spawny = 0;
@@ -278,7 +278,7 @@ void World::doSimulation(float dt)
 					objects[e.t1].v = -normal*(1/sqrt(normal*normal))*DEATH_RATE;
 					objects[e.t1].nattached = 0;
 					objects[e.t1].attachedTo = -1;
-					sounds.push_back(pair<int, Vector2D>(1+(objects[e.t1].flag != -1), objects[e.t1].p-normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
+					sounds.push_back(pair<int, Vector2D>(1+(objects[e.t1].flag != NO_TEAM), objects[e.t1].p-normal*(1/sqrt(normal*normal)*objects[e.t1].rad)));
 				}
 				else {
 					float nv1 = objects[e.t1].v*normal;

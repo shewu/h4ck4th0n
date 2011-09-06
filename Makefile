@@ -16,7 +16,7 @@ HOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -lIL -lOpenCL -O2 -g
 SERVER_TARGET=server
 UNHOLY_BALLS_TARGET=unholyballs
 
-SERVER_OBJECTS=clcomm.o world.o socket.o object.o vec.o simulate.o
+SERVER_OBJECTS=server.o game.o world.o socket.o object.o vec.o simulate.o
 UNHOLY_BALLS_OBJECTS=client.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o GameViewController.o
 
 all: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET)
@@ -40,7 +40,7 @@ love:
 	echo 'In Soviet Russia, love makes you!'
 
 macserver:
-	g++ -O2 -g clcomm.cpp world.cpp socket.cpp object.cpp vec.cpp simulate.cpp SDLMain.m -I/Library/Frameworks/SDL.framework/Headers -framework SDL -framework Cocoa -o macserver
+	g++ -O2 -g server.cpp game.cpp world.cpp socket.cpp object.cpp vec.cpp simulate.cpp SDLMain.m -I/Library/Frameworks/SDL.framework/Headers -framework SDL -framework Cocoa -o macserver
 
 mac:
 	g++ -O2 client.cpp font.cpp menu.cpp menudraw.cpp menuitem.cpp object.cpp unholyrender.cpp socket.cpp vec.cpp world.cpp SDLMain.m -framework SDL -framework OpenGL -framework Cocoa -framework GLUT -I/Library/Frameworks/SDL.framework/Headers -o unholyballs

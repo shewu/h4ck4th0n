@@ -228,4 +228,3 @@ class slidermenuitem : public menuitem {
 };
 
 #endif
-

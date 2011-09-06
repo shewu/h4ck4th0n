@@ -12,6 +12,12 @@
 #define P(x)
 #endif
 
+enum {
+    BLU,
+    RED,
+    NO_TEAM
+};
+
 class Vector2D
 {
 	public:
@@ -72,7 +78,7 @@ class Object
 		bool stopped;
 		int spawnl;
 		int spawny;
-		double spawnTime;
+		double time_until_spawn;
 		int nattached;
 		int attachedTo;
 		int player;
@@ -98,6 +104,8 @@ class Obstacle
 		Color color;
 		bool sticky;
 		int flag;
+        Obstacle(Vector2D a, Vector2D b, Color c, bool d = false, int e = NO_TEAM)
+            : p1(a), p2(b), color(c), sticky(d), flag(e) {}
 };
 
 class Light

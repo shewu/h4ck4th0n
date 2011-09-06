@@ -2,8 +2,8 @@
 #include "constants.h"
 
 #include <cmath>
-#include <cstdio>
 #include <cstdlib>
+#include <cstdio>
 #include <sys/socket.h>
 #include <netinet/in.h>
 
@@ -86,7 +86,6 @@ void Game::update(float dt) {
             p->second.time_until_spawn -= dt;
             while(p->second.object_id == -1 &&
                     p->second.time_until_spawn < 0.0) {
-                printf("time_until_spawn is less than 0\n");
                 p->second.object_id = world.spawn(2 * p->second.team,
                         p->second.cl.id, -1); //wtf does this mean?
                 if(p->second.object_id == -1)

@@ -112,11 +112,11 @@ GameViewController::GameViewController() {
 		cout << "Failed to connect" << endl;
 		exit(1);
 	}
-	
-	u[0] = ntohl(u[0]);
-	myId = -1;
-	angle = *reinterpret_cast<float*>(u);
 
+	int local_order = ntohl(u[0]);
+	angle = *reinterpret_cast<float*>(&local_order);
+
+    myId = -1;
 }
 
 GameViewController::~GameViewController() {

@@ -30,13 +30,13 @@ World::World() {
 			float x1, y1, x2, y2;
 			mapf >> x1 >> y1 >> x2 >> y2;
             obstacles.push_back(Obstacle(Vector2D(x1, y1), Vector2D(x2, y2),
-                        Color(0, 0, 200), true, 0));
+                        Color(0, 0, 200), true, BLU));
 		}
 		else if (cmd == "obs1") {
 			float x1, y1, x2, y2;
 			mapf >> x1 >> y1 >> x2 >> y2;
             obstacles.push_back(Obstacle(Vector2D(x1, y1), Vector2D(x2, y2),
-                        Color(200, 0, 0), true, 1));
+                        Color(200, 0, 0), true, RED));
 		}
 		else if (cmd == "sobs") {
 			float x1, y1, x2, y2;
@@ -63,7 +63,7 @@ World::World() {
 		else if (cmd == "obj") {
 			int spawnl;
 			mapf >> spawnl;
-			while (spawn(spawnl, -1, -1) == -1);
+			while (spawn(spawnl, -1, NO_TEAM) == -1);
 		}
 	}
 	
@@ -77,8 +77,8 @@ World::World() {
 	l2.color = Color(255, 255, 255);
 	lights.push_back(l2);
 	
-	while (spawn(1, -1, 0) == -1);
-	while (spawn(3, -1, 1) == -1);
+	while (spawn(1, -1, BLU) == -1);
+	while (spawn(3, -1, RED) == -1);
 }
 
 int World::spawn(int spawnl, int player, int flag) {

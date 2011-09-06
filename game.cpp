@@ -87,7 +87,7 @@ void Game::update(float dt) {
             while(p->second.object_id == -1 &&
                     p->second.time_until_spawn < 0.0) {
                 p->second.object_id = world.spawn(2 * p->second.team,
-                        p->second.cl.id, -1); //wtf does this mean?
+                        p->second.cl.id, NO_TEAM); //wtf does this mean?
                 if(p->second.object_id == -1)
                     p->second.time_until_spawn += SPAWN_TRY;
             }

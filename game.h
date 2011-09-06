@@ -4,10 +4,7 @@
 #include "socket.h"
 #include "server.h"
 
-enum {
-    RED,
-    BLU,
-};
+#include "hack.h"
 
 class Player {
     public:

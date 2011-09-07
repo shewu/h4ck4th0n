@@ -63,6 +63,42 @@ void WritePacket::write_int(int i) {
     size += 4;    
 }
 
+short ReadPacket::read_short() {
+    if(index > max_size - 2)
+        return 0;
+    short s;
+    memcpy((void *)&s, (void *)&buf[index], 2);
+    index += 2;
+    return ntohl(s);
+}
+
+void WritePacket::write_short(short s) {
+    if(size + 2 > max_size)
+        increase_buf_size();
+    s = htonl(s);
+    memcpy((void *)&buf[size], (void *)&s, 2);
+    size += 2;
+}
+
+// Read and write strings
+
+std::string ReadPacket::read_string() {
+    int length = (int)read_short();
+    if(length == 0 || index + length > size)
+        return (std::string)"";
+    std::string s = std::string(buf + index, length);
+    index += length;
+    return s;
+}
+
+void WritePacket::write_string(std::string s) {
+    write_short((short)s.length());
+    while(size + s.length() > max_size)
+        increase_buf_size();
+    memcpy((void *)(buf + size), (void *)s.data(), s.length());
+    size += s.length();
+}
+
 // Read and write floats
 
 #define pack754_32(f) (pack754((f), 32, 8))
@@ -128,6 +164,8 @@ void WritePacket::write_float(float f) {
 }
 
 float ReadPacket::read_float() {
+    if(index > size - 4)
+        return 0.0f;
     return (float)unpack754_32(read_int());
 }
 

@@ -16,7 +16,9 @@ class WritePacket {
 
         void write_char(char c);
         void write_int(int i);
+        void write_short(short s);
         void write_float(float f);
+        void write_string(std::string s);
 
     private:
         increase_buf_size();
@@ -35,7 +37,9 @@ class ReadPacket {
 
         char read_char();
         int read_int();
+        short read_short();
         float read_float();
+        std::string read_string();
 }
 
 #endif

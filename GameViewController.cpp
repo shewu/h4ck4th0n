@@ -249,7 +249,7 @@ void GameViewController::_initGL() {
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
-	glMaterialf( GL_FRONT_AND_BACK, GL_SHININESS, 200.0);
+	glMaterialf( GL_FRONT_AND_BACK, GL_SHININESS, 100.0);
 
 	glEnable(GL_LIGHTING); // enable lighting 
 	glEnable(GL_LIGHT0); // enable light 0
@@ -278,8 +278,8 @@ void GameViewController::render() {
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 	
 
-	glUseProgram(program);
-	glUniform3f(glGetUniformLocation(program, "lightv"), 5*matrix[8]+matrix[12], 5*matrix[9]+matrix[13], 5*matrix[10]+matrix[14]);
+	//glUseProgram(program);
+	//glUniform3f(glGetUniformLocation(program, "lightv"), 5*matrix[8]+matrix[12], 5*matrix[9]+matrix[13], 5*matrix[10]+matrix[14]);
 
 	glPushMatrix();
 		glScalef(1, 1, -1);
@@ -290,7 +290,7 @@ void GameViewController::render() {
 	glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glColor4f(1.0, 1.0, 1.0, 1.0);
-		_drawFloor(0.82);
+		_drawFloor(.82);
 	glDisable(GL_BLEND);
 
 	_drawObjects();

@@ -21,14 +21,14 @@ static bool menuGetIP(char* a) {
 	}
 }
 
-static bool menuQuit() {
+static bool menuQuit(voidtype) {
 	// we need to deallocate memory
 	printf("Exiting\n");
 	exit(0);
 	return true;
 }
 
-static bool goBack() {
+static bool goBack(voidtype) {
 	finishedView = kHBMainMenuView;
 	return true;
 }
@@ -39,8 +39,8 @@ ServerConnectViewController::ServerConnectViewController() {
 
 	serverConnectMenu = new menu();
 	serverConnectMenu->add_menuitem(new inputmenuitem(20, menuGetIP, (char *)"", (char *)"Must not be empty", (char *)"Enter Server IP Address", (char *)"Stuff"));
-	serverConnectMenu->add_menuitem(new actionmenuitem(goBack, NULL, (char *)"Back"));
-	serverConnectMenu->add_menuitem(new actionmenuitem(menuQuit, NULL, (char *)"Quit"));
+	serverConnectMenu->add_menuitem(new actionmenuitem(goBack, (char *)"Back"));
+	serverConnectMenu->add_menuitem(new actionmenuitem(menuQuit, (char *)"Quit"));
 
 	serverConnectMenu->set_active(true);
 }

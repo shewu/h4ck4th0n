@@ -15,6 +15,64 @@ using namespace std;
 #define MENU_KEY_A		SDLK_a
 #define MENU_KEY_0		SDLK_0
 
+struct voidtype { };
+
+template<class R, class I> class funcobj {
+	public:
+	virtual R operator()(I) = 0;
+};
+
+template<class R, class I, class A> class funcobjwrapper : public funcobj<R, I> {
+	public:
+	funcobjwrapper(A internal) {
+		_internal = internal;
+	}
+
+	R operator()(I i) {
+		return _internal(i);
+	}
+	private:
+	A _internal;
+};
+
+template<class R, class I> class wrappedfuncobj {
+	public:
+	wrappedfuncobj() {
+		real = NULL;
+		refcount = new int(1);
+	}
+	wrappedfuncobj(const wrappedfuncobj<R, I>& toCopy) {
+		real = toCopy.real;
+		refcount = toCopy.refcount;
+		(*refcount)++;
+	}
+	template<class A> wrappedfuncobj(A internal) {
+		real = new funcobjwrapper<R, I, A>(internal);
+		refcount = new int(1);
+	}
+	wrappedfuncobj& operator=(const wrappedfuncobj& toCopy) {
+		(*(toCopy.refcount))++;
+		if (--(*refcount) == 0) {
+			delete refcount;
+			if (real) delete real;
+		}
+		real = toCopy.real;
+		refcount = toCopy.refcount;
+	}
+	R operator()(I i) {
+		return (*real)(i);
+	}
+	~wrappedfuncobj() {
+		if (--(*refcount) == 0) {
+			delete refcount;
+			if (real) delete real;
+		}
+	}
+	private:
+	funcobj<R, I>* real;
+	int* refcount;
+};
+
 class menuitem {
 	public:
 		virtual ~menuitem();
@@ -33,7 +91,7 @@ class menuitem {
 		
 };
 
-
+// The menu "owns" its menuitems and will free them on destruction
 class menu {
 	public:
 		menu();
@@ -58,6 +116,7 @@ class menu {
 		float x1, x2, y1, y2;
 };
 
+// The submenuitem "owns" its menu and will free it on destruction
 class submenuitem : public menuitem {
 	public:
 		virtual ~submenuitem();
@@ -77,25 +136,43 @@ class submenuitem : public menuitem {
 class actionmenuitem : public menuitem {
 	public:
 		virtual ~actionmenuitem();
-		actionmenuitem(bool (*init)(), bool (*ki)(int), char *name);
+		template <class A> actionmenuitem(A init1, char *name1) {
+			init = wrappedfuncobj<bool, voidtype>(init1);
+			name = name1;
+		}
 
 		virtual bool activate();
-		virtual bool key_input(int key);
 		virtual bool shouldMenuBeDrawn();
 
 	private:
-		bool (*init)();
-		bool (*ki)(int);
+		wrappedfuncobj<bool, voidtype> init;
 };
 
 class inputmenuitem : public menuitem {
 	public:
-		inputmenuitem(  int maxInputLen, 
-				bool (*inputValidator)(char *),
+		template <class A> inputmenuitem(  int maxInputLen, 
+				A inputValidator,
 				char *initInput,
-				char *invalidInputError,
-				char *text,
-				char *name);
+				char *iie,
+				char *t,
+				char *nam) {
+				maxlen = maxInputLen;
+			input = new char[maxlen+1];
+			if(initInput == NULL) {
+				len = 0;
+				input[0] = '\0';
+			} else {
+				strcpy(input, initInput);
+				len = strlen(input);
+			}
+	
+			vali = wrappedfuncobj<bool, char*>(inputValidator);
+			invalidInputError = iie;
+			displayError = false;
+
+			text = t;
+			name = nam;
+		}
 		virtual ~inputmenuitem();
 		virtual bool activate();
 		virtual bool key_input(int key);
@@ -108,25 +185,36 @@ class inputmenuitem : public menuitem {
 
 		char *invalidInputError;
 		bool displayError;
-		bool (*vali)(char *);
+		wrappedfuncobj<bool, char*> vali;
 };
 
 class togglemenuitem : public menuitem {
 	public:
-		togglemenuitem(char *name, bool defaultstate, void (*act)(bool));
+		template <class A> togglemenuitem(char *name1, bool state1, A act) {
+			name = name1;
+			state = state1;
+			action = wrappedfuncobj<voidtype, bool>(act);
+		}
 		virtual ~togglemenuitem();
 		virtual bool activate();
 		bool get_state();
 		virtual void draw(bool selected, float x1, float y1, float width, float height, unsigned char alpha);
 	private:
 		bool state;
-		void (*action)(bool);
+		wrappedfuncobj<voidtype, bool> action;
 		
 };
 
 class slidermenuitem : public menuitem {
 	public:
-		slidermenuitem(char *name, char** states, int len, int defaultstate, void (*act)(int));
+		template <class A> slidermenuitem(char *name1, char** states1, int len1, int curstate1, A act) {
+			name = name1;
+			states = states1;
+			len = len1;
+			curstate = curstate1;
+			newcurstate = curstate1;
+			action = wrappedfuncobj<voidtype, int>(act);
+		}
 		virtual ~slidermenuitem();
 		virtual void key_input_non_active(int key);
 		bool get_state();
@@ -136,8 +224,7 @@ class slidermenuitem : public menuitem {
 	private:
 		char** states;
 		int curstate, len, newcurstate;
-		void (*action)(int);
+		wrappedfuncobj<voidtype, int> action;
 };
 
 #endif
-

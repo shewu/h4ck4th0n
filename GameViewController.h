@@ -12,6 +12,7 @@
 #include "hack.h"
 #include "menu.h"
 #include "font.h"
+#include "packet.h"
 
 extern SDL_Surface* screen;
 extern char* ipaddy;

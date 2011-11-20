@@ -24,7 +24,7 @@ Socket::listen() {
 }
 
 SocketConnection* Socket::receiveConnection() {
-    if(!listening)
+    if(!listening || connections.size() >= MAX_CLIENTS)
         return false;
     sockaddr addr;
     socklen_t addr_len;

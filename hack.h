@@ -5,6 +5,7 @@
 #include <vector>
 #include "constants.h"
 #include "socket.h"
+#include "packet.h"
 
 #ifdef DEBUG
 #define P(x) printf x
@@ -84,8 +85,8 @@ class Object
 		int player;
 		int flag;
 		
-		void send(SocketConnection* sc);
-		char* get(char* buf);
+		void write_data(WritePacket* wp);
+		void read_data(ReadPacket* rp);
 };
 
 class Spawn {

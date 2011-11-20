@@ -1,9 +1,11 @@
 #ifndef PACKET_H
 #define PACKET_H
 
+#include "network_protocol.h"
+
 /* Note: if the initial value of max_size given is not large enough,
-   then this will work correctly but probably be slow due to
-   constant rebuffering. */
+   then this will work correctly as it can resize the buffer. Of
+   course, it is best to be as accurate as possible. */
 
 class WritePacket {
     public:
@@ -11,7 +13,7 @@ class WritePacket {
         char *buf;
         char message_type;
 
-        WritePacket(int ms, char type);
+        WritePacket(char message_type, int max_size = 1);
         virtual ~WritePacket();
 
         void write_char(char c);
@@ -32,7 +34,7 @@ class ReadPacket {
         int index;
         int packet_number;
 
-        ReadPacket(int size, char message_type, int packet_number);
+        ReadPacket(char message_type, int size, int packet_number);
         virtual ~ReadPacket();
 
         char read_char();

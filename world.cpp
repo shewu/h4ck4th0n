@@ -130,59 +130,47 @@ int World::spawn(int spawnl, int player, int flag) {
 }
 
 void World::sendObjects(SocketConnection* sc, int obj) {
-	int o = htonl(obj);
-	sc->add((char*)(&o), 4);
-	
-	int a = htonl(objects.size());
-	sc->add((char*)(&a), 4);
-	
-	int s = objects.size();
-	for(map<int, Object>::iterator it = objects.begin(); it != objects.end(); it++) {
-		it->second.send(sc);
-		s--;
-	}
-	
-	int b = htonl(sounds.size());
-	sc->add((char*)(&b), 4);
-	for(vector<pair<char, Vector2D> >::iterator it = sounds.begin(); it != sounds.end(); it++) {
-		char buf[9];
-		buf[0] = it->first;
-		*((int*)(buf+1)) = htonl(*reinterpret_cast<int*>(&it->second.x));
-		*((int*)(buf+5)) = htonl(*reinterpret_cast<int*>(&it->second.y));
-		sc->add(buf, 9);
-	}
-	sc->send();
+    WritePacket* wp = new WritePacket(STC_WORLD_DATA, 12 +
+            35 * objects.size() +
+            9 * sounds.size());
+
+    wp->write_int(obj);
+
+    wp->write_int(objects.size());
+    for(map<int, Object>::iterator it = objects.begin(); it != objects.end(); ++it) {
+        it->second.write_data(wp);
+    }
+
+    wp->write_int(sounds.size());
+    for(vector<pair<char, Vector2D> >::iterator it = sounds.begin();
+            it != sounds.end(); ++it) {
+        wp->write_char(it->first);
+        wp->write_float(it->second.x);
+        wp->write_float(it->second.y);
+    }
+
+    sc->send(wp);
+    delete wp;
 }
 
-int World::receiveObjects(SocketConnection* sc, int& obj) {
-	char buffer[MAXPACKET];
-	int len;
-	if ((len = sc->receive(buffer, MAXPACKET)) < 12) return (len >= 0 ? 0 : -1);
-	
-	int numObjects = ntohl(*reinterpret_cast<int*>(buffer+4));
-	if (numObjects < 0 || numObjects > 2*MAX_CLIENTS || len < 35*numObjects+12) return 0;
-	
-	int numSounds = ntohl(*reinterpret_cast<int*>(buffer+35*numObjects+8));
-	if (numSounds < 0 || numSounds > MAX_EVENTS || len != 35*numObjects+9*numSounds+12) return 0;
-	
-	obj = ntohl(*reinterpret_cast<int*>(buffer));
-	
-	objects.clear();
-	char* c = buffer+8;
-	for (int i = 0; i < numObjects; i++) {
-		Object o;
-		c = o.get(c);
-		objects[o.id] = o;
-	}
-	
-	sounds.clear();
-	sounds.reserve(numSounds);
-	c += 4;
-	for (int i = 0; i < numSounds; i++) {
-		*((int*)(c+1)) = ntohl(*((int*)(c+1)));
-		*((int*)(c+5)) = ntohl(*((int*)(c+5)));
-		sounds.push_back(pair<char, Vector2D>(c[0], Vector2D(*reinterpret_cast<float*>(c+1), *reinterpret_cast<float*>(c+5))));
-		c += 9;
-	}
-	return true;
+void World::receiveObjects(ReadPacket* rp, int& obj) {
+    obj = rp->read_int();
+
+    int numObjects = rp->read_int();
+    objects.clear();
+    for(int i = 0; i < numObjects; i++) {
+        Object o;
+        o.get(rp);
+        objects[o.id] = o;
+    }
+
+    int numSounds = rp->read_int();
+    sounds.clear();
+    sounds.reserve(numSounds);
+    for(int i = 0; i < numSounds; i++) {
+        char c = rp->read_char();
+        int v1 = rp->read_float();
+        int v2 = rp->read_float();
+        sounds.push_back(pair<char, Vector2D>(v1, v2));
+    }
 }

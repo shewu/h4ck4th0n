@@ -11,7 +11,6 @@
 #include "GameViewController.h"
 
 static HBViewMode finishedView = kHBNoView;
-static SocketConnection *sc_static = NULL;
 
 static void send_disconnect_message() {
     char q = 0;
@@ -104,29 +103,31 @@ GameViewController::GameViewController() {
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	Socket* sock = new Socket(sockfd);
 	sc = sock->connect(*res->ai_addr, res->ai_addrlen);
-    sc_static = sc;
 	
 	int u[2];
 	bool done = false;
 	for (int i = 0; i < 10 && !done; i++) {
-		sc->send();
+		WritePacket* wp = new WritePacket(CTS_CONNECT, 0); 
+        sc->send(wp);
+        delete wp;
+
 		SDL_Delay(200);
-		int n;
-		while ((n = sc->receive((char*)&u, 8)) != -1) {
-			if (n == 4) {
+		ReadPacket* rp;
+		while ((rp = sc->receive((char*)&u, 8)) != NULL) {
+			if (rp->message_type == STC_INITIAL_ANGLE) {
 				done = true;
 				break;
 			}
+            delete rp;
 		}
 	}
-	sc->packetnum = 10;
 	if (!done) {
 		cout << "Failed to connect" << endl;
 		leave();
 	}
 
-	int local_order = ntohl(u[0]);
-	angle = *reinterpret_cast<float*>(&local_order);
+	angle = rp->read_float();
+    delete rp;
 
     myId = -1;
 }

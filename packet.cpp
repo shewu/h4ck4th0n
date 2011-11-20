@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <inttypes.h>
 
-WritePacket::WritePacket(int ms, char type) {
+WritePacket::WritePacket(char type, int ms) {
     max_size = ms;
     size = 0;
     buf = new char[max_size];
@@ -16,7 +16,7 @@ WritePacket::~WritePacket() {
     delete buf;
 }
 
-ReadPacket::ReadPacket(int s, int type, int n) {
+ReadPacket::ReadPacket(char type, int s, int n) {
     size = s;
     buf = new char[size];
     message_type = type;
@@ -38,7 +38,7 @@ char ReadPacket::read_char() {
 }
 
 void WritePacket::write_char(char c) {
-    if(size == max_size)
+    while(size + 1 > max_size)
         increase_buf_size();
     buf[size] = c;
     size++;
@@ -56,7 +56,7 @@ int ReadPacket::read_int() {
 }
 
 void WritePacket::write_int(int i) {
-    if(size + 4 > max_size)
+    while(size + 4 > max_size)
         increase_buf_size();
     i = htonl(i);
     memcpy((void *)&buf[size], (void *)&i, 4);
@@ -73,7 +73,7 @@ short ReadPacket::read_short() {
 }
 
 void WritePacket::write_short(short s) {
-    if(size + 2 > max_size)
+    while(size + 2 > max_size)
         increase_buf_size();
     s = htonl(s);
     memcpy((void *)&buf[size], (void *)&s, 2);
@@ -172,9 +172,9 @@ float ReadPacket::read_float() {
 // Make sure buf is large enough
 
 void WritePacket::increase_buf_size() {
-    char *buf2 = new char[max_size + 4];
+    char *buf2 = new char[max_size * 2];
     memcpy(buf2, buf, size);
     delete buf;
     buf = buf2;
-    max_size += 4;
+    max_size *= 2;
 }

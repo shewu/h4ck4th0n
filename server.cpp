@@ -1,4 +1,5 @@
 #include "server.h"
+#include "packet.h"
 #include "game.h"
 #include "hack.h"
 
@@ -33,6 +34,7 @@ map<int, Client> clients;
 timeval tim;
 
 Game game;
+Socket s;
 
 void verify() {
     if(FRICTION < 0.0f) {
@@ -42,7 +44,7 @@ void verify() {
 }
 
 void remove_client(Client cl) {
-    delete cl.sc;
+    s.removeConnection(cl.sc);
     clients.erase(cl.id);
 }
 
@@ -65,7 +67,7 @@ int main() {
     int opt = 1;
     setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt));
     bind(sockfd, res->ai_addr, res->ai_addrlen);
-    Socket s(sockfd);
+    s = Socket(sockfd);
     s.listen();
 
     while(true) {
@@ -86,11 +88,6 @@ int main() {
 
         SocketConnection *sc = s.receiveConnection();
         if(sc != NULL) {
-            if(clients.size() >= MAX_CLIENTS) {
-                delete sc;
-                continue;
-            }
-            
             printf("Connection made\n");
 
             Client cl;
@@ -122,23 +119,19 @@ int main() {
                         clients.size());
             }
             else {
-                int n;
-                char buf[MAX_PACKET_LENGTH_CLIENT_TO_SERVER];
-                while((n = cl.sc->receive(buf, 
-                                MAX_PACKET_LENGTH_CLIENT_TO_SERVER)) >= 0) {
-                    
-                    //Message of length 0 indicated connection
-                    if(n == 0) {
+                ReadPacket* rp;
+                while((rp = cl.sc->receive()) != NULL) {
+                    //Connect
+                    if(rp->message_type == CTS_CONNECT) {
                         printf("Received connect message\n");
 
-                        game.add_player(cl);
-
-                        printf("Player added to game; currently %zu clients\n",
-                                clients.size());
+                        if(game.add_player(cl))
+                            printf("Player added to game; currently %zu clients\n",
+                                     clients.size());
                     }
 
-                    //One byte of 0 indictates disconnect
-                    else if(n == 1 && buf[0] == 0) {
+                    //Disconnect
+                    else if(rp->message_type == CTS_DISCONNECT) {
                         game.remove_player(cl.id);
                         remove_client(cl);
                         printf("Player disconnected, currently %zu clients\n",
@@ -146,8 +139,10 @@ int main() {
                     }
 
                     else {
-                        game.process_packet(cl.id, buf, n);
+                        game.process_packet(cl.id, rp);
                     }
+
+                    delete rp;
                 }
             }
 

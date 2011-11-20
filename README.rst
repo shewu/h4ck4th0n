@@ -2,6 +2,12 @@ Holy Balls: The Game
 A free and open source capture-the-flag game.
 Version 0.4, now with gameplay and a menu *and* Mac OS X support!
 
+TODO
+====
+Proposed Gameplay:
+* Capture the flag based
+	- event engine interfaces with game engine that announces what happens, sends data to socket code to talk to client
+
 Game
 ====
 
@@ -19,9 +25,8 @@ Requirements
 * The Mac version requires an Intel Mac running Mac OS X 10.5 Leopard or higher.
 
 Building
---------
-Linux
-~~~~~
+=======
+* Linux
 	- make
 		see 'make all'
 
@@ -37,14 +42,13 @@ Linux
 	- make all
 		will build all three binaries
 
-Mac 
-~~~
-	open the .xcodeproj file in Xcode and hit the build button.
+* Mac 
+	- open the .xcodeproj file in Xcode and hit the build button.
 
 Run
----
+===
 Linux
-~~~~~
+-----
 -h
 	to display help message
 
@@ -58,11 +62,11 @@ Linux
 	to play in fullscreen; will not work if specified resolution is greater than screen resolution
 
 Mac
-~~~
+---
 double click on the .app to run or click the Run or Build and Run button in Xcode
 
 Playing
--------
+=======
 * Mouse: Turn
 * W: Accelerate forwards
 * A: Accelerate left
@@ -71,7 +75,7 @@ Playing
 * Escape: Bring up menu
 
 Credits
--------
+======
 * Sounds from freesound.org
 	- bounce sound from user dreamoron
 	- ding sound from user acclivity

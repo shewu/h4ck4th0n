@@ -76,7 +76,7 @@ class MapEditPanel extends JPanel implements KeyListener
 		}
 
 		// draw where we are
-		final int HERE_R = 3;
+		final int HERE_R = 4;
 		g.setColor(Color.RED);
 		g.drawOval(MapEdit.SCALE*here.x - HERE_R, MapEdit.SCALE*here.y - HERE_R, 2*HERE_R, 2*HERE_R);
 
@@ -114,7 +114,7 @@ class MapEditPanel extends JPanel implements KeyListener
 				}
 				break;
 			case 'd':
-				if(here.x < WIDTH)
+				if(here.x < MWIDTH)
 				{
 					++here.x;
 				}
@@ -126,7 +126,7 @@ class MapEditPanel extends JPanel implements KeyListener
 				}
 				break;
 			case 's':
-				if(here.y < HEIGHT)
+				if(here.y < MHEIGHT)
 				{
 					++here.y;
 				}

@@ -9,9 +9,6 @@
 #include <iostream>
 #include <fstream>
 #include <SDL/SDL.h>
-#ifndef __APPLE__
-#include <IL/il.h>
-#endif
 #include <cmath>
 #include "constants.h"
 #include "client.h"

@@ -136,7 +136,6 @@ void MultiGameViewController::process() {
 	int status;
 	
 	int count = 0, oldTime = SDL_GetTicks();
-	// seems like this is crashing on the second time it's called
 	while ((status = world.receiveObjects(sc, myId)) != -1) {
 		int time = SDL_GetTicks();
 		if (((++count)%=100) == 0) {
@@ -422,6 +421,14 @@ void MultiGameViewController::render() {
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 	glEnable(GL_DEPTH_TEST);
+
+	glFlush();
+
+	if (mainmenu->is_active()) {
+		glDisable(GL_LIGHTING);
+		mainmenu->drawMenu();
+		glEnable(GL_LIGHTING);
+	}
 }
 
 void MultiGameViewController::_disconnect() {

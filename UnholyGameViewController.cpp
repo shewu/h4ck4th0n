@@ -136,7 +136,6 @@ void UnholyGameViewController::process() {
 	int status;
 	
 	int count = 0, oldTime = SDL_GetTicks();
-	// seems like this is crashing on the second time it's called
 	while ((status = world.receiveObjects(sc, myId)) != -1) {
 		int time = SDL_GetTicks();
 		if (((++count)%=100) == 0) {
@@ -280,10 +279,7 @@ void UnholyGameViewController::render() {
 	float matrix[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 	
-
-	//glUseProgram(program);
-	//glUniform3f(glGetUniformLocation(program, "lightv"), 5*matrix[8]+matrix[12], 5*matrix[9]+matrix[13], 5*matrix[10]+matrix[14]);
-
+	// fake reflections
 	glPushMatrix();
 		glScalef(1, 1, -1);
 		_drawObjects();
@@ -296,6 +292,7 @@ void UnholyGameViewController::render() {
 		_drawFloor(.82);
 	glDisable(GL_BLEND);
 
+	// draw the things right-side up
 	_drawObjects();
 	_drawWalls();
 

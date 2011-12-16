@@ -8,7 +8,7 @@
 using namespace std;
 
 World::World() {
-	std::ifstream mapf("map");
+	std::ifstream mapf("map.hbm");
 	mapf >> minX >> maxX >> minY >> maxY;
 
     Color wall_color(101, 67, 33);

@@ -3,11 +3,8 @@
 #include <GL/glx.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#ifndef UNHOLY
-#include <CL/cl.hpp>
-#endif
 
-#include "HBViewController.h"
+#include "GameViewController.h"
 #include "hack.h"
 #include "menu.h"
 
@@ -15,11 +12,9 @@ extern SDL_Surface* screen;
 extern char* ipaddy;
 extern int WIDTH;
 extern int HEIGHT;
-#ifdef UNHOLY
 extern bool NORAPE;
-#endif
 
-class GameViewController : public HBViewController {
+class UnholyGameViewController : public GameViewController {
 	private:
 		unsigned int albuf[3], alsrcs[ALSRCS];
 		SocketConnection* sc;
@@ -35,21 +30,11 @@ class GameViewController : public HBViewController {
 		void _drawObjects();
 		void _drawFloor(float);
 		void _disconnect();
-#ifndef UNHOLY
-		cl::Context context;
-		cl::Program program;
-		vector<cl::Device> devices;
-		cl::CommandQueue cq;
-		vector<cl::Memory> bs;
-		cl::Image2DGL igl;
-		GLuint texture;
-#else
 		int program;
-#endif
 
 	public:
-		GameViewController();
-		~GameViewController();
+		UnholyGameViewController();
+		~UnholyGameViewController();
 
 		HBViewMode didFinishView();
 		void process();

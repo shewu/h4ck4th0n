@@ -7,7 +7,7 @@
 #include <CL/cl.hpp>
 #endif
 
-#include "HBViewController.h"
+#include "GameViewController.h"
 #include "hack.h"
 #include "menu.h"
 
@@ -15,11 +15,8 @@ extern SDL_Surface* screen;
 extern char* ipaddy;
 extern int WIDTH;
 extern int HEIGHT;
-#ifdef UNHOLY
-extern bool NORAPE;
-#endif
 
-class GameViewController : public HBViewController {
+class MultiGameViewController : public GameViewController {
 	private:
 		unsigned int albuf[3], alsrcs[ALSRCS];
 		SocketConnection* sc;
@@ -35,21 +32,17 @@ class GameViewController : public HBViewController {
 		void _drawObjects();
 		void _drawFloor(float);
 		void _disconnect();
-#ifndef UNHOLY
-		cl::Context context;
-		cl::Program program;
+		vector<cl::Context> deviceContexts;
+		vector<cl::Program> devicePrograms;
 		vector<cl::Device> devices;
-		cl::CommandQueue cq;
-		vector<cl::Memory> bs;
-		cl::Image2DGL igl;
+		vector<cl::Image2D> images;
+		vector<cl::CommandQueue> cqs;
 		GLuint texture;
-#else
-		int program;
-#endif
+		int* pixels;
 
 	public:
-		GameViewController();
-		~GameViewController();
+		MultiGameViewController();
+		~MultiGameViewController();
 
 		HBViewMode didFinishView();
 		void process();

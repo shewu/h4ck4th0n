@@ -5,7 +5,15 @@
 
 #include "SplashViewController.h"
 #include "ServerConnectViewController.h"
-#include "GameViewController.h"
+#ifdef UNHOLY
+#include "UnholyGameViewController.h"
+#else
+#ifdef MULTI
+#include "MultiGameViewController.h"
+#else
+#include "HolyGameViewController.h"
+#endif
+#endif
 #include "constants.h"
 
 using namespace std;
@@ -131,7 +139,15 @@ int main(int argc, char* argv[]) {
 			}
 			case kHBGameView: {
 				P(("drawing game view\n"));
-				GameViewController* gvc = new GameViewController();
+#ifdef UNHOLY
+				UnholyGameViewController* gvc = new UnholyGameViewController();
+#else
+#ifdef MULTI
+				MultiGameViewController* gvc = new MultiGameViewController();
+#else
+				HolyGameViewController* gvc = new HolyGameViewController();
+#endif
+#endif
 				while ((viewToDisplay = gvc->didFinishView()) == kHBNoView) {
 					gvc->process();
 					gvc->render();

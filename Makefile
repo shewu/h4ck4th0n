@@ -19,11 +19,11 @@ HOLY_BALLS_TARGET=holyballs
 MULTI_BALLS_TARGET=multiballs
 
 SERVER_OBJECTS=server.o game.o world.o socket.o object.o vec.o simulate.o
-UNHOLY_BALLS_OBJECTS=client.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o UnholyGameViewController.o
-HOLY_BALLS_OBJECTS=client.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o HolyGameViewController.o
-MULTI_BALLS_OBJECTS=client.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o MultiGameViewController.o
+UNHOLY_BALLS_OBJECTS=unholyclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o UnholyGameViewController.o
+HOLY_BALLS_OBJECTS=holyclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o HolyGameViewController.o
+MULTI_BALLS_OBJECTS=multiclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o MultiGameViewController.o
 
-all: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET)
+all: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET) $(MULTI_BALLS_TARGET)
 
 $(SERVER_TARGET): $(SERVER_OBJECTS)
 	$(LD) -o $(SERVER_TARGET) $(SERVER_LDFLAGS) $(SERVER_OBJECTS)
@@ -40,20 +40,14 @@ $(MULTI_BALLS_TARGET): $(MULTI_BALLS_OBJECTS)
 %.o: %.cpp *.h
 	$(CC) -c $(CCFLAGS) $<
 
-unholy.o: client.cpp *.h
-	$(CC) -c $(CCFLAGS) -DUNHOLY -o unholy.o $<
+unholyclient.o: client.cpp *.h
+	$(CC) -c $(CCFLAGS) -DUNHOLY -o unholyclient.o $<
 
-holy.o: client.cpp *.h
-	$(CC) -c $(CCFLAGS) -o holy.o $<
+holyclient.o: client.cpp *.h
+	$(CC) -c $(CCFLAGS) -o holyclient.o $<
 
-UnholyGameViewController.o: GameViewController.cpp *.h
-	$(CC) -c $(CCFLAGS) -DUNHOLY -o UnholyGameViewController.o $<
-
-HolyGameViewController.o: GameViewController.cpp *.h
-	$(CC) -c $(CCFLAGS) -o HolyGameViewController.o $<
-
-MultiGameViewController.o: GameViewController.cpp *.h
-	$(CC) -c $(CCFLAGS) -DMULTI -o MultiGameViewController.o $<
+multiclient.o: client.cpp *.h
+	$(CC) -c $(CCFLAGS) -DMULTI -o multiclient.o $<
 
 clean:
 	rm -rf $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET) $(MULTI_BALLS_TARGET) $(SERVER_OBJECTS) $(UNHOLY_BALLS_OBJECTS) $(HOLY_BALLS_OBJECTS) $(MULTI_BALLS_OBJECTS)

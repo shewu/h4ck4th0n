@@ -11,7 +11,7 @@ LD=g++
 
 CCFLAGS=-O2 -g $(DEBUG_FLAGS)
 UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
-HOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -lOpenCL -O2 -g
+HOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -L/opt/AMDAPP/bin/x86_64 -lOpenCL -O2 -g
 
 SERVER_TARGET=server
 UNHOLY_BALLS_TARGET=unholyballs

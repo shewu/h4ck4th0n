@@ -13,6 +13,7 @@ class ServerConnectViewController : public HBViewController {
 		HBViewMode didFinishView();
 		void process();
 		void render();
+		bool quit();
 };
 
 

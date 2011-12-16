@@ -6,11 +6,10 @@
 #include <netdb.h>
 #include <cmath>
 #include <fstream>
-#ifndef UNHOLY
-#include <CL/cl.hpp>
-#endif
 
 #include "GameViewController.h"
+#include "menufuncs.h"
+#include "font.h"
 
 static HBViewMode finishedView = kHBNoView;
 static SocketConnection *sc_static = NULL;
@@ -20,18 +19,6 @@ static void send_disconnect_message() {
     sc_static->add(&q, 1);
     sc_static->send();
 }
-
-class quitfunc {
-	public:
-	quitfunc() {}
-	quitfunc(GameViewController* gvc) {
-		_gvc = gvc;
-	}
-	GameViewController* _gvc;
-	bool operator()(voidtype) {
-		return _gvc->quit();
-	}
-};
 
 class leavefunc {
 	public:
@@ -244,14 +231,6 @@ void GameViewController::process() {
 
 #ifdef UNHOLY
 void GameViewController::_initGL() {
-#ifndef __APPLE__
-	GLenum err = glewInit();
-	if(err != GLEW_OK) {
-		cout << "glewInit failed; " << glewGetErrorString(err) << "\n";
-		exit(-1);
-	}
-#endif
-
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0, ((float) WIDTH) / ((float) HEIGHT), 1.0, 100.0);
@@ -337,39 +316,6 @@ void GameViewController::render() {
 void GameViewController::_initGL() {
 	vector<cl::Platform> platforms;
 	cl::Platform::get(&platforms);
-#ifdef __APPLE__
-	/* based on the Apple OpenCL documentation */
-	// declare memory to hold the device id
-	cl_device_id device_id;
-	
-	// ask OpenCL for exactly 1 GPU
-	cl_int err = clGetDeviceIDs(
-								NULL,				// platform ID
-								CL_DEVICE_TYPE_GPU,	// look only for GPUs
-								1,					// return an ID for only one GPU
-								&device_id,			// on return, the device ID
-								NULL);				// don't return the number of devices
-	
-	// make sure nothing went wrong
-	if (err != CL_SUCCESS) {
-		cout << "Something, somewhere went terribly wrong.\n";
-		exit(1);
-	}
-	
-	context = clCreateContext(
-							  0, 
-							  numDevices,	// the number of devices in the devices parameter
-							  &devices,		// a pointer to the list of device IDs from clGetDeviceIDs
-							  NULL,			// a pointer to an error notice callback function (if any)
-							  NULL,			// data to pass as a param to the callback function
-							  &err);		// on return, points to a result code
-	
-	// again, make sure nothing went wrong
-	if (err != CL_SUCCESS) {
-		cout << "Something, somewhere went terribly wrong.\n";
-		exit(1);
-	}
-#else
 	cl_context_properties props[7] = {
 		CL_CONTEXT_PLATFORM, 
 		(cl_context_properties)(platforms[0])(), 
@@ -381,7 +327,6 @@ void GameViewController::_initGL() {
 	};
 	context = cl::Context(CL_DEVICE_TYPE_GPU, props, NULL, NULL, NULL);
 	devices = context.getInfo<CL_CONTEXT_DEVICES>();
-#endif
 	if (devices.size() <=0) {
 		cout << "No OpenCL devices found. Quitting." << endl;
 		exit(1);
@@ -536,7 +481,7 @@ void GameViewController::render() {
 
 void GameViewController::_drawWalls() {
 	// obstaclesGameViewController* gvc;
-	glUseProgram(0);
+	//glUseProgram(0);
 	glBegin(GL_QUADS);
 	for (vector<Obstacle>::iterator i = world.obstacles.begin(); i != world.obstacles.end(); i++) {
 		glColor3f(i->color.r/255.0, i->color.g/255.0, i->color.b/255.0);
@@ -608,3 +553,4 @@ bool GameViewController::leave() {
 	_disconnect();
 	return finishedView = kHBServerConnectView;
 }
+

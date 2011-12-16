@@ -13,6 +13,7 @@ class SplashViewController : public HBViewController {
 		HBViewMode didFinishView();
 		void process();
 		void render();
+		bool quit();
 };
 
 

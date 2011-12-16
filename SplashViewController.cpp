@@ -7,11 +7,11 @@
 #endif
 
 #include "SplashViewController.h"
+#include "menufuncs.h"
 
 static HBViewMode finishedView = kHBNoView;
 
-static bool menuQuit(voidtype) {
-	printf("Exiting\n");
+bool SplashViewController::quit() {
 	exit(0);
 	return true;
 }
@@ -26,7 +26,7 @@ SplashViewController::SplashViewController() {
 
 	splashMenu = new menu();
 	splashMenu->add_menuitem(new actionmenuitem(menuConnectToServer, (char *)"Play Game"));
-	splashMenu->add_menuitem(new actionmenuitem(menuQuit, (char *)"Quit"));
+	splashMenu->add_menuitem(new actionmenuitem(quitfunc(this), (char *)"Quit"));
 
 	splashMenu->set_active(true);
 }

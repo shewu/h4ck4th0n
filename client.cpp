@@ -17,6 +17,14 @@ bool NORAPE = true;
 SDL_Surface* screen;
 char* ipaddy = (char *)"127.0.0.1";
 
+static float abs(float f) {
+	if (f < 0) {
+		return -f;
+	} else {
+		return f;
+	}
+}
+
 void initVideo() {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		printf("Something went wrong!\n");
@@ -30,7 +38,6 @@ void initVideo() {
 	}
 #endif
 	// detect aspect ratio
-	/*
 	float ratio = (float)SDL_GetVideoInfo()->current_w / SDL_GetVideoInfo()->current_h;
 	
 	float d16x9 = abs(ratio - SIXTEEN_BY_NINE);
@@ -58,7 +65,6 @@ void initVideo() {
 	
 	WIDTH = ALIGN(WIDTH);
 	HEIGHT = ALIGN(HEIGHT);
-	*/
 	
 	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	//SDL_ShowCursor(false);
@@ -82,14 +88,13 @@ int main(int argc, char* argv[]) {
 #endif
 					);
 			exit(0);
+		} else if (!strcmp(argv[i], "-d")) {
+			WIDTH = ALIGN(atoi(argv[i+1]));
+			HEIGHT = ALIGN(atoi(argv[i+2]));
+			cout << "Playing at " << WIDTH << "x" << HEIGHT << "\n";
+		} else if (!strcmp(argv[i], "-i")) {
+			ipaddy = argv[i+1];
 		}
-		//else if (!strcmp(argv[i], "-d")) {
-			//WIDTH = ALIGN(atoi(argv[i+1]));
-			//HEIGHT = ALIGN(atoi(argv[i+2]));
-			//cout << "Playing at " << WIDTH << "x" << HEIGHT << "\n";
-		//} else if (!strcmp(argv[i], "-i")) {
-		//	ipaddy = argv[i+1];
-		//}
 #ifdef UNHOLY
 		else if (!strcmp(argv[i], "-norape")) {
 			NORAPE = true;

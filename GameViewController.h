@@ -1,17 +1,15 @@
-#ifndef __APPLE__
 #include <AL/alut.h>
 #include <AL/al.h>
-#include <GL/glew.h>
+#include <GL/glx.h>
+#include <GL/gl.h>
 #include <GL/glu.h>
-#else
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+#ifndef UNHOLY
+#include <CL/cl.hpp>
 #endif
 
 #include "HBViewController.h"
 #include "hack.h"
 #include "menu.h"
-#include "font.h"
 
 extern SDL_Surface* screen;
 extern char* ipaddy;
@@ -29,7 +27,6 @@ class GameViewController : public HBViewController {
 		float angle;
 		int myId;
 		menu* mainmenu;
-		int program;
 		GLUquadric* quad;
 		void _initGL();
 		void _initMenus();
@@ -38,6 +35,17 @@ class GameViewController : public HBViewController {
 		void _drawObjects();
 		void _drawFloor(float);
 		void _disconnect();
+#ifndef UNHOLY
+		cl::Context context;
+		cl::Program program;
+		vector<cl::Device> devices;
+		cl::CommandQueue cq;
+		vector<cl::Memory> bs;
+		cl::Image2DGL igl;
+		GLuint texture;
+#else
+		int program;
+#endif
 
 	public:
 		GameViewController();

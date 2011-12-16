@@ -16,10 +16,12 @@ HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -L/opt/AMDAPP/lib/
 SERVER_TARGET=server
 UNHOLY_BALLS_TARGET=unholyballs
 HOLY_BALLS_TARGET=holyballs
+MULTI_BALLS_TARGET=multiballs
 
 SERVER_OBJECTS=server.o game.o world.o socket.o object.o vec.o simulate.o
 UNHOLY_BALLS_OBJECTS=client.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o UnholyGameViewController.o
 HOLY_BALLS_OBJECTS=client.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o HolyGameViewController.o
+MULTI_BALLS_OBJECTS=client.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o MultiGameViewController.o
 
 all: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET)
 
@@ -31,6 +33,9 @@ $(UNHOLY_BALLS_TARGET): $(UNHOLY_BALLS_OBJECTS)
 
 $(HOLY_BALLS_TARGET): $(HOLY_BALLS_OBJECTS)
 	$(LD) -o $(HOLY_BALLS_TARGET) $(HOLY_LDFLAGS) $(HOLY_BALLS_OBJECTS)
+
+$(MULTI_BALLS_TARGET): $(MULTI_BALLS_OBJECTS)
+	$(LD) -o $(MULTI_BALLS_TARGET) $(HOLY_LDFLAGS) $(MULTI_BALLS_OBJECTS)
 
 %.o: %.cpp *.h
 	$(CC) -c $(CCFLAGS) $<
@@ -47,8 +52,11 @@ UnholyGameViewController.o: GameViewController.cpp *.h
 HolyGameViewController.o: GameViewController.cpp *.h
 	$(CC) -c $(CCFLAGS) -o HolyGameViewController.o $<
 
+MultiGameViewController.o: GameViewController.cpp *.h
+	$(CC) -c $(CCFLAGS) -DMULTI -o MultiGameViewController.o $<
+
 clean:
-	rm -rf $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(SERVER_OBJECTS) $(UNHOLY_BALLS_OBJECTS) $(HOLY_BALLS_TARGET) $(HOLY_BALLS_OBJECTS)
+	rm -rf $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET) $(MULTI_BALLS_TARGET) $(SERVER_OBJECTS) $(UNHOLY_BALLS_OBJECTS) $(HOLY_BALLS_OBJECTS) $(MULTI_BALLS_OBJECTS)
 
 love:
 	echo 'In Soviet Russia, love makes you!'

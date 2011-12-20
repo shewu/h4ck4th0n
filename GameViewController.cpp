@@ -11,25 +11,20 @@
 #endif
 
 #include "GameViewController.h"
+#include "packet.h"
 
 static HBViewMode finishedView = kHBNoView;
 
-static void send_disconnect_message() {
-    char q = 0;
-    sc_static->add(&q, 1);
-    sc_static->send();
-}
-
 class quitfunc {
 	public:
-	quitfunc() {}
-	quitfunc(GameViewController* gvc) {
-		_gvc = gvc;
-	}
-	GameViewController* _gvc;
-	bool operator()(voidtype) {
-		return _gvc->quit();
-	}
+		quitfunc() {}
+		quitfunc(GameViewController* gvc) {
+			_gvc = gvc;
+		}
+		GameViewController* _gvc;
+		bool operator()(voidtype) {
+			return _gvc->quit();
+		}
 };
 
 class leavefunc {
@@ -50,10 +45,8 @@ static voidtype action_toggle_fullscreen(bool b) {
 	} else {
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	}
-}
-
-static bool validator_test(char *a) {
-	return a[0] == 'a';
+	voidtype v;
+	return v;
 }
 
 void GameViewController::_initMenus() {
@@ -73,10 +66,14 @@ void GameViewController::_initSound() {
 	dev = alcOpenDevice(NULL);
 	con = alcCreateContext(dev, NULL);
 	alcMakeContextCurrent(con);
+
+	ALfloat pos_tmp[] = {0,0,0};
+	ALfloat vel_tmp[] = {0,0,0};
+	ALfloat ori_tmp[] = {0.0, 0.0, 1.0, 0.0, 1.0, 0.0};
 	
-	ALfloat pos[] = { 0, 0, 0 };
-	ALfloat vel[] = { 0, 0, 0 };
-	ALfloat ori[] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
+	memcpy(pos, pos_tmp, sizeof(float)*3);
+	memcpy(pos, vel_tmp, sizeof(float)*3);
+	memcpy(pos, ori_tmp, sizeof(float)*6);
 	
 	alutInit(NULL, NULL);
 	albuf[0] = alutCreateBufferFromFile("sounds/boing2.wav");
@@ -99,23 +96,26 @@ GameViewController::GameViewController() {
 	
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_UNSPEC;
-	hints.ai_socktype = SOCK_DGRAM;
+	hints.ai_socktype = SOCK_STREAM; //SOCK_DGRAM;
 	
+	printf("ipaddy = %s\n", ipaddy);
 	getaddrinfo(ipaddy, "55555", &hints, &res);
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	Socket* sock = new Socket(sockfd);
-	sc = sock->connect(*res->ai_addr, res->ai_addrlen);
+
+	sc = sock->connect_to_server(res->ai_addr, res->ai_addrlen);
+
+	printf("connected to server\n");
 	
-	int u[2];
 	bool done = false;
+	ReadPacket* rp;
 	for (int i = 0; i < 10 && !done; i++) {
 		WritePacket* wp = new WritePacket(CTS_CONNECT, 0); 
-        sc->send(wp);
+        sc->send_packet(wp);
         delete wp;
 
 		SDL_Delay(200);
-		ReadPacket* rp;
-		while ((rp = sc->receive((char*)&u, 8)) != NULL) {
+		while ((rp = sc->receive_packet()) != NULL) {
 			if (rp->message_type == STC_INITIAL_ANGLE) {
 				done = true;
 				break;
@@ -147,12 +147,18 @@ HBViewMode GameViewController::didFinishView() {
 }
 
 void GameViewController::process() {
-	int status;
-	
+	//int status;
+
 	int count = 0, oldTime = SDL_GetTicks();
 	// seems like this is crashing on the second time it's called
-	while ((status = world.receiveObjects(sc, myId)) != -1) {
-		int time = SDL_GetTicks();
+	//while ((status = world.receiveObjects(sc, myId)) != -1) {
+	while(1) {
+		ReadPacket *rp = sc->receive_packet();
+		if(rp == NULL)
+			break;
+		world.receiveObjects(rp, myId);
+		delete rp;
+
 		if (((++count)%=100) == 0) {
 			int time = SDL_GetTicks();
 			float fps = 100000./(time - oldTime);
@@ -162,7 +168,7 @@ void GameViewController::process() {
 			oldTime = time;
 		}
 
-		if (status == 0) continue;
+		//if (status == 0) continue;
 #ifndef __APPLE__
 		for(vector<pair<char, Vector2D> >::iterator it = world.sounds.begin(); it != world.sounds.end(); it++) {
 			int src = -1;
@@ -182,7 +188,7 @@ void GameViewController::process() {
 				alSourcef(alsrcs[src], AL_GAIN, 1.0f);
 				alSourcefv(alsrcs[src], AL_POSITION, alsrcpos);
 				alSourcefv(alsrcs[src], AL_VELOCITY, alsrcvel);
-				alSourcei(alsrcs[src], AL_BUFFER, albuf[it->first]);
+				alSourcei(alsrcs[src], AL_BUFFER, albuf[(int)it->first]);
 				alSourcei(alsrcs[src], AL_LOOPING, AL_FALSE);
 				alSourcePlay(alsrcs[src]);
 			}
@@ -219,19 +225,20 @@ void GameViewController::process() {
 				break;
 		}
 	}
-	
+
 	Uint8* keystate = SDL_GetKeyState(NULL);
-	char buf[5];
-	*((int*)buf) = htonl(*reinterpret_cast<int*>(&angle));
-	buf[4] = 0;
+	WritePacket *wp = new WritePacket(CTS_USER_STATE);
+	wp->write_float(angle);
+	char keystate_byte = 0;
 	if(!mainmenu->is_active()) {
-		if (keystate[SDLK_a]) buf[4] ^= 1;
-		if (keystate[SDLK_d]) buf[4] ^= 2;
-		if (keystate[SDLK_w]) buf[4] ^= 4;
-		if (keystate[SDLK_s]) buf[4] ^= 8;
+		if (keystate[SDLK_a]) keystate_byte ^= 1;
+		if (keystate[SDLK_d]) keystate_byte ^= 2;
+		if (keystate[SDLK_w]) keystate_byte ^= 4;
+		if (keystate[SDLK_s]) keystate_byte ^= 8;
 	}
-	sc->add(buf, 5);
-	sc->send();
+	wp->write_char(keystate_byte);
+	sc->send_packet(wp);
+	delete wp;
 	
 #ifndef __APPLE__
 	ALfloat alpos[] = { world.objects[myId].p.x, world.objects[myId].p.y, 0 };
@@ -551,7 +558,6 @@ void GameViewController::_drawWalls() {
 
 void GameViewController::_drawObjects() {
 	glEnable(GL_NORMALIZE);
-	int howMany = 0;
 	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {
 		glPushMatrix();
 		glTranslatef(i->second.p.x, i->second.p.y, 0);
@@ -572,8 +578,8 @@ void GameViewController::_drawFloor(float alpha) {
 
 	glEnable(GL_NORMALIZE);
 	glBegin(GL_QUADS);
-	for (int x = 0; x < GridSizeX; ++x) {
-		for (int y = 0; y < GridSizeY; ++y) {
+	for (int x = 0; x < (int)GridSizeX; ++x) {
+		for (int y = 0; y < (int)GridSizeY; ++y) {
 			if (abs(x+y) & 1) {//modulo 2
 				glColor4f(1.0f,1.0f,1.0f, alpha); //white
 			} else {
@@ -594,9 +600,9 @@ void GameViewController::_drawFloor(float alpha) {
 
 void GameViewController::_disconnect() {
 	if (sc) {
-		char q = 0;
-		sc->add(&q, 1);
-		sc->send();
+		WritePacket *wp = new WritePacket(STC_DISCONNECT, 1);
+		sc->send_packet(wp);
+		delete wp;
 	}
 }
 
@@ -607,5 +613,5 @@ bool GameViewController::quit() {
 
 bool GameViewController::leave() {
 	_disconnect();
-	return finishedView = kHBServerConnectView;
+	return (finishedView = kHBServerConnectView) != kHBNoView;
 }

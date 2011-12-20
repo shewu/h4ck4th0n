@@ -4,6 +4,7 @@
 #include <cstring>
 #include <stdint.h>
 #include <inttypes.h>
+#include <cstdio>
 
 WritePacket::WritePacket(char type, int ms) {
     max_size = ms;
@@ -13,7 +14,7 @@ WritePacket::WritePacket(char type, int ms) {
 }
 
 WritePacket::~WritePacket() {
-    delete buf;
+    delete[] buf;
 }
 
 ReadPacket::ReadPacket(char type, int s, int n) {
@@ -25,7 +26,7 @@ ReadPacket::ReadPacket(char type, int s, int n) {
 }
 
 ReadPacket::~ReadPacket() {
-    delete buf;
+    delete[] buf;
 }
 
 // Read and write characters
@@ -47,7 +48,7 @@ void WritePacket::write_char(char c) {
 // Read and write ints
 
 int ReadPacket::read_int() {
-    if(index > max_size - 4)
+    if(index > size - 4)
         return 0;
     int i;
     memcpy((void *)&i, (void *)&buf[index], 4);
@@ -64,7 +65,7 @@ void WritePacket::write_int(int i) {
 }
 
 short ReadPacket::read_short() {
-    if(index > max_size - 2)
+    if(index > size - 2)
         return 0;
     short s;
     memcpy((void *)&s, (void *)&buf[index], 2);
@@ -93,7 +94,7 @@ std::string ReadPacket::read_string() {
 
 void WritePacket::write_string(std::string s) {
     write_short((short)s.length());
-    while(size + s.length() > max_size)
+    while(size + (int)s.length() > size)
         increase_buf_size();
     memcpy((void *)(buf + size), (void *)s.data(), s.length());
     size += s.length();
@@ -174,7 +175,7 @@ float ReadPacket::read_float() {
 void WritePacket::increase_buf_size() {
     char *buf2 = new char[max_size * 2];
     memcpy(buf2, buf, size);
-    delete buf;
+    delete[] buf;
     buf = buf2;
     max_size *= 2;
 }

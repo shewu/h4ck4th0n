@@ -131,7 +131,7 @@ class World
 		void doSimulation(float dt);
 		
 		void sendObjects(SocketConnection* sc, int obj);
-		int receiveObjects(SocketConnection* sc, int& obj);
+		void receiveObjects(ReadPacket* rp, int& obj);
 };
 
 #endif

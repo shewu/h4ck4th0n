@@ -18,6 +18,7 @@
 #include <iostream>
 
 #include <unistd.h>
+#include <errno.h>
 
 #include <sys/poll.h>
 
@@ -25,16 +26,13 @@ using namespace std;
 
 #define MYPORT "55555"
 
-//does not appear to serve any purpose?
-//#define BACKLOG 10
-
 #define TIMESTEP_MICROSECONDS 10000
 
 map<int, Client> clients;
 timeval tim;
 
 Game game;
-Socket s;
+Socket *s;
 
 void verify() {
     if(FRICTION < 0.0f) {
@@ -44,7 +42,7 @@ void verify() {
 }
 
 void remove_client(Client cl) {
-    s.removeConnection(cl.sc);
+    s->closeConnection(cl.sc);
     clients.erase(cl.id);
 }
 
@@ -58,17 +56,17 @@ int main() {
     struct addrinfo hints, *res;
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
-    hints.ai_socktype = SOCK_DGRAM;
+    hints.ai_socktype = SOCK_STREAM; //SOCK_DGRAM;
     hints.ai_flags = AI_PASSIVE;
 
     getaddrinfo(NULL, MYPORT, &hints, &res);
 
     int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-    int opt = 1;
-    setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt));
+    //int opt = 1;
+    //setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt));
     bind(sockfd, res->ai_addr, res->ai_addrlen);
-    s = Socket(sockfd);
-    s.listen();
+    s = new Socket(sockfd);
+    s->listen_for_client();
 
     while(true) {
         pollfd fds;
@@ -84,9 +82,8 @@ int main() {
             }
         }
 
-        sockaddr_storage their_addr;
-
-        SocketConnection *sc = s.receiveConnection();
+		// Checking for new connections from clients
+        SocketConnection *sc = s->receiveConnection();
         if(sc != NULL) {
             printf("Connection made\n");
 
@@ -109,10 +106,11 @@ int main() {
 
             Client cl = it->second;
 
-            if(cl.sc->lastTimeAcknowledged < time(NULL) - TIMEOUT) {
-                char q = 0;
-                cl.sc->add(&q, 1);
-                cl.sc->send();
+            if(cl.sc->lastTimeReceived < time(NULL) - TIMEOUT) {
+				WritePacket *wp = new WritePacket(STC_DISCONNECT, 0);
+				cl.sc->send_packet(wp);
+				delete wp;
+
                 game.remove_player(cl.id);
                 remove_client(cl);
                 printf("Client timed out, currently %zu clients\n",
@@ -120,7 +118,8 @@ int main() {
             }
             else {
                 ReadPacket* rp;
-                while((rp = cl.sc->receive()) != NULL) {
+                while((rp = cl.sc->receive_packet()) != NULL) {
+					printf("packet received! :D\n");
                     //Connect
                     if(rp->message_type == CTS_CONNECT) {
                         printf("Received connect message\n");
@@ -135,7 +134,7 @@ int main() {
                         game.remove_player(cl.id);
                         remove_client(cl);
                         printf("Player disconnected, currently %zu clients\n",
-                                clients.size());
+											clients.size());
                     }
 
                     else {
@@ -149,6 +148,7 @@ int main() {
             it = next_it;
         }
 
+		// Time stuff
         timeval tim2;
         gettimeofday(&tim2, NULL);
         float dt = (float)(tim2.tv_sec - tim.tv_sec) +
@@ -163,4 +163,3 @@ int main() {
     }
 
 }
-

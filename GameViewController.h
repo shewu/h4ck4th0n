@@ -40,6 +40,8 @@ class GameViewController : public HBViewController {
 		void _drawFloor(float);
 		void _disconnect();
 
+		ALfloat pos[3], vel[3], ori[6];
+
 	public:
 		GameViewController();
 		~GameViewController();

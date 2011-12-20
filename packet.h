@@ -1,6 +1,7 @@
 #ifndef PACKET_H
 #define PACKET_H
 
+#include <string>
 #include "network_protocol.h"
 
 /* Note: if the initial value of max_size given is not large enough,
@@ -23,7 +24,7 @@ class WritePacket {
         void write_string(std::string s);
 
     private:
-        increase_buf_size();
+        void increase_buf_size();
 };
 
 class ReadPacket {
@@ -42,6 +43,6 @@ class ReadPacket {
         short read_short();
         float read_float();
         std::string read_string();
-}
+};
 
 #endif

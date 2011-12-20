@@ -36,7 +36,7 @@ bool Game::add_player(Client cl) {
 
     WritePacket* wp = new WritePacket(STC_INITIAL_ANGLE, 4);
     wp->write_float(player.angle);
-    cl.sc->send(wp);
+    cl.sc->send_packet(wp);
     delete wp;
 
     return true;

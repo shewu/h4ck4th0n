@@ -17,17 +17,17 @@ class Socket
 	public:
 		Socket(int sock);
 
-		void listen();
+		void listen_for_client();
 		SocketConnection* receiveConnection();
-        void closeConnection();
+        void closeConnection(SocketConnection *sc);
 
-		SocketConnection* connect(sockaddr addr, socklen_t addrlen);
-        void disconnect();
+		SocketConnection* connect_to_server(sockaddr *addr, socklen_t addrlen);
+        void end_connection();
 		
     private:
         int socket;
 		bool listening, connected;
-        map<int, SocketConnection*> connections;
+        std::map<int, SocketConnection*> connections;
 };
 
 class SocketConnection {
@@ -35,8 +35,8 @@ class SocketConnection {
         int socket;
 
 		SocketConnection(int socket);
-		void send(WritePacket*);
-		ReadPacket* receive();
+		void send_packet(WritePacket*);
+		ReadPacket* receive_packet();
 		~SocketConnection();
 
 		int lastTimeReceived;

@@ -17,9 +17,11 @@ SERVER_TARGET=server
 UNHOLY_BALLS_TARGET=unholyballs
 HOLY_BALLS_TARGET=holyballs
 
-SERVER_OBJECTS=server.o game.o world.o socket.o object.o vec.o simulate.o
-UNHOLY_BALLS_OBJECTS=client.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o UnholyGameViewController.o
-HOLY_BALLS_OBJECTS=client.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o HolyGameViewController.o
+SERVER_OBJECTS=server.o game.o world.o socket.o object.o vec.o simulate.o packet.o socket_connection.o
+
+UNHOLY_BALLS_OBJECTS=client.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o UnholyGameViewController.o packet.o socket_connection.o
+
+HOLY_BALLS_OBJECTS=client.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o HolyGameViewController.o packet.o socket_connection.o
 
 all: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET)
 

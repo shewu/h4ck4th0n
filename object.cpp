@@ -18,7 +18,7 @@ void Object::write_data(WritePacket* wp) {
     wp->write_int(id);
 }
 
-void Object::get(ReadPacket *rp) {
+void Object::read_data(ReadPacket *rp) {
     p.x = rp->read_float();
     p.y = rp->read_float();
     v.x = rp->read_float();

@@ -149,7 +149,7 @@ void World::sendObjects(SocketConnection* sc, int obj) {
         wp->write_float(it->second.y);
     }
 
-    sc->send(wp);
+    sc->send_packet(wp);
     delete wp;
 }
 
@@ -160,7 +160,7 @@ void World::receiveObjects(ReadPacket* rp, int& obj) {
     objects.clear();
     for(int i = 0; i < numObjects; i++) {
         Object o;
-        o.get(rp);
+        o.read_data(rp);
         objects[o.id] = o;
     }
 
@@ -171,6 +171,6 @@ void World::receiveObjects(ReadPacket* rp, int& obj) {
         char c = rp->read_char();
         int v1 = rp->read_float();
         int v2 = rp->read_float();
-        sounds.push_back(pair<char, Vector2D>(v1, v2));
+        sounds.push_back(pair<char, Vector2D>(c, Vector2D(v1, v2)));
     }
 }

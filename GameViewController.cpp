@@ -77,7 +77,6 @@ void GameViewController::process() {
 	
 	int count = 0, oldTime = SDL_GetTicks();
 	while ((status = world.receiveObjects(sc, myId)) != -1) {
-		int time = SDL_GetTicks();
 		if (((++count)%=100) == 0) {
 			int time = SDL_GetTicks();
 			float fps = 100000./(time - oldTime);

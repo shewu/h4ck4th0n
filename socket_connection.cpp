@@ -67,7 +67,10 @@ void SocketConnection::send_packet(WritePacket* wp) {
     
     memcpy((void *)(msg + 13), (void *)wp->buf, wp->size);
 
-    send(socket, msg, 13 + wp->size, 0);
+	// we don't want to generate a SIGPIPE signal
+	// in the case that the client has closed
+	// without telling us
+    send(socket, msg, 13 + wp->size, MSG_NOSIGNAL);
 
     delete[] msg;
 }

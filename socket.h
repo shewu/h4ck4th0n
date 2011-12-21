@@ -24,6 +24,12 @@
 	 to the server. The client should only need one
 	 SocketConnection instance.
 
+   Note that the constructor for Socket takes a socket
+   file descriptor as an argument. Currently, the code
+   for making this socket can be found in server.cpp
+   for the server and in GameViewController.cpp for
+   for the client.
+
    To send messages, use the ReadPacket and WritePacket
    classes. SocketConnection::send_packet takes a WritePacket
    as an argument, and SocketConnection::receive_packet

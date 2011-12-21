@@ -44,7 +44,7 @@ class WritePacket {
         void write_string(std::string s);
 
     private:
-        void increase_buf_size();
+        void _increase_buf_size();
 };
 
 class ReadPacket {

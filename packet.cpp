@@ -5,7 +5,9 @@
 #include <stdint.h>
 #include <inttypes.h>
 #include <cstdio>
+#include "assert.h"
 
+// Constructor
 WritePacket::WritePacket(char type, int ms) {
     max_size = ms;
     size = 0;
@@ -13,10 +15,15 @@ WritePacket::WritePacket(char type, int ms) {
     message_type = type;
 }
 
+// Destructor
 WritePacket::~WritePacket() {
     delete[] buf;
 }
 
+// Constructor
+// The argument 's' is an initial guess
+// for the size of the packet, but it
+// does not have to be correct.
 ReadPacket::ReadPacket(char type, int s, int n) {
     size = s;
     buf = new char[size];
@@ -25,6 +32,7 @@ ReadPacket::ReadPacket(char type, int s, int n) {
     packet_number = n;
 }
 
+// Destructor
 ReadPacket::~ReadPacket() {
     delete[] buf;
 }
@@ -40,7 +48,7 @@ char ReadPacket::read_char() {
 
 void WritePacket::write_char(char c) {
     while(size + 1 > max_size)
-        increase_buf_size();
+        _increase_buf_size();
     buf[size] = c;
     size++;
 }
@@ -58,7 +66,7 @@ int ReadPacket::read_int() {
 
 void WritePacket::write_int(int i) {
     while(size + 4 > max_size)
-        increase_buf_size();
+        _increase_buf_size();
     i = htonl(i);
     memcpy((void *)&buf[size], (void *)&i, 4);
     size += 4;    
@@ -75,13 +83,18 @@ short ReadPacket::read_short() {
 
 void WritePacket::write_short(short s) {
     while(size + 2 > max_size)
-        increase_buf_size();
+        _increase_buf_size();
     s = htonl(s);
     memcpy((void *)&buf[size], (void *)&s, 2);
     size += 2;
 }
 
 // Read and write strings
+
+// Maximal length of strings is 2^15 - 1.
+// We sent strings by first writing their
+// length as a 16-bit integer, followed
+// by the characters of the string.
 
 std::string ReadPacket::read_string() {
     int length = (int)read_short();
@@ -93,14 +106,20 @@ std::string ReadPacket::read_string() {
 }
 
 void WritePacket::write_string(std::string s) {
+	assert(s.length() < (1 << 15));
+
     write_short((short)s.length());
     while(size + (int)s.length() > size)
-        increase_buf_size();
+        _increase_buf_size();
     memcpy((void *)(buf + size), (void *)s.data(), s.length());
     size += s.length();
 }
 
 // Read and write floats
+
+// To ensure that floats are sent in a consistent format,
+// I found these functions online which convert floats to
+// and form a specified format.
 
 #define pack754_32(f) (pack754((f), 32, 8))
 #define pack754_64(f) (pack754((f), 64, 11))
@@ -172,7 +191,7 @@ float ReadPacket::read_float() {
 
 // Make sure buf is large enough
 
-void WritePacket::increase_buf_size() {
+void WritePacket::_increase_buf_size() {
     char *buf2 = new char[max_size * 2];
     memcpy(buf2, buf, size);
     delete[] buf;

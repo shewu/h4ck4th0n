@@ -6,6 +6,7 @@
 #endif
 
 #include "ServerConnectViewController.h"
+#include "menufuncs.h"
 
 extern char* ipaddy;
 static HBViewMode finishedView = kHBNoView;
@@ -21,9 +22,7 @@ static bool menuGetIP(char* a) {
 	}
 }
 
-static bool menuQuit(voidtype) {
-	// we need to deallocate memory
-	printf("Exiting\n");
+bool ServerConnectViewController::quit() {
 	exit(0);
 	return true;
 }
@@ -40,7 +39,7 @@ ServerConnectViewController::ServerConnectViewController() {
 	serverConnectMenu = new menu();
 	serverConnectMenu->add_menuitem(new inputmenuitem(20, menuGetIP, (char *)"", (char *)"Must not be empty", (char *)"Enter Server IP Address", (char *)"Stuff"));
 	serverConnectMenu->add_menuitem(new actionmenuitem(goBack, (char *)"Back"));
-	serverConnectMenu->add_menuitem(new actionmenuitem(menuQuit, (char *)"Quit"));
+	serverConnectMenu->add_menuitem(new actionmenuitem(quitfunc(this), (char *)"Quit"));
 
 	serverConnectMenu->set_active(true);
 }

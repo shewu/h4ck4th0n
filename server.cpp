@@ -119,7 +119,6 @@ int main() {
             else {
                 ReadPacket* rp;
                 while((rp = cl.sc->receive_packet()) != NULL) {
-					printf("packet received! :D\n");
                     //Connect
                     if(rp->message_type == CTS_CONNECT) {
                         printf("Received connect message\n");

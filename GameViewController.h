@@ -5,6 +5,7 @@
 #include "hack.h"
 #include "menu.h"
 #include "menufuncs.h"
+#include "packet.h"
 
 extern SDL_Surface* screen;
 extern char* ipaddy;
@@ -25,6 +26,8 @@ class GameViewController : public HBViewController {
 		int myId;
 		menu* mainmenu;
 
+		ALfloat pos[3], vel[3], ori[6];
+
 	public:
 		GameViewController();
 		~GameViewController();
@@ -33,6 +36,18 @@ class GameViewController : public HBViewController {
 		void render() {}
 		bool quit();
 		bool leave();
+};
+
+class quitfunc {
+	public:
+		quitfunc() {}
+		quitfunc(GameViewController* gvc) {
+			_gvc = gvc;
+		}
+		GameViewController* _gvc;
+		bool operator()(voidtype) {
+			return _gvc->quit();
+		}
 };
 
 class leavefunc {

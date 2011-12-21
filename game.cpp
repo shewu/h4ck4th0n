@@ -4,8 +4,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <cstdio>
-#include <sys/socket.h>
-#include <netinet/in.h>
+#include <cstring>
 
 using namespace std;
 
@@ -35,9 +34,10 @@ bool Game::add_player(Client cl) {
 
     players[cl.id] = player;
 
-    int message = htonl(*reinterpret_cast<int*>(&player.angle));
-    cl.sc->add((char *)(&message), 4);
-    cl.sc->send();
+    WritePacket* wp = new WritePacket(STC_INITIAL_ANGLE, 4);
+    wp->write_float(player.angle);
+    cl.sc->send_packet(wp);
+    delete wp;
 
     return true;
 }
@@ -66,16 +66,16 @@ void Game::send_world() {
     }
 }
 
-void Game::process_packet(int id, char *buf, int length) {
+void Game::process_packet(int id, ReadPacket* rp) {
     if(players.count(id) == 0)
         return;
 
-    if(length != 5)
-        return;
-
-    int angle_i = ntohl(*((int*)buf));
-    players[id].angle = *reinterpret_cast<float*>(&angle_i);
-    players[id].key_pressed = buf[4];
+    if(rp->message_type == CTS_USER_STATE) {
+        if(rp->size != 5)
+            return;
+        players[id].angle = rp->read_float();
+        players[id].key_pressed = rp->read_char();
+    }
 }
 
 void Game::update(float dt) {

@@ -2,6 +2,8 @@
 #define SOCKET_H
 
 #include "constants.h"
+#include "packet.h"
+
 #include <string>
 #include <unistd.h>
 #include <sys/types.h>
@@ -10,44 +12,37 @@
 
 class SocketConnection;
 
-#define MAX_PACKET_LENGTH_CLIENT_TO_SERVER 5
-
 class Socket
 {
 	public:
-		int socket;
 		Socket(int sock);
-		void receivePackets();
-		void listen();
+
+		void listen_for_client();
 		SocketConnection* receiveConnection();
-		SocketConnection* connect(sockaddr addr, socklen_t addrlen);
+        void closeConnection(SocketConnection *sc);
+
+		SocketConnection* connect_to_server(sockaddr *addr, socklen_t addrlen);
+        void end_connection();
 		
-		bool listening;
-		SocketConnection* queue[MAXQUEUE];
-		int qf, qb;
-		std::map<std::pair<std::string, int>, SocketConnection*> connections;
+    private:
+        int socket;
+		bool listening, connected;
+        std::map<int, SocketConnection*> connections;
 };
 
 class SocketConnection {
 	public:
-		SocketConnection(Socket* s, sockaddr addr, socklen_t addrlen, int v);
-		void add(char* stuff, int size);
-		void send();
-		int receive(char* stuff, int size);
+        int socket;
+
+		SocketConnection(int socket);
+		void send_packet(WritePacket*);
+		ReadPacket* receive_packet();
 		~SocketConnection();
-		
-		sockaddr addr;
-		socklen_t addrlen;
-		int v;
-		Socket* sock;
-		std::string toSend;
-		std::string queue[MAXQUEUE];
-		int qf, qb;
-		
-		int packetnum;
-		int lastReceived;
+
 		int lastTimeReceived;
-		int lastTimeAcknowledged;
+
+    private:
+        int num_sent;
 };
 
 #endif

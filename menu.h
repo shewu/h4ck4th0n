@@ -58,6 +58,7 @@ template<class R, class I> class wrappedfuncobj {
 		}
 		real = toCopy.real;
 		refcount = toCopy.refcount;
+		return *this;
 	}
 	R operator()(I i) {
 		return (*real)(i);

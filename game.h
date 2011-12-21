@@ -32,7 +32,7 @@ class Game {
         void remove_player(int id);
 
         void send_world();
-        void process_packet(int id, char *buf, int length);
+        void process_packet(int id, ReadPacket *rp);
 
         void update(float dt);
 };

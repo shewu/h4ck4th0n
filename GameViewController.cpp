@@ -12,7 +12,6 @@
 #endif
 
 #include "GameViewController.h"
-#include "font.h"
 
 static HBViewMode sFinishedView = kHBNoView;
 
@@ -32,34 +31,40 @@ GameViewController::GameViewController() {
 
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_UNSPEC;
-	hints.ai_socktype = SOCK_DGRAM;
-
+	hints.ai_socktype = SOCK_STREAM; //SOCK_DGRAM;
+	
+	printf("ipaddy = %s\n", ipaddy);
 	getaddrinfo(ipaddy, "55555", &hints, &res);
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	Socket* sock = new Socket(sockfd);
-	sc = sock->connect(*res->ai_addr, res->ai_addrlen);
 
-	int u[2];
+	sc = sock->connect_to_server(res->ai_addr, res->ai_addrlen);
+
+	printf("connected to server\n");
+	
 	bool done = false;
+	ReadPacket* rp;
 	for (int i = 0; i < 10 && !done; i++) {
-		sc->send();
+		WritePacket* wp = new WritePacket(CTS_CONNECT, 0); 
+        sc->send_packet(wp);
+        delete wp;
+
 		SDL_Delay(200);
-		int n;
-		while ((n = sc->receive((char*)&u, 8)) != -1) {
-			if (n == 4) {
+		while ((rp = sc->receive_packet()) != NULL) {
+			if (rp->message_type == STC_INITIAL_ANGLE) {
 				done = true;
 				break;
 			}
+            delete rp;
 		}
 	}
-	sc->packetnum = 10;
 	if (!done) {
 		cout << "Failed to connect" << endl;
 		leave();
 	}
 
-	int local_order = ntohl(u[0]);
-	angle = *reinterpret_cast<float*>(&local_order);
+	angle = rp->read_float();
+    delete rp;
 
     myId = -1;
 }
@@ -73,10 +78,18 @@ GameViewController::~GameViewController() {
 }
 
 void GameViewController::process() {
-	int status;
-	
+	//int status;
+
 	int count = 0, oldTime = SDL_GetTicks();
-	while ((status = world.receiveObjects(sc, myId)) != -1) {
+	// seems like this is crashing on the second time it's called
+	//while ((status = world.receiveObjects(sc, myId)) != -1) {
+	while(1) {
+		ReadPacket *rp = sc->receive_packet();
+		if(rp == NULL)
+			break;
+		world.receiveObjects(rp, myId);
+		delete rp;
+
 		if (((++count)%=100) == 0) {
 			int time = SDL_GetTicks();
 			float fps = 100000./(time - oldTime);
@@ -86,7 +99,7 @@ void GameViewController::process() {
 			oldTime = time;
 		}
 
-		if (status == 0) continue;
+		//if (status == 0) continue;
 #ifndef __APPLE__
 		for(vector<pair<char, Vector2D> >::iterator it = world.sounds.begin(); it != world.sounds.end(); it++) {
 			int src = -1;
@@ -106,7 +119,7 @@ void GameViewController::process() {
 				alSourcef(alsrcs[src], AL_GAIN, 1.0f);
 				alSourcefv(alsrcs[src], AL_POSITION, alsrcpos);
 				alSourcefv(alsrcs[src], AL_VELOCITY, alsrcvel);
-				alSourcei(alsrcs[src], AL_BUFFER, albuf[it->first]);
+				alSourcei(alsrcs[src], AL_BUFFER, albuf[(int)it->first]);
 				alSourcei(alsrcs[src], AL_LOOPING, AL_FALSE);
 				alSourcePlay(alsrcs[src]);
 			}
@@ -143,19 +156,20 @@ void GameViewController::process() {
 				break;
 		}
 	}
-	
+
 	Uint8* keystate = SDL_GetKeyState(NULL);
-	char buf[5];
-	*((int*)buf) = htonl(*reinterpret_cast<int*>(&angle));
-	buf[4] = 0;
+	WritePacket *wp = new WritePacket(CTS_USER_STATE);
+	wp->write_float(angle);
+	char keystate_byte = 0;
 	if(!mainmenu->is_active()) {
-		if (keystate[SDLK_a]) buf[4] ^= 1;
-		if (keystate[SDLK_d]) buf[4] ^= 2;
-		if (keystate[SDLK_w]) buf[4] ^= 4;
-		if (keystate[SDLK_s]) buf[4] ^= 8;
+		if (keystate[SDLK_a]) keystate_byte ^= 1;
+		if (keystate[SDLK_d]) keystate_byte ^= 2;
+		if (keystate[SDLK_w]) keystate_byte ^= 4;
+		if (keystate[SDLK_s]) keystate_byte ^= 8;
 	}
-	sc->add(buf, 5);
-	sc->send();
+	wp->write_char(keystate_byte);
+	sc->send_packet(wp);
+	delete wp;
 	
 #ifndef __APPLE__
 	ALfloat alpos[] = { world.objects[myId].p.x, world.objects[myId].p.y, 0 };
@@ -175,7 +189,7 @@ bool GameViewController::quit() {
 
 bool GameViewController::leave() {
 	_disconnect();
-	return (sFinishedView = kHBServerConnectView) != 0;
+	return (sFinishedView = kHBServerConnectView) != kHBNoView;
 }
 
 static voidtype action_toggle_fullscreen(bool b) {
@@ -188,9 +202,9 @@ static voidtype action_toggle_fullscreen(bool b) {
 
 void GameViewController::_disconnect() {
 	if (sc) {
-		char q = 0;
-		sc->add(&q, 1);
-		sc->send();
+		WritePacket *wp = new WritePacket(STC_DISCONNECT, 1);
+		sc->send_packet(wp);
+		delete wp;
 	}
 }
 

@@ -60,7 +60,7 @@ void menu::draw() {
 		glVertex3f(1.0f, 0.0f, 0.0f);
 		glEnd();
 	
-		for(int i = 0; i < menuitems.size(); i++) {
+		for(int i = 0; i < (int)menuitems.size(); i++) {
 			menuitems[i]->draw(i == current_index, 
 				button_left,
 				button_top + i * (button_height + button_separation),

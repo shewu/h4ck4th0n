@@ -9,7 +9,7 @@ endif
 CC=g++
 LD=g++
 
-CCFLAGS=-O2 -g $(DEBUG_FLAGS)
+CCFLAGS=-O2 -g -Wall $(DEBUG_FLAGS)
 UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
 HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -L/opt/AMDAPP/lib/x86_64 -O2 -g
 
@@ -18,10 +18,28 @@ UNHOLY_BALLS_TARGET=unholyballs
 HOLY_BALLS_TARGET=holyballs
 MULTI_BALLS_TARGET=multiballs
 
-SERVER_OBJECTS=server.o game.o world.o socket.o object.o vec.o simulate.o
-UNHOLY_BALLS_OBJECTS=unholyclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o UnholyGameViewController.o GameViewController.o
-HOLY_BALLS_OBJECTS=holyclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o HolyGameViewController.o GameViewController.o
-MULTI_BALLS_OBJECTS=multiclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o MultiGameViewController.o GameViewController.o
+SHARED_OBJECTS = socket.o \
+	vec.o \
+	object.o \
+	world.o \
+	menu.o \
+	menuitem.o \
+	menudraw.o \
+	font.o \
+	SplashViewController.o \
+	ServerConnectViewController.o \
+	GameViewController.o \
+	packet.o \
+	socket_connection.o
+
+SERVER_OBJECTS=server.o game.o world.o socket.o object.o vec.o simulate.o packet.o socket_connection.o
+UNHOLY_BALLS_OBJECTS+=SHARED_OBJECTS unholyclient.o UnholyGameViewController.o
+HOLY_BALLS_OBJECTS+=SHARED_OBJECTS holyclient.o HolyGameViewController.o
+MULTI_BALLS_OBJECTS+=SHARED_OBJECTS multiclient.o MultiGameViewController.o
+
+#UNHOLY_BALLS_OBJECTS=unholyclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o UnholyGameViewController.o GameViewController.o packet.o socket_connection.o
+#HOLY_BALLS_OBJECTS=holyclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o HolyGameViewController.o GameViewController.o socket_connection.o
+#MULTI_BALLS_OBJECTS=multiclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o MultiGameViewController.o GameViewController.o socket_connection.o
 
 all: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET) $(MULTI_BALLS_TARGET)
 

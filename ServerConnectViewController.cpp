@@ -16,7 +16,7 @@ static bool menuGetIP(char* a) {
 	ipaddy = a;
 	printf("Entered IP = %s\n", a);
 	if (strcmp(a, "")) {
-		return finishedView = kHBGameView;
+		return (finishedView = kHBGameView) != kHBNoView;
 	} else {
 		return false;
 	}

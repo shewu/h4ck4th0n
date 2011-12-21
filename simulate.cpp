@@ -62,11 +62,11 @@ void doObstacleCollision(int f, Object fo, vector<Obstacle>& obstacles, map<pair
 			collide_event e = { collideTimesObs[pair<int, int>(f, -1)], -1, f, -1 };
 			collide_events.push(e);
 		}
-		for (int j = 0; j < obstacles.size(); j++) collideTimesObs[pair<int, int>(f, j)] = INFINITY;
+		for (int j = 0; j < (int)obstacles.size(); j++) collideTimesObs[pair<int, int>(f, j)] = INFINITY;
 		return;
 	}
 	
-	for (int j = 0; j < obstacles.size(); j++) {
+	for (int j = 0; j < (int)obstacles.size(); j++) {
 		float time1 = collideCircles(fo.p-obstacles[j].p1, fo.rad, fo.v, 0), time2 = collideCircles(fo.p-obstacles[j].p2, fo.rad, fo.v, 0);
 		float time3;
 		Vector2D dir = obstacles[j].p2-obstacles[j].p1;

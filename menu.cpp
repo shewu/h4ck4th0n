@@ -57,7 +57,7 @@ void menu::key_input(int key) {
 	}
 	else if(key == MENU_KEY_DOWN) {
 		menuitems[current_index]->onDeselect();
-		if(current_index == menuitems.size() - 1)
+		if(current_index == (int)menuitems.size() - 1)
 			current_index = 0;
 		else
 			current_index++;

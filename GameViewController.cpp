@@ -221,9 +221,9 @@ void GameViewController::_initSound() {
 	ALCcontext* con = alcCreateContext(dev, NULL);
 	alcMakeContextCurrent(con);
 	
-	pos = { 0, 0, 0 };
-	vel = { 0, 0, 0 };
-	ori = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
+	pos[0] = 0; pos[1] = 0; pos[2] = 0;
+	vel[0] = 0; vel[1] = 0; vel[2] = 0;
+	ori[0] = 0.0; ori[1] = 0.0; ori[2] = 1.0; ori[3] = 0.0; ori[4] = 1.0; ori[5] = 0.0;
 	
 	alutInit(NULL, NULL);
 	albuf[0] = alutCreateBufferFromFile("sounds/boing2.wav");

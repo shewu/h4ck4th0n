@@ -122,7 +122,7 @@ void HolyGameViewController::render() {
 	
 	float lightpos[3*world.lights.size()];
 	unsigned char lightcolor[4*world.lights.size()];
-	for (int i = 0; i < world.lights.size(); i++) {
+	for (unsigned i = 0; i < world.lights.size(); i++) {
 		lightpos[3*i] = world.lights[i].position.x;
 		lightpos[3*i+1] = world.lights[i].position.y;
 		lightpos[3*i+2] = world.lights[i].position.z;

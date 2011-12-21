@@ -123,6 +123,8 @@ render(
 			normal = (float4)(0, 0, 1, 0);
 			when = -z/zdir;
 			hit = true;
+			// Floor reflection!!
+			specular = true;
 		}
 		when *= (1-EPS);
 		if (hit) {

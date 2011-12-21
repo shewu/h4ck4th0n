@@ -200,7 +200,7 @@ static voidtype action_toggle_fullscreen(bool b) {
 
 void GameViewController::_disconnect() {
 	if (sc) {
-		WritePacket *wp = new WritePacket(STC_DISCONNECT, 1);
+		WritePacket *wp = new WritePacket(CTS_DISCONNECT, 1);
 		sc->send_packet(wp);
 		delete wp;
 	}

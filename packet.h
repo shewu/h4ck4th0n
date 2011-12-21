@@ -4,9 +4,29 @@
 #include <string>
 #include "network_protocol.h"
 
-/* Note: if the initial value of max_size given is not large enough,
-   then this will work correctly as it can resize the buffer. Of
-   course, it is best to be as accurate as possible. */
+/* WritePackets are passed to the SocketConnection class
+   (see socket.h) to be sent out. ReadPackets are read
+   from a SocketConnection.
+
+   Every packet (incoming or outgoing) has a ``message_type''.
+   The type says what kind of message the packet contains.
+   In most cases, the packet will contain additional data.
+   These classes allow you to read/write this data like
+   a typical stream, and supports the following primitives:
+   char, int, short, float, and std::string.
+
+   See network_protocol.h for the specification of
+   the networking protocol. It should contain constants
+   for the message_type field, as well as information
+   about how data should be stored for a given message
+   type.
+
+   Note: if the initial value of max_size
+   (passed to the constructor of WritePacket) is not large enough,
+   then WritePacket will be able to resize the buffer as
+   necessary. Of course, for performance, it is best to give
+   as good an approximation as possible.
+*/
 
 class WritePacket {
     public:

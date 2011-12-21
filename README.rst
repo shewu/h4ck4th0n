@@ -4,15 +4,13 @@ Version 0.4, now with gameplay and a menu *and* Mac OS X support!
 
 TODO
 ====
-Proposed Gameplay:
-* Capture the flag based
-	- event engine interfaces with game engine that announces what happens, sends data to socket code to talk to client
-
-Game
-====
+Proposed Gameplay
+-----------------
+    - Capture the flag based
+    - event engine interfaces with game engine that announces what happens, sends data to socket code to talk to client
 
 Requirements
-------------
+============
 * Linux
 	- Hardware
 		+ unholyballs requires at least a modern integrated graphics chipset
@@ -83,7 +81,6 @@ Credits
 
 Map Editor
 ==========
-
 Requirements
 ------------
 * Hardware

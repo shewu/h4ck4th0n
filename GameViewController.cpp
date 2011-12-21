@@ -6,12 +6,9 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
-#ifndef __APPLE__
-#include <AL/alut.h>
-#include <AL/al.h>
-#endif
 
 #include "GameViewController.h"
+#include "menufuncs.h"
 
 static HBViewMode sFinishedView = kHBNoView;
 
@@ -198,6 +195,7 @@ static voidtype action_toggle_fullscreen(bool b) {
 	} else {
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	}
+	return voidtype();
 }
 
 void GameViewController::_disconnect() {
@@ -223,9 +221,9 @@ void GameViewController::_initSound() {
 	ALCcontext* con = alcCreateContext(dev, NULL);
 	alcMakeContextCurrent(con);
 	
-	ALfloat pos[] = { 0, 0, 0 };
-	ALfloat vel[] = { 0, 0, 0 };
-	ALfloat ori[] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
+	pos = { 0, 0, 0 };
+	vel = { 0, 0, 0 };
+	ori = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
 	
 	alutInit(NULL, NULL);
 	albuf[0] = alutCreateBufferFromFile("sounds/boing2.wav");

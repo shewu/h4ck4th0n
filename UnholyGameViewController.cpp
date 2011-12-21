@@ -107,7 +107,6 @@ void UnholyGameViewController::_drawWalls() {
 
 void UnholyGameViewController::_drawObjects() {
 	glEnable(GL_NORMALIZE);
-	int howMany = 0;
 	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {
 		glPushMatrix();
 		glTranslatef(i->second.p.x, i->second.p.y, 0);
@@ -128,9 +127,9 @@ void UnholyGameViewController::_drawFloor(float alpha) {
 
 	glEnable(GL_NORMALIZE);
 	glBegin(GL_QUADS);
-	for (int x = 0; x < GridSizeX; ++x) {
-		for (int y = 0; y < GridSizeY; ++y) {
-			if (abs(x+y) & 1) {//modulo 2
+	for (unsigned x = 0; x < GridSizeX; ++x) {
+		for (unsigned y = 0; y < GridSizeY; ++y) {
+			if ((unsigned)abs(x+y) % 2 == 1) {//modulo 2
 				glColor4f(1.0f,1.0f,1.0f, alpha); //white
 			} else {
 				glColor4f(0.0f,0.0f,0.0f, alpha); //black

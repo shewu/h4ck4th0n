@@ -1,3 +1,6 @@
+#ifndef __MENUFUNCS_H__
+#define __MENUFUNCS_H__
+
 // file for shared menu functors
 
 #include "HBViewController.h"
@@ -14,4 +17,6 @@ class quitfunc {
 			return _vc->quit();
 		}
 };
+
+#endif
 

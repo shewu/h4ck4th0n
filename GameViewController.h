@@ -1,10 +1,14 @@
 #ifndef __GAMEVIEWCONTROLLER_H__
 #define __GAMEVIEWCONTROLLER_H__
 
+#ifndef __APPLE__
+#include <AL/alut.h>
+#include <AL/al.h>
+#endif
+
 #include "HBViewController.h"
 #include "hack.h"
 #include "menu.h"
-#include "menufuncs.h"
 #include "packet.h"
 
 extern SDL_Surface* screen;
@@ -38,23 +42,9 @@ class GameViewController : public HBViewController {
 		bool leave();
 };
 
-class quitfunc {
-	public:
-		quitfunc() {}
-		quitfunc(GameViewController* gvc) {
-			_gvc = gvc;
-		}
-		GameViewController* _gvc;
-		bool operator()(voidtype) {
-			return _gvc->quit();
-		}
-};
-
 class leavefunc {
-	private:
-		GameViewController* _gvc;
-
 	public:
+		GameViewController* _gvc;
 		leavefunc() {}
 		leavefunc(GameViewController* gvc) {
 			_gvc = gvc;

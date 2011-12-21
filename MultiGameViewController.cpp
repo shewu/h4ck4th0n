@@ -27,7 +27,7 @@ void MultiGameViewController::_initGL() {
 		exit(1);
 	}
 	cout << "Number of OpenCL devices found: " << devices.size() << endl;
-	for (int i = 0; i < devices.size(); i++) {
+	for (unsigned i = 0; i < devices.size(); i++) {
 		cout << "Device " << i << ": " << devices[i].getInfo<CL_DEVICE_NAME>() << " Vendor ID: " << devices[i].getInfo<CL_DEVICE_VENDOR_ID>() <<  endl;
 		vector<cl::Device> temp;
 		temp.push_back(devices[i]);
@@ -41,7 +41,7 @@ void MultiGameViewController::_initGL() {
 	}
 
 	cl::Program::Sources clSource(1, pair<const char*, int>(clCode.c_str(), clCode.length() + 1));
-	for (int i = 0; i < devices.size(); i++) {
+	for (unsigned i = 0; i < devices.size(); i++) {
 		devicePrograms.push_back(cl::Program(deviceContexts[i], clSource));
 		devicePrograms[i].build(deviceContexts[i].getInfo<CL_CONTEXT_DEVICES>(), "-I.");
 	}
@@ -60,7 +60,7 @@ void MultiGameViewController::_initGL() {
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 	pixels = new int[WIDTH * HEIGHT];
-	for (int i = 0; i < devices.size(); i++) {
+	for (unsigned i = 0; i < devices.size(); i++) {
 		int render_offset = (((i+1)*(HEIGHT/16))/devices.size()-(i*(HEIGHT/16))/devices.size())*16;
 		images.push_back(cl::Image2D(deviceContexts[i], CL_MEM_WRITE_ONLY, cl::ImageFormat(CL_RGBA, CL_UNORM_INT8), WIDTH, render_offset));
 		cqs.push_back(cl::CommandQueue(deviceContexts[i], devices[i], 0, NULL));
@@ -84,7 +84,7 @@ void MultiGameViewController::render() {
 
 	float obspoints[4 * world.obstacles.size()];
 	unsigned char obscolor[4 * world.obstacles.size()];
-	int ti, i2 = 0;
+	unsigned ti, i2 = 0;
 	for (ti = 0; ; ti++) {
 		while (i2 != world.obstacles.size()) {
 			Vector2D diff = Vector2D(focusx, focusy) - world.obstacles[i2].p1;
@@ -108,7 +108,7 @@ void MultiGameViewController::render() {
 		i2++;
 	}
 	vector<cl::Buffer> obspointsbuf, obscolorbuf, objpointbuf, objsizebuf, objcolorbuf, lightposbuf, lightcolorbuf;
-	for (int i = 0; i < devices.size(); i++) {
+	for (unsigned i = 0; i < devices.size(); i++) {
 		obspointsbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.obstacles.size()*sizeof(float), obspoints, NULL));
 		obscolorbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.obstacles.size()*sizeof(char), obscolor, NULL));
 	}
@@ -131,7 +131,7 @@ void MultiGameViewController::render() {
 		objcolor[4*si+3] = it->second.color.a;
 		it++;
 	}
-	for(int i = 0; i < devices.size(); i++) {
+	for(unsigned i = 0; i < devices.size(); i++) {
 		objpointbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 2*world.objects.size()*sizeof(float), objpoint, NULL));
 		objsizebuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 2*world.objects.size()*sizeof(float), objsize, NULL));
 		objcolorbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.objects.size()*sizeof(char), objcolor, NULL));
@@ -139,7 +139,7 @@ void MultiGameViewController::render() {
 
 	float lightpos[3*world.lights.size()];
 	unsigned char lightcolor[4*world.lights.size()];
-	for (int i = 0; i < world.lights.size(); i++) {
+	for (unsigned i = 0; i < world.lights.size(); i++) {
 		lightpos[3*i] = world.lights[i].position.x;
 		lightpos[3*i+1] = world.lights[i].position.y;
 		lightpos[3*i+2] = world.lights[i].position.z;
@@ -148,12 +148,12 @@ void MultiGameViewController::render() {
 		lightcolor[4*i+2] = world.lights[i].color.b;
 		lightcolor[4*i+3] = world.lights[i].color.a;
 	}
-	for (int i = 0; i < devices.size(); i++) {
+	for (unsigned i = 0; i < devices.size(); i++) {
 		lightposbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 3*world.lights.size()*sizeof(float), lightpos, NULL));
 		lightcolorbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.lights.size()*sizeof(char), lightcolor, NULL));
 	}
 
-	for (int i = 0; i < devices.size(); i++) {
+	for (unsigned i = 0; i < devices.size(); i++) {
 		cl::Kernel renderKern(devicePrograms[i], "render", NULL);
 		renderKern.setArg(0, focusx-7*cos(angle));
 		renderKern.setArg(1, focusy-7*sin(angle));
@@ -190,7 +190,7 @@ void MultiGameViewController::render() {
 		sz.push_back(1);
 		cqs[i].enqueueReadImage(images[i], false, offset, sz, 0, 0, pixels+((i*(HEIGHT/16))/devices.size())*16*WIDTH);
 	}
-	for (int i = 0; i < devices.size(); i++) cqs[i].finish();
+	for (unsigned i = 0; i < devices.size(); i++) cqs[i].finish();
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texture);

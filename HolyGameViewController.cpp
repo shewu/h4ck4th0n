@@ -74,7 +74,7 @@ void HolyGameViewController::render() {
 	unsigned char obscolor[4*world.obstacles.size()];
 	int ti, i2 = 0;
 	for (ti = 0; ; ti++) {
-		while (i2 != world.obstacles.size()) {
+		while ((unsigned)i2 != world.obstacles.size()) {
 			Vector2D diff = Vector2D(focusx, focusy)-world.obstacles[i2].p1;
 			Vector2D obsdir = world.obstacles[i2].p2-world.obstacles[i2].p1;
 			float smallest;
@@ -84,7 +84,7 @@ void HolyGameViewController::render() {
 			if (smallest <= 56*56*(1+float(WIDTH)*float(WIDTH)/float(HEIGHT)/float(HEIGHT)/4.0)) break;
 			i2++;
 		}
-		if (i2 == world.obstacles.size()) break;
+		if ((unsigned)i2 == world.obstacles.size()) break;
 		obspoints[4*ti] = world.obstacles[i2].p1.x;
 		obspoints[4*ti+1] = world.obstacles[i2].p1.y;
 		obspoints[4*ti+2] = world.obstacles[i2].p2.x;

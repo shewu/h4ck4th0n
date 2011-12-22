@@ -1,5 +1,3 @@
-# The lines of interest to you are SERVER_OBJECTS and UNHOLY_BALLS_OBJECTS, which specify the object files that are required for the server and unholyballs, respectively
-
 ifeq ($(DEBUG_MODE),on)
  DEBUG_FLAGS=-DDEBUG
 else
@@ -12,6 +10,7 @@ LD=g++
 CCFLAGS=-O2 -g -Wall $(DEBUG_FLAGS)
 UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
 HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
+#HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -L/opt/AMDAPP/lib/x86_64 -O2 -g
 
 SERVER_TARGET=server
 UNHOLY_BALLS_TARGET=unholyballs
@@ -36,10 +35,6 @@ SERVER_OBJECTS=server.o game.o world.o socket.o object.o vec.o simulate.o packet
 UNHOLY_BALLS_OBJECTS+=$(SHARED_OBJECTS) unholyclient.o UnholyGameViewController.o
 HOLY_BALLS_OBJECTS+=$(SHARED_OBJECTS) holyclient.o HolyGameViewController.o
 MULTI_BALLS_OBJECTS+=$(SHARED_OBJECTS) multiclient.o MultiGameViewController.o
-
-#UNHOLY_BALLS_OBJECTS=unholyclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o UnholyGameViewController.o GameViewController.o packet.o socket_connection.o
-#HOLY_BALLS_OBJECTS=holyclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o HolyGameViewController.o GameViewController.o socket_connection.o
-#MULTI_BALLS_OBJECTS=multiclient.o socket.o vec.o object.o world.o menu.o menuitem.o menudraw.o font.o SplashViewController.o ServerConnectViewController.o MultiGameViewController.o GameViewController.o socket_connection.o
 
 all: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET) $(MULTI_BALLS_TARGET)
 

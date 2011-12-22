@@ -1,4 +1,4 @@
-#include "constants.h"
+#include "clconstants.h"
 
 const sampler_t texSample = CLK_NORMALIZED_COORDS_TRUE|CLK_ADDRESS_REPEAT|CLK_FILTER_LINEAR;
 

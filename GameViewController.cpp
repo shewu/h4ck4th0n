@@ -30,15 +30,13 @@ GameViewController::GameViewController() {
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM; //SOCK_DGRAM;
 	
-	printf("ipaddy = %s\n", ipaddy);
+	printf("IP Address = %s\n", ipaddy);
 	getaddrinfo(ipaddy, "55555", &hints, &res);
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	Socket* sock = new Socket(sockfd);
 
 	sc = sock->connect_to_server(res->ai_addr, res->ai_addrlen);
 
-	printf("connected to server\n");
-	
 	bool done = false;
 	ReadPacket* rp;
 	for (int i = 0; i < 10 && !done; i++) {
@@ -59,6 +57,8 @@ GameViewController::GameViewController() {
 		cout << "Failed to connect" << endl;
 		leave();
 	}
+
+	if (done) cout << "Connected to server" << endl;
 
 	angle = rp->read_float();
     delete rp;

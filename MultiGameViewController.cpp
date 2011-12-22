@@ -43,7 +43,10 @@ void MultiGameViewController::_initGL() {
 	cl::Program::Sources clSource(1, pair<const char*, int>(clCode.c_str(), clCode.length() + 1));
 	for (unsigned i = 0; i < devices.size(); i++) {
 		devicePrograms.push_back(cl::Program(deviceContexts[i], clSource));
-		devicePrograms[i].build(deviceContexts[i].getInfo<CL_CONTEXT_DEVICES>(), "-I.");
+		if (devicePrograms[i].build(deviceContexts[i].getInfo<CL_CONTEXT_DEVICES>(), "-I.")) {
+			cout << devicePrograms[i].getBuildInfo<CL_PROGRAM_BUILD_LOG>(devices[i]) << endl;
+			exit(1);
+		}
 	}
 	/*
 	if (program.build(devices, "-I.")) {

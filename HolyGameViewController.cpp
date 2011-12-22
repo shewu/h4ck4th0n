@@ -181,9 +181,7 @@ void HolyGameViewController::render() {
 	glFlush();
 
 	if (mainmenu->is_active()) {
-		glDisable(GL_LIGHTING);
 		mainmenu->drawMenu();
-		glEnable(GL_LIGHTING);
 	}
 }
 

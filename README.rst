@@ -32,16 +32,16 @@ Building
 		will build only the server
 
 	- make holyballs
-		will build holyballs, the ray tracing binary. requires OpenCL and at minimum a GTS450
+		will build holyballs, the ray tracing binary. requires OpenCL and at minimum a GTS450. will only work for single GPU systems.
+	
+	- make multiballs
+		will build multiballs, the multi-gpu ray tracing binary. requires OpenCL and at minimum a GTS450. if on a single GPU system, will run slower than holyballs.
 
 	- make unholyballs
 		will build only the unholyballs binary, for people with lesser graphics cards
 
 	- make all
-		will build all three binaries
-
-* Mac 
-	- open the .xcodeproj file in Xcode and hit the build button.
+		will build all four binaries
 
 Run
 ===
@@ -58,10 +58,6 @@ Linux
 
 -f
 	to play in fullscreen; will not work if specified resolution is greater than screen resolution
-
-Mac
----
-double click on the .app to run or click the Run or Build and Run button in Xcode
 
 Playing
 =======

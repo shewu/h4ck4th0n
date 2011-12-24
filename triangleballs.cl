@@ -1,63 +1,11 @@
 #define EPSILON 0.000001
 #define BOUNCES 4
 #define BGCOLOR (0.0f, 0.0f, 0.0f, 0.0f);
-#include "common.h"
 
-typedef struct {
-	float4 diffuse, specular;
-} material;
+#define get_float4(a, i) ((float4) (a[3 * (i)], a[3 * (i) + 1], a[3 * (i) + 2], 0.0f))
+#define get_float2(a, i) ((float2) (a[2 * (i)], a[2 * (i) + 1]))
 
-typedef struct {
-	float4 *v0, *v1, *v2, normal;
-	material *m;
-} triangle;
-
-typedef struct {
-	float d;
-	float4 normal;
-	material *m;
-} plane;
-
-typedef struct {
-	float2 p1, p2;
-	float2 normal;
-	float height;
-	material *m;
-} wall;
-
-typedef struct {
-	float4 center;
-	float radius;
-	material *m;
-} sphere;
-
-typedef struct {
-	float4 pos, color;
-} light;
-
-typedef struct {
-	float4 origin, dir;
-} ray;
-
-typedef struct {
-	float t;
-	float4 normal;
-	material *m;
-} hit;
-
-typedef struct {
-	sphere* sphere;
-	int num_spheres;
-	plane* plane;
-	int num_planes;
-	wall* wall;
-	int num_walls;
-	triangle* triangle;
-	int num_triangles;
-	light* light;
-	int num_lights;
-	float4 ambient;
-} scene;
+#include "rt_types.h"
 
 int intersect_triangle(ray* r, triangle* t, hit* h) {
 	float4 edge1, edge2, tvec, pvec, qvec;
@@ -150,11 +98,18 @@ int intersect_wall(ray* r, wall* w, hit* h)
 	return 1;
 }
 
+nt i = 0; i < wcount; i++) {
+    float2 v1 = get_float2(wvertex, i);
+    float2 v2 = get_float2(wvertex, i + 1);
+    float2 wdir = fast_normalize(v2 - v1);
+    float2 normal = (float2) (wdir.y, -wdir.x);
+    wall[i] = {v1, v2, normal, wheight[i], mat[wmindex[i]]};
+  }
 int intersect_scene(ray* r, scene* s, hit* h)
 {
 	hit temp_h;
 	int result = 0;
-	h->t = MAXFLOAT;
+	h->t = MAXFLOA ;
 	for (int i = 0; i < s->num_spheres; i++) {
 		if (intersect_sphere(r, &(s->sphere[i]), &temp_h)) {
 			if (temp_h.t < h->t ) {
@@ -229,28 +184,14 @@ float4 trace(ray* r, scene* s)
 	return result;
 }
 
-__kernel void render(__constant float *tvertex, __constant int *vindex, __constant int *tmindex, int tcount, int vcount,
-										 __constant float *wvertex, __constant int *wmindex,  int wcount,
-										 __constant float *sp_center, __constant float *sp_radius, __constant int *smindex, int scount,
-										 __constant float *plane_d, __constant float *plane_n, __constant int *pmindex, int pcount,
-										 __constant float *mdiffuse, __constant float *mspec, int mcount,
-										 camera cam)
+__kernel void render(scene* s, camera* cam, __write_only image2d_t result)
 {
-	triangle triangle[tcount];
-	wall wall[wcount];
-	sphere sphere[scount];
-	plane plane[pcount];
-	material mat[mcount];
-	float4 tvertex4[vcount];
-	for (int i = 0; i < vcount; i++) {
-		tvertex4[i] = (float4) (tvertex[3 * i], tvertex[3 * i + 1], tvertex[3 * i + 2], 0);
-	}
-	for (int i = 0; i < mcount; i++) {
-		mat[i] = {(float4) (mdiffuse[3 * i], mdiffuse[3 * i + 1], mdiffuse[3 * i + 2], 0),
-							(float4) (mspec[3 * i], mspec[3 * i + 1], mspec[3 * i + 2], 0)};
-	}
-	for (int i = 0; i < tcount; i++) {
-		float4 normal = fast_normalize(cross(tvertex[vindex[3 * i + 1]] - tvertex[vindex[3 * i]], tvertex[vindex[3 * i + 2]] - tvertex[vindex[3 * i]]));
-		triangle[i] = {tvertex4 + vindex[3 * i], tvertex4 + vindex[3 * i + 1], tvertex4 + vindex[3 * i + 2], normal, mat + tmindex[i]};
-	}	
+	int xi = get_global_id(0);
+	int yi = get_global_id(1);
+	float x = (float) xi / (float) cam->width;
+	float y = (float) yi / (float) cam->height;
+	float D = 1.0 / tan(cam->angle / 2);
+	float4 dir = fast_normalize(y * cam->h + x * cam->u + D * cam->d);
+	ray r = {cam->pos, dir};
+	write_imagef(result, (int2) (xi, yi), trace(&ray, s);	
 }

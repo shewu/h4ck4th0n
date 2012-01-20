@@ -24,6 +24,7 @@ class GameViewController : public HBViewController {
 
 	protected:
 		unsigned int albuf[3], alsrcs[ALSRCS];
+		Socket *sock;
 		SocketConnection* sc;
 		World world;
 		float angle;

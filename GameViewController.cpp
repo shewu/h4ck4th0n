@@ -28,14 +28,14 @@ GameViewController::GameViewController() {
 
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_UNSPEC;
-	hints.ai_socktype = SOCK_STREAM; //SOCK_DGRAM;
+	hints.ai_socktype = SOCK_DGRAM;
 	
 	printf("IP Address = %s\n", ipaddy);
 	getaddrinfo(ipaddy, "55555", &hints, &res);
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-	Socket* sock = new Socket(sockfd);
+	sock = new Socket(sockfd);
 
-	sc = sock->connect_to_server(res->ai_addr, res->ai_addrlen);
+	sc = sock->connect(res->ai_addr, res->ai_addrlen);
 
 	bool done = false;
 	ReadPacket* rp;
@@ -45,6 +45,7 @@ GameViewController::GameViewController() {
         delete wp;
 
 		SDL_Delay(200);
+		sock->recv_all();
 		while ((rp = sc->receive_packet()) != NULL) {
 			if (rp->message_type == STC_INITIAL_ANGLE) {
 				done = true;
@@ -58,7 +59,8 @@ GameViewController::GameViewController() {
 		leave();
 	}
 
-	if (done) cout << "Connected to server" << endl;
+	if (done)
+		cout << "Connected to server" << endl;
 
 	angle = rp->read_float();
     delete rp;
@@ -80,6 +82,7 @@ void GameViewController::process() {
 	int count = 0, oldTime = SDL_GetTicks();
 	// seems like this is crashing on the second time it's called
 	//while ((status = world.receiveObjects(sc, myId)) != -1) {
+	sock->recv_all();
 	while(1) {
 		ReadPacket *rp = sc->receive_packet();
 		if(rp == NULL)

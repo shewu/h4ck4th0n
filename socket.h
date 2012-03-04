@@ -5,10 +5,13 @@
 #include "packet.h"
 
 #include <string>
+
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+
 #include <map>
+#include <queue>
 
 /* This header file contains two important classes, Socket
    and SocketConnection. Socket is a class which handles
@@ -19,7 +22,7 @@
      and then use Socket::receiveConnection() to obtain
 	 SocketConnection instances for all connecting clients.
 
-   - The client should call Socket::connect_to_server()
+   - The client should call Socket::connect()
      to obtain a SocketConnection instance which communicates
 	 to the server. The client should only need one
 	 SocketConnection instance.
@@ -48,31 +51,41 @@ class Socket
 		Socket(int sock);
 
 		void listen_for_client();
-		SocketConnection* receiveConnection();
+		class SocketConnection* receiveConnection();
         void closeConnection(SocketConnection *sc);
 
-		SocketConnection* connect_to_server(sockaddr *addr, socklen_t addrlen);
+		class SocketConnection* connect(sockaddr *addr, socklen_t addrlen);
         void end_connection();
+
+		void recv_all();
 		
     private:
         int socket;
-		bool listening, connected;
-        std::map<int, SocketConnection*> connections;
+		bool listening;
+        std::map<std::pair<std::string, int>, SocketConnection*> connections;
+		std::queue<SocketConnection*> new_connections;
 };
 
 class SocketConnection {
 	public:
         int socket;
+		struct sockaddr *addr;
+		socklen_t addrlen;
+		int my_id, their_id;
 
-		SocketConnection(int socket);
+		SocketConnection(int socket, struct sockaddr *addr, socklen_t addrlen,
+		                 int my_id, int their_id);
 		void send_packet(WritePacket*);
 		ReadPacket* receive_packet();
+		void recv_data(char *buf, int length);
 		~SocketConnection();
 
 		int lastTimeReceived;
 
     private:
         int num_sent;
+		std::queue<ReadPacket*> read_packets;
+
 };
 
 #endif

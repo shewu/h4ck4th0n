@@ -51,7 +51,11 @@ Socket *s;
 void verify() {
     if(FRICTION < 0.0f) {
         cout << "Your friction is negative and will cause the game to fail\n";
-        exit(-1);
+		cout << "Continue anyway? (y/n) ";
+		char c;
+		cin >> c;
+		if(!(c == 'y' || c == 'Y'))
+			exit(-1);
     }
 }
 
@@ -74,17 +78,19 @@ int main() {
     struct addrinfo hints, *res;
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
-    hints.ai_socktype = SOCK_STREAM; //SOCK_DGRAM;
+    hints.ai_socktype = SOCK_DGRAM;
     hints.ai_flags = AI_PASSIVE;
 
     getaddrinfo(NULL, MYPORT, &hints, &res);
 
     int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-    //int opt = 1;
-    //setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt));
+    int opt = 1;
+    setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt));
     bind(sockfd, res->ai_addr, res->ai_addrlen);
     s = new Socket(sockfd);
     s->listen_for_client();
+
+	printf("Server started, hit 'q' to quit.\n");
 
 	// Main server loop
     while(true) {
@@ -103,6 +109,11 @@ int main() {
                 exit(0);
             }
         }
+
+		// Receive all incoming packets
+		// Socket distributes these packets to
+		// the appropriate SocketConnection instances
+		s->recv_all();
 
 		// Checking for new connections from clients
         SocketConnection *sc = s->receiveConnection();

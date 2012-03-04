@@ -130,8 +130,8 @@ class World
 		std::map<int, Object> objects;
 		std::vector<Light> lights;
 		std::vector<Obstacle> obstacles;
-		std::vector<std::pair<char, Vector2D> > sounds;
-		void doSimulation(float dt);
+		//std::vector<std::pair<char, Vector2D> > sounds;
+		void doSimulation(float dt, std::vector<std::pair<char, Vector2D> >& sounds);
 		
 		void sendObjects(SocketConnection* sc, int obj);
 		void receiveObjects(ReadPacket* rp, int& obj);

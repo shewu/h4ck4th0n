@@ -22,6 +22,7 @@ class Game {
         int team_count[2];
 
         std::map<int, Player> players;
+        std::vector<std::pair<char, Vector2D> > sounds;
 
         SocketConnection *sc;
 
@@ -32,6 +33,7 @@ class Game {
         void remove_player(int id);
 
         void send_world();
+        void send_sounds_to(SocketConnection* c);
         void process_packet(int id, ReadPacket *rp);
 
         void update(float dt);

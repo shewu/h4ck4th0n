@@ -3,9 +3,9 @@
 
 #define TEST_EQ(d, x, y) \
 	do { \
-		if(x == y) printf("[PASSED] %s\n",d); \
+		if (x == y) printf("[PASSED] %s\n",d); \
 		else printf("[FAIL] %s at line %d: %s == %s failed\n",d,__LINE__,#x,#y); \
-	} while(0);
+	} while (0);
 
 using namespace std;
 

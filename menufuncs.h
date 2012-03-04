@@ -10,11 +10,20 @@ class quitfunc {
 		HBViewController* _vc;
 
 		quitfunc() {}
-		quitfunc(HBViewController* vc) {
-			_vc = vc;
-		}
+		quitfunc(HBViewController* vc) : _vc(vc) {}
 		bool operator()(voidtype) {
 			return _vc->quit();
+		}
+};
+
+class changeResFunc {
+	public:
+		HBViewController* _vc;
+
+		changeResFunc() {}
+		changeResFunc(HBViewController* vc) : _vc(vc) {}
+		bool operator()(voidtype) {
+			;
 		}
 };
 

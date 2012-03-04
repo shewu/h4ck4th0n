@@ -16,16 +16,5 @@ class quitfunc {
 		}
 };
 
-class changeResFunc {
-	public:
-		HBViewController* _vc;
-
-		changeResFunc() {}
-		changeResFunc(HBViewController* vc) : _vc(vc) {}
-		bool operator()(voidtype) {
-			;
-		}
-};
-
 #endif
 

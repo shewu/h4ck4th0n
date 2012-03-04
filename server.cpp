@@ -126,6 +126,7 @@ int main() {
             while(clients.count(cl.id));
 
             cl.sc = sc;
+            cl.latestPacket = 0;
 
             clients[cl.id] = cl;
 
@@ -148,9 +149,8 @@ int main() {
 			// at least once every TIMEOUT seconds to demonstrate
 			// that it is still present.
             if(cl.sc->lastTimeReceived < time(NULL) - TIMEOUT) {
-				WritePacket *wp = new WritePacket(STC_DISCONNECT, 0);
+				WritePacket wp(STC_DISCONNECT, 0);
 				cl.sc->send_packet(wp);
-				delete wp;
 
                 game.remove_player(cl.id);
                 remove_client(cl);
@@ -165,7 +165,6 @@ int main() {
             else {
                 ReadPacket* rp;
                 while((rp = cl.sc->receive_packet()) != NULL) {
-
                     // Connect
                     if(rp->message_type == CTS_CONNECT) {
                         printf("Received connect message\n");
@@ -185,7 +184,9 @@ int main() {
 
 					// Give packet to game for processing
 					// if the packet is of any other type.
-                    else {
+                    else if (rp->message_type == CTS_USER_STATE &&
+                             rp->packet_number > cl.latestPacket) {
+                    	cl.latestPacket = rp->packet_number;
                         game.process_packet(cl.id, rp);
                     }
 

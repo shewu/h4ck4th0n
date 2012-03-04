@@ -55,12 +55,15 @@ void Socket::recv_all() {
 		sockaddr addr;
 		socklen_t addrlen = sizeof(struct sockaddr);
 		int len = recvfrom(socket, buf, MAXPACKET, MSG_DONTWAIT, &addr, &addrlen);
-		if(len < 4)
+		if(len < 8)
 			break;
-
+		int magic;
+		memcpy((void*)&magic, (void*)buf, 4);
+		magic = ntohl(magic);
+		if (magic != MESSAGE_HEADER_INIT) continue;
 		string s = string((char *)&addr, addrlen);
 		int id;
-		memcpy((void*)&id, (void*)buf, 4);
+		memcpy((void*)&id, (void*)(buf + 4), 4);
 		id = ntohl(id);
 		pair<string,int> s_id(s, id);
 
@@ -75,6 +78,6 @@ void Socket::recv_all() {
 			sc = connections[s_id];
 		}
 
-		sc->recv_data(buf, len);
+		sc->recv_data(buf + 8, len - 8);
 	}
 }

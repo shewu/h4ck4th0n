@@ -105,7 +105,7 @@ void doObstacleCollision(int f, Object fo, vector<Obstacle>& obstacles, map<pair
 	}
 }
 
-void World::doSimulation(float dt)
+void World::doSimulation(float dt, vector<pair<char, Vector2D> >& sounds)
 {
 	map<pair<int, int>, float> collideTimes;
 	map<pair<int, int>, float> collideTimesObs;

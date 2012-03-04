@@ -29,6 +29,9 @@ class GameViewController : public HBViewController {
 		World world;
 		float angle;
 		int myId;
+		int latestPacket;
+		int count;
+		int oldTime;
 		menu* mainmenu;
 
 		ALfloat pos[3], vel[3], ori[6];

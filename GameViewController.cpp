@@ -10,6 +10,8 @@
 #include "GameViewController.h"
 #include "menufuncs.h"
 
+#define MAX_SOUND_LATENESS 100
+
 static HBViewMode sFinishedView = kHBNoView;
 
 HBViewMode GameViewController::didFinishView() {
@@ -40,9 +42,8 @@ GameViewController::GameViewController() {
 	bool done = false;
 	ReadPacket* rp;
 	for (int i = 0; i < 10 && !done; i++) {
-		WritePacket* wp = new WritePacket(CTS_CONNECT, 0); 
+		WritePacket wp(CTS_CONNECT, 0); 
         sc->send_packet(wp);
-        delete wp;
 
 		SDL_Delay(200);
 		sock->recv_all();
@@ -59,13 +60,18 @@ GameViewController::GameViewController() {
 		leave();
 	}
 
-	if (done)
+	if (done) {
 		cout << "Connected to server" << endl;
 
-	angle = rp->read_float();
-    delete rp;
+		angle = rp->read_float();
+		delete rp;
 
-    myId = -1;
+		myId = -1;
+	}
+	latestPacket = 0;
+
+	count = 0;
+	oldTime = SDL_GetTicks();
 }
 
 GameViewController::~GameViewController() {
@@ -77,31 +83,16 @@ GameViewController::~GameViewController() {
 }
 
 void GameViewController::process() {
-	//int status;
-
-	int count = 0, oldTime = SDL_GetTicks();
-	// seems like this is crashing on the second time it's called
-	//while ((status = world.receiveObjects(sc, myId)) != -1) {
 	sock->recv_all();
 	while(1) {
 		ReadPacket *rp = sc->receive_packet();
 		if(rp == NULL)
 			break;
-		world.receiveObjects(rp, myId);
-		delete rp;
+		if (rp->message_type == STC_SOUND && rp->packet_number >= latestPacket - MAX_SOUND_LATENESS) {
+			char c = rp->read_char();
+		    int v1 = rp->read_float();
+		    int v2 = rp->read_float();
 
-		if (((++count)%=100) == 0) {
-			int time = SDL_GetTicks();
-			float fps = 100000./(time - oldTime);
-			printf("\r");
-			cout.width(6);
-			cout << (int)fps << "fps" << flush;
-			oldTime = time;
-		}
-
-		//if (status == 0) continue;
-#ifndef __APPLE__
-		for(vector<pair<char, Vector2D> >::iterator it = world.sounds.begin(); it != world.sounds.end(); it++) {
 			int src = -1;
 			for (int s = 0; s < ALSRCS; s++) {
 				int st;
@@ -111,19 +102,27 @@ void GameViewController::process() {
 					break;
 				}
 			}
-			if (src >= 0 && src < 3) {
-				ALfloat alsrcpos[] = { it->second.x, it->second.y, 0 };
+			if (c >= 0 && c < 3 && src >= 0) {
+				ALfloat alsrcpos[] = { v1, v2, 0 };
 				ALfloat alsrcvel[] = { 0, 0, 0 };
 
 				alSourcef(alsrcs[src], AL_PITCH, 1.0f);
 				alSourcef(alsrcs[src], AL_GAIN, 1.0f);
 				alSourcefv(alsrcs[src], AL_POSITION, alsrcpos);
 				alSourcefv(alsrcs[src], AL_VELOCITY, alsrcvel);
-				alSourcei(alsrcs[src], AL_BUFFER, albuf[(int)it->first]);
+				alSourcei(alsrcs[src], AL_BUFFER, albuf[(int)c]);
 				alSourcei(alsrcs[src], AL_LOOPING, AL_FALSE);
 				alSourcePlay(alsrcs[src]);
 			}
 		}
+		else if (rp->message_type != STC_WORLD_DATA || rp->packet_number <= latestPacket) {
+			delete rp;
+			continue;
+		}
+		latestPacket = rp->packet_number;
+		world.receiveObjects(rp, myId);
+		delete rp;
+#ifndef __APPLE__
 #endif
 	}
 	
@@ -158,8 +157,8 @@ void GameViewController::process() {
 	}
 
 	Uint8* keystate = SDL_GetKeyState(NULL);
-	WritePacket *wp = new WritePacket(CTS_USER_STATE);
-	wp->write_float(angle);
+	WritePacket wp(CTS_USER_STATE);
+	wp.write_float(angle);
 	char keystate_byte = 0;
 	if(!mainmenu->is_active()) {
 		if (keystate[SDLK_a]) keystate_byte ^= 1;
@@ -167,9 +166,8 @@ void GameViewController::process() {
 		if (keystate[SDLK_w]) keystate_byte ^= 4;
 		if (keystate[SDLK_s]) keystate_byte ^= 8;
 	}
-	wp->write_char(keystate_byte);
+	wp.write_char(keystate_byte);
 	sc->send_packet(wp);
-	delete wp;
 	
 #ifndef __APPLE__
 	ALfloat alpos[] = { world.objects[myId].p.x, world.objects[myId].p.y, 0 };
@@ -179,6 +177,14 @@ void GameViewController::process() {
 	alListenerfv(AL_VELOCITY, alvel);
 	alListenerfv(AL_ORIENTATION, alori);
 #endif
+	if (((++count)%100) == 0) {
+		int time = SDL_GetTicks();
+		float fps = 100000./(time - oldTime);
+		printf("\r");
+		cout.width(6);
+		cout << (int)fps << "fps" << flush;
+		oldTime = time;
+	}
 }
 
 bool GameViewController::quit() {
@@ -203,9 +209,8 @@ static voidtype action_toggle_fullscreen(bool b) {
 
 void GameViewController::_disconnect() {
 	if (sc) {
-		WritePacket *wp = new WritePacket(CTS_DISCONNECT, 1);
+		WritePacket wp(CTS_DISCONNECT, 1);
 		sc->send_packet(wp);
-		delete wp;
 	}
 }
 

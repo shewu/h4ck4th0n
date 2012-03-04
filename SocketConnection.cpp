@@ -10,8 +10,6 @@
 #include <netdb.h>
 #include <sys/socket.h>
 
-#define MESSAGE_HEADER_INIT 0x74d32f8c
-
 /* PACKET HEADER (13 bytes total):
    - four bytes MESSAGE_HEADER_INIT, for confirmation
    - packet number, unsigned int
@@ -44,37 +42,35 @@ ReadPacket* SocketConnection::receive_packet() {
 }
 
 void SocketConnection::recv_data(char *buf, int length) {
-    int header_ints[3];
-    memcpy((void *)header_ints, (void *)buf, 12);
-	int id = ntohl(header_ints[0]);
-    int conf = ntohl(header_ints[1]);
-    int num = ntohl(header_ints[2]);
-    char type = buf[12];
+    if (length < 5) {
+    	return;
+    }
+    int header;
+    memcpy((void *)&header, (void *)buf, 4);
+    int num = ntohl(header);
+    char type = buf[4];
 
-    if(conf != MESSAGE_HEADER_INIT || id != their_id)
-        return;
-
-    ReadPacket* rp = new ReadPacket(type, length - 13, num);
-	if(length - 13 > 0)
-		memcpy(rp->buf, buf + 13, length - 13);
+    ReadPacket* rp = new ReadPacket(type, length - 5, num);
+    if(length - 5 > 0)
+      memcpy(rp->buf, buf + 5, length - 5);
 
     lastTimeReceived = time(NULL);
 	read_packets.push(rp);
 }
 
-void SocketConnection::send_packet(WritePacket* wp) {
+void SocketConnection::send_packet(WritePacket& wp) {
     int header_ints[3];
 
-    char *msg = new char[13 + wp->size];
-	header_ints[0] = htonl(my_id);
-    header_ints[1] = htonl(MESSAGE_HEADER_INIT);
+    char *msg = new char[13 + wp.size];
+    header_ints[0] = htonl(MESSAGE_HEADER_INIT);
+    header_ints[1] = htonl(my_id);
     header_ints[2] = htonl(num_sent++);
     memcpy((void *)msg, (void *)header_ints, 12);
-    msg[12] = wp->message_type;
+    msg[12] = wp.message_type;
 
-    memcpy((void *)(msg + 13), (void *)wp->buf, wp->size);
+    memcpy((void *)(msg + 13), (void *)wp.buf, wp.size);
 
-    sendto(socket, msg, 13 + wp->size, MSG_NOSIGNAL, addr, addrlen);
+    sendto(socket, msg, 13 + wp.size, MSG_NOSIGNAL, addr, addrlen);
 
     delete[] msg;
 }

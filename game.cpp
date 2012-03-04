@@ -34,10 +34,9 @@ bool Game::add_player(Client cl) {
 
     players[cl.id] = player;
 
-    WritePacket* wp = new WritePacket(STC_INITIAL_ANGLE, 4);
-    wp->write_float(player.angle);
+    WritePacket wp(STC_INITIAL_ANGLE, 4);
+    wp.write_float(player.angle);
     cl.sc->send_packet(wp);
-    delete wp;
 
     return true;
 }
@@ -63,6 +62,18 @@ void Game::send_world() {
     for(map<int, Player>::iterator p = players.begin();
             p != players.end(); ++p) {
         world.sendObjects(p->second.cl.sc, p->second.object_id);
+        send_sounds_to(p->second.cl.sc);
+    }
+}
+
+void Game::send_sounds_to(SocketConnection* sc) {
+	for(vector<pair<char, Vector2D> >::iterator it = sounds.begin();
+            it != sounds.end(); ++it) {
+        WritePacket wp(STC_SOUND, 9);
+        wp.write_char(it->first);
+        wp.write_float(it->second.x);
+        wp.write_float(it->second.y);
+        sc->send_packet(wp);
     }
 }
 
@@ -166,5 +177,6 @@ void Game::update(float dt) {
         it = next_it;
     }
 
-    world.doSimulation(dt);
+	sounds.clear();
+    world.doSimulation(dt, sounds);
 }

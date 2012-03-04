@@ -130,27 +130,16 @@ int World::spawn(int spawnl, int player, int flag) {
 }
 
 void World::sendObjects(SocketConnection* sc, int obj) {
-    WritePacket* wp = new WritePacket(STC_WORLD_DATA, 12 +
-            35 * objects.size() +
-            9 * sounds.size());
+    WritePacket wp(STC_WORLD_DATA, 12 + 35 * objects.size());
 
-    wp->write_int(obj);
+    wp.write_int(obj);
 
-    wp->write_int(objects.size());
+    wp.write_int(objects.size());
     for(map<int, Object>::iterator it = objects.begin(); it != objects.end(); ++it) {
-        it->second.write_data(wp);
-    }
-
-    wp->write_int(sounds.size());
-    for(vector<pair<char, Vector2D> >::iterator it = sounds.begin();
-            it != sounds.end(); ++it) {
-        wp->write_char(it->first);
-        wp->write_float(it->second.x);
-        wp->write_float(it->second.y);
+        it->second.write_data(&wp);
     }
 
     sc->send_packet(wp);
-    delete wp;
 }
 
 void World::receiveObjects(ReadPacket* rp, int& obj) {
@@ -162,15 +151,5 @@ void World::receiveObjects(ReadPacket* rp, int& obj) {
         Object o;
         o.read_data(rp);
         objects[o.id] = o;
-    }
-
-    int numSounds = rp->read_int();
-    sounds.clear();
-    sounds.reserve(numSounds);
-    for(int i = 0; i < numSounds; i++) {
-        char c = rp->read_char();
-        int v1 = rp->read_float();
-        int v2 = rp->read_float();
-        sounds.push_back(pair<char, Vector2D>(c, Vector2D(v1, v2)));
     }
 }

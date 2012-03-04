@@ -29,9 +29,9 @@ SHARED_OBJECTS = socket.o \
 	ServerConnectViewController.o \
 	GameViewController.o \
 	packet.o \
-	socket_connection.o
+	SocketConnection.o
 
-SERVER_OBJECTS=server.o game.o world.o socket.o object.o vec.o simulate.o packet.o socket_connection.o
+SERVER_OBJECTS=server.o game.o world.o socket.o object.o vec.o simulate.o packet.o SocketConnection.o
 UNHOLY_BALLS_OBJECTS+=$(SHARED_OBJECTS) unholyclient.o UnholyGameViewController.o
 HOLY_BALLS_OBJECTS+=$(SHARED_OBJECTS) holyclient.o HolyGameViewController.o
 MULTI_BALLS_OBJECTS+=$(SHARED_OBJECTS) multiclient.o MultiGameViewController.o

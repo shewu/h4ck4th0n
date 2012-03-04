@@ -15,7 +15,7 @@
    a typical stream, and supports the following primitives:
    char, int, short, float, and std::string.
 
-   See network_protocol.h for the specification of
+   See NetworkProtocol.h for the specification of
    the networking protocol. It should contain constants
    for the message_type field, as well as information
    about how data should be stored for a given message

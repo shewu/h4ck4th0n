@@ -39,7 +39,7 @@
    returns a ReadPacket (or NULL if no packet is received).
    See packet.h.
 
-   Also see network_protocol.h for specification of the
+   Also see NetworkProtocol.h for specification of the
    messaging protocol.
 */
 

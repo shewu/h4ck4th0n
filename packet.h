@@ -2,7 +2,7 @@
 #define PACKET_H
 
 #include <string>
-#include "network_protocol.h"
+#include "NetworkProtocol.h"
 
 /* WritePackets are passed to the SocketConnection class
    (see socket.h) to be sent out. ReadPackets are read

@@ -5,13 +5,58 @@
 #include <netinet/in.h>
 #include <cstdio>
 #include <cstdlib>
+#include <exception>
+
 using namespace std;
+
+class ParseException : public exception { };
+
+World::parseMap(String filename) {
+	const Color wallColor(101, 67, 33);
+	std::ifstream mapf(filename);
+	String str;
+
+	// get the map name.
+	// name "Vlad's map"
+	getline(mapf, str);
+	if (strcmp(str.substring(0, 4), "name") == 0 && strcmp(str.substring(str.length()-1, str.length()), "\"") == 0) {
+		size_t pos = str.find('"');
+		if (pos == str.length()-1) {
+			throw new ParseException();
+		}
+		mapName = str.substring(pos, str.length()-1);
+	} else {
+		throw new ParseException();
+	}
+
+	// mode TAG CTF
+	getline(mapf, str);
+	// dimensions # #
+	getline(mapf, str);
+	// team # #-#
+	getline(mapf, str);
+	while (strcmp(str.substring(0, 4), "team") == 0) {
+		getline(mapf, str);
+	}
+	// spawn # # #
+	while (strcmp(str.substring(0, 5), "spawn") == 0) {
+		getline(mapf, str);
+	}
+	// flag # # #
+	while (strcmp(str.substring(0, 4), "flag") == 0) {
+		getline(mapf, str);
+	}
+	// wall str # # # #
+	while (strcmp(str.substring(0, 4), "wall") == 0) {
+		getline(mapf, str);
+	}
+
+	mapf.close();
+}
 
 World::World() {
 	std::ifstream mapf("map.hbm");
 	mapf >> minX >> maxX >> minY >> maxY;
-
-    Color wall_color(101, 67, 33);
 	
 	obstacles.push_back(Obstacle(Vector2D(minX, minY), Vector2D(maxX, minY), wall_color));
     obstacles.push_back(Obstacle(Vector2D(minX, maxY), Vector2D(maxX, maxY), wall_color));

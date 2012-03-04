@@ -118,6 +118,9 @@ class Light
 
 class World
 {
+	private:
+		void parseMap();
+		String mapName;
 	public:
 		World();
 		int spawn(int spawnl, int player, int flag);

@@ -5,11 +5,9 @@
 #include <netinet/in.h>
 #include <cstdio>
 #include <cstdlib>
-#include <exception>
+#include <cstring>
 
 using namespace std;
-
-class ParseException : public exception { };
 
 World::parseMap(String filename) {
 	const Color wallColor(101, 67, 33);
@@ -31,19 +29,93 @@ World::parseMap(String filename) {
 
 	// mode TAG CTF
 	getline(mapf, str);
+	str = str.substring(4, str.length());
 	// dimensions # #
 	getline(mapf, str);
+	str = str.substring(10, str.length());
 	// team # #-#
 	getline(mapf, str);
 	while (strcmp(str.substring(0, 4), "team") == 0) {
+		str = str.substring(5, str.length());
+		int a = 0, b = 0, c = 0, i = 0;
+		while ('0' > str[i] || str[i] > '9') {
+			++i;
+		}
+		// parse a
+		while ('0' <= str[i] && str[i] <= '9') {
+			a = (a * 10 + (str[i] - '0'));
+			++i;
+		}
+		while ('0' > str[i] || str[i] > '9') {
+			++i;
+		}
+		// parse b
+		while ('0' <= str[i] && str[i] <= '9') {
+			b = (b * 10 + (str[i] - '0'));
+			++i;
+		}
+		++i; // advance over '-'
+		// parse c
+		while ('0' <= str[i] && str[i] <= '9') {
+			c = (c * 10 + (str[i] - '0'));
+			++i;
+		}
 		getline(mapf, str);
 	}
 	// spawn # # #
 	while (strcmp(str.substring(0, 5), "spawn") == 0) {
+		str = str.substring(5, str.length());
+		int a = 0, b = 0, c = 0, i = 0;
+		while ('0' > str[i] || str[i] > '9') {
+			++i;
+		}
+		// parse a
+		while ('0' <= str[i] && str[i] <= '9') {
+			a = (a * 10 + (str[i] - '0'));
+			++i;
+		}
+		while ('0' > str[i] || str[i] > '9') {
+			++i;
+		}
+		// parse b
+		while ('0' <= str[i] && str[i] <= '9') {
+			b = (b * 10 + (str[i] - '0'));
+			++i;
+		}
+		++i; // advance over '-'
+		// parse c
+		while ('0' <= str[i] && str[i] <= '9') {
+			c = (c * 10 + (str[i] - '0'));
+			++i;
+		}
 		getline(mapf, str);
 	}
 	// flag # # #
 	while (strcmp(str.substring(0, 4), "flag") == 0) {
+		str = str.substring(4, str.length());
+		int a = 0, b = 0, c = 0, i = 0;
+		while ('0' > str[i] || str[i] > '9') {
+			++i;
+		}
+		// parse a
+		while ('0' <= str[i] && str[i] <= '9') {
+			a = (a * 10 + (str[i] - '0'));
+			++i;
+		}
+		while ('0' > str[i] || str[i] > '9') {
+			++i;
+		}
+		// parse b
+		while ('0' <= str[i] && str[i] <= '9') {
+			b = (b * 10 + (str[i] - '0'));
+			++i;
+		}
+		++i; // advance over '-'
+		// parse c
+		while ('0' <= str[i] && str[i] <= '9') {
+			c = (c * 10 + (str[i] - '0'));
+			++i;
+		}
 		getline(mapf, str);
 	}
 	// wall str # # # #

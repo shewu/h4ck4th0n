@@ -19,6 +19,18 @@ enum {
     NO_TEAM
 };
 
+enum {
+    INVALID = -1,
+    TAG,
+    CTF,
+    
+    NUM_MODES // always the last mode
+} Mode;
+
+std::string modeStrings[] {
+    "TAG", "CTF"
+};
+
 class Vector2D
 {
 	public:

@@ -19,7 +19,7 @@ MapParser::MapParser(std::string filename) {
 void MapParser::loadFromFile(std::string filename) {
     in = ifstream(filename);
     parseMapName();
-    parseMode();
+    parseModes();
     parseDimensions();
     parseTeams();
     parseSpawns();
@@ -36,7 +36,16 @@ void MapParser::parseMapName() {
     mapName = s.substr(1, s.length());
 }
 
-void MapParser::parseMode() {
+Mode parseMode(std::string& str) {
+    for (int i = 0; i < sizeof(modeStrings)/sizeof(std::string); ++i) {
+        if (str.compare(modeStrings[i]) == 0) {
+            return (Mode)i;
+        }
+    }
+    return -1;
+}
+
+void MapParser::parseModes() {
     string s;
     getline(in, s);
     if ((s = s.substr(0, 4)).compare("mode") != 0) {
@@ -45,14 +54,16 @@ void MapParser::parseMode() {
     char* pch;
     // get 1st mode
     if ((pch = strtok(s.c_str(), " \t"))) {
-        ;
+        s = string(pch);
+        modes.push_back(parseMode(s));
     } else {
         // we should have at least one mode.
         throw new ParseException();
     }
     // get the rest of the modes
     while ((pch = strtok(NULL, " \t"))) {
-        ;
+        s = string(pch);
+        modes.push_back(parseMode(s));
     }
 }
 

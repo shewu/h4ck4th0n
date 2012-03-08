@@ -2,6 +2,9 @@
 #define MAP_PARSER
 
 #include <fstream>
+#include <vector>
+
+#include "hack.h"
 
 class MapParser {
     public:
@@ -10,7 +13,7 @@ class MapParser {
     private:
         void loadFromFile(std::string filename);
         void parseMapName();
-        void parseMode();
+        void parseModes();
         void parseDimensions();
         void parseTeams();
         void parseSpawns();
@@ -20,6 +23,7 @@ class MapParser {
         std::ifstream in;
         std::string mapName;
         unsigned width, height;
+        std::vector<Mode> modes;
 };
 
 #endif

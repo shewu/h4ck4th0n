@@ -6,9 +6,9 @@
 class MapParser {
     public:
         MapParser();
-        MapParser(std::String filename);
+        MapParser(std::string filename);
     private:
-        void loadFromFile(std::String filename);
+        void loadFromFile(std::string filename);
         void parseMapName();
         void parseMode();
         void parseDimensions();
@@ -18,6 +18,8 @@ class MapParser {
         void parseWalls();
 
         std::ifstream in;
+        std::string mapName;
+        unsigned width, height;
 };
 
 #endif

@@ -15,15 +15,19 @@ class MapParser {
         void parseMapName();
         void parseModes();
         void parseDimensions();
-        void parseTeams();
-        void parseSpawns();
-        void parseFlags();
-        void parseWalls();
+
+        std::string& parseTeams();
+        std::string& parseSpawns();
+        std::string& parseFlags();
+        std::string& parseWalls();
 
         std::ifstream in;
         std::string mapName;
         unsigned width, height;
-        std::vector<Mode> modes;
+        std::vector<GameMode> modes;
+        std::vector<Team> teams;
+        std::vector<Spawn> spawns;
+        std::vector<Obstacle> walls;
 };
 
 #endif

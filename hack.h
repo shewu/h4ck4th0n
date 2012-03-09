@@ -24,11 +24,32 @@ enum {
     TAG,
     CTF,
     
-    NUM_MODES // always the last mode
-} Mode;
+    NUM_GAMEMODES // always the last mode
+} GameMode;
 
 std::string modeStrings[] {
     "TAG", "CTF"
+};
+
+enum {
+    INVALID = -1,
+    NORMAL,
+    DEADLY,
+    BOUNCY,
+
+    NUM_WALLTYPES
+} WallType;
+
+std::string wallTypeStrings[] {
+    "normal", "deadly", "bouncy"
+};
+
+struct Team {
+    int teamNumber;
+    int minPlayers;
+    int maxPlayers;
+    Team() { }
+    Team(int a, int b, int c) : teamNumber(a), minPlayers(b), maxPlayers(c) { }
 };
 
 class Vector2D
@@ -117,8 +138,11 @@ class Obstacle
 		Color color;
 		bool sticky;
 		int flag;
+        WallType wallType;
         Obstacle(Vector2D a, Vector2D b, Color c, bool d = false, int e = NO_TEAM)
             : p1(a), p2(b), color(c), sticky(d), flag(e) {}
+        Obstacle(Vector2D a, Vector2D b, Color c, WallType d, int e = NO_TEAM) 
+            : p1(a), p2(b), color(c), wallType(d), flag(e) { }
 };
 
 class Light

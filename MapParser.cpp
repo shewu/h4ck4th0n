@@ -38,11 +38,7 @@ class StringTokenizer {
         }
 }
 
-MapParser::MapParser() {
-    loadFromFile("map.hbm");
-};
-
-MapParser::MapParser(std::string filename) {
+MapParser::MapParser(std::string filename = "map.hbm") {
     loadFromFile(filename);
 }
 
@@ -57,7 +53,7 @@ void MapParser::loadFromFile(std::string filename) {
     // we don't know what line we're reading is for, so we will always read one
     // more line than necessary. pass that line to the next block of args to be
     // parsed.
-    String s;
+    std::string s;
     parseTeams(s);
     parseSpawns(s);
     parseFlags(s);

@@ -8,8 +8,28 @@
 
 class MapParser {
     public:
-        MapParser();
         MapParser(std::string filename);
+        unsigned getWidth() {
+            return width;
+        }
+        unsigned getHeight() {
+            return height;
+        }
+        std::string& getName() {
+            return mapName;
+        }
+        std::vector<GameMode>& getGameModes() {
+            return modes;
+        }
+        std::vector<Team>& getTeams() {
+            return teams;
+        }
+        std::vector<Spawn>& getSpawns() {
+            return spawns;
+        }
+        std::vector<Obstacle>& getWalls() {
+            return walls;
+        }
     private:
         void loadFromFile(std::string filename);
         void parseMapName();

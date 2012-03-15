@@ -1,12 +1,42 @@
 #include <exception>
+#include <list>
 #include <cstring>
 
 #include "MapParser.h"
 
-class ParseException : public exception {
+class ParseException : public std::exception {
     public:
         ParseException();
 };
+
+class StringTokenizer {
+    public:
+        StringTokenizer(std::string& s, std::string delim = " \t") {
+            init(s, delim);
+        }
+        // Fetches and removes the next token. If no tokens remain before the
+        // operation, then throws an exception.
+        std::string& nextToken() {
+            if (!hasMoreTokens()) {
+                throw new std::exception();
+            }
+            std::string ret = toks.front();
+            ret.pop_front();
+            return ret;
+        }
+        bool hasMoreTokens() {
+            return toks.size() > 0;
+        }
+    private:
+        std::list<string> toks;
+        void init(std::string& s, std::string delim) {
+            char* pch = strtok(s.c_str(), delim.c_str());
+            while (pch) {
+                toks.push_back(std::string(pch));
+                pch = strtok(NULL, delim.c_str());
+            }
+        }
+}
 
 MapParser::MapParser() {
     loadFromFile("map.hbm");
@@ -37,9 +67,10 @@ void MapParser::loadFromFile(std::string filename) {
 void MapParser::parseMapName() {
     std::string s;
     getline(in, s);
-    if ((s = s.substr(0, 4)).compare("name") != 0) {
+    if (s.substr(0, 4).compare("name") != 0) {
         throw new ParseException();
     }
+    s = s.substr(4, s.size());
     mapName = s.substr(1, s.length());
 }
 
@@ -55,42 +86,31 @@ GameMode parseGameMode(std::string& str) {
 void MapParser::parseModes() {
     std::string s;
     getline(in, s);
-    if ((s = s.substr(0, 4)).compare("mode") != 0) {
+    if (s.substr(0, 4).compare("mode") != 0) {
         throw new ParseException();
     }
-    char* pch;
-    // get 1st mode
-    if ((pch = strtok(s.c_str(), " \t"))) {
-        s = string(pch);
-        modes.push_back(parseGameMode(s));
-    } else {
-        // we should have at least one mode.
-        throw new ParseException();
-    }
-    // get the rest of the modes
-    while ((pch = strtok(NULL, " \t"))) {
-        s = string(pch);
-        modes.push_back(parseMode(s));
+    s = s.substr(4, s.size());
+    StringTokenizer st(s);
+    while (st.hasMoreTokens()) {
+        modes.push_back(parseGameMode(st.nextToken()));
     }
 }
 
 void MapParser::parseDimensions() {
     std::string s;
     getline(in, s);
-    if ((s = s.substr(0, 3)).compare("dim") != 0) {
+    if (s.substr(0, 3).compare("dim") != 0) {
         throw new ParseException();
     }
-    char* pch;
-    // get width
-    if ((pch = strtok(s.c_str(), " \t"))) {
-        width = atoi(pch);
+    s = s.substr(3, s.size());
+    StringTokenizer st(s);
+    if (st.hasMoreTokens()) {
+        width = atoi(st.nextToken().c_str());
     }
-    // get height
-    if ((pch = strtok(NULL, " \t"))) {
-        height = atoi(pch);
+    if (st.hasMoreTokens()) {
+        height = atoi(st.nextToken().c_str());
     }
-    // no characters should be left
-    if (width < 0 || height < 0 || strtok(NULL, " \t")) {
+    if (width < 0 || height < 0 || st.hasMoreTokens()) {
         throw new ParseException();
     }
 }
@@ -104,19 +124,20 @@ std::string& MapParser::parseTeams(std::string& s) {
             return s;
         }
 
-        s = s.substr(0, 4);
-        char* pch;
+        s = s.substr(5, s.size());
+        StringTokenizer st(s, " -\t");
+        if (st.hasMoreTokens()) {
+            teamNum = atoi(st.nextToken.c_str());
+        }
+        if (st.hasMoreTokens()) {
+            minPlayers = atoi(st.nextToken().c_str());
+        }
+        if (st.hasMoreTokens()) {
+            maxPlayers = atoi(st.nextToken().c_str());
+        }
+
         int teamNum = -1, minPlayers = -1, maxPlayers = -1;
-        if ((pch = strtok(s.c_str(), " -\t"))) {
-            teamNum = atoi(pch);
-        }
-        if ((pch = strtok(NULL, " -\t"))) {
-            minPlayers = atoi(pch);
-        }
-        if ((pch = strtok(NULL, " -\t"))) {
-            maxPlayers = atoi(pch);
-        }
-        if (teamNum < 0 || minPlayers < 0 || maxPlayers < 0 || strtok(NULL, " -\t")) {
+        if (teamNum < 0 || minPlayers < 0 || maxPlayers < 0 || st.hasMoreTokens()) {
             throw new ParseException();
         }
 
@@ -132,16 +153,21 @@ std::string& MapParser::parseSpawns(std::string& s) {
             return s;
         }
 
-        s = s.substr(0, 5);
-        char* pch;
-        if ((pch = strtok(pch, " \t"))) {
-            ;
+        s = s.substr(5, s.size());
+        StringTokenizer st(s);
+        int id = -1, x = -1, y = -1;
+        if (st.hasMoreTokens()) {
+            id = atoi(st.nextToken().c_str());
         }
-        if ((pch = strtok(NULL, " \t"))) {
-            ;
+        if (st.hasMoreTokens()) {
+            x = atoi(st.nextToken().c_str());
         }
-        if ((pch = strtok(NULL, " \t"))) {
-            ;
+        if (st.hasMoreTokens()) {
+            y = atoi(st.nextToken().c_str());
+        }
+
+        if (id < 0 || x < 0 || y < 0 || st.hasMoreTokens()) {
+            throw new ParseException();
         }
 
         getline(in, s);
@@ -154,16 +180,21 @@ std::string& MapParser::parseFlags(std::string& s) {
             return s;
         }
 
-        s = s.substr(0, 4);
-        char* pch;
-        if ((pch = strtok(pch, " \t"))) {
-            ;
+        s = s.substr(4, s.size());
+        StringTokenizer st(s);
+        int id = -1, x = -1, y = -1;
+        if (st.hasMoreTokens()) {
+            id = atoi(st.nextToken().c_str());
         }
-        if ((pch = strtok(NULL, " \t"))) {
-            ;
+        if (st.hasMoreTokens()) {
+            x = atoi(st.nextToken().c_str());
         }
-        if ((pch = strtok(NULL, " \t"))) {
-            ;
+        if (st.hasMoreTokens()) {
+            y = atoi(st.nextToken().c_str());
+        }
+
+        if (id < 0 || x < 0 || y < 0 || st.hasMoreTokens()) {
+            throw new ParseException();
         }
 
         getline(in, s);
@@ -184,26 +215,26 @@ std::string& MapParser::parseWalls(std::string& s) {
             return s;
         }
 
-        s = s.substr(0, 4);
+        s = s.substr(4, s.size());
+        StringTokenizer st(s);
         std::string wallType;
         int a = -1, b = -1, c = -1, d = -1;
-        char* pch;
-        if ((pch = strtok(NULL, " \t"))) {
-            wallType = std::string(pch);
+        if (st.hasMoreTokens()) {
+            wallType = st.nextToken();
         }
-        if ((pch = strtok(NULL, " \t"))) {
-            a = atoi(pch);
+        if (st.hasMoreTokens()) {
+            a = atoi(st.nextToken().c_str());
         }
-        if ((pch = strtok(NULL, " \t"))) {
-            b = atoi(pch);
+        if (st.hasMoreTokens()) {
+            b = atoi(st.nextToken().c_str());
         }
-        if ((pch = strtok(NULL, " \t"))) {
-            c = atoi(pch);
+        if (st.hasMoreTokens()) {
+            c = atoi(st.nextToken().c_str());
         }
-        if ((pch = strtok(NULL, " \t"))) {
-            d = atoi(pch);
+        if (st.hasMoreTokens()) {
+            d = atoi(st.nextToken().c_str());
         }
-        if (a < 0 || b < 0 || c < 0 || d < 0 || strtok(NULL, " \t")) {
+        if (a < 0 || b < 0 || c < 0 || d < 0 || st.hasMoreTokens()) {
             throw new ParseException();
         }
 

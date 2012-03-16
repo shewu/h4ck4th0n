@@ -8,6 +8,7 @@
 
 class Map {
     public:
+        Map();
         Map(std::string filename);
         unsigned getWidth() {
             return width;
@@ -24,14 +25,24 @@ class Map {
         std::vector<Team>& getTeams() {
             return teams;
         }
-        std::vector<Spawn>& getSpawns() {
-            return spawns;
+        std::vector<Obstacle>& getSpawnsForTeam(unsigned team) {
+            if (team >= teams.size()) {
+                return spawns[0];
+            }
+            return spawns[team];
+        }
+        std::vector<Spawn>& getFlagsForTeam(unsigned team) {
+            if (team >= teams.size()) {
+                return flags[0];
+            }
+            return flags[team];
         }
         std::vector<Obstacle>& getWalls() {
             return walls;
         }
+        const static unsigned MAX_TEAMS = 10;
     private:
-        void parse(std::string filename);
+        void parse(std::string filename = "map.hbm");
         void parseMapName(std::string& s);
         void parseModes(std::string& s);
         void parseDimensions(std::string& s);
@@ -45,7 +56,8 @@ class Map {
         unsigned width, height;
         std::vector<GameMode> modes;
         std::vector<Team> teams;
-        std::vector<Spawn> spawns;
+        std::vector<Obstacle> spawns[Map::MAX_TEAMS];
+        std::vector<Spawn> flags[Map::MAX_TEAMS];
         std::vector<Obstacle> walls;
 };
 

@@ -16,52 +16,59 @@ class StringTokenizer {
         }
         // Fetches and removes the next token. If no tokens remain before the
         // operation, then throws an exception.
-        std::string& nextToken() {
+        std::string nextToken() {
             if (!hasMoreTokens()) {
                 throw new std::exception();
             }
             std::string ret = toks.front();
-            ret.pop_front();
+            toks.pop_front();
             return ret;
         }
-        bool hasMoreTokens() {
+        bool hasMoreTokens() const {
             return toks.size() > 0;
         }
     private:
-        std::list<string> toks;
+        std::list<std::string> toks;
         void init(std::string& s, std::string delim) {
-            char* pch = strtok(s.c_str(), delim.c_str());
+            const char* d = delim.c_str();
+            char* pch = strtok(const_cast<char*>(s.c_str()), d);
             while (pch) {
                 toks.push_back(std::string(pch));
-                pch = strtok(NULL, delim.c_str());
+                pch = strtok(NULL, d);
             }
         }
+};
+
+Map::Map() {
+    parse();
 }
 
-Map::Map(std::string filename = "map.hbm") {
+Map::Map(std::string filename) {
     parse(filename);
 }
 
-void Map::parse(std::string filename) {
+void Map::parse(std::string filename = "map.hbm") {
     width = -1;
     height = -1;
-    in = ifstream(filename);
+    in = std::ifstream(filename.c_str());
+    std::string cmd;
     std::string s;
     while (!in.eof()) {
+        in >> cmd;
         s = getline(in, s);
-        if (s.substr(0, 4).compare("name") == 0) {
+        if (cmd.compare("name") == 0) {
             parseMapName(s);
-        } else if (s.substr(0, 4).compare("mode") == 0) {
+        } else if (cmd.compare("mode") == 0) {
             parseModes(s);
-        } else if (s.substr(0, 3).compare("dim") == 0) {
+        } else if (cmd.compare("dim") == 0) {
             parseDimensions(s);
-        } else if (s.substr(0, 4).compare("team") == 0) {
+        } else if (cmd.compare("team") == 0) {
             parseTeam(s);
-        } else if (s.substr(0, 5).compare("spawn") == 0) {
+        } else if (cmd.compare("spawn") == 0) {
             parseSpawn(s);
-        } else if (s.substr(0, 4).compare("flag") == 0) {
+        } else if (cmd.compare("flag") == 0) {
             parseFlag(s);
-        } else if (s.substr(0, 4).compare("wall") == 0) {
+        } else if (cmd.compare("wall") == 0) {
             parseWall(s);
         } else {
             throw new ParseException();
@@ -73,17 +80,16 @@ void Map::parseMapName(std::string& s) {
     mapName = s.substr(5, s.size());
 }
 
-GameMode parseGameMode(std::string& str) {
-    for (int i = 0; i < GameMode.NUM_MODES; ++i) {
+GameMode parseGameMode(std::string str) {
+    for (int i = 0; i < NUM_GAMEMODES; ++i) {
         if (str.compare(modeStrings[i]) == 0) {
             return (GameMode)i;
         }
     }
-    return -1;
+    return GM_INVALID;
 }
 
 void Map::parseModes(std::string& s) {
-    s = s.substr(4, s.size());
     StringTokenizer st(s);
     while (st.hasMoreTokens()) {
         modes.push_back(parseGameMode(st.nextToken()));
@@ -91,7 +97,6 @@ void Map::parseModes(std::string& s) {
 }
 
 void Map::parseDimensions(std::string& s) {
-    s = s.substr(3, s.size());
     StringTokenizer st(s);
     if (st.hasMoreTokens()) {
         width = atoi(st.nextToken().c_str());
@@ -105,8 +110,8 @@ void Map::parseDimensions(std::string& s) {
 }
 
 void Map::parseTeam(std::string& s) {
-    s = s.substr(5, s.size());
     StringTokenizer st(s, " -\t");
+    int teamNum = -1, minPlayers = -1, maxPlayers = -1;
     if (st.hasMoreTokens()) {
         teamNum = atoi(st.nextToken.c_str());
     }
@@ -126,7 +131,6 @@ void Map::parseTeam(std::string& s) {
 }
 
 void Map::parseSpawn(std::string& s) {
-    s = s.substr(5, s.size());
     StringTokenizer st(s);
     int id = -1, x = -1, y = -1;
     if (st.hasMoreTokens()) {
@@ -145,7 +149,6 @@ void Map::parseSpawn(std::string& s) {
 }
 
 void Map::parseFlag(std::string& s) {
-    s = s.substr(4, s.size());
     StringTokenizer st(s);
     int id = -1, x = -1, y = -1;
     if (st.hasMoreTokens()) {
@@ -161,18 +164,20 @@ void Map::parseFlag(std::string& s) {
     if (id < 0 || x < 0 || y < 0 || st.hasMoreTokens()) {
         throw new ParseException();
     }
+
+    //flags.push_back(Spawn(Vector2D(), Vector2D(), Color(), true, ));
 }
 
 WallType parseWallType(std::string& s) {
-    for (int i = 0; i < WallType.NUM_WALLTYPES; ++i) {
+    for (int i = 0; i < NUM_WALLTYPES; ++i) {
         if (modeStrings[i].compare(s) == 0) {
             return (WallType)i;
         }
     }
+    return WT_INVALID;
 }
 
 void Map::parseWall(std::string& s) {
-    s = s.substr(4, s.size());
     StringTokenizer st(s);
     std::string wallType;
     int a = -1, b = -1, c = -1, d = -1;

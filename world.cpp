@@ -1,4 +1,3 @@
-#include "hack.h"
 #include <fstream>
 #include <string>
 #include <map>
@@ -7,11 +6,16 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "hack.h"
+#include "Map.h"
+
 using namespace std;
 
 World::World() {
 	std::ifstream mapf("map.hbm");
 	mapf >> minX >> maxX >> minY >> maxY;
+
+    wall_color = Color(67, 101, 33);
 	
 	obstacles.push_back(Obstacle(Vector2D(minX, minY), Vector2D(maxX, minY), wall_color));
     obstacles.push_back(Obstacle(Vector2D(minX, maxY), Vector2D(maxX, maxY), wall_color));

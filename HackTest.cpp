@@ -1,5 +1,7 @@
 #include <cstdio>
+
 #include "hack.h"
+#include "Map.h"
 
 #define TEST_EQ(d, x, y) \
 	do { \
@@ -8,6 +10,18 @@
 	} while (0);
 
 using namespace std;
+
+void Vector2DTest();
+void Vector3DTest();
+void MapTest();
+
+int main()
+{
+	Vector2DTest();
+	Vector3DTest();
+    MapTest();
+	return 0;
+}
 
 // Vector2D test
 void Vector2DTest()
@@ -58,10 +72,8 @@ void Vector3DTest()
 	return;
 }
 
-int main()
-{
-	Vector2DTest();
-	Vector3DTest();
-	return 0;
+void MapTest() {
+    Map stock();
+    Map custom("custom.hbm");
 }
 

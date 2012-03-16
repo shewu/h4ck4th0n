@@ -19,28 +19,28 @@ enum {
     NO_TEAM
 };
 
-enum {
-    INVALID = -1,
-    TAG,
-    CTF,
+enum GameMode {
+    GM_INVALID = -1,
+    GM_TAG,
+    GM_CTF,
     
     NUM_GAMEMODES // always the last mode
-} GameMode;
+};
 
-std::string modeStrings[] {
+std::string modeStrings[] = {
     "TAG", "CTF"
 };
 
-enum {
-    INVALID = -1,
-    NORMAL,
-    DEADLY,
-    BOUNCY,
+enum WallType {
+    WT_INVALID = -1,
+    WT_NORMAL,
+    WT_DEADLY,
+    WT_BOUNCY,
 
     NUM_WALLTYPES
-} WallType;
+};
 
-std::string wallTypeStrings[] {
+std::string wallTypeStrings[] = {
     "normal", "deadly", "bouncy"
 };
 
@@ -139,10 +139,10 @@ class Obstacle
 		bool sticky;
 		int flag;
         WallType wallType;
-        Obstacle(Vector2D a, Vector2D b, Color c, bool d = false, int e = NO_TEAM)
-            : p1(a), p2(b), color(c), sticky(d), flag(e) {}
         Obstacle(Vector2D a, Vector2D b, Color c, WallType d, int e = NO_TEAM) 
             : p1(a), p2(b), color(c), wallType(d), flag(e) { }
+        Obstacle(Vector2D a, Vector2D b, Color c, bool d = false, int e = NO_TEAM)
+            : p1(a), p2(b), color(c), sticky(d), flag(e) {}
 };
 
 class Light
@@ -155,8 +155,8 @@ class Light
 class World
 {
 	private:
-		void parseMap();
-		String mapName;
+		std::string mapName;
+        Color wall_color;
 	public:
 		World();
 		int spawn(int spawnl, int player, int flag);

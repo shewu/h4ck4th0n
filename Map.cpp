@@ -40,22 +40,22 @@ class StringTokenizer {
 };
 
 Map::Map() {
-    parse();
+    parse("map.hbm");
 }
 
 Map::Map(std::string filename) {
     parse(filename);
 }
 
-void Map::parse(std::string filename = "map.hbm") {
+void Map::parse(std::string filename) {
     width = -1;
     height = -1;
-    in = std::ifstream(filename.c_str());
+    in.open(filename.c_str());
     std::string cmd;
     std::string s;
     while (!in.eof()) {
         in >> cmd;
-        s = getline(in, s);
+        getline(in, s);
         if (cmd.compare("name") == 0) {
             parseMapName(s);
         } else if (cmd.compare("mode") == 0) {
@@ -113,7 +113,7 @@ void Map::parseTeam(std::string& s) {
     StringTokenizer st(s, " -\t");
     int teamNum = -1, minPlayers = -1, maxPlayers = -1;
     if (st.hasMoreTokens()) {
-        teamNum = atoi(st.nextToken.c_str());
+        teamNum = atoi(st.nextToken().c_str());
     }
     if (st.hasMoreTokens()) {
         minPlayers = atoi(st.nextToken().c_str());
@@ -122,7 +122,6 @@ void Map::parseTeam(std::string& s) {
         maxPlayers = atoi(st.nextToken().c_str());
     }
 
-    int teamNum = -1, minPlayers = -1, maxPlayers = -1;
     if (teamNum < 0 || minPlayers < 0 || maxPlayers < 0 || st.hasMoreTokens()) {
         throw new ParseException();
     }

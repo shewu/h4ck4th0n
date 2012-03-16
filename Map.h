@@ -42,7 +42,7 @@ class Map {
         }
         const static unsigned MAX_TEAMS = 10;
     private:
-        void parse(std::string filename = "map.hbm");
+        void parse(std::string filename);
         void parseMapName(std::string& s);
         void parseModes(std::string& s);
         void parseDimensions(std::string& s);

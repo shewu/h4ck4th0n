@@ -2,7 +2,7 @@
 #include <list>
 #include <cstring>
 
-#include "MapParser.h"
+#include "Map.h"
 
 class ParseException : public std::exception {
     public:
@@ -38,11 +38,11 @@ class StringTokenizer {
         }
 }
 
-MapParser::MapParser(std::string filename = "map.hbm") {
+Map::Map(std::string filename = "map.hbm") {
     loadFromFile(filename);
 }
 
-void MapParser::loadFromFile(std::string filename) {
+void Map::loadFromFile(std::string filename) {
     width = -1;
     height = -1;
     in = ifstream(filename);
@@ -67,7 +67,7 @@ void MapParser::loadFromFile(std::string filename) {
     parseWalls(s);
 }
 
-void MapParser::parseMapName(std::string& s) {
+void Map::parseMapName(std::string& s) {
     if (s.substr(0, 4).compare("name") != 0) {
         throw new ParseException();
     }
@@ -83,7 +83,7 @@ GameMode parseGameMode(std::string& str) {
     return -1;
 }
 
-void MapParser::parseModes() {
+void Map::parseModes() {
     std::string s;
     getline(in, s);
     if (s.substr(0, 4).compare("mode") != 0) {
@@ -96,7 +96,7 @@ void MapParser::parseModes() {
     }
 }
 
-void MapParser::parseDimensions() {
+void Map::parseDimensions() {
     std::string s;
     getline(in, s);
     if (s.substr(0, 3).compare("dim") != 0) {
@@ -115,7 +115,7 @@ void MapParser::parseDimensions() {
     }
 }
 
-std::string& MapParser::parseTeams(std::string& s) {
+std::string& Map::parseTeams(std::string& s) {
     while (1) {
         if (s.length() == 0) {
             getline(in, s);
@@ -147,7 +147,7 @@ std::string& MapParser::parseTeams(std::string& s) {
     }
 }
 
-std::string& MapParser::parseSpawns(std::string& s) {
+std::string& Map::parseSpawns(std::string& s) {
     while (1) {
         if (s.substr(0, 5).compare("spawn")) {
             return s;
@@ -174,7 +174,7 @@ std::string& MapParser::parseSpawns(std::string& s) {
     }
 }
 
-std::string& MapParser::parseFlags(std::string& s) {
+std::string& Map::parseFlags(std::string& s) {
     while (1) {
         if (s.substr(0, 4).compare("flag")) {
             return s;
@@ -209,7 +209,7 @@ WallType parseWallType(std::string& s) {
     }
 }
 
-std::string& MapParser::parseWalls(std::string& s) {
+std::string& Map::parseWalls(std::string& s) {
     while (1) {
         if (s.substr(0, 4).compare("wall")) {
             return s;

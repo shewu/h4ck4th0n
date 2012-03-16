@@ -6,9 +6,9 @@
 
 #include "hack.h"
 
-class MapParser {
+class Map {
     public:
-        MapParser(std::string filename);
+        Map(std::string filename);
         unsigned getWidth() {
             return width;
         }

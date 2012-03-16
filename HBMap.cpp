@@ -6,7 +6,9 @@
 
 class ParseException : public std::exception {
     public:
-        ParseException();
+        ParseException() {
+
+        }
 };
 
 class StringTokenizer {
@@ -169,7 +171,7 @@ void HBMap::parseFlag(std::string& s) {
 
 WallType parseWallType(std::string& s) {
     for (int i = 0; i < NUM_WALLTYPES; ++i) {
-        if (modeStrings[i].compare(s) == 0) {
+        if (wallTypeStrings[i].compare(s) == 0) {
             return (WallType)i;
         }
     }

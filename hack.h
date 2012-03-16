@@ -27,7 +27,7 @@ enum GameMode {
     NUM_GAMEMODES // always the last mode
 };
 
-std::string modeStrings[] = {
+const std::string modeStrings[] = {
     "TAG", "CTF"
 };
 
@@ -40,7 +40,7 @@ enum WallType {
     NUM_WALLTYPES
 };
 
-std::string wallTypeStrings[] = {
+const std::string wallTypeStrings[] = {
     "normal", "deadly", "bouncy"
 };
 

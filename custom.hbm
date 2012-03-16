@@ -1,0 +1,24 @@
+name "Vlad's map"
+mode TAG CTF
+dim 50 50
+team 0 1-4 (# players)
+team 1 1-4
+team 2 1-4
+spawn 0 20 20
+spawn 0 30 30
+spawn 0 40 40
+spawn 0 45 45
+spawn 1 40 40
+spawn 1 40 41
+spawn 1 40 42
+spawn 1 40 43
+spawn 2 50 50
+spawn 2 49 50
+spawn 2 48 50
+spawn 2 47 50
+spawn 2 46 50
+flag 2 40 50
+wall normal x1 y1 x2 y2
+wall deadly x1 y1 x2 y2
+wall bouncy x1 y1 x2 y2
+

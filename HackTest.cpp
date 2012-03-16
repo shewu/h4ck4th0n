@@ -73,7 +73,7 @@ void Vector3DTest()
 }
 
 void MapTest() {
-    HBMap stock();
+    //HBMap stock();
     HBMap custom("custom.hbm");
 }
 

@@ -31,15 +31,14 @@ class Map {
             return walls;
         }
     private:
-        void loadFromFile(std::string filename);
+        void parse(std::string filename);
         void parseMapName(std::string& s);
-        void parseModes();
-        void parseDimensions();
-
-        std::string& parseTeams();
-        std::string& parseSpawns();
-        std::string& parseFlags();
-        std::string& parseWalls();
+        void parseModes(std::string& s);
+        void parseDimensions(std::string& s);
+        void parseTeam(std::string& s);
+        void parseSpawn(std::string& s);
+        void parseFlag(std::string& s);
+        void parseWall(std::string& s);
 
         std::ifstream in;
         std::string mapName;

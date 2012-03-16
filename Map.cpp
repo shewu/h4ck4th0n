@@ -39,10 +39,10 @@ class StringTokenizer {
 }
 
 Map::Map(std::string filename = "map.hbm") {
-    loadFromFile(filename);
+    parse(filename);
 }
 
-void Map::loadFromFile(std::string filename) {
+void Map::parse(std::string filename) {
     width = -1;
     height = -1;
     in = ifstream(filename);
@@ -51,26 +51,25 @@ void Map::loadFromFile(std::string filename) {
         s = getline(in, s);
         if (s.substr(0, 4).compare("name") == 0) {
             parseMapName(s);
+        } else if (s.substr(0, 4).compare("mode") == 0) {
+            parseModes(s);
+        } else if (s.substr(0, 3).compare("dim") == 0) {
+            parseDimensions(s);
+        } else if (s.substr(0, 4).compare("team") == 0) {
+            parseTeam(s);
+        } else if (s.substr(0, 5).compare("spawn") == 0) {
+            parseSpawn(s);
+        } else if (s.substr(0, 4).compare("flag") == 0) {
+            parseFlag(s);
+        } else if (s.substr(0, 4).compare("wall") == 0) {
+            parseWall(s);
+        } else {
+            throw new ParseException();
         }
     }
-    parseMapName();
-    parseModes();
-    parseDimensions();
-
-    // we don't know what line we're reading is for, so we will always read one
-    // more line than necessary. pass that line to the next block of args to be
-    // parsed.
-    std::string s;
-    parseTeams(s);
-    parseSpawns(s);
-    parseFlags(s);
-    parseWalls(s);
 }
 
 void Map::parseMapName(std::string& s) {
-    if (s.substr(0, 4).compare("name") != 0) {
-        throw new ParseException();
-    }
     mapName = s.substr(5, s.size());
 }
 
@@ -83,12 +82,7 @@ GameMode parseGameMode(std::string& str) {
     return -1;
 }
 
-void Map::parseModes() {
-    std::string s;
-    getline(in, s);
-    if (s.substr(0, 4).compare("mode") != 0) {
-        throw new ParseException();
-    }
+void Map::parseModes(std::string& s) {
     s = s.substr(4, s.size());
     StringTokenizer st(s);
     while (st.hasMoreTokens()) {
@@ -96,12 +90,7 @@ void Map::parseModes() {
     }
 }
 
-void Map::parseDimensions() {
-    std::string s;
-    getline(in, s);
-    if (s.substr(0, 3).compare("dim") != 0) {
-        throw new ParseException();
-    }
+void Map::parseDimensions(std::string& s) {
     s = s.substr(3, s.size());
     StringTokenizer st(s);
     if (st.hasMoreTokens()) {
@@ -115,89 +104,62 @@ void Map::parseDimensions() {
     }
 }
 
-std::string& Map::parseTeams(std::string& s) {
-    while (1) {
-        if (s.length() == 0) {
-            getline(in, s);
-        }
-        if (s.substr(0, 4).compare("team")) {
-            return s;
-        }
+void Map::parseTeam(std::string& s) {
+    s = s.substr(5, s.size());
+    StringTokenizer st(s, " -\t");
+    if (st.hasMoreTokens()) {
+        teamNum = atoi(st.nextToken.c_str());
+    }
+    if (st.hasMoreTokens()) {
+        minPlayers = atoi(st.nextToken().c_str());
+    }
+    if (st.hasMoreTokens()) {
+        maxPlayers = atoi(st.nextToken().c_str());
+    }
 
-        s = s.substr(5, s.size());
-        StringTokenizer st(s, " -\t");
-        if (st.hasMoreTokens()) {
-            teamNum = atoi(st.nextToken.c_str());
-        }
-        if (st.hasMoreTokens()) {
-            minPlayers = atoi(st.nextToken().c_str());
-        }
-        if (st.hasMoreTokens()) {
-            maxPlayers = atoi(st.nextToken().c_str());
-        }
+    int teamNum = -1, minPlayers = -1, maxPlayers = -1;
+    if (teamNum < 0 || minPlayers < 0 || maxPlayers < 0 || st.hasMoreTokens()) {
+        throw new ParseException();
+    }
 
-        int teamNum = -1, minPlayers = -1, maxPlayers = -1;
-        if (teamNum < 0 || minPlayers < 0 || maxPlayers < 0 || st.hasMoreTokens()) {
-            throw new ParseException();
-        }
+    teams.push_back(Team(teamNum, minPlayers, maxPlayers));
+}
 
-        teams.push_back(Team(teamNum, minPlayers, maxPlayers));
+void Map::parseSpawn(std::string& s) {
+    s = s.substr(5, s.size());
+    StringTokenizer st(s);
+    int id = -1, x = -1, y = -1;
+    if (st.hasMoreTokens()) {
+        id = atoi(st.nextToken().c_str());
+    }
+    if (st.hasMoreTokens()) {
+        x = atoi(st.nextToken().c_str());
+    }
+    if (st.hasMoreTokens()) {
+        y = atoi(st.nextToken().c_str());
+    }
 
-        getline(in, s);
+    if (id < 0 || x < 0 || y < 0 || st.hasMoreTokens()) {
+        throw new ParseException();
     }
 }
 
-std::string& Map::parseSpawns(std::string& s) {
-    while (1) {
-        if (s.substr(0, 5).compare("spawn")) {
-            return s;
-        }
-
-        s = s.substr(5, s.size());
-        StringTokenizer st(s);
-        int id = -1, x = -1, y = -1;
-        if (st.hasMoreTokens()) {
-            id = atoi(st.nextToken().c_str());
-        }
-        if (st.hasMoreTokens()) {
-            x = atoi(st.nextToken().c_str());
-        }
-        if (st.hasMoreTokens()) {
-            y = atoi(st.nextToken().c_str());
-        }
-
-        if (id < 0 || x < 0 || y < 0 || st.hasMoreTokens()) {
-            throw new ParseException();
-        }
-
-        getline(in, s);
+void Map::parseFlag(std::string& s) {
+    s = s.substr(4, s.size());
+    StringTokenizer st(s);
+    int id = -1, x = -1, y = -1;
+    if (st.hasMoreTokens()) {
+        id = atoi(st.nextToken().c_str());
     }
-}
+    if (st.hasMoreTokens()) {
+        x = atoi(st.nextToken().c_str());
+    }
+    if (st.hasMoreTokens()) {
+        y = atoi(st.nextToken().c_str());
+    }
 
-std::string& Map::parseFlags(std::string& s) {
-    while (1) {
-        if (s.substr(0, 4).compare("flag")) {
-            return s;
-        }
-
-        s = s.substr(4, s.size());
-        StringTokenizer st(s);
-        int id = -1, x = -1, y = -1;
-        if (st.hasMoreTokens()) {
-            id = atoi(st.nextToken().c_str());
-        }
-        if (st.hasMoreTokens()) {
-            x = atoi(st.nextToken().c_str());
-        }
-        if (st.hasMoreTokens()) {
-            y = atoi(st.nextToken().c_str());
-        }
-
-        if (id < 0 || x < 0 || y < 0 || st.hasMoreTokens()) {
-            throw new ParseException();
-        }
-
-        getline(in, s);
+    if (id < 0 || x < 0 || y < 0 || st.hasMoreTokens()) {
+        throw new ParseException();
     }
 }
 
@@ -209,39 +171,31 @@ WallType parseWallType(std::string& s) {
     }
 }
 
-std::string& Map::parseWalls(std::string& s) {
-    while (1) {
-        if (s.substr(0, 4).compare("wall")) {
-            return s;
-        }
-
-        s = s.substr(4, s.size());
-        StringTokenizer st(s);
-        std::string wallType;
-        int a = -1, b = -1, c = -1, d = -1;
-        if (st.hasMoreTokens()) {
-            wallType = st.nextToken();
-        }
-        if (st.hasMoreTokens()) {
-            a = atoi(st.nextToken().c_str());
-        }
-        if (st.hasMoreTokens()) {
-            b = atoi(st.nextToken().c_str());
-        }
-        if (st.hasMoreTokens()) {
-            c = atoi(st.nextToken().c_str());
-        }
-        if (st.hasMoreTokens()) {
-            d = atoi(st.nextToken().c_str());
-        }
-        if (a < 0 || b < 0 || c < 0 || d < 0 || st.hasMoreTokens()) {
-            throw new ParseException();
-        }
-
-        // assign wall colors later
-        walls.push_back(Obstacle(Vector2D(a, b), Vector2D(c, d), Color(0, 0, 0), parseWallType(wallType)));
-
-        getline(in, s);
+void Map::parseWall(std::string& s) {
+    s = s.substr(4, s.size());
+    StringTokenizer st(s);
+    std::string wallType;
+    int a = -1, b = -1, c = -1, d = -1;
+    if (st.hasMoreTokens()) {
+        wallType = st.nextToken();
     }
+    if (st.hasMoreTokens()) {
+        a = atoi(st.nextToken().c_str());
+    }
+    if (st.hasMoreTokens()) {
+        b = atoi(st.nextToken().c_str());
+    }
+    if (st.hasMoreTokens()) {
+        c = atoi(st.nextToken().c_str());
+    }
+    if (st.hasMoreTokens()) {
+        d = atoi(st.nextToken().c_str());
+    }
+    if (a < 0 || b < 0 || c < 0 || d < 0 || st.hasMoreTokens()) {
+        throw new ParseException();
+    }
+
+    // assign wall colors later
+    walls.push_back(Obstacle(Vector2D(a, b), Vector2D(c, d), Color(0, 0, 0), parseWallType(wallType)));
 }
 

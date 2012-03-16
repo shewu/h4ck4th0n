@@ -32,7 +32,7 @@ class MapParser {
         }
     private:
         void loadFromFile(std::string filename);
-        void parseMapName();
+        void parseMapName(std::string& s);
         void parseModes();
         void parseDimensions();
 

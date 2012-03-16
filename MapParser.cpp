@@ -46,6 +46,13 @@ void MapParser::loadFromFile(std::string filename) {
     width = -1;
     height = -1;
     in = ifstream(filename);
+    std::string s;
+    while (!in.eof()) {
+        s = getline(in, s);
+        if (s.substr(0, 4).compare("name") == 0) {
+            parseMapName(s);
+        }
+    }
     parseMapName();
     parseModes();
     parseDimensions();
@@ -60,14 +67,11 @@ void MapParser::loadFromFile(std::string filename) {
     parseWalls(s);
 }
 
-void MapParser::parseMapName() {
-    std::string s;
-    getline(in, s);
+void MapParser::parseMapName(std::string& s) {
     if (s.substr(0, 4).compare("name") != 0) {
         throw new ParseException();
     }
-    s = s.substr(4, s.size());
-    mapName = s.substr(1, s.length());
+    mapName = s.substr(5, s.size());
 }
 
 GameMode parseGameMode(std::string& str) {

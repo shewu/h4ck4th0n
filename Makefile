@@ -22,7 +22,7 @@ SHARED_OBJECTS = socket.o \
 	object.o \
 	world.o \
 	menu.o \
-    Map.o \
+    HBMap.o \
 	menuitem.o \
 	menudraw.o \
 	font.o \
@@ -64,7 +64,7 @@ multiclient.o: client.cpp *.h
 	$(CC) -c $(CCFLAGS) -DMULTI -o multiclient.o $<
 
 test:
-	$(CC) -o HackTest HackTest.cpp hack.h vec.cpp Map.h Map.cpp
+	$(CC) -o HackTest HackTest.cpp hack.h vec.cpp HBMap.h HBMap.cpp
 	./HackTest
 	rm HackTest
 

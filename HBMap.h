@@ -6,10 +6,10 @@
 
 #include "hack.h"
 
-class Map {
+class HBMap {
     public:
-        Map();
-        Map(std::string filename);
+        HBMap();
+        HBMap(std::string filename);
         unsigned getWidth() {
             return width;
         }
@@ -43,7 +43,7 @@ class Map {
         const static unsigned MAX_TEAMS = 10;
     private:
         void parse(std::string filename);
-        void parseMapName(std::string& s);
+        void parseHBMapName(std::string& s);
         void parseModes(std::string& s);
         void parseDimensions(std::string& s);
         void parseTeam(std::string& s);
@@ -56,8 +56,8 @@ class Map {
         unsigned width, height;
         std::vector<GameMode> modes;
         std::vector<Team> teams;
-        std::vector<Obstacle> spawns[Map::MAX_TEAMS];
-        std::vector<Spawn> flags[Map::MAX_TEAMS];
+        std::vector<Obstacle> spawns[HBMap::MAX_TEAMS];
+        std::vector<Spawn> flags[HBMap::MAX_TEAMS];
         std::vector<Obstacle> walls;
 };
 

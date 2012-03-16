@@ -2,7 +2,7 @@
 #include <list>
 #include <cstring>
 
-#include "Map.h"
+#include "HBMap.h"
 
 class ParseException : public std::exception {
     public:
@@ -39,15 +39,15 @@ class StringTokenizer {
         }
 };
 
-Map::Map() {
+HBMap::HBMap() {
     parse("map.hbm");
 }
 
-Map::Map(std::string filename) {
+HBMap::HBMap(std::string filename) {
     parse(filename);
 }
 
-void Map::parse(std::string filename) {
+void HBMap::parse(std::string filename) {
     width = -1;
     height = -1;
     in.open(filename.c_str());
@@ -57,7 +57,7 @@ void Map::parse(std::string filename) {
         in >> cmd;
         getline(in, s);
         if (cmd.compare("name") == 0) {
-            parseMapName(s);
+            parseHBMapName(s);
         } else if (cmd.compare("mode") == 0) {
             parseModes(s);
         } else if (cmd.compare("dim") == 0) {
@@ -76,7 +76,7 @@ void Map::parse(std::string filename) {
     }
 }
 
-void Map::parseMapName(std::string& s) {
+void HBMap::parseHBMapName(std::string& s) {
     mapName = s.substr(5, s.size());
 }
 
@@ -89,14 +89,14 @@ GameMode parseGameMode(std::string str) {
     return GM_INVALID;
 }
 
-void Map::parseModes(std::string& s) {
+void HBMap::parseModes(std::string& s) {
     StringTokenizer st(s);
     while (st.hasMoreTokens()) {
         modes.push_back(parseGameMode(st.nextToken()));
     }
 }
 
-void Map::parseDimensions(std::string& s) {
+void HBMap::parseDimensions(std::string& s) {
     StringTokenizer st(s);
     if (st.hasMoreTokens()) {
         width = atoi(st.nextToken().c_str());
@@ -109,7 +109,7 @@ void Map::parseDimensions(std::string& s) {
     }
 }
 
-void Map::parseTeam(std::string& s) {
+void HBMap::parseTeam(std::string& s) {
     StringTokenizer st(s, " -\t");
     int teamNum = -1, minPlayers = -1, maxPlayers = -1;
     if (st.hasMoreTokens()) {
@@ -129,7 +129,7 @@ void Map::parseTeam(std::string& s) {
     teams.push_back(Team(teamNum, minPlayers, maxPlayers));
 }
 
-void Map::parseSpawn(std::string& s) {
+void HBMap::parseSpawn(std::string& s) {
     StringTokenizer st(s);
     int id = -1, x = -1, y = -1;
     if (st.hasMoreTokens()) {
@@ -147,7 +147,7 @@ void Map::parseSpawn(std::string& s) {
     }
 }
 
-void Map::parseFlag(std::string& s) {
+void HBMap::parseFlag(std::string& s) {
     StringTokenizer st(s);
     int id = -1, x = -1, y = -1;
     if (st.hasMoreTokens()) {
@@ -176,7 +176,7 @@ WallType parseWallType(std::string& s) {
     return WT_INVALID;
 }
 
-void Map::parseWall(std::string& s) {
+void HBMap::parseWall(std::string& s) {
     StringTokenizer st(s);
     std::string wallType;
     int a = -1, b = -1, c = -1, d = -1;

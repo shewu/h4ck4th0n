@@ -1,7 +1,7 @@
 #include <cstdio>
 
 #include "hack.h"
-#include "Map.h"
+#include "HBMap.h"
 
 #define TEST_EQ(d, x, y) \
 	do { \
@@ -73,7 +73,7 @@ void Vector3DTest()
 }
 
 void MapTest() {
-    Map stock();
-    Map custom("custom.hbm");
+    HBMap stock();
+    HBMap custom("custom.hbm");
 }
 

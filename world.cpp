@@ -7,11 +7,13 @@
 #include <cstring>
 
 #include "hack.h"
-#include "Map.h"
+#include "HBMap.h"
 
 using namespace std;
 
 World::World() {
+    HBMap map("custom.hbm");
+
 	Light l;
 	l.position = Vector3D(0, 0, 10);
 	l.color = Color(255, 255, 255);

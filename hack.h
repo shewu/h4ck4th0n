@@ -129,6 +129,7 @@ class Spawn {
 		float rad;
 		Color color;
 		float hrat;
+        Spawn(float xmin, float xmax, float ymin, float ymax, float mass, float rad, Color color, float hrat) : xmin(xmin), xmax(xmax), ymin(ymin), ymax(ymax), mass(mass), rad(rad), color(color), hrat(hrat) { }
 };
 
 class Obstacle

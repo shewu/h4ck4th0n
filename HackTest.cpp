@@ -5,8 +5,8 @@
 
 #define TEST_EQ(d, x, y) \
 	do { \
-		if (x == y) printf("[PASSED] %s\n",d); \
-		else printf("[FAIL] %s at line %d: %s == %s failed\n",d,__LINE__,#x,#y); \
+		if (x == y) printf("[PASSED]\t%s\n",d); \
+		else printf("[FAIL]\t%s at line %d: %s == %s failed\n",d,__LINE__,#x,#y); \
 	} while (0);
 
 using namespace std;
@@ -73,7 +73,7 @@ void Vector3DTest()
 }
 
 void MapTest() {
-    //HBMap stock();
     HBMap custom("custom.hbm");
+    TEST_EQ("read good map", true, true);
 }
 

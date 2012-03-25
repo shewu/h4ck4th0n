@@ -57,6 +57,11 @@ void HBMap::parse(std::string filename) {
     std::string s;
     while (!in.eof()) {
         in >> cmd;
+        // we need this check because checking for in.eof() doesn't work the way
+        // we want.
+        if (cmd.length() == 0) {
+            break;
+        }
         getline(in, s);
         if (cmd.compare("name") == 0) {
             parseHBMapName(s);
@@ -75,6 +80,7 @@ void HBMap::parse(std::string filename) {
         } else {
             throw new ParseException();
         }
+        cmd = "";
     }
 }
 

@@ -41,14 +41,6 @@ class StringTokenizer {
         }
 };
 
-HBMap::HBMap() {
-    parse("map.hbm");
-}
-
-HBMap::HBMap(std::string filename) {
-    parse(filename);
-}
-
 void HBMap::parse(std::string filename) {
     width = -1;
     height = -1;

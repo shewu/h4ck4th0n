@@ -12,65 +12,6 @@
 using namespace std;
 
 World::World() {
-	std::ifstream mapf("map.hbm");
-	mapf >> minX >> maxX >> minY >> maxY;
-
-    wall_color = Color(67, 101, 33);
-	
-	obstacles.push_back(Obstacle(Vector2D(minX, minY), Vector2D(maxX, minY), wall_color));
-    obstacles.push_back(Obstacle(Vector2D(minX, maxY), Vector2D(maxX, maxY), wall_color));
-    obstacles.push_back(Obstacle(Vector2D(minX, minY), Vector2D(minX, maxY), wall_color));
-    obstacles.push_back(Obstacle(Vector2D(maxX, minY), Vector2D(maxX, maxY), wall_color));
-	
-    std::string cmd;
-
-	while (mapf >> cmd) {
-		if (cmd == "obs") {
-			float x1, y1, x2, y2;
-			mapf >> x1 >> y1 >> x2 >> y2;
-            obstacles.push_back(Obstacle(Vector2D(x1, y1), Vector2D(x2, y2), wall_color));
-		}
-		else if (cmd == "obs0") {
-			float x1, y1, x2, y2;
-			mapf >> x1 >> y1 >> x2 >> y2;
-            obstacles.push_back(Obstacle(Vector2D(x1, y1), Vector2D(x2, y2),
-                        Color(0, 0, 200), true, BLU));
-		}
-		else if (cmd == "obs1") {
-			float x1, y1, x2, y2;
-			mapf >> x1 >> y1 >> x2 >> y2;
-            obstacles.push_back(Obstacle(Vector2D(x1, y1), Vector2D(x2, y2),
-                        Color(200, 0, 0), true, RED));
-		}
-		else if (cmd == "sobs") {
-			float x1, y1, x2, y2;
-			mapf >> x1 >> y1 >> x2 >> y2;
-            obstacles.push_back(Obstacle(Vector2D(x1, y1), Vector2D(x2, y2),
-                        Color(0, 255, 0), true));
-		}
-		else if (cmd == "spawn") {
-			int spawn_id;
-			float xmin, xmax, ymin, ymax, mass, rad, hrat;
-			int r, g, b;
-			mapf >> spawn_id >> xmin >> xmax >> ymin >> ymax >> mass >> rad >> hrat >> r >> g >> b;
-			Spawn s;
-			s.xmin = xmin;
-			s.xmax = xmax;
-			s.ymin = ymin;
-			s.ymax = ymax;
-			s.mass = mass;
-			s.rad = rad;
-			s.hrat = hrat;
-			s.color = Color(r, g, b);
-			spawns[spawn_id].push_back(s);
-		}
-		else if (cmd == "obj") {
-			int spawnl;
-			mapf >> spawnl;
-			while (spawn(spawnl, -1, NO_TEAM) == -1);
-		}
-	}
-	
 	Light l;
 	l.position = Vector3D(0, 0, 10);
 	l.color = Color(255, 255, 255);
@@ -87,8 +28,6 @@ World::World() {
 
 int World::spawn(int spawnl, int player, int flag) {
 	if (rand()/float(RAND_MAX) >= SPAWN_PROB) return -1;
-
-    //printf("passed randomness\n");
 	
 	int oid;
 	do {
@@ -117,7 +56,6 @@ int World::spawn(int spawnl, int player, int flag) {
 	o.p.x = rand()/float(RAND_MAX)*(max_x - min_x) + min_x;
 	o.p.y = rand()/float(RAND_MAX)*(max_y - min_y) + min_y;
 	bool fail = false;
-    //printf("about to enter loop\n");
 	for (map<int, Object>::iterator it = objects.begin(); it != objects.end(); it++) {
 		Vector2D d = it->second.p - o.p;
 		if ((!it->second.dead || !it->second.stopped) && (it->second.rad + o.rad) * (it->second.rad + o.rad) > d*d) {
@@ -125,7 +63,6 @@ int World::spawn(int spawnl, int player, int flag) {
 			break;
 		}
 	}
-    //printf("out of loop, fail = %c\n", fail ? 't' : 'f');
 	if (fail)
 		return -1;
 	

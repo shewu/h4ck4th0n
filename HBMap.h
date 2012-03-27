@@ -12,9 +12,6 @@ class HBMap {
         HBMap(std::string filename) {
             parse(filename);
         }
-        void loadMapFromFile(std::string filename) {
-            parse(filename);
-        }
         unsigned getWidth() {
             return width;
         }

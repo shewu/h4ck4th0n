@@ -1,20 +1,9 @@
-#include <exception>
 #include <list>
 #include <cstring>
 #include <cstdlib>
 
 #include "HBMap.h"
-
-class ParseException : public std::exception {
-	private:
-		std::string msg;
-    public:
-        ParseException(std::string msg = "") : msg(msg) { }
-
-		const char* what() const throw() {
-			return msg.c_str();
-		}
-};
+#include "Exceptions.h"
 
 class StringTokenizer {
     public:

@@ -1,0 +1,176 @@
+\hypertarget{class_h_b_map}{\section{H\-B\-Map Class Reference}
+\label{class_h_b_map}\index{H\-B\-Map@{H\-B\-Map}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_h_b_map_ac67b05db88443e2d7044f134864d2f53}{H\-B\-Map} ()
+\item 
+\hyperlink{class_h_b_map_a368322ab6cbd98123a00e5df1822d204}{H\-B\-Map} (std\-::string filename)
+\item 
+unsigned \hyperlink{class_h_b_map_a515e8a0be2e7cce366a81632cce6da4d}{get\-Width} ()
+\item 
+unsigned \hyperlink{class_h_b_map_a5935af936a849f70c66b0830d517a4c9}{get\-Height} ()
+\item 
+std\-::string \& \hyperlink{class_h_b_map_a306c703d78a5be354f73186eb9f0cf4c}{get\-Name} ()
+\item 
+std\-::vector$<$ Game\-Mode $>$ \& \hyperlink{class_h_b_map_a86c9120ba5dea97040c019e99daa0226}{get\-Game\-Modes} ()
+\item 
+std\-::vector$<$ \hyperlink{struct_team}{Team} $>$ \& \hyperlink{class_h_b_map_a17d50199fdc09f1c8fac6b49d2989cbf}{get\-Teams} ()
+\item 
+std\-::vector$<$ \hyperlink{class_obstacle}{Obstacle} $>$ \& \hyperlink{class_h_b_map_abf3a3b5a59ba22a08d51ef94cc44794d}{get\-Spawns\-For\-Team} (unsigned team)
+\item 
+std\-::vector$<$ \hyperlink{class_spawn}{Spawn} $>$ \& \hyperlink{class_h_b_map_a841fd545b388d50df1755f788dee9a03}{get\-Flags\-For\-Team} (unsigned team)
+\item 
+std\-::vector$<$ \hyperlink{class_obstacle}{Obstacle} $>$ \& \hyperlink{class_h_b_map_adb7096539acd9c192b8291bcea719191}{get\-Walls} ()
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const unsigned \hyperlink{class_h_b_map_a86583aaa4db0d7bac49b94d48cdefc86}{M\-A\-X\-\_\-\-T\-E\-A\-M\-S} = 10
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_h_b_map_ac67b05db88443e2d7044f134864d2f53}{\index{H\-B\-Map@{H\-B\-Map}!H\-B\-Map@{H\-B\-Map}}
+\index{H\-B\-Map@{H\-B\-Map}!HBMap@{H\-B\-Map}}
+\subsubsection[{H\-B\-Map}]{\setlength{\rightskip}{0pt plus 5cm}{\bf H\-B\-Map\-::\-H\-B\-Map} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_h_b_map_ac67b05db88443e2d7044f134864d2f53}
+Empty constructor that does nothing. \hypertarget{class_h_b_map_a368322ab6cbd98123a00e5df1822d204}{\index{H\-B\-Map@{H\-B\-Map}!H\-B\-Map@{H\-B\-Map}}
+\index{H\-B\-Map@{H\-B\-Map}!HBMap@{H\-B\-Map}}
+\subsubsection[{H\-B\-Map}]{\setlength{\rightskip}{0pt plus 5cm}{\bf H\-B\-Map\-::\-H\-B\-Map} (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{filename}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_h_b_map_a368322ab6cbd98123a00e5df1822d204}
+Creates an \hyperlink{class_h_b_map}{H\-B\-Map} instance given the map filename.
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \hyperlink{class_parse_exception}{Parse\-Exception}} & when the parser encounters invalid syntax. \\
+\hline
+\end{DoxyExceptions}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_h_b_map_a841fd545b388d50df1755f788dee9a03}{\index{H\-B\-Map@{H\-B\-Map}!get\-Flags\-For\-Team@{get\-Flags\-For\-Team}}
+\index{get\-Flags\-For\-Team@{get\-Flags\-For\-Team}!HBMap@{H\-B\-Map}}
+\subsubsection[{get\-Flags\-For\-Team}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<${\bf Spawn}$>$\& {\bf H\-B\-Map\-::get\-Flags\-For\-Team} (
+\begin{DoxyParamCaption}
+\item[{unsigned}]{team}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_h_b_map_a841fd545b388d50df1755f788dee9a03}
+Gets the flags for a given team.
+
+
+\begin{DoxyParams}{Parameters}
+{\em team} & the team number for which to get flags.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the flags for team. 
+\end{DoxyReturn}
+\hypertarget{class_h_b_map_a86c9120ba5dea97040c019e99daa0226}{\index{H\-B\-Map@{H\-B\-Map}!get\-Game\-Modes@{get\-Game\-Modes}}
+\index{get\-Game\-Modes@{get\-Game\-Modes}!HBMap@{H\-B\-Map}}
+\subsubsection[{get\-Game\-Modes}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$Game\-Mode$>$\& {\bf H\-B\-Map\-::get\-Game\-Modes} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_h_b_map_a86c9120ba5dea97040c019e99daa0226}
+Gets the game modes of the map.
+
+\begin{DoxyReturn}{Returns}
+the game modes in no particular order. 
+\end{DoxyReturn}
+\hypertarget{class_h_b_map_a5935af936a849f70c66b0830d517a4c9}{\index{H\-B\-Map@{H\-B\-Map}!get\-Height@{get\-Height}}
+\index{get\-Height@{get\-Height}!HBMap@{H\-B\-Map}}
+\subsubsection[{get\-Height}]{\setlength{\rightskip}{0pt plus 5cm}unsigned {\bf H\-B\-Map\-::get\-Height} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_h_b_map_a5935af936a849f70c66b0830d517a4c9}
+Gets the height of the map.
+
+\begin{DoxyReturn}{Returns}
+the height. 
+\end{DoxyReturn}
+\hypertarget{class_h_b_map_a306c703d78a5be354f73186eb9f0cf4c}{\index{H\-B\-Map@{H\-B\-Map}!get\-Name@{get\-Name}}
+\index{get\-Name@{get\-Name}!HBMap@{H\-B\-Map}}
+\subsubsection[{get\-Name}]{\setlength{\rightskip}{0pt plus 5cm}std\-::string\& {\bf H\-B\-Map\-::get\-Name} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_h_b_map_a306c703d78a5be354f73186eb9f0cf4c}
+Gets the name of the map.
+
+\begin{DoxyReturn}{Returns}
+the name. 
+\end{DoxyReturn}
+\hypertarget{class_h_b_map_abf3a3b5a59ba22a08d51ef94cc44794d}{\index{H\-B\-Map@{H\-B\-Map}!get\-Spawns\-For\-Team@{get\-Spawns\-For\-Team}}
+\index{get\-Spawns\-For\-Team@{get\-Spawns\-For\-Team}!HBMap@{H\-B\-Map}}
+\subsubsection[{get\-Spawns\-For\-Team}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<${\bf Obstacle}$>$\& {\bf H\-B\-Map\-::get\-Spawns\-For\-Team} (
+\begin{DoxyParamCaption}
+\item[{unsigned}]{team}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_h_b_map_abf3a3b5a59ba22a08d51ef94cc44794d}
+Gets the spawns for a given team.
+
+
+\begin{DoxyParams}{Parameters}
+{\em team} & the team number for which to get spawns.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the spawns for team. 
+\end{DoxyReturn}
+\hypertarget{class_h_b_map_a17d50199fdc09f1c8fac6b49d2989cbf}{\index{H\-B\-Map@{H\-B\-Map}!get\-Teams@{get\-Teams}}
+\index{get\-Teams@{get\-Teams}!HBMap@{H\-B\-Map}}
+\subsubsection[{get\-Teams}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<${\bf Team}$>$\& {\bf H\-B\-Map\-::get\-Teams} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_h_b_map_a17d50199fdc09f1c8fac6b49d2989cbf}
+Gets the team list and properties of the map.
+
+\begin{DoxyReturn}{Returns}
+the team list containing \hyperlink{struct_team}{Team} objects in no particular order. 
+\end{DoxyReturn}
+\hypertarget{class_h_b_map_adb7096539acd9c192b8291bcea719191}{\index{H\-B\-Map@{H\-B\-Map}!get\-Walls@{get\-Walls}}
+\index{get\-Walls@{get\-Walls}!HBMap@{H\-B\-Map}}
+\subsubsection[{get\-Walls}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<${\bf Obstacle}$>$\& {\bf H\-B\-Map\-::get\-Walls} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_h_b_map_adb7096539acd9c192b8291bcea719191}
+Gets the walls for the map.
+
+\begin{DoxyReturn}{Returns}
+a list of walls. 
+\end{DoxyReturn}
+\hypertarget{class_h_b_map_a515e8a0be2e7cce366a81632cce6da4d}{\index{H\-B\-Map@{H\-B\-Map}!get\-Width@{get\-Width}}
+\index{get\-Width@{get\-Width}!HBMap@{H\-B\-Map}}
+\subsubsection[{get\-Width}]{\setlength{\rightskip}{0pt plus 5cm}unsigned {\bf H\-B\-Map\-::get\-Width} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_h_b_map_a515e8a0be2e7cce366a81632cce6da4d}
+Gets the width of the map.
+
+\begin{DoxyReturn}{Returns}
+the width. 
+\end{DoxyReturn}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_h_b_map_a86583aaa4db0d7bac49b94d48cdefc86}{\index{H\-B\-Map@{H\-B\-Map}!M\-A\-X\-\_\-\-T\-E\-A\-M\-S@{M\-A\-X\-\_\-\-T\-E\-A\-M\-S}}
+\index{M\-A\-X\-\_\-\-T\-E\-A\-M\-S@{M\-A\-X\-\_\-\-T\-E\-A\-M\-S}!HBMap@{H\-B\-Map}}
+\subsubsection[{M\-A\-X\-\_\-\-T\-E\-A\-M\-S}]{\setlength{\rightskip}{0pt plus 5cm}const unsigned {\bf H\-B\-Map\-::\-M\-A\-X\-\_\-\-T\-E\-A\-M\-S} = 10\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}\label{class_h_b_map_a86583aaa4db0d7bac49b94d48cdefc86}
+The maximum number of teams allowed in maps. 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+H\-B\-Map.\-h\item 
+H\-B\-Map.\-cpp\end{DoxyCompactItemize}

@@ -69,12 +69,17 @@ class Socket
 };
 
 class SocketConnection {
-	public:
-        int socket;
+	private:
+        int num_sent;
+		std::queue<ReadPacket*> read_packets;
+
+		int socket;
 		struct sockaddr *addr;
 		socklen_t addrlen;
 		int my_id, their_id;
 
+
+	public:
 		SocketConnection(int socket, struct sockaddr *addr, socklen_t addrlen,
 		                 int my_id, int their_id);
 		void send_packet(WritePacket&);
@@ -84,10 +89,21 @@ class SocketConnection {
 
 		int lastTimeReceived;
 
-    private:
-        int num_sent;
-		std::queue<ReadPacket*> read_packets;
+		struct sockaddr *get_addr() {
+			return this->addr;
+		}
 
+		socklen_t get_addrlen() {
+			return this->addrlen;
+		}
+
+		int get_my_id() {
+			return this->my_id;
+		}
+
+		int get_their_id() {
+			return this->their_id;
+		}
 };
 
 #endif

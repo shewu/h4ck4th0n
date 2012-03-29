@@ -33,7 +33,8 @@ SocketConnection* Socket::receiveConnection() {
 }
 
 void Socket::closeConnection(SocketConnection *sc) {
-    connections.erase(pair<string, int>(string((char*)sc->addr, sc->addrlen), sc->their_id));
+    connections.erase(pair<string, int>(string((char*)sc->get_addr(), sc->get_addrlen()),
+                                        sc->get_their_id()));
     delete sc;
 }
 

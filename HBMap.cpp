@@ -6,10 +6,14 @@
 #include "HBMap.h"
 
 class ParseException : public std::exception {
+	private:
+		std::string msg;
     public:
-        ParseException() {
+        ParseException(std::string msg = "") : msg(msg) { }
 
-        }
+		const char* what() const throw() {
+			return msg.c_str();
+		}
 };
 
 class StringTokenizer {
@@ -21,7 +25,7 @@ class StringTokenizer {
         // operation, then throws an exception.
         std::string nextToken() {
             if (!hasMoreTokens()) {
-                throw new std::exception();
+                throw std::exception();
             }
             std::string ret = toks.front();
             toks.pop_front();
@@ -71,7 +75,9 @@ void HBMap::parse(std::string filename) {
         } else if (cmd.compare("wall") == 0) {
             parseWall(s);
         } else {
-            throw new ParseException();
+			std::string error = "unknown command: ";
+			error.append(cmd);
+            throw ParseException(error);
         }
         cmd = "";
     }
@@ -106,7 +112,7 @@ void HBMap::parseDimensions(std::string& s) {
         height = atoi(st.nextToken().c_str());
     }
     if (width < 0 || height < 0 || st.hasMoreTokens()) {
-        throw new ParseException();
+        throw ParseException("parseDimensions fail");
     }
 }
 
@@ -124,7 +130,7 @@ void HBMap::parseTeam(std::string& s) {
     }
 
     if (teamNum < 0 || minPlayers < 0 || maxPlayers < 0 || st.hasMoreTokens()) {
-        throw new ParseException();
+        throw ParseException("parseTeam fail");
     }
 
     teams.push_back(Team(teamNum, minPlayers, maxPlayers));
@@ -144,7 +150,7 @@ void HBMap::parseSpawn(std::string& s) {
     }
 
     if (id < 0 || x < 0 || y < 0 || st.hasMoreTokens()) {
-        throw new ParseException();
+        throw ParseException("parseSpawn fail");
     }
 }
 
@@ -162,7 +168,7 @@ void HBMap::parseFlag(std::string& s) {
     }
 
     if (id < 0 || x < 0 || y < 0 || st.hasMoreTokens()) {
-        throw new ParseException();
+        throw ParseException("parseFlag fail");
     }
 
     //flags.push_back(Spawn(Vector2D(), Vector2D(), Color(), true, ));
@@ -179,10 +185,10 @@ WallType parseWallType(std::string& s) {
 
 void HBMap::parseWall(std::string& s) {
     StringTokenizer st(s);
-    std::string wallType;
+    WallType wallType;
     int a = -1, b = -1, c = -1, d = -1;
     if (st.hasMoreTokens()) {
-        wallType = st.nextToken();
+        wallType = parseWallType(st.nextToken());
     }
     if (st.hasMoreTokens()) {
         a = atoi(st.nextToken().c_str());
@@ -197,7 +203,7 @@ void HBMap::parseWall(std::string& s) {
         d = atoi(st.nextToken().c_str());
     }
     if (a < 0 || b < 0 || c < 0 || d < 0 || st.hasMoreTokens()) {
-        throw new ParseException();
+        throw ParseException("parseWall fail");
     }
 
     // assign wall colors later

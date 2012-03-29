@@ -1,8 +1,6 @@
 #ifndef HACK_H
 #define HACK_H
 
-#include <map>
-#include <vector>
 #include "constants.h"
 #include "socket.h"
 #include "packet.h"
@@ -142,8 +140,6 @@ class Obstacle
         WallType wallType;
         Obstacle(Vector2D a, Vector2D b, Color c, WallType d, int e = NO_TEAM) 
             : p1(a), p2(b), color(c), wallType(d), flag(e) { }
-        Obstacle(Vector2D a, Vector2D b, Color c, bool d = false, int e = NO_TEAM)
-            : p1(a), p2(b), color(c), sticky(d), flag(e) {}
 };
 
 class Light
@@ -153,25 +149,5 @@ class Light
 		Color color;
 };
 
-class World
-{
-	private:
-		std::string mapName;
-        Color wallColor;
-	public:
-		World();
-		int spawn(int spawnl, int player, int flag);
-		
-		float minX, maxX, minY, maxY;
-		std::map<int, std::vector<Spawn> > spawns;
-		std::map<int, Object> objects;
-		std::vector<Light> lights;
-		std::vector<Obstacle> obstacles;
-		//std::vector<std::pair<char, Vector2D> > sounds;
-		void doSimulation(float dt, std::vector<std::pair<char, Vector2D> >& sounds);
-		
-		void sendObjects(SocketConnection* sc, int obj);
-		void receiveObjects(ReadPacket* rp, int& obj);
-};
-
 #endif
+

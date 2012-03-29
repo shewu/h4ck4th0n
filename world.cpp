@@ -1,19 +1,16 @@
 #include <fstream>
-#include <string>
 #include <map>
+#include <string>
 #include <netinet/in.h>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 
-#include "hack.h"
-#include "HBMap.h"
+#include "world.h"
 
 using namespace std;
 
-World::World() : wallColor(101, 67, 33) {
-    HBMap map("custom.hbm");
-
+World::World(std::string mapName) : wallColor(101, 67, 33), worldMap(mapName) {
 	Light l;
 	l.position = Vector3D(0, 0, 10);
 	l.color = Color(255, 255, 255);

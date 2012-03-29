@@ -1,6 +1,7 @@
 #include <exception>
 #include <list>
 #include <cstring>
+#include <cstdlib>
 
 #include "HBMap.h"
 

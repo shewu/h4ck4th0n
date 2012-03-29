@@ -11,7 +11,7 @@
 
 using namespace std;
 
-World::World() {
+World::World() : wallColor(101, 67, 33) {
     HBMap map("custom.hbm");
 
 	Light l;

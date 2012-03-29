@@ -157,7 +157,7 @@ class World
 {
 	private:
 		std::string mapName;
-        Color wall_color;
+        Color wallColor;
 	public:
 		World();
 		int spawn(int spawnl, int player, int flag);

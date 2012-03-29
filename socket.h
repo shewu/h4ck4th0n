@@ -50,15 +50,48 @@ class SocketConnection;
 class Socket
 {
 	public:
+		/**
+		 * Creates a Socket class with the given socket descriptor, which must be
+		 * of type SOCK_DGRAM.
+		 * @param sock The socket descriptor, which must be of type SOCK_DGRAM.
+		 */
 		Socket(int sock);
 
+		/**
+		 * Puts the Socket into listening mode. Should be used by a server
+		 * who wants to listen for incoming connections with clients.
+		 */
 		void listen_for_client();
+
+		/**
+		 * Returns a new SocketConnection that was received. New sockets can only be
+		 * received if in listening mode.
+		 * @return a new SocketConnection, or NULL if all received connections
+		 *         already been returned.
+		 */
 		class SocketConnection* receiveConnection();
+
+		/**
+		 * Closes the given SocketConnection.
+		 * @param sc the SocketConnection instance to be closed.
+		 */
         void closeConnection(SocketConnection *sc);
 
+		/**
+		 * Connects to the given address, and returns the resulting SocketConnection.
+		 * @return a SocketConnection instance for the connection
+		 */
 		class SocketConnection* connect(sockaddr *addr, socklen_t addrlen);
+
+		/**
+		 * Closes everything
+		 */
         void end_connection();
 
+		/**
+		 * Must be called periodically to process all incoming data to find new connections
+		 * and pass this data to the SocketConnections.
+		 */
 		void recv_all();
 		
     private:
@@ -69,7 +102,7 @@ class Socket
 };
 
 class SocketConnection {
-	public:
+	private:
         int socket;
 		struct sockaddr *addr;
 		socklen_t addrlen;

@@ -1,6 +1,7 @@
 #include <list>
 #include <cstring>
 #include <cstdlib>
+#include <exception>
 
 #include "HBMap.h"
 #include "Exceptions.h"
@@ -14,7 +15,7 @@ class StringTokenizer {
         // operation, then throws an exception.
         std::string nextToken() {
             if (!hasMoreTokens()) {
-                throw std::exception();
+                throw std::out_of_range("StringTokenizer has no more tokens!");
             }
             std::string ret = toks.front();
             toks.pop_front();

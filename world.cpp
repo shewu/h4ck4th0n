@@ -11,6 +11,11 @@
 using namespace std;
 
 World::World(std::string mapName) : wallColor(101, 67, 33), worldMap(mapName) {
+	minX = -worldMap.getWidth()/2;
+	maxX = worldMap.getWidth() + minX;
+	minY = -worldMap.getHeight()/2;
+	maxY = worldMap.getHeight() + minY;
+
 	Light l;
 	l.position = Vector3D(0, 0, 10);
 	l.color = Color(255, 255, 255);

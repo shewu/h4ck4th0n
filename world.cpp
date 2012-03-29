@@ -7,7 +7,6 @@
 #include <cstring>
 
 #include "hack.h"
-#include "Map.h"
 
 using namespace std;
 

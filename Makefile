@@ -22,7 +22,6 @@ SHARED_OBJECTS = socket.o \
 	object.o \
 	world.o \
 	menu.o \
-    HBMap.o \
 	menuitem.o \
 	menudraw.o \
 	font.o \

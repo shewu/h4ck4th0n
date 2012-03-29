@@ -158,6 +158,7 @@ class World
 	private:
 		std::string mapName;
         Color wall_color;
+        HBMap map;
 	public:
 		World();
 		int spawn(int spawnl, int player, int flag);

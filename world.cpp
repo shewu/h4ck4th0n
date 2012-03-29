@@ -11,9 +11,8 @@
 
 using namespace std;
 
-World::World() {
-    HBMap map("custom.hbm");
-
+World::World() : map("custom.hbm")
+{
 	Light l;
 	l.position = Vector3D(0, 0, 10);
 	l.color = Color(255, 255, 255);

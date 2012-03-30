@@ -69,7 +69,8 @@ class HBMap {
         }
 
 		/**
-		 * Gets the spawns for a given team.
+		 * Gets the spawns for a given team. If an invalid team number is
+		 * requested, returns the spawns for the first team.
 		 *
 		 * @param team the team number for which to get spawns.
 		 *
@@ -83,7 +84,8 @@ class HBMap {
         }
 
 		/**
-		 * Gets the flags for a given team.
+		 * Gets the flags for a given team. If an invalid team number is
+		 * requested, returns the spawns for the first team.
 		 *
 		 * @param team the team number for which to get flags.
 		 *

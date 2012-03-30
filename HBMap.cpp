@@ -1,20 +1,10 @@
-#include <exception>
 #include <list>
 #include <cstring>
 #include <cstdlib>
+#include <exception>
 
 #include "HBMap.h"
-
-class ParseException : public std::exception {
-	private:
-		std::string msg;
-    public:
-        ParseException(std::string msg = "") : msg(msg) { }
-
-		const char* what() const throw() {
-			return msg.c_str();
-		}
-};
+#include "Exceptions.h"
 
 class StringTokenizer {
     public:
@@ -25,7 +15,7 @@ class StringTokenizer {
         // operation, then throws an exception.
         std::string nextToken() {
             if (!hasMoreTokens()) {
-                throw std::exception();
+                throw std::out_of_range("StringTokenizer has no more tokens!");
             }
             std::string ret = toks.front();
             toks.pop_front();

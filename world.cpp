@@ -16,6 +16,16 @@ World::World(std::string mapName) : wallColor(101, 67, 33), worldMap(mapName) {
 	minY = -worldMap.getHeight()/2;
 	maxY = worldMap.getHeight() + minY;
 
+    vector<Obstacle> walls = worldMap.getWalls();
+    for (iterator<Obstacle> it = walls.begin(); it != walls.end(); ++it) {
+        obstacles.push_back(*it);
+    }
+
+    vector<Team> teams = worldMap.getTeams();
+    for (iterator<Team> team = teams.begin(); team != teams.end(); ++it) {
+        ;
+    }
+
 	Light l;
 	l.position = Vector3D(0, 0, 10);
 	l.color = Color(255, 255, 255);

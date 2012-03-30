@@ -11,12 +11,6 @@
 #define P(x)
 #endif
 
-enum {
-    BLU,
-    RED,
-    NO_TEAM
-};
-
 enum GameMode {
     GM_INVALID = -1,
     GM_TAG,
@@ -35,19 +29,61 @@ enum WallType {
     WT_DEADLY,
     WT_BOUNCY,
 
-    NUM_WALLTYPES
+    NUM_WALLTYPES // always the last mode
 };
 
 const std::string wallTypeStrings[] = {
     "normal", "deadly", "bouncy"
 };
 
-struct Team {
-    int teamNumber;
-    int minPlayers;
-    int maxPlayers;
-    Team() { }
-    Team(int a, int b, int c) : teamNumber(a), minPlayers(b), maxPlayers(c) { }
+class Team {
+    private:
+        unsigned teamNumber;
+        unsigned minPlayers;
+        unsigned maxPlayers;
+
+    public:
+        /**
+         * Empty team constructor. Does nothing.
+         */
+        Team() { }
+
+        /**
+         * Constructs a team given the team number, minimum number of players,
+         * and maximum number of players.
+         *
+         * @param a the team number.
+         * @param b the minimum number of players.
+         * @param c the maximum number of players.
+         */
+        Team(unsigned a, unsigned b, unsigned c) : teamNumber(a), minPlayers(b), maxPlayers(c) { }
+
+        /**
+         * Gets the team number for this team.
+         *
+         * @return the team number.
+         */
+        unsigned getTeamNumber() {
+            return teamNumber;
+        }
+
+        /**
+         * Gets the minimum number of players for this team.
+         *
+         * @return the minimum number of players.
+         */
+        unsigned getMinPlayers() {
+            return minPlayers;
+        }
+
+        /**
+         * Gets the maximum number of players for this team.
+         *
+         * @return the maximum number of players.
+         */
+        unsigned getMaxPlayers() {
+            return maxPlayers;
+        }
 };
 
 class Vector2D
@@ -127,7 +163,7 @@ class Spawn {
 		float rad;
 		Color color;
 		float hrat;
-        Spawn(float xmin, float xmax, float ymin, float ymax, float mass, float rad, Color color, float hrat) : xmin(xmin), xmax(xmax), ymin(ymin), ymax(ymax), mass(mass), rad(rad), color(color), hrat(hrat) { }
+        Spawn(float xmin, float xmax, float ymin, float ymax, Color color, float hrat = 1, float mass = 1, float rad = 1) : xmin(xmin), xmax(xmax), ymin(ymin), ymax(ymax), mass(mass), rad(rad), color(color), hrat(hrat) { }
 };
 
 class Obstacle

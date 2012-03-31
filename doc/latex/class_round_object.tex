@@ -1,0 +1,103 @@
+\hypertarget{class_round_object}{\section{Round\-Object Class Reference}
+\label{class_round_object}\index{Round\-Object@{Round\-Object}}
+}
+Inheritance diagram for Round\-Object\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_round_object}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_round_object_a5ced474e09b2284b3d99380b2cd82d8f}{Round\-Object} (\hyperlink{class_material}{Material} material, \hyperlink{class_vector2_d}{Vector2\-D} center, float radius, float start\-Angle=0.\-0, float end\-Angle=M\-\_\-\-P\-I\-\_\-2)
+\item 
+const \hyperlink{class_vector2_d}{Vector2\-D} \& \hyperlink{class_round_object_a6998fa9d51ab4814ceb242df9e6031b5}{get\-Center} () const 
+\item 
+const float \& \hyperlink{class_round_object_a754405df28786cd80d50fe911dc220ca}{get\-Radius} () const 
+\item 
+const float \& \hyperlink{class_round_object_a748fc039f7a76a495c8ee51476d56df1}{get\-Start\-Angle} () const 
+\item 
+const float \& \hyperlink{class_round_object_a775ee05b5e644b07522dfb3654cfe114}{get\-End\-Angle} () const 
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_round_object_a0a0b04b4676fc85d6e8f03f80541c8f6}{float {\bfseries center}}\label{class_round_object_a0a0b04b4676fc85d6e8f03f80541c8f6}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_round_object_a5ced474e09b2284b3d99380b2cd82d8f}{\index{Round\-Object@{Round\-Object}!Round\-Object@{Round\-Object}}
+\index{Round\-Object@{Round\-Object}!RoundObject@{Round\-Object}}
+\subsubsection[{Round\-Object}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Round\-Object\-::\-Round\-Object} (
+\begin{DoxyParamCaption}
+\item[{{\bf Material}}]{material, }
+\item[{{\bf Vector2\-D}}]{center, }
+\item[{float}]{radius, }
+\item[{float}]{start\-Angle = {\ttfamily 0.0}, }
+\item[{float}]{end\-Angle = {\ttfamily M\-\_\-PI\-\_\-2}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_round_object_a5ced474e09b2284b3d99380b2cd82d8f}
+Constructs a \hyperlink{class_round_object}{Round\-Object} with the given material. The object is represented by an arc which goes from start\-Angle to end\-Angle. If end\-Angle $>$ start\-Angle, it goes counter-\/clockwise from start\-Angle to end\-Angle; otherwise, it goes clockwise. 
+\begin{DoxyParams}{Parameters}
+{\em material} & The material for the object being created. \\
+\hline
+{\em center} & The center of the circle for the moving object. \\
+\hline
+{\em radius} & The radius of the circle for the moving object. \\
+\hline
+{\em start\-Angle} & The starting angle for the arc. \\
+\hline
+{\em end\-Angle} & The ending angle for the arc. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_round_object_a6998fa9d51ab4814ceb242df9e6031b5}{\index{Round\-Object@{Round\-Object}!get\-Center@{get\-Center}}
+\index{get\-Center@{get\-Center}!RoundObject@{Round\-Object}}
+\subsubsection[{get\-Center}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Vector2\-D}\& {\bf Round\-Object\-::get\-Center} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_round_object_a6998fa9d51ab4814ceb242df9e6031b5}
+\begin{DoxyReturn}{Returns}
+the center 
+\end{DoxyReturn}
+\hypertarget{class_round_object_a775ee05b5e644b07522dfb3654cfe114}{\index{Round\-Object@{Round\-Object}!get\-End\-Angle@{get\-End\-Angle}}
+\index{get\-End\-Angle@{get\-End\-Angle}!RoundObject@{Round\-Object}}
+\subsubsection[{get\-End\-Angle}]{\setlength{\rightskip}{0pt plus 5cm}const float\& {\bf Round\-Object\-::get\-End\-Angle} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_round_object_a775ee05b5e644b07522dfb3654cfe114}
+\begin{DoxyReturn}{Returns}
+the ending angle 
+\end{DoxyReturn}
+\hypertarget{class_round_object_a754405df28786cd80d50fe911dc220ca}{\index{Round\-Object@{Round\-Object}!get\-Radius@{get\-Radius}}
+\index{get\-Radius@{get\-Radius}!RoundObject@{Round\-Object}}
+\subsubsection[{get\-Radius}]{\setlength{\rightskip}{0pt plus 5cm}const float\& {\bf Round\-Object\-::get\-Radius} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_round_object_a754405df28786cd80d50fe911dc220ca}
+\begin{DoxyReturn}{Returns}
+the radius 
+\end{DoxyReturn}
+\hypertarget{class_round_object_a748fc039f7a76a495c8ee51476d56df1}{\index{Round\-Object@{Round\-Object}!get\-Start\-Angle@{get\-Start\-Angle}}
+\index{get\-Start\-Angle@{get\-Start\-Angle}!RoundObject@{Round\-Object}}
+\subsubsection[{get\-Start\-Angle}]{\setlength{\rightskip}{0pt plus 5cm}const float\& {\bf Round\-Object\-::get\-Start\-Angle} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_round_object_a748fc039f7a76a495c8ee51476d56df1}
+\begin{DoxyReturn}{Returns}
+the starting angle 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+Object.\-h\end{DoxyCompactItemize}

@@ -8,6 +8,11 @@ class Material
 	
 };
 
+class Texture : public Material
+{
+
+};
+
 class Color : public Material
 {
     private:

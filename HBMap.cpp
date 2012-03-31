@@ -140,7 +140,7 @@ void HBMap::parseSpawn(std::string& s) {
         y = atoi(st.nextToken().c_str());
     }
 
-    if (id < 0 || x < 0 || y < 0 || st.hasMoreTokens()) {
+    if (id < 0 || st.hasMoreTokens()) {
         throw ParseException("parseSpawn fail");
     }
 }
@@ -158,7 +158,7 @@ void HBMap::parseFlag(std::string& s) {
         y = atoi(st.nextToken().c_str());
     }
 
-    if (id < 0 || x < 0 || y < 0 || st.hasMoreTokens()) {
+    if (id < 0 || st.hasMoreTokens()) {
         throw ParseException("parseFlag fail");
     }
 
@@ -177,7 +177,6 @@ WallType parseWallType(std::string& s) {
 void HBMap::parseWall(std::string& s) {
     StringTokenizer st(s);
     WallType wallType;
-    int a = -1, b = -1, c = -1, d = -1;
     if (st.hasMoreTokens()) {
         wallType = parseWallType(st.nextToken());
     }
@@ -193,7 +192,7 @@ void HBMap::parseWall(std::string& s) {
     if (st.hasMoreTokens()) {
         d = atoi(st.nextToken().c_str());
     }
-    if (a < 0 || b < 0 || c < 0 || d < 0 || st.hasMoreTokens()) {
+    if (st.hasMoreTokens()) {
         throw ParseException("parseWall fail");
     }
 

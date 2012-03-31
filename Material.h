@@ -25,6 +25,33 @@ class Color : public Material
          */
 		Color(unsigned char x = 0, unsigned char y = 0, unsigned char z = 0) 
             : r(x), g(y), b(z), a(0) {} 
+
+        /**
+         * Gets the red channel of this Color instance.
+         *
+         * @return the value of the red channel.
+         */
+        const unsigned char getR() const {
+            return r;
+        }
+
+        /**
+         * Gets the green channel of this Color instance.
+         *
+         * @return the value of the green channel.
+         */
+        const unsigned char getG() const {
+            return g;
+        }
+
+        /**
+         * Gets the blue channel of this Color instance.
+         *
+         * @return the value of the blue channel.
+         */
+        const unsigned char getB() const {
+            return b;
+        }
 };
 
 #endif

@@ -255,10 +255,30 @@ class Flag : MovingRoundObject
 		}
 };
 
+enum PlayerState {
+	PS_SPAWNING,
+	PS_ALIVE,
+	PS_SHRINKING,
+	PS_DEAD
+};
+
 class Player : MovingRoundObject
 {
 	private:
-		
+		PlayerState playerState;
+
+		unsigned team;
+
+		// PS_SPAWNING
+		float timeUntilSpawn;
+
+		// PS_ALIVE
+
+		// PS_SHRINKING
+		Player *parent;
+		int numChildren;
+
+		// PS_DEAD
 };
 
 #endif

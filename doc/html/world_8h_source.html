@@ -107,29 +107,45 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00013"></a>00013                 std::string mapName;
 <a name="l00014"></a>00014         <a class="code" href="class_color.html">Color</a> wallColor;
 <a name="l00015"></a>00015         <a class="code" href="class_h_b_map.html">HBMap</a> worldMap;
-<a name="l00016"></a>00016         <span class="keyword">public</span>:
-<a name="l00017"></a>00017                 <a class="code" href="class_world.html">World</a>(std::string mapName = <span class="stringliteral">&quot;custom.hbm&quot;</span>);
-<a name="l00018"></a>00018                 <span class="keywordtype">int</span> spawn(<span class="keywordtype">int</span> spawnl, <span class="keywordtype">int</span> player, <span class="keywordtype">int</span> flag);
-<a name="l00019"></a>00019                 
-<a name="l00020"></a>00020                 <span class="keywordtype">float</span> minX, maxX, minY, maxY;
-<a name="l00021"></a>00021                 std::map&lt;int, std::vector&lt;Spawn&gt; &gt; spawns;
-<a name="l00022"></a>00022                 std::map&lt;int, Object&gt; objects;
-<a name="l00023"></a>00023                 std::vector&lt;Light&gt; lights;
-<a name="l00024"></a>00024                 std::vector&lt;Obstacle&gt; obstacles;
-<a name="l00025"></a>00025                 <span class="comment">//std::vector&lt;std::pair&lt;char, Vector2D&gt; &gt; sounds;</span>
-<a name="l00026"></a>00026                 <span class="keywordtype">void</span> doSimulation(<span class="keywordtype">float</span> dt, std::vector&lt;std::pair&lt;char, Vector2D&gt; &gt;&amp; sounds);
-<a name="l00027"></a>00027                 
-<a name="l00028"></a>00028                 <span class="keywordtype">void</span> sendObjects(<a class="code" href="class_socket_connection.html">SocketConnection</a>* sc, <span class="keywordtype">int</span> obj);
-<a name="l00029"></a>00029                 <span class="keywordtype">void</span> receiveObjects(<a class="code" href="class_read_packet.html">ReadPacket</a>* rp, <span class="keywordtype">int</span>&amp; obj);
-<a name="l00030"></a>00030 };
-<a name="l00031"></a>00031 
-<a name="l00032"></a>00032 <span class="preprocessor">#endif</span>
-<a name="l00033"></a>00033 <span class="preprocessor"></span>
+<a name="l00016"></a>00016 
+<a name="l00017"></a>00017         <span class="keyword">public</span>:
+<a name="l00024"></a>00024                 <a class="code" href="class_world.html#a927865dd19c6a03b0d3b481ae03775c3">World</a>(std::string mapName = <span class="stringliteral">&quot;custom.hbm&quot;</span>);
+<a name="l00025"></a>00025                 <span class="keywordtype">int</span> spawn(<span class="keywordtype">int</span> spawnl, <span class="keywordtype">int</span> player, <span class="keywordtype">int</span> flag);
+<a name="l00026"></a>00026 
+<a name="l00032"></a><a class="code" href="class_world.html#a1780684e06f60af5a22bd232916860d8">00032</a>         <span class="keyword">const</span> <span class="keywordtype">float</span> <a class="code" href="class_world.html#a1780684e06f60af5a22bd232916860d8">getMinX</a>()<span class="keyword"> const </span>{
+<a name="l00033"></a>00033             <span class="keywordflow">return</span> worldMap.<a class="code" href="class_h_b_map.html#a515e8a0be2e7cce366a81632cce6da4d">getWidth</a>()/-2.0f;
+<a name="l00034"></a>00034         }
+<a name="l00035"></a>00035 
+<a name="l00041"></a><a class="code" href="class_world.html#a1e35597fd94c241b9df7a87e9b6a523d">00041</a>         <span class="keyword">const</span> <span class="keywordtype">float</span> <a class="code" href="class_world.html#a1e35597fd94c241b9df7a87e9b6a523d">getMaxX</a>()<span class="keyword"> const </span>{
+<a name="l00042"></a>00042             <span class="keywordflow">return</span> worldMap.<a class="code" href="class_h_b_map.html#a515e8a0be2e7cce366a81632cce6da4d">getWidth</a>()/2.0f;
+<a name="l00043"></a>00043         }
+<a name="l00044"></a>00044 
+<a name="l00050"></a><a class="code" href="class_world.html#a8ec2876af6bcbe4603c786eb67b040fd">00050</a>         <span class="keyword">const</span> <span class="keywordtype">float</span> <a class="code" href="class_world.html#a8ec2876af6bcbe4603c786eb67b040fd">getMinY</a>()<span class="keyword"> const </span>{
+<a name="l00051"></a>00051             <span class="keywordflow">return</span> worldMap.<a class="code" href="class_h_b_map.html#a5935af936a849f70c66b0830d517a4c9">getHeight</a>()/-2.0f;
+<a name="l00052"></a>00052         }
+<a name="l00053"></a>00053 
+<a name="l00059"></a><a class="code" href="class_world.html#a402581ee124acda99859c7e67edff1de">00059</a>         <span class="keyword">const</span> <span class="keywordtype">float</span> <a class="code" href="class_world.html#a402581ee124acda99859c7e67edff1de">getMaxY</a>()<span class="keyword"> const </span>{
+<a name="l00060"></a>00060             <span class="keywordflow">return</span> worldMap.<a class="code" href="class_h_b_map.html#a5935af936a849f70c66b0830d517a4c9">getHeight</a>()/2.0f;
+<a name="l00061"></a>00061         }
+<a name="l00062"></a>00062                 
+<a name="l00063"></a>00063                 std::map&lt;int, std::vector&lt;Spawn&gt; &gt; spawns;
+<a name="l00064"></a>00064                 std::map&lt;int, Object&gt; objects;
+<a name="l00065"></a>00065                 std::vector&lt;Light&gt; lights;
+<a name="l00066"></a>00066                 std::vector&lt;Obstacle&gt; obstacles;
+<a name="l00067"></a>00067                 <span class="comment">//std::vector&lt;std::pair&lt;char, Vector2D&gt; &gt; sounds;</span>
+<a name="l00068"></a>00068                 <span class="keywordtype">void</span> doSimulation(<span class="keywordtype">float</span> dt, std::vector&lt;std::pair&lt;char, Vector2D&gt; &gt;&amp; sounds);
+<a name="l00069"></a>00069                 
+<a name="l00070"></a>00070                 <span class="keywordtype">void</span> sendObjects(<a class="code" href="class_socket_connection.html">SocketConnection</a>* sc, <span class="keywordtype">int</span> obj);
+<a name="l00071"></a>00071                 <span class="keywordtype">void</span> receiveObjects(<a class="code" href="class_read_packet.html">ReadPacket</a>* rp, <span class="keywordtype">int</span>&amp; obj);
+<a name="l00072"></a>00072 };
+<a name="l00073"></a>00073 
+<a name="l00074"></a>00074 <span class="preprocessor">#endif</span>
+<a name="l00075"></a>00075 <span class="preprocessor"></span>
 </pre></div></div><!-- contents -->
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 29 2012 17:42:45 for Holy Balls by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 31 2012 11:35:59 for Holy Balls by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

@@ -92,38 +92,136 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a>  </div>
+<a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Color Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="dynheader">
+Inheritance diagram for Color:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_color.png" usemap="#Color_map" alt=""/>
+  <map id="Color_map" name="Color_map">
+<area href="class_material.html" alt="Material" shape="rect" coords="0,0,58,24"/>
+</map>
+ </div></div>
 
 <p><a href="class_color-members.html">List of all members.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8e195b730ea2cd93d19012b9297ca368"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8e195b730ea2cd93d19012b9297ca368"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Color</b> (unsigned char x=0, unsigned char y=0, unsigned char z=0)</td></tr>
-<tr><td colspan="2"><h2><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:ab9a9c7134511f9b116a6fcc81a303ba6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab9a9c7134511f9b116a6fcc81a303ba6"></a>
-unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>r</b></td></tr>
-<tr class="memitem:adc506c5063609cacdda2c007da3b7a5f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adc506c5063609cacdda2c007da3b7a5f"></a>
-unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>g</b></td></tr>
-<tr class="memitem:a9f00605f7024dcb79342e97fae52c1bd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f00605f7024dcb79342e97fae52c1bd"></a>
-unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>b</b></td></tr>
-<tr class="memitem:a39bb1f3f9a514ac1a581ca27fddebebc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a39bb1f3f9a514ac1a581ca27fddebebc"></a>
-unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>a</b></td></tr>
+<tr class="memitem:a8e195b730ea2cd93d19012b9297ca368"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_color.html#a8e195b730ea2cd93d19012b9297ca368">Color</a> (unsigned char x=0, unsigned char y=0, unsigned char z=0)</td></tr>
+<tr class="memitem:aff41a5c42f799776a3d3e044d5bf3ed5"><td class="memItemLeft" align="right" valign="top">const unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_color.html#aff41a5c42f799776a3d3e044d5bf3ed5">getR</a> () const </td></tr>
+<tr class="memitem:ab30c8e7a987bbde4c5d126ce261d8188"><td class="memItemLeft" align="right" valign="top">const unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_color.html#ab30c8e7a987bbde4c5d126ce261d8188">getG</a> () const </td></tr>
+<tr class="memitem:ad1f832619a22c94493ce7289de503c3f"><td class="memItemLeft" align="right" valign="top">const unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_color.html#ad1f832619a22c94493ce7289de503c3f">getB</a> () const </td></tr>
 </table>
+<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a8e195b730ea2cd93d19012b9297ca368"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_color.html#a8e195b730ea2cd93d19012b9297ca368">Color::Color</a> </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>x</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>y</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>z</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Creates a color, whose default color is black. If any of the arguments are greater than 255 or less than 0, takes the positive result of mod 256.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>the red channel. Defaults to 0. </td></tr>
+    <tr><td class="paramname">y</td><td>the green channel. Defaults to 0. </td></tr>
+    <tr><td class="paramname">z</td><td>the blue channel. Defaults to 0. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="ad1f832619a22c94493ce7289de503c3f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const unsigned char <a class="el" href="class_color.html#ad1f832619a22c94493ce7289de503c3f">Color::getB</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the blue channel of this <a class="el" href="class_color.html">Color</a> instance.</p>
+<dl class="section return"><dt>Returns:</dt><dd>the value of the blue channel. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab30c8e7a987bbde4c5d126ce261d8188"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const unsigned char <a class="el" href="class_color.html#ab30c8e7a987bbde4c5d126ce261d8188">Color::getG</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the green channel of this <a class="el" href="class_color.html">Color</a> instance.</p>
+<dl class="section return"><dt>Returns:</dt><dd>the value of the green channel. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aff41a5c42f799776a3d3e044d5bf3ed5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const unsigned char <a class="el" href="class_color.html#aff41a5c42f799776a3d3e044d5bf3ed5">Color::getR</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Gets the red channel of this <a class="el" href="class_color.html">Color</a> instance.</p>
+<dl class="section return"><dt>Returns:</dt><dd>the value of the red channel. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li><a class="el" href="hack_8h_source.html">hack.h</a></li>
+<li><a class="el" href="_material_8h_source.html">Material.h</a></li>
 </ul>
 </div><!-- contents -->
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 29 2012 17:42:45 for Holy Balls by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 31 2012 11:35:59 for Holy Balls by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

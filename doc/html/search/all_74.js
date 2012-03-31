@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['team',['Team',['../struct_team.html',1,'']]],
+  ['team',['Team',['../class_team.html',1,'Team'],['../class_team.html#aada295895b747960576b69d8c87a54ba',1,'Team::Team()'],['../class_team.html#af573698b380a45356b9688ef133ebb70',1,'Team::Team(unsigned a, unsigned b, unsigned c)']]],
   ['textquad',['textquad',['../structtextquad.html',1,'']]],
+  ['texture',['Texture',['../class_texture.html',1,'']]],
   ['togglemenuitem',['togglemenuitem',['../classtogglemenuitem.html',1,'']]]
 ];

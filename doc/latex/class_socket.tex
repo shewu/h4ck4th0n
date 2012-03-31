@@ -4,28 +4,93 @@
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{class_socket_acba9bcb13219372b3236ebd45edc29fb}{{\bfseries Socket} (int sock)}\label{class_socket_acba9bcb13219372b3236ebd45edc29fb}
-
+\hyperlink{class_socket_acba9bcb13219372b3236ebd45edc29fb}{Socket} (int sock)
 \item 
-\hypertarget{class_socket_a9409d7a46addea38d47d26ebe06bc93b}{void {\bfseries listen\-\_\-for\-\_\-client} ()}\label{class_socket_a9409d7a46addea38d47d26ebe06bc93b}
-
+void \hyperlink{class_socket_a9409d7a46addea38d47d26ebe06bc93b}{listen\-\_\-for\-\_\-client} ()
 \item 
-\hypertarget{class_socket_a4637d93fff9965d3c93f20d091e15ce6}{class \hyperlink{class_socket_connection}{Socket\-Connection} $\ast$ {\bfseries receive\-Connection} ()}\label{class_socket_a4637d93fff9965d3c93f20d091e15ce6}
-
+class \hyperlink{class_socket_connection}{Socket\-Connection} $\ast$ \hyperlink{class_socket_a4637d93fff9965d3c93f20d091e15ce6}{receive\-Connection} ()
 \item 
-\hypertarget{class_socket_ad9f8aabc5908fd1ba5383196e5dbb513}{void {\bfseries close\-Connection} (\hyperlink{class_socket_connection}{Socket\-Connection} $\ast$sc)}\label{class_socket_ad9f8aabc5908fd1ba5383196e5dbb513}
-
+void \hyperlink{class_socket_ad9f8aabc5908fd1ba5383196e5dbb513}{close\-Connection} (\hyperlink{class_socket_connection}{Socket\-Connection} $\ast$sc)
 \item 
-\hypertarget{class_socket_a5f927294fc68ee16d297ced2dd5ed7e8}{class \hyperlink{class_socket_connection}{Socket\-Connection} $\ast$ {\bfseries connect} (sockaddr $\ast$addr, socklen\-\_\-t addrlen)}\label{class_socket_a5f927294fc68ee16d297ced2dd5ed7e8}
-
+class \hyperlink{class_socket_connection}{Socket\-Connection} $\ast$ \hyperlink{class_socket_a5f927294fc68ee16d297ced2dd5ed7e8}{connect} (sockaddr $\ast$addr, socklen\-\_\-t addrlen)
 \item 
-\hypertarget{class_socket_a6c8618907b9b3395f18b9d15b4e4db03}{void {\bfseries end\-\_\-connection} ()}\label{class_socket_a6c8618907b9b3395f18b9d15b4e4db03}
-
+void \hyperlink{class_socket_a6c8618907b9b3395f18b9d15b4e4db03}{end\-\_\-connection} ()
 \item 
-\hypertarget{class_socket_a924e09899ab24fb092b94ce03e17a6af}{void {\bfseries recv\-\_\-all} ()}\label{class_socket_a924e09899ab24fb092b94ce03e17a6af}
-
+void \hyperlink{class_socket_a924e09899ab24fb092b94ce03e17a6af}{recv\-\_\-all} ()
 \end{DoxyCompactItemize}
 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_socket_acba9bcb13219372b3236ebd45edc29fb}{\index{Socket@{Socket}!Socket@{Socket}}
+\index{Socket@{Socket}!Socket@{Socket}}
+\subsubsection[{Socket}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Socket\-::\-Socket} (
+\begin{DoxyParamCaption}
+\item[{int}]{sock}
+\end{DoxyParamCaption}
+)}}\label{class_socket_acba9bcb13219372b3236ebd45edc29fb}
+Creates a \hyperlink{class_socket}{Socket} class with the given socket descriptor, which must be of type S\-O\-C\-K\-\_\-\-D\-G\-R\-A\-M. 
+\begin{DoxyParams}{Parameters}
+{\em sock} & The socket descriptor, which must be of type S\-O\-C\-K\-\_\-\-D\-G\-R\-A\-M. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_socket_ad9f8aabc5908fd1ba5383196e5dbb513}{\index{Socket@{Socket}!close\-Connection@{close\-Connection}}
+\index{close\-Connection@{close\-Connection}!Socket@{Socket}}
+\subsubsection[{close\-Connection}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf Socket\-::close\-Connection} (
+\begin{DoxyParamCaption}
+\item[{{\bf Socket\-Connection} $\ast$}]{sc}
+\end{DoxyParamCaption}
+)}}\label{class_socket_ad9f8aabc5908fd1ba5383196e5dbb513}
+Closes the given \hyperlink{class_socket_connection}{Socket\-Connection}. 
+\begin{DoxyParams}{Parameters}
+{\em sc} & the \hyperlink{class_socket_connection}{Socket\-Connection} instance to be closed. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_socket_a5f927294fc68ee16d297ced2dd5ed7e8}{\index{Socket@{Socket}!connect@{connect}}
+\index{connect@{connect}!Socket@{Socket}}
+\subsubsection[{connect}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Socket\-Connection} $\ast$ {\bf Socket\-::connect} (
+\begin{DoxyParamCaption}
+\item[{sockaddr $\ast$}]{addr, }
+\item[{socklen\-\_\-t}]{addrlen}
+\end{DoxyParamCaption}
+)}}\label{class_socket_a5f927294fc68ee16d297ced2dd5ed7e8}
+Connects to the given address, and returns the resulting \hyperlink{class_socket_connection}{Socket\-Connection}. \begin{DoxyReturn}{Returns}
+a \hyperlink{class_socket_connection}{Socket\-Connection} instance for the connection 
+\end{DoxyReturn}
+\hypertarget{class_socket_a6c8618907b9b3395f18b9d15b4e4db03}{\index{Socket@{Socket}!end\-\_\-connection@{end\-\_\-connection}}
+\index{end\-\_\-connection@{end\-\_\-connection}!Socket@{Socket}}
+\subsubsection[{end\-\_\-connection}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf Socket\-::end\-\_\-connection} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_socket_a6c8618907b9b3395f18b9d15b4e4db03}
+Closes everything \hypertarget{class_socket_a9409d7a46addea38d47d26ebe06bc93b}{\index{Socket@{Socket}!listen\-\_\-for\-\_\-client@{listen\-\_\-for\-\_\-client}}
+\index{listen\-\_\-for\-\_\-client@{listen\-\_\-for\-\_\-client}!Socket@{Socket}}
+\subsubsection[{listen\-\_\-for\-\_\-client}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf Socket\-::listen\-\_\-for\-\_\-client} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_socket_a9409d7a46addea38d47d26ebe06bc93b}
+Puts the \hyperlink{class_socket}{Socket} into listening mode. Should be used by a server who wants to listen for incoming connections with clients. \hypertarget{class_socket_a4637d93fff9965d3c93f20d091e15ce6}{\index{Socket@{Socket}!receive\-Connection@{receive\-Connection}}
+\index{receive\-Connection@{receive\-Connection}!Socket@{Socket}}
+\subsubsection[{receive\-Connection}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Socket\-Connection} $\ast$ {\bf Socket\-::receive\-Connection} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_socket_a4637d93fff9965d3c93f20d091e15ce6}
+Returns a new \hyperlink{class_socket_connection}{Socket\-Connection} that was received. New sockets can only be received if in listening mode. \begin{DoxyReturn}{Returns}
+a new \hyperlink{class_socket_connection}{Socket\-Connection}, or N\-U\-L\-L if all received connections already been returned. 
+\end{DoxyReturn}
+\hypertarget{class_socket_a924e09899ab24fb092b94ce03e17a6af}{\index{Socket@{Socket}!recv\-\_\-all@{recv\-\_\-all}}
+\index{recv\-\_\-all@{recv\-\_\-all}!Socket@{Socket}}
+\subsubsection[{recv\-\_\-all}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf Socket\-::recv\-\_\-all} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_socket_a924e09899ab24fb092b94ce03e17a6af}
+Must be called periodically to process all incoming data to find new connections and pass this data to the Socket\-Connections. 
 
 The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
 \item 

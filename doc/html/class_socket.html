@@ -102,21 +102,162 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:acba9bcb13219372b3236ebd45edc29fb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acba9bcb13219372b3236ebd45edc29fb"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Socket</b> (int sock)</td></tr>
-<tr class="memitem:a9409d7a46addea38d47d26ebe06bc93b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9409d7a46addea38d47d26ebe06bc93b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>listen_for_client</b> ()</td></tr>
-<tr class="memitem:a4637d93fff9965d3c93f20d091e15ce6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4637d93fff9965d3c93f20d091e15ce6"></a>
-class <a class="el" href="class_socket_connection.html">SocketConnection</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>receiveConnection</b> ()</td></tr>
-<tr class="memitem:ad9f8aabc5908fd1ba5383196e5dbb513"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad9f8aabc5908fd1ba5383196e5dbb513"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>closeConnection</b> (<a class="el" href="class_socket_connection.html">SocketConnection</a> *sc)</td></tr>
-<tr class="memitem:a5f927294fc68ee16d297ced2dd5ed7e8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5f927294fc68ee16d297ced2dd5ed7e8"></a>
-class <a class="el" href="class_socket_connection.html">SocketConnection</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>connect</b> (sockaddr *addr, socklen_t addrlen)</td></tr>
-<tr class="memitem:a6c8618907b9b3395f18b9d15b4e4db03"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c8618907b9b3395f18b9d15b4e4db03"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>end_connection</b> ()</td></tr>
-<tr class="memitem:a924e09899ab24fb092b94ce03e17a6af"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a924e09899ab24fb092b94ce03e17a6af"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>recv_all</b> ()</td></tr>
+<tr class="memitem:acba9bcb13219372b3236ebd45edc29fb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_socket.html#acba9bcb13219372b3236ebd45edc29fb">Socket</a> (int sock)</td></tr>
+<tr class="memitem:a9409d7a46addea38d47d26ebe06bc93b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_socket.html#a9409d7a46addea38d47d26ebe06bc93b">listen_for_client</a> ()</td></tr>
+<tr class="memitem:a4637d93fff9965d3c93f20d091e15ce6"><td class="memItemLeft" align="right" valign="top">class <a class="el" href="class_socket_connection.html">SocketConnection</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_socket.html#a4637d93fff9965d3c93f20d091e15ce6">receiveConnection</a> ()</td></tr>
+<tr class="memitem:ad9f8aabc5908fd1ba5383196e5dbb513"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_socket.html#ad9f8aabc5908fd1ba5383196e5dbb513">closeConnection</a> (<a class="el" href="class_socket_connection.html">SocketConnection</a> *sc)</td></tr>
+<tr class="memitem:a5f927294fc68ee16d297ced2dd5ed7e8"><td class="memItemLeft" align="right" valign="top">class <a class="el" href="class_socket_connection.html">SocketConnection</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_socket.html#a5f927294fc68ee16d297ced2dd5ed7e8">connect</a> (sockaddr *addr, socklen_t addrlen)</td></tr>
+<tr class="memitem:a6c8618907b9b3395f18b9d15b4e4db03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_socket.html#a6c8618907b9b3395f18b9d15b4e4db03">end_connection</a> ()</td></tr>
+<tr class="memitem:a924e09899ab24fb092b94ce03e17a6af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_socket.html#a924e09899ab24fb092b94ce03e17a6af">recv_all</a> ()</td></tr>
 </table>
+<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="acba9bcb13219372b3236ebd45edc29fb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_socket.html#acba9bcb13219372b3236ebd45edc29fb">Socket::Socket</a> </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>sock</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Creates a <a class="el" href="class_socket.html">Socket</a> class with the given socket descriptor, which must be of type SOCK_DGRAM. </p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sock</td><td>The socket descriptor, which must be of type SOCK_DGRAM. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="ad9f8aabc5908fd1ba5383196e5dbb513"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_socket.html#ad9f8aabc5908fd1ba5383196e5dbb513">Socket::closeConnection</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_socket_connection.html">SocketConnection</a> *&#160;</td>
+          <td class="paramname"><em>sc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Closes the given <a class="el" href="class_socket_connection.html">SocketConnection</a>. </p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sc</td><td>the <a class="el" href="class_socket_connection.html">SocketConnection</a> instance to be closed. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a5f927294fc68ee16d297ced2dd5ed7e8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_socket_connection.html">SocketConnection</a> * <a class="el" href="class_socket.html#a5f927294fc68ee16d297ced2dd5ed7e8">Socket::connect</a> </td>
+          <td>(</td>
+          <td class="paramtype">sockaddr *&#160;</td>
+          <td class="paramname"><em>addr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">socklen_t&#160;</td>
+          <td class="paramname"><em>addrlen</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Connects to the given address, and returns the resulting <a class="el" href="class_socket_connection.html">SocketConnection</a>. </p>
+<dl class="section return"><dt>Returns:</dt><dd>a <a class="el" href="class_socket_connection.html">SocketConnection</a> instance for the connection </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6c8618907b9b3395f18b9d15b4e4db03"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_socket.html#a6c8618907b9b3395f18b9d15b4e4db03">Socket::end_connection</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Closes everything </p>
+
+</div>
+</div>
+<a class="anchor" id="a9409d7a46addea38d47d26ebe06bc93b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_socket.html#a9409d7a46addea38d47d26ebe06bc93b">Socket::listen_for_client</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Puts the <a class="el" href="class_socket.html">Socket</a> into listening mode. Should be used by a server who wants to listen for incoming connections with clients. </p>
+
+</div>
+</div>
+<a class="anchor" id="a4637d93fff9965d3c93f20d091e15ce6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_socket_connection.html">SocketConnection</a> * <a class="el" href="class_socket.html#a4637d93fff9965d3c93f20d091e15ce6">Socket::receiveConnection</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns a new <a class="el" href="class_socket_connection.html">SocketConnection</a> that was received. New sockets can only be received if in listening mode. </p>
+<dl class="section return"><dt>Returns:</dt><dd>a new <a class="el" href="class_socket_connection.html">SocketConnection</a>, or NULL if all received connections already been returned. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a924e09899ab24fb092b94ce03e17a6af"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_socket.html#a924e09899ab24fb092b94ce03e17a6af">Socket::recv_all</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Must be called periodically to process all incoming data to find new connections and pass this data to the SocketConnections. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="socket_8h_source.html">socket.h</a></li>
 <li>socket.cpp</li>
@@ -125,7 +266,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>recv_all</b> ()</td><
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 29 2012 17:42:46 for Holy Balls by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 31 2012 11:36:01 for Holy Balls by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

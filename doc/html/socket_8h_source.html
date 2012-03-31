@@ -144,52 +144,55 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00050"></a><a class="code" href="class_socket.html">00050</a> <span class="keyword">class </span><a class="code" href="class_socket.html">Socket</a>
 <a name="l00051"></a>00051 {
 <a name="l00052"></a>00052         <span class="keyword">public</span>:
-<a name="l00053"></a>00053                 <a class="code" href="class_socket.html">Socket</a>(<span class="keywordtype">int</span> sock);
-<a name="l00054"></a>00054 
-<a name="l00055"></a>00055                 <span class="keywordtype">void</span> listen_for_client();
-<a name="l00056"></a>00056                 <span class="keyword">class </span><a class="code" href="class_socket_connection.html">SocketConnection</a>* receiveConnection();
-<a name="l00057"></a>00057         <span class="keywordtype">void</span> closeConnection(<a class="code" href="class_socket_connection.html">SocketConnection</a> *sc);
-<a name="l00058"></a>00058 
-<a name="l00059"></a>00059                 <span class="keyword">class </span><a class="code" href="class_socket_connection.html">SocketConnection</a>* connect(sockaddr *addr, socklen_t addrlen);
-<a name="l00060"></a>00060         <span class="keywordtype">void</span> end_connection();
-<a name="l00061"></a>00061 
-<a name="l00062"></a>00062                 <span class="keywordtype">void</span> recv_all();
-<a name="l00063"></a>00063                 
-<a name="l00064"></a>00064     <span class="keyword">private</span>:
-<a name="l00065"></a>00065         <span class="keywordtype">int</span> socket;
-<a name="l00066"></a>00066                 <span class="keywordtype">bool</span> listening;
-<a name="l00067"></a>00067         std::map&lt;std::pair&lt;std::string, int&gt;, <a class="code" href="class_socket_connection.html">SocketConnection</a>*&gt; connections;
-<a name="l00068"></a>00068                 std::queue&lt;SocketConnection*&gt; new_connections;
-<a name="l00069"></a>00069 };
-<a name="l00070"></a>00070 
-<a name="l00071"></a><a class="code" href="class_socket_connection.html">00071</a> <span class="keyword">class </span><a class="code" href="class_socket_connection.html">SocketConnection</a> {
-<a name="l00072"></a>00072         <span class="keyword">public</span>:
-<a name="l00073"></a>00073         <span class="keywordtype">int</span> socket;
-<a name="l00074"></a>00074                 <span class="keyword">struct </span>sockaddr *addr;
-<a name="l00075"></a>00075                 socklen_t addrlen;
-<a name="l00076"></a>00076                 <span class="keywordtype">int</span> my_id, their_id;
-<a name="l00077"></a>00077 
-<a name="l00078"></a>00078                 <a class="code" href="class_socket_connection.html">SocketConnection</a>(<span class="keywordtype">int</span> socket, <span class="keyword">struct</span> sockaddr *addr, socklen_t addrlen,
-<a name="l00079"></a>00079                                  <span class="keywordtype">int</span> my_id, <span class="keywordtype">int</span> their_id);
-<a name="l00080"></a>00080                 <span class="keywordtype">void</span> send_packet(<a class="code" href="class_write_packet.html">WritePacket</a>&amp;);
-<a name="l00081"></a>00081                 <a class="code" href="class_read_packet.html">ReadPacket</a>* receive_packet();
-<a name="l00082"></a>00082                 <span class="keywordtype">void</span> recv_data(<span class="keywordtype">char</span> *buf, <span class="keywordtype">int</span> length);
-<a name="l00083"></a>00083                 ~<a class="code" href="class_socket_connection.html">SocketConnection</a>();
-<a name="l00084"></a>00084 
-<a name="l00085"></a>00085                 <span class="keywordtype">int</span> lastTimeReceived;
-<a name="l00086"></a>00086 
-<a name="l00087"></a>00087     <span class="keyword">private</span>:
-<a name="l00088"></a>00088         <span class="keywordtype">int</span> num_sent;
-<a name="l00089"></a>00089                 std::queue&lt;ReadPacket*&gt; read_packets;
+<a name="l00058"></a>00058                 <a class="code" href="class_socket.html#acba9bcb13219372b3236ebd45edc29fb">Socket</a>(<span class="keywordtype">int</span> sock);
+<a name="l00059"></a>00059 
+<a name="l00064"></a>00064                 <span class="keywordtype">void</span> <a class="code" href="class_socket.html#a9409d7a46addea38d47d26ebe06bc93b">listen_for_client</a>();
+<a name="l00065"></a>00065 
+<a name="l00072"></a>00072                 <span class="keyword">class </span><a class="code" href="class_socket_connection.html">SocketConnection</a>* <a class="code" href="class_socket.html#a4637d93fff9965d3c93f20d091e15ce6">receiveConnection</a>();
+<a name="l00073"></a>00073 
+<a name="l00078"></a>00078         <span class="keywordtype">void</span> <a class="code" href="class_socket.html#ad9f8aabc5908fd1ba5383196e5dbb513">closeConnection</a>(<a class="code" href="class_socket_connection.html">SocketConnection</a> *sc);
+<a name="l00079"></a>00079 
+<a name="l00084"></a>00084                 <span class="keyword">class </span><a class="code" href="class_socket_connection.html">SocketConnection</a>* <a class="code" href="class_socket.html#a5f927294fc68ee16d297ced2dd5ed7e8">connect</a>(sockaddr *addr, socklen_t addrlen);
+<a name="l00085"></a>00085 
+<a name="l00089"></a>00089         <span class="keywordtype">void</span> <a class="code" href="class_socket.html#a6c8618907b9b3395f18b9d15b4e4db03">end_connection</a>();
 <a name="l00090"></a>00090 
-<a name="l00091"></a>00091 };
-<a name="l00092"></a>00092 
-<a name="l00093"></a>00093 <span class="preprocessor">#endif</span>
+<a name="l00095"></a>00095                 <span class="keywordtype">void</span> <a class="code" href="class_socket.html#a924e09899ab24fb092b94ce03e17a6af">recv_all</a>();
+<a name="l00096"></a>00096                 
+<a name="l00097"></a>00097     <span class="keyword">private</span>:
+<a name="l00098"></a>00098         <span class="keywordtype">int</span> socket;
+<a name="l00099"></a>00099                 <span class="keywordtype">bool</span> listening;
+<a name="l00100"></a>00100         std::map&lt;std::pair&lt;std::string, int&gt;, <a class="code" href="class_socket_connection.html">SocketConnection</a>*&gt; connections;
+<a name="l00101"></a>00101                 std::queue&lt;SocketConnection*&gt; new_connections;
+<a name="l00102"></a>00102 };
+<a name="l00103"></a>00103 
+<a name="l00104"></a><a class="code" href="class_socket_connection.html">00104</a> <span class="keyword">class </span><a class="code" href="class_socket_connection.html">SocketConnection</a> {
+<a name="l00105"></a>00105         <span class="keyword">private</span>:
+<a name="l00106"></a>00106         <span class="keywordtype">int</span> socket;
+<a name="l00107"></a>00107                 <span class="keyword">struct </span>sockaddr *addr;
+<a name="l00108"></a>00108                 socklen_t addrlen;
+<a name="l00109"></a>00109                 <span class="keywordtype">int</span> my_id, their_id;
+<a name="l00110"></a>00110 
+<a name="l00111"></a>00111                 <a class="code" href="class_socket_connection.html">SocketConnection</a>(<span class="keywordtype">int</span> socket, <span class="keyword">struct</span> sockaddr *addr, socklen_t addrlen,
+<a name="l00112"></a>00112                                  <span class="keywordtype">int</span> my_id, <span class="keywordtype">int</span> their_id);
+<a name="l00113"></a>00113                 <span class="keywordtype">void</span> send_packet(<a class="code" href="class_write_packet.html">WritePacket</a>&amp;);
+<a name="l00114"></a>00114                 <a class="code" href="class_read_packet.html">ReadPacket</a>* receive_packet();
+<a name="l00115"></a>00115                 <span class="keywordtype">void</span> recv_data(<span class="keywordtype">char</span> *buf, <span class="keywordtype">int</span> length);
+<a name="l00116"></a>00116                 ~<a class="code" href="class_socket_connection.html">SocketConnection</a>();
+<a name="l00117"></a>00117 
+<a name="l00118"></a>00118                 <span class="keywordtype">int</span> lastTimeReceived;
+<a name="l00119"></a>00119 
+<a name="l00120"></a>00120     <span class="keyword">private</span>:
+<a name="l00121"></a>00121         <span class="keywordtype">int</span> num_sent;
+<a name="l00122"></a>00122                 std::queue&lt;ReadPacket*&gt; read_packets;
+<a name="l00123"></a>00123 
+<a name="l00124"></a>00124 };
+<a name="l00125"></a>00125 
+<a name="l00126"></a>00126 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 29 2012 17:42:45 for Holy Balls by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 31 2012 11:35:59 for Holy Balls by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

@@ -16,7 +16,7 @@ std\-::string \& \hyperlink{class_h_b_map_a306c703d78a5be354f73186eb9f0cf4c}{get
 \item 
 std\-::vector$<$ Game\-Mode $>$ \& \hyperlink{class_h_b_map_a86c9120ba5dea97040c019e99daa0226}{get\-Game\-Modes} ()
 \item 
-std\-::vector$<$ \hyperlink{struct_team}{Team} $>$ \& \hyperlink{class_h_b_map_a17d50199fdc09f1c8fac6b49d2989cbf}{get\-Teams} ()
+std\-::vector$<$ \hyperlink{class_team}{Team} $>$ \& \hyperlink{class_h_b_map_a17d50199fdc09f1c8fac6b49d2989cbf}{get\-Teams} ()
 \item 
 std\-::vector$<$ \hyperlink{class_obstacle}{Obstacle} $>$ \& \hyperlink{class_h_b_map_abf3a3b5a59ba22a08d51ef94cc44794d}{get\-Spawns\-For\-Team} (unsigned team)
 \item 
@@ -63,7 +63,7 @@ Creates an \hyperlink{class_h_b_map}{H\-B\-Map} instance given the map filename.
 \item[{unsigned}]{team}
 \end{DoxyParamCaption}
 )\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_h_b_map_a841fd545b388d50df1755f788dee9a03}
-Gets the flags for a given team.
+Gets the flags for a given team. If an invalid team number is requested, returns the spawns for the first team.
 
 
 \begin{DoxyParams}{Parameters}
@@ -116,7 +116,7 @@ the name.
 \item[{unsigned}]{team}
 \end{DoxyParamCaption}
 )\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_h_b_map_abf3a3b5a59ba22a08d51ef94cc44794d}
-Gets the spawns for a given team.
+Gets the spawns for a given team. If an invalid team number is requested, returns the spawns for the first team.
 
 
 \begin{DoxyParams}{Parameters}
@@ -136,7 +136,7 @@ the spawns for team.
 Gets the team list and properties of the map.
 
 \begin{DoxyReturn}{Returns}
-the team list containing \hyperlink{struct_team}{Team} objects in no particular order. 
+the team list containing \hyperlink{class_team}{Team} objects in no particular order. 
 \end{DoxyReturn}
 \hypertarget{class_h_b_map_adb7096539acd9c192b8291bcea719191}{\index{H\-B\-Map@{H\-B\-Map}!get\-Walls@{get\-Walls}}
 \index{get\-Walls@{get\-Walls}!HBMap@{H\-B\-Map}}

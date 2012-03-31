@@ -98,6 +98,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">Object Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="dynheader">
+Inheritance diagram for Object:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_object.png" usemap="#Object_map" alt=""/>
+  <map id="Object_map" name="Object_map">
+<area href="class_rectangular_object.html" alt="RectangularObject" shape="rect" coords="0,56,117,80"/>
+<area href="class_round_object.html" alt="RoundObject" shape="rect" coords="127,56,244,80"/>
+<area href="class_rectangular_wall.html" alt="RectangularWall" shape="rect" coords="0,112,117,136"/>
+</map>
+ </div></div>
 
 <p><a href="class_object-members.html">List of all members.</a></p>
 <table class="memberdecls">
@@ -107,6 +118,8 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>write_data</b> (<a class="el" href="class_write_packet.html">WritePacket</a> *wp)</td></tr>
 <tr class="memitem:a38c8d7375c607ed8c60c7a21c1dfc21d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a38c8d7375c607ed8c60c7a21c1dfc21d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>read_data</b> (<a class="el" href="class_read_packet.html">ReadPacket</a> *rp)</td></tr>
+<tr class="memitem:af44c19b310b6567cd196a9dcd2f50e46"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_object.html#af44c19b310b6567cd196a9dcd2f50e46">Object</a> (<a class="el" href="class_material.html">Material</a> m)</td></tr>
+<tr class="memitem:a8b4f09c5a0ab51e58a1d1c2da6f33a18"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_material.html">Material</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_object.html#a8b4f09c5a0ab51e58a1d1c2da6f33a18">getMaterial</a> () const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a99f124fb1348ce54003a170411919913"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a99f124fb1348ce54003a170411919913"></a>
@@ -142,15 +155,59 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>player</b></td></tr>
 <tr class="memitem:ab51b11311d5cc603dea0a86960512cd7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab51b11311d5cc603dea0a86960512cd7"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>flag</b></td></tr>
 </table>
+<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="af44c19b310b6567cd196a9dcd2f50e46"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_object.html#af44c19b310b6567cd196a9dcd2f50e46">Object::Object</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_material.html">Material</a>&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Constructs an object with the given material. </p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>The material for the object being created. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a8b4f09c5a0ab51e58a1d1c2da6f33a18"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_material.html">Material</a>&amp; <a class="el" href="class_object.html#a8b4f09c5a0ab51e58a1d1c2da6f33a18">Object::getMaterial</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="section return"><dt>Returns:</dt><dd>the material </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="hack_8h_source.html">hack.h</a></li>
+<li><a class="el" href="_object_8h_source.html">Object.h</a></li>
 <li>object.cpp</li>
 </ul>
 </div><!-- contents -->
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 29 2012 17:42:46 for Holy Balls by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 31 2012 11:36:00 for Holy Balls by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

@@ -10,19 +10,31 @@ class Object
 {
 	private:
 		Material material;
+		unsigned id;
+
+		static unsigned nextid = 0;
 
 	public:
 		/**
 		 * Constructs an object with the given material.
-		 * @param m The material for the object being created.
+		 * @param material The material for the object being created.
 		 */
-		Object(Material m) : material(m) { }
+		Object(Material material) : material(material) {
+			id = (nextid++);
+		}
 
 		/**
 		 * @return the material
 		 */
 		const Material& getMaterial() const {
 			return material;
+		}
+
+		/**
+		 * @return the object's unique ID
+		 */
+		const unsigned& getID() const {
+			return id;
 		}
 };
 
@@ -37,10 +49,10 @@ class RectangularObject : Object
 		 * and with the given material.
 		 * @param a First endpoint of the wall.
 		 * @param b Second endpoint of the wall.
-		 * @param m The material for the object being created.
+		 * @param material The material for the object being created.
 		 */
-		RectangularObject(Vector2D a, Vector2D b, Material m)
-		    : p1(a), p2(b), Object(m) { }
+		RectangularObject(Vector2D a, Vector2D b, Material material)
+		    : p1(a), p2(b), Object(material) { }
 
 		/**
 		 * @return the first endpoint of the object
@@ -78,10 +90,10 @@ class RectangularWall : RectangularObject
 		 * and with the given material.
 		 * @param a First endpoint of the wall.
 		 * @param b Second endpoint of the wall.
-		 * @param m The material for the object being created.
+		 * @param material The material for the object being created.
 		 */
-		RectangularWall(Vector2D a, Vector2D b, Material m, WallType wt = WT_NORMAL) :
-		    wallType(wt) : RectangularObject(a, b, m) { }
+		RectangularWall(Vector2D a, Vector2D b, Material material, WallType wt = WT_NORMAL) :
+		    wallType(wt) : RectangularObject(a, b, material) { }
 
 		/**
 		 * @return the wall type
@@ -93,11 +105,9 @@ class RectangularWall : RectangularObject
 
 class RoundObject : Object
 {
-	private:
+	protected:
 		float radius;
 		float startAngle, endAngle;
-	
-	protected:
 		float center;
 
 	public:
@@ -167,8 +177,8 @@ class RoundWall : RoundObject
 		RoundObject(Material material, Vector2D center, float radius,
 		            float startAngle = 0.0, float endAngle = M_PI_2,
 		            WallType wt = WT_NORMAL) :
-		     wallType(wt), RoundObject(material, center, radius, 
-		                               startAngle, endAngle) { }
+		     wallType(wt),
+		     RoundObject(material, center, radius, startAngle, endAngle) { }
 
 		/**
 		 * @return the wall type
@@ -182,10 +192,13 @@ class MovingRoundObject : RoundObject
 {
 	private:
 		Vector2D velocity;
+		float mass;
+		float heightRatio;
 		
 	public:
-		MovingRoundObject(Material material, Vector2D center, float radius) :
-		    velocity(0.0, 0.0),
+		MovingRoundObject(Material material, Vector2D center, float radius, float mass,
+		                  float heightRatio) :
+		    velocity(0.0, 0.0), mass(mass), heightRatio(heightRatio)
 		    RoundObject(material, center, radius, 0.0, M_PI_2) { }
 
 		/**
@@ -198,7 +211,7 @@ class MovingRoundObject : RoundObject
 		/**
 		 * @param velocity the new velocity for this object
 		 */
-		void setCenter(const Vector2D& velocity) {
+		void setVelocity(const Vector2D& velocity) {
 			this->velocity = velocity;
 		}
 
@@ -207,6 +220,13 @@ class MovingRoundObject : RoundObject
 		 */
 		const Vector2D& getWallType() const {
 			return velocity;
+		}
+
+		/**
+		 * @return the mass
+		 */
+		const float& getMass() const {
+			return mass;
 		}
 };
 
@@ -225,7 +245,7 @@ class Flag : MovingRoundObject
 		 */
 		Flag(Material material, Vector2D center, unsigned teamNumber) :
 		    teamNumber(teamNumber),
-		    MovingRoundObject(material, center, FLAG_RADIUS) { }
+		    MovingRoundObject(material, center, FLAG_RADIUS, FLAG_MASS, FLAG_HEIGHT_RATIO) { }
 		
 		/**
 		 * @return the team number

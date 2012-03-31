@@ -50,6 +50,11 @@ void HBMap::parse(std::string filename) {
             break;
         }
         getline(in, s);
+
+        // get rid of comments
+        int commentStartPos = s.find_first_of('%');
+        s = s.substr(0, commentStartPos);
+
         if (cmd.compare("name") == 0) {
             parseHBMapName(s);
         } else if (cmd.compare("mode") == 0) {
@@ -64,10 +69,6 @@ void HBMap::parse(std::string filename) {
             parseFlag(s);
         } else if (cmd.compare("wall") == 0) {
             parseWall(s);
-        } else {
-			std::string error = "unknown command: ";
-			error.append(cmd);
-            throw ParseException(error);
         }
         cmd = "";
     }

@@ -4,11 +4,18 @@
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{class_world_a927865dd19c6a03b0d3b481ae03775c3}{{\bfseries World} (std\-::string map\-Name=\char`\"{}custom.\-hbm\char`\"{})}\label{class_world_a927865dd19c6a03b0d3b481ae03775c3}
-
+\hyperlink{class_world_a927865dd19c6a03b0d3b481ae03775c3}{World} (std\-::string map\-Name=\char`\"{}custom.\-hbm\char`\"{})
 \item 
 \hypertarget{class_world_af852886a613927fb0e1ca4b33a14f303}{int {\bfseries spawn} (int spawnl, int player, int flag)}\label{class_world_af852886a613927fb0e1ca4b33a14f303}
 
+\item 
+const float \hyperlink{class_world_a1780684e06f60af5a22bd232916860d8}{get\-Min\-X} () const 
+\item 
+const float \hyperlink{class_world_a1e35597fd94c241b9df7a87e9b6a523d}{get\-Max\-X} () const 
+\item 
+const float \hyperlink{class_world_a8ec2876af6bcbe4603c786eb67b040fd}{get\-Min\-Y} () const 
+\item 
+const float \hyperlink{class_world_a402581ee124acda99859c7e67edff1de}{get\-Max\-Y} () const 
 \item 
 \hypertarget{class_world_a587f1be5d3b3237a5c00714ec17e39a9}{void {\bfseries do\-Simulation} (float dt, std\-::vector$<$ std\-::pair$<$ char, \hyperlink{class_vector2_d}{Vector2\-D} $>$ $>$ \&sounds)}\label{class_world_a587f1be5d3b3237a5c00714ec17e39a9}
 
@@ -21,18 +28,6 @@
 \end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
-\item 
-\hypertarget{class_world_a8d19d75e0614c854451eeb80f9a6c7df}{float {\bfseries min\-X}}\label{class_world_a8d19d75e0614c854451eeb80f9a6c7df}
-
-\item 
-\hypertarget{class_world_a1e5b91987fe382083580ddd3889bad85}{float {\bfseries max\-X}}\label{class_world_a1e5b91987fe382083580ddd3889bad85}
-
-\item 
-\hypertarget{class_world_a821cc5789d4eeeb7839ab3057de1da53}{float {\bfseries min\-Y}}\label{class_world_a821cc5789d4eeeb7839ab3057de1da53}
-
-\item 
-\hypertarget{class_world_a7a42a8e4b171bedd927dfa6ae018e96e}{float {\bfseries max\-Y}}\label{class_world_a7a42a8e4b171bedd927dfa6ae018e96e}
-
 \item 
 \hypertarget{class_world_a4ed3ad3160ad21a961c010dc2d10c4cf}{std\-::map$<$ int, std\-::vector\\*
 $<$ \hyperlink{class_spawn}{Spawn} $>$ $>$ {\bfseries spawns}}\label{class_world_a4ed3ad3160ad21a961c010dc2d10c4cf}
@@ -47,6 +42,74 @@ $<$ \hyperlink{class_spawn}{Spawn} $>$ $>$ {\bfseries spawns}}\label{class_world
 \hypertarget{class_world_acaee24cc3256bf5bc39147a326520655}{std\-::vector$<$ \hyperlink{class_obstacle}{Obstacle} $>$ {\bfseries obstacles}}\label{class_world_acaee24cc3256bf5bc39147a326520655}
 
 \end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_world_a927865dd19c6a03b0d3b481ae03775c3}{\index{World@{World}!World@{World}}
+\index{World@{World}!World@{World}}
+\subsubsection[{World}]{\setlength{\rightskip}{0pt plus 5cm}{\bf World\-::\-World} (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{map\-Name = {\ttfamily \char`\"{}custom.hbm\char`\"{}}}
+\end{DoxyParamCaption}
+)}}\label{class_world_a927865dd19c6a03b0d3b481ae03775c3}
+Default constructor for \hyperlink{class_world}{World} given a map name from which to load the world.
+
+
+\begin{DoxyParams}{Parameters}
+{\em map\-Name} & the map file name. Defaults to \char`\"{}custom.\-hbm\char`\"{}. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_world_a1e35597fd94c241b9df7a87e9b6a523d}{\index{World@{World}!get\-Max\-X@{get\-Max\-X}}
+\index{get\-Max\-X@{get\-Max\-X}!World@{World}}
+\subsubsection[{get\-Max\-X}]{\setlength{\rightskip}{0pt plus 5cm}const float {\bf World\-::get\-Max\-X} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_world_a1e35597fd94c241b9df7a87e9b6a523d}
+Returns the maximum x coordinate of the world.
+
+\begin{DoxyReturn}{Returns}
+the maximum x coordinate. 
+\end{DoxyReturn}
+\hypertarget{class_world_a402581ee124acda99859c7e67edff1de}{\index{World@{World}!get\-Max\-Y@{get\-Max\-Y}}
+\index{get\-Max\-Y@{get\-Max\-Y}!World@{World}}
+\subsubsection[{get\-Max\-Y}]{\setlength{\rightskip}{0pt plus 5cm}const float {\bf World\-::get\-Max\-Y} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_world_a402581ee124acda99859c7e67edff1de}
+Returns the maximum y coordinate of the world.
+
+\begin{DoxyReturn}{Returns}
+the maximum y coordinate. 
+\end{DoxyReturn}
+\hypertarget{class_world_a1780684e06f60af5a22bd232916860d8}{\index{World@{World}!get\-Min\-X@{get\-Min\-X}}
+\index{get\-Min\-X@{get\-Min\-X}!World@{World}}
+\subsubsection[{get\-Min\-X}]{\setlength{\rightskip}{0pt plus 5cm}const float {\bf World\-::get\-Min\-X} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_world_a1780684e06f60af5a22bd232916860d8}
+Returns the minimum x coordinate of the world.
+
+\begin{DoxyReturn}{Returns}
+the minimum x coordinate. 
+\end{DoxyReturn}
+\hypertarget{class_world_a8ec2876af6bcbe4603c786eb67b040fd}{\index{World@{World}!get\-Min\-Y@{get\-Min\-Y}}
+\index{get\-Min\-Y@{get\-Min\-Y}!World@{World}}
+\subsubsection[{get\-Min\-Y}]{\setlength{\rightskip}{0pt plus 5cm}const float {\bf World\-::get\-Min\-Y} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_world_a8ec2876af6bcbe4603c786eb67b040fd}
+Returns the minimum y coordinate of the world.
+
+\begin{DoxyReturn}{Returns}
+the minimum y coordinate. 
+\end{DoxyReturn}
 
 
 The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}

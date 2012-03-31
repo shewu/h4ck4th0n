@@ -1,29 +1,87 @@
 \hypertarget{class_color}{\section{Color Class Reference}
 \label{class_color}\index{Color@{Color}}
 }
+Inheritance diagram for Color\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_color}
+\end{center}
+\end{figure}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{class_color_a8e195b730ea2cd93d19012b9297ca368}{{\bfseries Color} (unsigned char x=0, unsigned char y=0, unsigned char z=0)}\label{class_color_a8e195b730ea2cd93d19012b9297ca368}
-
+\hyperlink{class_color_a8e195b730ea2cd93d19012b9297ca368}{Color} (unsigned char x=0, unsigned char y=0, unsigned char z=0)
+\item 
+const unsigned char \hyperlink{class_color_aff41a5c42f799776a3d3e044d5bf3ed5}{get\-R} () const 
+\item 
+const unsigned char \hyperlink{class_color_ab30c8e7a987bbde4c5d126ce261d8188}{get\-G} () const 
+\item 
+const unsigned char \hyperlink{class_color_ad1f832619a22c94493ce7289de503c3f}{get\-B} () const 
 \end{DoxyCompactItemize}
-\subsection*{Public Attributes}
-\begin{DoxyCompactItemize}
-\item 
-\hypertarget{class_color_ab9a9c7134511f9b116a6fcc81a303ba6}{unsigned char {\bfseries r}}\label{class_color_ab9a9c7134511f9b116a6fcc81a303ba6}
 
-\item 
-\hypertarget{class_color_adc506c5063609cacdda2c007da3b7a5f}{unsigned char {\bfseries g}}\label{class_color_adc506c5063609cacdda2c007da3b7a5f}
 
-\item 
-\hypertarget{class_color_a9f00605f7024dcb79342e97fae52c1bd}{unsigned char {\bfseries b}}\label{class_color_a9f00605f7024dcb79342e97fae52c1bd}
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_color_a8e195b730ea2cd93d19012b9297ca368}{\index{Color@{Color}!Color@{Color}}
+\index{Color@{Color}!Color@{Color}}
+\subsubsection[{Color}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Color\-::\-Color} (
+\begin{DoxyParamCaption}
+\item[{unsigned char}]{x = {\ttfamily 0}, }
+\item[{unsigned char}]{y = {\ttfamily 0}, }
+\item[{unsigned char}]{z = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_color_a8e195b730ea2cd93d19012b9297ca368}
+Creates a color, whose default color is black. If any of the arguments are greater than 255 or less than 0, takes the positive result of mod 256.
 
-\item 
-\hypertarget{class_color_a39bb1f3f9a514ac1a581ca27fddebebc}{unsigned char {\bfseries a}}\label{class_color_a39bb1f3f9a514ac1a581ca27fddebebc}
 
-\end{DoxyCompactItemize}
+\begin{DoxyParams}{Parameters}
+{\em x} & the red channel. Defaults to 0. \\
+\hline
+{\em y} & the green channel. Defaults to 0. \\
+\hline
+{\em z} & the blue channel. Defaults to 0. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_color_ad1f832619a22c94493ce7289de503c3f}{\index{Color@{Color}!get\-B@{get\-B}}
+\index{get\-B@{get\-B}!Color@{Color}}
+\subsubsection[{get\-B}]{\setlength{\rightskip}{0pt plus 5cm}const unsigned char {\bf Color\-::get\-B} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_color_ad1f832619a22c94493ce7289de503c3f}
+Gets the blue channel of this \hyperlink{class_color}{Color} instance.
+
+\begin{DoxyReturn}{Returns}
+the value of the blue channel. 
+\end{DoxyReturn}
+\hypertarget{class_color_ab30c8e7a987bbde4c5d126ce261d8188}{\index{Color@{Color}!get\-G@{get\-G}}
+\index{get\-G@{get\-G}!Color@{Color}}
+\subsubsection[{get\-G}]{\setlength{\rightskip}{0pt plus 5cm}const unsigned char {\bf Color\-::get\-G} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_color_ab30c8e7a987bbde4c5d126ce261d8188}
+Gets the green channel of this \hyperlink{class_color}{Color} instance.
+
+\begin{DoxyReturn}{Returns}
+the value of the green channel. 
+\end{DoxyReturn}
+\hypertarget{class_color_aff41a5c42f799776a3d3e044d5bf3ed5}{\index{Color@{Color}!get\-R@{get\-R}}
+\index{get\-R@{get\-R}!Color@{Color}}
+\subsubsection[{get\-R}]{\setlength{\rightskip}{0pt plus 5cm}const unsigned char {\bf Color\-::get\-R} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_color_aff41a5c42f799776a3d3e044d5bf3ed5}
+Gets the red channel of this \hyperlink{class_color}{Color} instance.
+
+\begin{DoxyReturn}{Returns}
+the value of the red channel. 
+\end{DoxyReturn}
 
 
 The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
 \item 
-hack.\-h\end{DoxyCompactItemize}
+Material.\-h\end{DoxyCompactItemize}

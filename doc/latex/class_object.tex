@@ -1,6 +1,12 @@
 \hypertarget{class_object}{\section{Object Class Reference}
 \label{class_object}\index{Object@{Object}}
 }
+Inheritance diagram for Object\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_object}
+\end{center}
+\end{figure}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -9,6 +15,10 @@
 \item 
 \hypertarget{class_object_a38c8d7375c607ed8c60c7a21c1dfc21d}{void {\bfseries read\-\_\-data} (\hyperlink{class_read_packet}{Read\-Packet} $\ast$rp)}\label{class_object_a38c8d7375c607ed8c60c7a21c1dfc21d}
 
+\item 
+\hyperlink{class_object_af44c19b310b6567cd196a9dcd2f50e46}{Object} (\hyperlink{class_material}{Material} m)
+\item 
+const \hyperlink{class_material}{Material} \& \hyperlink{class_object_a8b4f09c5a0ab51e58a1d1c2da6f33a18}{get\-Material} () const 
 \end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -63,7 +73,36 @@
 \end{DoxyCompactItemize}
 
 
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_object_af44c19b310b6567cd196a9dcd2f50e46}{\index{Object@{Object}!Object@{Object}}
+\index{Object@{Object}!Object@{Object}}
+\subsubsection[{Object}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Object\-::\-Object} (
+\begin{DoxyParamCaption}
+\item[{{\bf Material}}]{m}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_object_af44c19b310b6567cd196a9dcd2f50e46}
+Constructs an object with the given material. 
+\begin{DoxyParams}{Parameters}
+{\em m} & The material for the object being created. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_object_a8b4f09c5a0ab51e58a1d1c2da6f33a18}{\index{Object@{Object}!get\-Material@{get\-Material}}
+\index{get\-Material@{get\-Material}!Object@{Object}}
+\subsubsection[{get\-Material}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Material}\& {\bf Object\-::get\-Material} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_object_a8b4f09c5a0ab51e58a1d1c2da6f33a18}
+\begin{DoxyReturn}{Returns}
+the material 
+\end{DoxyReturn}
+
+
 The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
 \item 
 hack.\-h\item 
+Object.\-h\item 
 object.\-cpp\end{DoxyCompactItemize}

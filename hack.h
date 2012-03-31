@@ -124,13 +124,6 @@ class Vector3D
 
 Vector3D operator*(const float, const Vector3D);
 
-class Color
-{
-	public:
-		unsigned char r, g, b, a; // align, dammit
-		Color(unsigned char x = 0, unsigned char y = 0, unsigned char z = 0) : r(x), g(y), b(z), a(0) {} 
-};
-
 class Object
 {
 	public:

@@ -103,10 +103,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a927865dd19c6a03b0d3b481ae03775c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a927865dd19c6a03b0d3b481ae03775c3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>World</b> (std::string mapName=&quot;custom.hbm&quot;)</td></tr>
+<tr class="memitem:a927865dd19c6a03b0d3b481ae03775c3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_world.html#a927865dd19c6a03b0d3b481ae03775c3">World</a> (std::string mapName=&quot;custom.hbm&quot;)</td></tr>
 <tr class="memitem:af852886a613927fb0e1ca4b33a14f303"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af852886a613927fb0e1ca4b33a14f303"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>spawn</b> (int spawnl, int player, int flag)</td></tr>
+<tr class="memitem:a1780684e06f60af5a22bd232916860d8"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_world.html#a1780684e06f60af5a22bd232916860d8">getMinX</a> () const </td></tr>
+<tr class="memitem:a1e35597fd94c241b9df7a87e9b6a523d"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_world.html#a1e35597fd94c241b9df7a87e9b6a523d">getMaxX</a> () const </td></tr>
+<tr class="memitem:a8ec2876af6bcbe4603c786eb67b040fd"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_world.html#a8ec2876af6bcbe4603c786eb67b040fd">getMinY</a> () const </td></tr>
+<tr class="memitem:a402581ee124acda99859c7e67edff1de"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_world.html#a402581ee124acda99859c7e67edff1de">getMaxY</a> () const </td></tr>
 <tr class="memitem:a587f1be5d3b3237a5c00714ec17e39a9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a587f1be5d3b3237a5c00714ec17e39a9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>doSimulation</b> (float dt, std::vector&lt; std::pair&lt; char, <a class="el" href="class_vector2_d.html">Vector2D</a> &gt; &gt; &amp;sounds)</td></tr>
 <tr class="memitem:ada6d1ec2f526a8529a709f5ce6fa2a0a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ada6d1ec2f526a8529a709f5ce6fa2a0a"></a>
@@ -115,14 +118,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>sendObjects</b> (<a c
 void&#160;</td><td class="memItemRight" valign="bottom"><b>receiveObjects</b> (<a class="el" href="class_read_packet.html">ReadPacket</a> *rp, int &amp;obj)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a8d19d75e0614c854451eeb80f9a6c7df"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d19d75e0614c854451eeb80f9a6c7df"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>minX</b></td></tr>
-<tr class="memitem:a1e5b91987fe382083580ddd3889bad85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1e5b91987fe382083580ddd3889bad85"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>maxX</b></td></tr>
-<tr class="memitem:a821cc5789d4eeeb7839ab3057de1da53"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a821cc5789d4eeeb7839ab3057de1da53"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>minY</b></td></tr>
-<tr class="memitem:a7a42a8e4b171bedd927dfa6ae018e96e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7a42a8e4b171bedd927dfa6ae018e96e"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>maxY</b></td></tr>
 <tr class="memitem:a4ed3ad3160ad21a961c010dc2d10c4cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ed3ad3160ad21a961c010dc2d10c4cf"></a>
 std::map&lt; int, std::vector<br class="typebreak"/>
 &lt; <a class="el" href="class_spawn.html">Spawn</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>spawns</b></td></tr>
@@ -133,6 +128,104 @@ std::vector&lt; <a class="el" href="class_light.html">Light</a> &gt;&#160;</td><
 <tr class="memitem:acaee24cc3256bf5bc39147a326520655"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acaee24cc3256bf5bc39147a326520655"></a>
 std::vector&lt; <a class="el" href="class_obstacle.html">Obstacle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>obstacles</b></td></tr>
 </table>
+<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a927865dd19c6a03b0d3b481ae03775c3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_world.html#a927865dd19c6a03b0d3b481ae03775c3">World::World</a> </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>mapName</em> = <code>&quot;custom.hbm&quot;</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Default constructor for <a class="el" href="class_world.html">World</a> given a map name from which to load the world.</p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mapName</td><td>the map file name. Defaults to "custom.hbm". </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a1e35597fd94c241b9df7a87e9b6a523d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float <a class="el" href="class_world.html#a1e35597fd94c241b9df7a87e9b6a523d">World::getMaxX</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the maximum x coordinate of the world.</p>
+<dl class="section return"><dt>Returns:</dt><dd>the maximum x coordinate. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a402581ee124acda99859c7e67edff1de"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float <a class="el" href="class_world.html#a402581ee124acda99859c7e67edff1de">World::getMaxY</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the maximum y coordinate of the world.</p>
+<dl class="section return"><dt>Returns:</dt><dd>the maximum y coordinate. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a1780684e06f60af5a22bd232916860d8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float <a class="el" href="class_world.html#a1780684e06f60af5a22bd232916860d8">World::getMinX</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the minimum x coordinate of the world.</p>
+<dl class="section return"><dt>Returns:</dt><dd>the minimum x coordinate. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a8ec2876af6bcbe4603c786eb67b040fd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float <a class="el" href="class_world.html#a8ec2876af6bcbe4603c786eb67b040fd">World::getMinY</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the minimum y coordinate of the world.</p>
+<dl class="section return"><dt>Returns:</dt><dd>the minimum y coordinate. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="world_8h_source.html">world.h</a></li>
 <li>simulate.cpp</li>
@@ -142,7 +235,7 @@ std::vector&lt; <a class="el" href="class_obstacle.html">Obstacle</a> &gt;&#160;
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 29 2012 17:42:46 for Holy Balls by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 31 2012 11:36:01 for Holy Balls by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

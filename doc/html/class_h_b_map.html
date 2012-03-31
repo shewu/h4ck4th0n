@@ -109,7 +109,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5935af936a849f70c66b0830d517a4c9"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_h_b_map.html#a5935af936a849f70c66b0830d517a4c9">getHeight</a> ()</td></tr>
 <tr class="memitem:a306c703d78a5be354f73186eb9f0cf4c"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_h_b_map.html#a306c703d78a5be354f73186eb9f0cf4c">getName</a> ()</td></tr>
 <tr class="memitem:a86c9120ba5dea97040c019e99daa0226"><td class="memItemLeft" align="right" valign="top">std::vector&lt; GameMode &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_h_b_map.html#a86c9120ba5dea97040c019e99daa0226">getGameModes</a> ()</td></tr>
-<tr class="memitem:a17d50199fdc09f1c8fac6b49d2989cbf"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="struct_team.html">Team</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_h_b_map.html#a17d50199fdc09f1c8fac6b49d2989cbf">getTeams</a> ()</td></tr>
+<tr class="memitem:a17d50199fdc09f1c8fac6b49d2989cbf"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_team.html">Team</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_h_b_map.html#a17d50199fdc09f1c8fac6b49d2989cbf">getTeams</a> ()</td></tr>
 <tr class="memitem:abf3a3b5a59ba22a08d51ef94cc44794d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_obstacle.html">Obstacle</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_h_b_map.html#abf3a3b5a59ba22a08d51ef94cc44794d">getSpawnsForTeam</a> (unsigned team)</td></tr>
 <tr class="memitem:a841fd545b388d50df1755f788dee9a03"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_spawn.html">Spawn</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_h_b_map.html#a841fd545b388d50df1755f788dee9a03">getFlagsForTeam</a> (unsigned team)</td></tr>
 <tr class="memitem:adb7096539acd9c192b8291bcea719191"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_obstacle.html">Obstacle</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_h_b_map.html#adb7096539acd9c192b8291bcea719191">getWalls</a> ()</td></tr>
@@ -174,7 +174,7 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the flags for a given team.</p>
+<p>Gets the flags for a given team. If an invalid team number is requested, returns the spawns for the first team.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">team</td><td>the team number for which to get flags.</td></tr>
@@ -253,7 +253,7 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Gets the spawns for a given team.</p>
+<p>Gets the spawns for a given team. If an invalid team number is requested, returns the spawns for the first team.</p>
 <dl class="params"><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">team</td><td>the team number for which to get spawns.</td></tr>
@@ -269,7 +269,7 @@ Static Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="struct_team.html">Team</a>&gt;&amp; <a class="el" href="class_h_b_map.html#a17d50199fdc09f1c8fac6b49d2989cbf">HBMap::getTeams</a> </td>
+          <td class="memname">std::vector&lt;<a class="el" href="class_team.html">Team</a>&gt;&amp; <a class="el" href="class_h_b_map.html#a17d50199fdc09f1c8fac6b49d2989cbf">HBMap::getTeams</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td><code> [inline]</code></td>
@@ -278,7 +278,7 @@ Static Public Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Gets the team list and properties of the map.</p>
-<dl class="section return"><dt>Returns:</dt><dd>the team list containing <a class="el" href="struct_team.html">Team</a> objects in no particular order. </dd></dl>
+<dl class="section return"><dt>Returns:</dt><dd>the team list containing <a class="el" href="class_team.html">Team</a> objects in no particular order. </dd></dl>
 
 </div>
 </div>
@@ -341,7 +341,7 @@ Static Public Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 29 2012 17:42:46 for Holy Balls by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 31 2012 11:35:59 for Holy Balls by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

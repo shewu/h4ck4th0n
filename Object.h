@@ -144,7 +144,7 @@ class RoundObject : Object
 		const float& getEndAngle() const {
 			return endAngle;
 		}
-}
+};
 
 class RoundWall : RoundObject
 {
@@ -168,7 +168,7 @@ class RoundWall : RoundObject
 		            float startAngle = 0.0, float endAngle = M_PI_2,
 		            WallType wt = WT_NORMAL) :
 		     wallType(wt), RoundObject(material, center, radius, 
-		                               startAngle, endAngle)
+		                               startAngle, endAngle) { }
 
 		/**
 		 * @return the wall type
@@ -176,6 +176,69 @@ class RoundWall : RoundObject
 		const WallType& getWallType() const {
 			return wallType;
 		}
-}
+};
+
+class MovingRoundObject : RoundObject
+{
+	private:
+		Vector2D velocity;
+		
+	public:
+		MovingRoundObject(Material material, Vector2D center, float radius) :
+		    velocity(0.0, 0.0),
+		    RoundObject(material, center, radius, 0.0, M_PI_2) { }
+
+		/**
+		 * @param center the new center for this object
+		 */
+		void setCenter(const Vector2D& center) {
+			this->center = center;
+		}
+
+		/**
+		 * @param velocity the new velocity for this object
+		 */
+		void setCenter(const Vector2D& velocity) {
+			this->velocity = velocity;
+		}
+
+		/**
+		 * @return the velocity
+		 */
+		const Vector2D& getWallType() const {
+			return velocity;
+		}
+};
+
+class Flag : MovingRoundObject
+{
+	private:
+		unsigned teamNumber;
+
+	public:
+
+		/**
+		 * Constructs a flag with the given material, center, and team.
+		 * @param material Material to use for the flag.
+		 * @param center The center of the flag.
+		 * @param teamNumber The team number for this flag.
+		 */
+		Flag(Material material, Vector2D center, unsigned teamNumber) :
+		    teamNumber(teamNumber),
+		    MovingRoundObject(material, center, FLAG_RADIUS) { }
+		
+		/**
+		 * @return the team number
+		 */
+		const unsigned& getTeamNumber() const {
+			return teamNumber;
+		}
+};
+
+class Player : MovingRoundObject
+{
+	private:
+		
+};
 
 #endif

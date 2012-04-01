@@ -6,6 +6,7 @@
 
 #include "hack.h"
 #include "HBMap.h"
+#include "Light.h"
 
 class World
 {

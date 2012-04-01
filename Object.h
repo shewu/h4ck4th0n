@@ -33,7 +33,7 @@ class Object
 		/**
 		 * @return the object's unique ID
 		 */
-		const unsigned& getID() const {
+		unsigned getID() {
 			return id;
 		}
 };
@@ -98,7 +98,7 @@ class RectangularWall : RectangularObject
 		/**
 		 * @return the wall type
 		 */
-		const WallType& getWallType() const {
+		WallType getWallType() {
 			return wallType;
 		}
 };
@@ -137,21 +137,21 @@ class RoundObject : Object
 		/**
 		 * @return the radius
 		 */
-		const float& getRadius() const {
+		float getRadius() {
 			return radius;
 		}
 
 		/**
 		 * @return the starting angle
 		 */
-		const float& getStartAngle() const {
+		float getStartAngle() {
 			return startAngle;
 		}
 
 		/**
 		 * @return the ending angle
 		 */
-		const float& getEndAngle() const {
+		float getEndAngle() {
 			return endAngle;
 		}
 };
@@ -183,7 +183,7 @@ class RoundWall : RoundObject
 		/**
 		 * @return the wall type
 		 */
-		const WallType& getWallType() const {
+		WallType getWallType() {
 			return wallType;
 		}
 };
@@ -225,7 +225,7 @@ class MovingRoundObject : RoundObject
 		/**
 		 * @return the mass
 		 */
-		const float& getMass() const {
+		float getMass() {
 			return mass;
 		}
 };
@@ -250,7 +250,7 @@ class Flag : MovingRoundObject
 		/**
 		 * @return the team number
 		 */
-		const unsigned& getTeamNumber() const {
+		unsigned getTeamNumber() {
 			return teamNumber;
 		}
 };

@@ -5,6 +5,7 @@
 #include "server.h"
 
 #include "hack.h"
+#include "world.h"
 
 class Player {
     public:

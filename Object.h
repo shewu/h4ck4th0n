@@ -7,6 +7,33 @@
 #include "hack.h"
 #include "packet.h"
 
+/*
+class Object
+{
+	public:
+		Vector2D p;
+		Vector2D v;
+		float mass;
+		float rad;
+		Color color;
+		float hrat;
+		int id;
+		
+		bool dead;
+		bool stopped;
+		int spawnl;
+		int spawny;
+		double time_until_spawn;
+		int nattached;
+		int attachedTo;
+		int player;
+		int flag;
+		
+		void write_data(WritePacket* wp);
+		void read_data(ReadPacket* rp);
+};
+*/
+
 class Object
 {
 	private:
@@ -21,7 +48,7 @@ class Object
 		 * @param material The material for the object being created.
 		 */
 		Object(Material material) : material(material) {
-			id = (nextid++);
+			id = (Object::nextid++);
 		}
 
 		/**
@@ -34,7 +61,7 @@ class Object
 		/**
 		 * @return the object's unique ID
 		 */
-		unsigned getID() {
+		unsigned getID() const {
 			return id;
 		}
 
@@ -80,6 +107,10 @@ enum WallType
     WT_BOUNCY,
 
     NUM_WALLTYPES // always the last mode
+};
+
+const std::string wallTypeStrings[] = {
+    "normal", "deadly", "bouncy"
 };
 
 class RectangularWall : RectangularObject
@@ -140,21 +171,33 @@ class RoundObject : Object
 		/**
 		 * @return the radius
 		 */
+<<<<<<< HEAD
 		float getRadius() const {
+=======
+		const float getRadius() const {
+>>>>>>> 77db2e2f35057d2ffaacfa15a53ca65dec288bab
 			return radius;
 		}
 
 		/**
 		 * @return the starting angle
 		 */
+<<<<<<< HEAD
 		float getStartAngle() const {
+=======
+		const float getStartAngle() const {
+>>>>>>> 77db2e2f35057d2ffaacfa15a53ca65dec288bab
 			return startAngle;
 		}
 
 		/**
 		 * @return the ending angle
 		 */
+<<<<<<< HEAD
 		float getEndAngle() const {
+=======
+		const float getEndAngle() const {
+>>>>>>> 77db2e2f35057d2ffaacfa15a53ca65dec288bab
 			return endAngle;
 		}
 };
@@ -186,7 +229,11 @@ class RoundWall : RoundObject
 		/**
 		 * @return the wall type
 		 */
+<<<<<<< HEAD
 		WallType getWallType() const {
+=======
+		const WallType getWallType() const {
+>>>>>>> 77db2e2f35057d2ffaacfa15a53ca65dec288bab
 			return wallType;
 		}
 };

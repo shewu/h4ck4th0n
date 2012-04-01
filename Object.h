@@ -327,6 +327,7 @@ class Player : MovingRoundObject
 {
 	private:
 		PlayerState playerState;
+		unsigned teamNumber;
 
 		// PS_SPAWNING
 		float timeUntilSpawn;
@@ -342,8 +343,8 @@ class Player : MovingRoundObject
 		 * @param teamNumber the number of this player's team.
 		 */
 		Player(Material material, unsigned teamNumber) :
-		    playerState(PS_DEAD),
-		    MovingRoundObject(material, Vector2D(), teamNumber) { }
+		    playerState(PS_DEAD), teamNumber(teamNumber),
+		    MovingRoundObject(material, Vector2D(), PLAYER_RADIUS, PLAYER_MASS, PLAYER_HEIGHT_RATIO) { }
 
 		/**
 		 * Gets the player state.
@@ -351,6 +352,14 @@ class Player : MovingRoundObject
 		 */
 		PlayerState getPlayerState() const {
 			return playerState;
+		}
+
+		/**
+		 * Gets the team number.
+		 * @return the team number.
+		 */
+		PlayerState getTeamNumber() const {
+			return teamNumber;
 		}
 
 		/**

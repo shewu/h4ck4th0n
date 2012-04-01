@@ -69,28 +69,28 @@ class SpawnDescriptor {
 		/**
 		 * @returns the minimum X-coordinate of the SpawnDescriptor's rectangle.
 		 */
-		const float& getMinX() const {
+		const float getMinX() const {
 			return minX;
 		}
 
 		/**
 		 * @returns the maximum X-coordinate of the SpawnDescriptor's rectangle.
 		 */
-		const float& getMaxX() const {
+		const float getMaxX() const {
 			return maxX;
 		}
 
 		/**
 		 * @returns the minimum Y-coordinate of the SpawnDescriptor's rectangle.
 		 */
-		const float& getMinY() const {
+		const float getMinY() const {
 			return minY;
 		}
 
 		/**
 		 * @returns the maximum Y-coordinate of the SpawnDescriptor's rectangle.
 		 */
-		const float& getMaxY() const {
+		const float getMaxY() const {
 			return maxY;
 		}
 };
@@ -125,7 +125,7 @@ class TeamDescriptor {
          *
          * @return the team number.
          */
-        unsigned getTeamNumber() {
+        const unsigned getTeamNumber() const {
             return teamNumber;
         }
 
@@ -134,7 +134,7 @@ class TeamDescriptor {
          *
          * @return the minimum number of players.
          */
-        unsigned getMinPlayers() {
+        const unsigned getMinPlayers() const {
             return minPlayers;
         }
 
@@ -143,7 +143,7 @@ class TeamDescriptor {
          *
          * @return the maximum number of players.
          */
-        unsigned getMaxPlayers() {
+        const unsigned getMaxPlayers() const {
             return maxPlayers;
         }
 

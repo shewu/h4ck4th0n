@@ -61,10 +61,10 @@ class HBMap {
 		/**
 		 * Gets the team list and properties of the map.
 		 *
-		 * @return the team list containing Team objects in no particular
+		 * @return the team list containing TeamDescriptor objects in no particular
 		 * order.
 		 */
-        std::vector<Team>& getTeams() {
+        std::vector<TeamDescriptor>& getTeamDescriptors() {
             return teams;
         }
 
@@ -122,14 +122,14 @@ class HBMap {
         void parseWall(std::string& s);
 
         std::ifstream in;
+
         std::string mapName;
         unsigned width, height;
-        std::vector<GameMode> modes;
-        std::vector<Team> teams;
-        std::vector<Obstacle> spawns[HBMap::MAX_TEAMS];
-        std::vector<Spawn> flags[HBMap::MAX_TEAMS];
-        std::vector<Obstacle> walls;
+
+		std::set<GameMode> modes;
+		std::vector<TeamDescriptor> teams;
+		std::vector<RectangularWall> walls;
+		std::vector<Flag> flags;
 };
 
 #endif
-

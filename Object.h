@@ -6,6 +6,33 @@
 #include "Material.h"
 #include "hack.h"
 
+/*
+class Object
+{
+	public:
+		Vector2D p;
+		Vector2D v;
+		float mass;
+		float rad;
+		Color color;
+		float hrat;
+		int id;
+		
+		bool dead;
+		bool stopped;
+		int spawnl;
+		int spawny;
+		double time_until_spawn;
+		int nattached;
+		int attachedTo;
+		int player;
+		int flag;
+		
+		void write_data(WritePacket* wp);
+		void read_data(ReadPacket* rp);
+};
+*/
+
 class Object
 {
 	private:
@@ -20,7 +47,7 @@ class Object
 		 * @param material The material for the object being created.
 		 */
 		Object(Material material) : material(material) {
-			id = (nextid++);
+			id = (Object::nextid++);
 		}
 
 		/**
@@ -33,9 +60,12 @@ class Object
 		/**
 		 * @return the object's unique ID
 		 */
-		const unsigned& getID() const {
+		const unsigned getID() const {
 			return id;
 		}
+
+        void write_data(WritePacket* wp);
+        void read_data(ReadPacket* rp);
 };
 
 class RectangularObject : Object
@@ -141,21 +171,21 @@ class RoundObject : Object
 		/**
 		 * @return the radius
 		 */
-		const float& getRadius() const {
+		const float getRadius() const {
 			return radius;
 		}
 
 		/**
 		 * @return the starting angle
 		 */
-		const float& getStartAngle() const {
+		const float getStartAngle() const {
 			return startAngle;
 		}
 
 		/**
 		 * @return the ending angle
 		 */
-		const float& getEndAngle() const {
+		const float getEndAngle() const {
 			return endAngle;
 		}
 };
@@ -187,7 +217,7 @@ class RoundWall : RoundObject
 		/**
 		 * @return the wall type
 		 */
-		const WallType& getWallType() const {
+		const WallType getWallType() const {
 			return wallType;
 		}
 };

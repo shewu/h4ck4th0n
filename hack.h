@@ -147,31 +147,6 @@ class TeamDescriptor {
 		}
 };
 
-class Object
-{
-	public:
-		Vector2D p;
-		Vector2D v;
-		float mass;
-		float rad;
-		Color color;
-		float hrat;
-		int id;
-		
-		bool dead;
-		bool stopped;
-		int spawnl;
-		int spawny;
-		double time_until_spawn;
-		int nattached;
-		int attachedTo;
-		int player;
-		int flag;
-		
-		void write_data(WritePacket* wp);
-		void read_data(ReadPacket* rp);
-};
-
 class Spawn {
 	public:
 		float xmin, xmax, ymin, ymax;

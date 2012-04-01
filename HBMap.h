@@ -46,7 +46,7 @@ class HBMap {
 		 *
 		 * @return the name.
 		 */
-        std::string& getName() const {
+        const std::string& getName() const {
             return mapName;
         }
 
@@ -55,7 +55,7 @@ class HBMap {
 		 *
 		 * @return the game modes in no particular order.
 		 */
-        const std::vector<GameMode>& getGameModes() const {
+        const std::set<GameMode>& getGameModes() const {
             return modes;
         }
 
@@ -104,7 +104,7 @@ class HBMap {
 		 *
 		 * @return a list of walls.
 		 */
-        const std::vector<Obstacle>& getWalls() const {
+        const std::vector<RectangularWall>& getWalls() const {
             return walls;
         }
 

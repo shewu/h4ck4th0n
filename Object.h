@@ -70,7 +70,7 @@ class Object
 
 unsigned Object::nextId = 0;
 
-class RectangularObject : Object
+class RectangularObject : public Object
 {
 	private:
 		Vector2D p1, p2;
@@ -84,7 +84,7 @@ class RectangularObject : Object
 		 * @param material The material for the object being created.
 		 */
 		RectangularObject(Vector2D a, Vector2D b, Material material)
-		    : p1(a), p2(b), Object(material) { }
+		    : Object(material), p1(a), p2(b) { }
 
 		/**
 		 * @return the first endpoint of the object
@@ -115,7 +115,7 @@ const std::string wallTypeStrings[] = {
     "normal", "deadly", "bouncy"
 };
 
-class RectangularWall : RectangularObject
+class RectangularWall : public RectangularObject
 {
 	private:
 		WallType wallType;
@@ -129,7 +129,7 @@ class RectangularWall : RectangularObject
 		 * @param material The material for the object being created.
 		 */
 		RectangularWall(Vector2D a, Vector2D b, Material material, WallType wt = WT_NORMAL) :
-		    wallType(wt) : RectangularObject(a, b, material) { }
+		    RectangularObject(a, b, material), wallType(wt) { }
 
 		/**
 		 * @return the wall type
@@ -139,12 +139,12 @@ class RectangularWall : RectangularObject
 		}
 };
 
-class RoundObject : Object
+class RoundObject : public Object
 {
 	protected:
+		Vector2D center;
 		float radius;
 		float startAngle, endAngle;
-		float center;
 
 	public:
 		/**
@@ -158,10 +158,10 @@ class RoundObject : Object
 		 * @param startAngle The starting angle for the arc.
 		 * @param endAngle The ending angle for the arc.
 		 */
-		RoundObject(Material material, Vector2D center, float radius,
+		RoundObject(Material material, Vector2D& center, float radius,
 		            float startAngle = 0.0, float endAngle = M_PI_2) :
-		    center(center), radius(radius), startAngle(startAngle), endAngle(endAngle),
-		    Object(material) { }
+		    Object(material), center(center), radius(radius), startAngle(startAngle), 
+            endAngle(endAngle) { }
 
 		/**
 		 * @return the center
@@ -192,7 +192,7 @@ class RoundObject : Object
 		}
 };
 
-class RoundWall : RoundObject
+class RoundWall : public RoundObject
 {
 	private:
 		WallType wallType;
@@ -210,11 +210,10 @@ class RoundWall : RoundObject
 		 * @param endAngle The ending angle for the arc.
 		 * @param wt The wall type for this wall.
 		 */
-		RoundObject(Material material, Vector2D center, float radius,
+		RoundWall(Material material, Vector2D center, float radius,
 		            float startAngle = 0.0, float endAngle = M_PI_2,
-		            WallType wt = WT_NORMAL) :
-		     wallType(wt),
-		     RoundObject(material, center, radius, startAngle, endAngle) { }
+		            WallType wt = WT_NORMAL) : 
+            RoundObject(material, center, radius, startAngle, endAngle), wallType(wt) { }
 
 		/**
 		 * @return the wall type
@@ -224,7 +223,7 @@ class RoundWall : RoundObject
 		}
 };
 
-class MovingRoundObject : RoundObject
+class MovingRoundObject : public RoundObject
 {
 	private:
 		Vector2D velocity;
@@ -234,8 +233,8 @@ class MovingRoundObject : RoundObject
 	public:
 		MovingRoundObject(Material material, Vector2D center, float radius, float mass,
 		                  float heightRatio) :
-		    velocity(0.0, 0.0), mass(mass), heightRatio(heightRatio)
-		    RoundObject(material, center, radius, 0.0, M_PI_2) { }
+		    RoundObject(material, center, radius, 0.0, M_PI_2), velocity(0.0, 0.0), mass(mass), 
+            heightRatio(heightRatio) { }
 
 		/**
 		 * @param center the new center for this object
@@ -261,12 +260,12 @@ class MovingRoundObject : RoundObject
 		/**
 		 * @return the mass
 		 */
-		float getMass() {
+		float getMass() const {
 			return mass;
 		}
 };
 
-class Flag : MovingRoundObject
+class Flag : public MovingRoundObject
 {
 	private:
 		unsigned teamNumber;
@@ -280,8 +279,8 @@ class Flag : MovingRoundObject
 		 * @param teamNumber The team number for this flag.
 		 */
 		Flag(Material material, Vector2D center, unsigned teamNumber) :
-		    teamNumber(teamNumber),
-		    MovingRoundObject(material, center, FLAG_RADIUS, FLAG_MASS, FLAG_HEIGHT_RATIO) { }
+		    MovingRoundObject(material, center, FLAG_RADIUS, FLAG_MASS, FLAG_HEIGHT_RATIO),
+            teamNumber(teamNumber) { }
 		
 		/**
 		 * @return the team number
@@ -295,10 +294,12 @@ enum PlayerState {
 	PS_SPAWNING,
 	PS_ALIVE,
 	PS_SHRINKING,
-	PS_DEAD
+	PS_DEAD,
+
+    PS_NUM_STATES
 };
 
-class Player : MovingRoundObject
+class Player : public MovingRoundObject
 {
 	private:
 		PlayerState playerState;
@@ -318,3 +319,4 @@ class Player : MovingRoundObject
 };
 
 #endif
+

@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "hack.h"
+#include "Object.h"
 #include "HBMap.h"
 #include "Light.h"
 
@@ -30,7 +31,7 @@ class World
          *
          * @return the minimum x coordinate.
          */
-        const float getMinX() const {
+        float getMinX() const {
             return worldMap.getWidth()/-2.0f;
         }
 
@@ -39,7 +40,7 @@ class World
          *
          * @return the maximum x coordinate.
          */
-        const float getMaxX() const {
+        float getMaxX() const {
             return worldMap.getWidth()/2.0f;
         }
 
@@ -48,7 +49,7 @@ class World
          *
          * @return the minimum y coordinate.
          */
-        const float getMinY() const {
+        float getMinY() const {
             return worldMap.getHeight()/-2.0f;
         }
 
@@ -57,7 +58,7 @@ class World
          *
          * @return the maximum y coordinate.
          */
-        const float getMaxY() const {
+        float getMaxY() const {
             return worldMap.getHeight()/2.0f;
         }
 		

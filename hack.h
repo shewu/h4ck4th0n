@@ -147,27 +147,5 @@ class TeamDescriptor {
 		}
 };
 
-class Spawn {
-	public:
-		float xmin, xmax, ymin, ymax;
-		float mass;
-		float rad;
-		Color color;
-		float hrat;
-        Spawn(float xmin, float xmax, float ymin, float ymax, Color color, float hrat = 1, float mass = 1, float rad = 1) : xmin(xmin), xmax(xmax), ymin(ymin), ymax(ymax), mass(mass), rad(rad), color(color), hrat(hrat) { }
-};
-
-class Obstacle
-{
-	public:
-		Vector2D p1, p2;
-		Color color;
-		bool sticky;
-        WallType wallType;
-		int flag;
-        Obstacle(Vector2D a, Vector2D b, Color c, WallType d, int e) 
-            : p1(a), p2(b), color(c), wallType(d), flag(e) { }
-};
-
 #endif
 

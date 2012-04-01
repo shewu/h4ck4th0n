@@ -289,6 +289,9 @@ class Flag : public MovingRoundObject
 		unsigned teamNumber;
 
 	public:
+        static float FLAG_RADIUS;
+        static float FLAG_MASS;
+        static float FLAG_HEIGHT_RATIO;
 
 		/**
 		 * Constructs a flag with the given material, center, and team.
@@ -314,6 +317,10 @@ class Flag : public MovingRoundObject
 		 */
 		static Flag readFromPacket(ReadPacket *rp);
 };
+
+float Flag::FLAG_RADIUS = 1.0f;
+float Flag::FLAG_MASS = 1.2f;
+float Flag::FLAG_HEIGHT_RATIO = 2.0f;
 
 enum PlayerState {
 	PS_SPAWNING,

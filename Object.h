@@ -335,14 +335,15 @@ enum PlayerState {
 class Player : public MovingRoundObject
 {
 	private:
+		PlayerState playerState;
+		unsigned teamNumber;
+
 		// PS_SPAWNING
 		float timeUntilSpawn;
 
 		// PS_SHRINKING
 		Player *parent;
 		int numChildren;
-
-		PlayerState playerState;
 
 	public:
 		/**
@@ -351,8 +352,8 @@ class Player : public MovingRoundObject
 		 * @param teamNumber the number of this player's team.
 		 */
 		Player(Material material, unsigned teamNumber) :
-		    MovingRoundObject(material, Vector2D(), teamNumber),
-            playerState(PS_DEAD) { }
+		    MovingRoundObject(material, Vector2D(), PLAYER_RADIUS, PLAYER_MASS, PLAYER_HEIGHT_RATIO)
+            playerState(PS_DEAD), teamNumber(teamNumber) { }
 
 		/**
 		 * Gets the player state.
@@ -360,6 +361,14 @@ class Player : public MovingRoundObject
 		 */
 		PlayerState getPlayerState() const {
 			return playerState;
+		}
+
+		/**
+		 * Gets the team number.
+		 * @return the team number.
+		 */
+		PlayerState getTeamNumber() const {
+			return teamNumber;
 		}
 
 		/**

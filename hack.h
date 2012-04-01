@@ -1,6 +1,8 @@
 #ifndef HACK_H
 #define HACK_H
 
+#include <vector>
+
 #include "constants.h"
 #include "socket.h"
 #include "packet.h"
@@ -151,7 +153,7 @@ class TeamDescriptor {
          * Gets the spawn descriptors for this team.
          * @return the spawn descriptors.
          */
-        const vector<SpawnDescriptor>& getSpawnDescriptors() const {
+        const std::vector<SpawnDescriptor>& getSpawnDescriptors() const {
         	return spawns;
 		}
 };

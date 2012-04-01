@@ -140,21 +140,21 @@ class RoundObject : Object
 		/**
 		 * @return the radius
 		 */
-		float getRadius() {
+		float getRadius() const {
 			return radius;
 		}
 
 		/**
 		 * @return the starting angle
 		 */
-		float getStartAngle() {
+		float getStartAngle() const {
 			return startAngle;
 		}
 
 		/**
 		 * @return the ending angle
 		 */
-		float getEndAngle() {
+		float getEndAngle() const {
 			return endAngle;
 		}
 };
@@ -186,7 +186,7 @@ class RoundWall : RoundObject
 		/**
 		 * @return the wall type
 		 */
-		WallType getWallType() {
+		WallType getWallType() const {
 			return wallType;
 		}
 };
@@ -228,7 +228,7 @@ class MovingRoundObject : RoundObject
 		/**
 		 * @return the mass
 		 */
-		float getMass() {
+		float getMass() const {
 			return mass;
 		}
 };
@@ -253,7 +253,7 @@ class Flag : MovingRoundObject
 		/**
 		 * @return the team number
 		 */
-		unsigned getTeamNumber() {
+		unsigned getTeamNumber() const {
 			return teamNumber;
 		}
 };
@@ -270,18 +270,58 @@ class Player : MovingRoundObject
 	private:
 		PlayerState playerState;
 
-		unsigned team;
-
 		// PS_SPAWNING
 		float timeUntilSpawn;
-
-		// PS_ALIVE
 
 		// PS_SHRINKING
 		Player *parent;
 		int numChildren;
 
-		// PS_DEAD
+	public:
+		/**
+		 * Creates a Player with the given material and team.
+		 * @param material The material for this player.
+		 * @param teamNumber the number of this player's team.
+		 */
+		Player(Material material, unsigned teamNumber) :
+		    playerState(PS_DEAD),
+		    MovingRoundObject(material, Vector2D(), teamNumber) { }
+
+		/**
+		 * Gets the player state.
+		 * @return the player state.
+		 */
+		PlayerState getPlayerState() const {
+			return playerState;
+		}
+
+		/**
+		 * Gets the time until spawn. Should only be called if the
+		 * playerState is PS_SPAWNING.
+		 * @return the time until spawn
+		 */
+		float getTimeUntilSpawn() const {
+			return timeUntilSpawn;
+		}
+
+		/**
+		 * Gets the parent for shrinking, or NULL if there is no
+		 * parent. Should only be called if the playerState is PS_SHRINKING
+		 * @return a pointer to the parent Player
+		 */
+		Player *getShrinkingParent() const {
+			return parent;
+		}
+
+		/**
+		 * Gets the time until spawn. Should only be called if the
+		 * playerState is PS_SPAWNING.
+		 * @return the time until spawn
+		 */
+		int getNumShrinkingChildren() const {
+			return numChildren;
+		}
+
 };
 
 #endif

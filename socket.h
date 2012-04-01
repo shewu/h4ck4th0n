@@ -102,7 +102,7 @@ class Socket
 };
 
 class SocketConnection {
-	private:
+	public:
         int socket;
 		struct sockaddr *addr;
 		socklen_t addrlen;

@@ -1,6 +1,7 @@
-#include "hack.h"
 #include <cstdio>
 #include <cmath>
+
+#include "Vector.h"
 
 Vector2D Vector2D::operator+(const Vector2D& v) const
 {

@@ -40,7 +40,7 @@ class Object
 		Material material;
 		unsigned id;
 
-		static unsigned nextid = 0;
+		static unsigned nextId;
 
 	public:
 		/**
@@ -48,7 +48,7 @@ class Object
 		 * @param material The material for the object being created.
 		 */
 		Object(Material material) : material(material) {
-			id = (Object::nextid++);
+			id = (Object::nextId++);
 		}
 
 		/**
@@ -61,21 +61,14 @@ class Object
 		/**
 		 * @return the object's unique ID
 		 */
-<<<<<<< HEAD
-		const unsigned getID() const {
-			return id;
-		}
-
-        void write_data(WritePacket* wp);
-        void read_data(ReadPacket* rp);
-=======
-		unsigned getID() {
+		unsigned getID() const {
 			return id;
 		}
 
 		virtual void writeToPacket(WritePacket *wp);
->>>>>>> dd923357b7f438495ff9b091abdd9c51e9d56cb6
 };
+
+unsigned Object::nextId = 0;
 
 class RectangularObject : Object
 {

@@ -28,7 +28,7 @@ class HBMap {
 		 *
 		 * @return the width.
 		 */
-        unsigned getWidth() {
+        const unsigned getWidth() const {
             return width;
         }
 
@@ -37,7 +37,7 @@ class HBMap {
 		 *
 		 * @return the height.
 		 */
-        unsigned getHeight() {
+        const unsigned getHeight() const {
             return height;
         }
 
@@ -46,7 +46,7 @@ class HBMap {
 		 *
 		 * @return the name.
 		 */
-        std::string& getName() {
+        std::string& getName() const {
             return mapName;
         }
 
@@ -55,7 +55,7 @@ class HBMap {
 		 *
 		 * @return the game modes in no particular order.
 		 */
-        std::vector<GameMode>& getGameModes() {
+        const std::vector<GameMode>& getGameModes() const {
             return modes;
         }
 
@@ -65,7 +65,7 @@ class HBMap {
 		 * @return the team list containing TeamDescriptor objects in no particular
 		 * order.
 		 */
-        std::vector<TeamDescriptor>& getTeamDescriptors() {
+        const std::vector<TeamDescriptor>& getTeamDescriptors() const {
             return teams;
         }
 
@@ -77,7 +77,7 @@ class HBMap {
 		 *
 		 * @return the spawns for team.
 		 */
-        std::vector<Obstacle>& getSpawnsForTeam(unsigned team) {
+        const std::vector<Obstacle>& getSpawnsForTeam(unsigned team) const {
             if (team >= teams.size()) {
                 return spawns[0];
             }
@@ -92,7 +92,7 @@ class HBMap {
 		 *
 		 * @return the flags for team.
 		 */
-        std::vector<Spawn>& getFlagsForTeam(unsigned team) {
+        const std::vector<Spawn>& getFlagsForTeam(unsigned team) const {
             if (team >= teams.size()) {
                 return flags[0];
             }
@@ -104,7 +104,7 @@ class HBMap {
 		 *
 		 * @return a list of walls.
 		 */
-        std::vector<Obstacle>& getWalls() {
+        const std::vector<Obstacle>& getWalls() const {
             return walls;
         }
 

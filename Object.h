@@ -5,6 +5,7 @@
 
 #include "Material.h"
 #include "hack.h"
+#include "packet.h"
 
 class Object
 {
@@ -36,6 +37,8 @@ class Object
 		unsigned getID() {
 			return id;
 		}
+
+		virtual void writeToPacket(WritePacket *wp);
 };
 
 class RectangularObject : Object

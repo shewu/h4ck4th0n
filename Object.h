@@ -5,6 +5,7 @@
 
 #include "Material.h"
 #include "hack.h"
+#include "packet.h"
 
 /*
 class Object
@@ -60,12 +61,20 @@ class Object
 		/**
 		 * @return the object's unique ID
 		 */
+<<<<<<< HEAD
 		const unsigned getID() const {
 			return id;
 		}
 
         void write_data(WritePacket* wp);
         void read_data(ReadPacket* rp);
+=======
+		unsigned getID() {
+			return id;
+		}
+
+		virtual void writeToPacket(WritePacket *wp);
+>>>>>>> dd923357b7f438495ff9b091abdd9c51e9d56cb6
 };
 
 class RectangularObject : Object
@@ -132,7 +141,7 @@ class RectangularWall : RectangularObject
 		/**
 		 * @return the wall type
 		 */
-		const WallType& getWallType() const {
+		WallType getWallType() {
 			return wallType;
 		}
 };
@@ -259,7 +268,7 @@ class MovingRoundObject : RoundObject
 		/**
 		 * @return the mass
 		 */
-		const float& getMass() const {
+		float getMass() {
 			return mass;
 		}
 };
@@ -284,7 +293,7 @@ class Flag : MovingRoundObject
 		/**
 		 * @return the team number
 		 */
-		const unsigned& getTeamNumber() const {
+		unsigned getTeamNumber() {
 			return teamNumber;
 		}
 };

@@ -79,6 +79,10 @@ enum WallType
     NUM_WALLTYPES // always the last mode
 };
 
+const std::string wallTypeStrings[] = {
+    "normal", "deadly", "bouncy"
+};
+
 class RectangularWall : RectangularObject
 {
 	private:

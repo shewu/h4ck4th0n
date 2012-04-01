@@ -3,8 +3,9 @@
 
 #include <fstream>
 #include <vector>
+#include <set>
 
-#include "hack.h"
+#include "Object.h"
 
 class HBMap {
     public:

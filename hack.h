@@ -6,6 +6,8 @@
 #include "constants.h"
 #include "socket.h"
 #include "packet.h"
+#include "Vector.h"
+#include "Material.h"
 
 #ifdef DEBUG
 #define P(x) printf x
@@ -23,19 +25,6 @@ enum GameMode {
 
 const std::string modeStrings[] = {
     "TAG", "CTF"
-};
-
-enum WallType {
-    WT_INVALID = -1,
-    WT_NORMAL,
-    WT_DEADLY,
-    WT_BOUNCY,
-
-    NUM_WALLTYPES // always the last mode
-};
-
-const std::string wallTypeStrings[] = {
-    "normal", "deadly", "bouncy"
 };
 
 class SpawnDescriptor {
@@ -199,17 +188,10 @@ class Obstacle
 		Vector2D p1, p2;
 		Color color;
 		bool sticky;
-		int flag;
         WallType wallType;
-        Obstacle(Vector2D a, Vector2D b, Color c, WallType d, int e = NO_TEAM) 
+		int flag;
+        Obstacle(Vector2D a, Vector2D b, Color c, WallType d, int e) 
             : p1(a), p2(b), color(c), wallType(d), flag(e) { }
-};
-
-class Light
-{
-	public:
-		Vector3D position;
-		Color color;
 };
 
 #endif

@@ -65,6 +65,10 @@ class Object
 			return id;
 		}
 
+		/**
+		 * Writes the object to a WritePacket
+		 * @param wp the WritePacket to write this object to
+		 */
 		virtual void writeToPacket(WritePacket *wp);
 };
 
@@ -137,6 +141,13 @@ class RectangularWall : RectangularObject
 		WallType getWallType() {
 			return wallType;
 		}
+
+		/**
+		 * Creates a RectangularWall object by reading a ReadPacket
+		 * @param rp ReadPacket to read from
+		 * @return a RectangularWall object read from the ReadPacket
+		 */
+		static RectangularWall readFromPacket(ReadPacket *rp);
 };
 
 class RoundObject : Object
@@ -173,33 +184,21 @@ class RoundObject : Object
 		/**
 		 * @return the radius
 		 */
-<<<<<<< HEAD
 		float getRadius() const {
-=======
-		const float getRadius() const {
->>>>>>> 77db2e2f35057d2ffaacfa15a53ca65dec288bab
 			return radius;
 		}
 
 		/**
 		 * @return the starting angle
 		 */
-<<<<<<< HEAD
 		float getStartAngle() const {
-=======
-		const float getStartAngle() const {
->>>>>>> 77db2e2f35057d2ffaacfa15a53ca65dec288bab
 			return startAngle;
 		}
 
 		/**
 		 * @return the ending angle
 		 */
-<<<<<<< HEAD
 		float getEndAngle() const {
-=======
-		const float getEndAngle() const {
->>>>>>> 77db2e2f35057d2ffaacfa15a53ca65dec288bab
 			return endAngle;
 		}
 };
@@ -231,13 +230,16 @@ class RoundWall : RoundObject
 		/**
 		 * @return the wall type
 		 */
-<<<<<<< HEAD
 		WallType getWallType() const {
-=======
-		const WallType getWallType() const {
->>>>>>> 77db2e2f35057d2ffaacfa15a53ca65dec288bab
 			return wallType;
 		}
+
+		/**
+		 * Creates a RoundWall object by reading a ReadPacket
+		 * @param rp ReadPacket to read from
+		 * @return a RoundWall object read from the ReadPacket
+		 */
+		static RoundWall readFromPacket(ReadPacket *rp);
 };
 
 class MovingRoundObject : RoundObject
@@ -305,6 +307,13 @@ class Flag : MovingRoundObject
 		unsigned getTeamNumber() const {
 			return teamNumber;
 		}
+
+		/**
+		 * Creates a Flag object by reading a ReadPacket
+		 * @param rp ReadPacket to read from
+		 * @return a Flag object read from the ReadPacket
+		 */
+		static Flag readFromPacket(ReadPacket *rp);
 };
 
 enum PlayerState {
@@ -371,6 +380,12 @@ class Player : MovingRoundObject
 			return numChildren;
 		}
 
+		/**
+		 * Creates a Player object by reading a ReadPacket
+		 * @param rp ReadPacket to read from
+		 * @return a Player object read from the ReadPacket
+		 */
+		static Player readFromPacket(ReadPacket *rp);
 };
 
 #endif

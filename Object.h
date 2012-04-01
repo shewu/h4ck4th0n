@@ -65,6 +65,10 @@ class Object
 			return id;
 		}
 
+		/**
+		 * Writes the object to a WritePacket
+		 * @param wp the WritePacket to write this object to
+		 */
 		virtual void writeToPacket(WritePacket *wp);
 };
 
@@ -137,6 +141,13 @@ class RectangularWall : public RectangularObject
 		WallType getWallType() {
 			return wallType;
 		}
+
+		/**
+		 * Creates a RectangularWall object by reading a ReadPacket
+		 * @param rp ReadPacket to read from
+		 * @return a RectangularWall object read from the ReadPacket
+		 */
+		static RectangularWall readFromPacket(ReadPacket *rp);
 };
 
 class RoundObject : public Object
@@ -173,21 +184,21 @@ class RoundObject : public Object
 		/**
 		 * @return the radius
 		 */
-		const float getRadius() const {
+		float getRadius() const {
 			return radius;
 		}
 
 		/**
 		 * @return the starting angle
 		 */
-		const float getStartAngle() const {
+		float getStartAngle() const {
 			return startAngle;
 		}
 
 		/**
 		 * @return the ending angle
 		 */
-		const float getEndAngle() const {
+		float getEndAngle() const {
 			return endAngle;
 		}
 };
@@ -218,9 +229,16 @@ class RoundWall : public RoundObject
 		/**
 		 * @return the wall type
 		 */
-		const WallType getWallType() const {
+		WallType getWallType() const {
 			return wallType;
 		}
+
+		/**
+		 * Creates a RoundWall object by reading a ReadPacket
+		 * @param rp ReadPacket to read from
+		 * @return a RoundWall object read from the ReadPacket
+		 */
+		static RoundWall readFromPacket(ReadPacket *rp);
 };
 
 class MovingRoundObject : public RoundObject
@@ -285,9 +303,16 @@ class Flag : public MovingRoundObject
 		/**
 		 * @return the team number
 		 */
-		unsigned getTeamNumber() {
+		unsigned getTeamNumber() const {
 			return teamNumber;
 		}
+
+		/**
+		 * Creates a Flag object by reading a ReadPacket
+		 * @param rp ReadPacket to read from
+		 * @return a Flag object read from the ReadPacket
+		 */
+		static Flag readFromPacket(ReadPacket *rp);
 };
 
 enum PlayerState {
@@ -304,18 +329,64 @@ class Player : public MovingRoundObject
 	private:
 		PlayerState playerState;
 
-		unsigned team;
-
 		// PS_SPAWNING
 		float timeUntilSpawn;
-
-		// PS_ALIVE
 
 		// PS_SHRINKING
 		Player *parent;
 		int numChildren;
 
-		// PS_DEAD
+	public:
+		/**
+		 * Creates a Player with the given material and team.
+		 * @param material The material for this player.
+		 * @param teamNumber the number of this player's team.
+		 */
+		Player(Material material, unsigned teamNumber) :
+		    playerState(PS_DEAD),
+		    MovingRoundObject(material, Vector2D(), teamNumber) { }
+
+		/**
+		 * Gets the player state.
+		 * @return the player state.
+		 */
+		PlayerState getPlayerState() const {
+			return playerState;
+		}
+
+		/**
+		 * Gets the time until spawn. Should only be called if the
+		 * playerState is PS_SPAWNING.
+		 * @return the time until spawn
+		 */
+		float getTimeUntilSpawn() const {
+			return timeUntilSpawn;
+		}
+
+		/**
+		 * Gets the parent for shrinking, or NULL if there is no
+		 * parent. Should only be called if the playerState is PS_SHRINKING
+		 * @return a pointer to the parent Player
+		 */
+		Player *getShrinkingParent() const {
+			return parent;
+		}
+
+		/**
+		 * Gets the time until spawn. Should only be called if the
+		 * playerState is PS_SPAWNING.
+		 * @return the time until spawn
+		 */
+		int getNumShrinkingChildren() const {
+			return numChildren;
+		}
+
+		/**
+		 * Creates a Player object by reading a ReadPacket
+		 * @param rp ReadPacket to read from
+		 * @return a Player object read from the ReadPacket
+		 */
+		static Player readFromPacket(ReadPacket *rp);
 };
 
 #endif

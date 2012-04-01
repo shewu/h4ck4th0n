@@ -300,7 +300,8 @@ class Flag : public MovingRoundObject
 		 * @param teamNumber The team number for this flag.
 		 */
 		Flag(Material material, Vector2D center, unsigned teamNumber) :
-		    MovingRoundObject(material, center, FLAG_RADIUS, FLAG_MASS, FLAG_HEIGHT_RATIO),
+		    MovingRoundObject(material, center, Flag::FLAG_RADIUS,
+                Flag::FLAG_MASS, Flag::FLAG_HEIGHT_RATIO),
             teamNumber(teamNumber) { }
 		
 		/**
@@ -334,14 +335,14 @@ enum PlayerState {
 class Player : public MovingRoundObject
 {
 	private:
-		PlayerState playerState;
-
 		// PS_SPAWNING
 		float timeUntilSpawn;
 
 		// PS_SHRINKING
 		Player *parent;
 		int numChildren;
+
+		PlayerState playerState;
 
 	public:
 		/**
@@ -350,8 +351,8 @@ class Player : public MovingRoundObject
 		 * @param teamNumber the number of this player's team.
 		 */
 		Player(Material material, unsigned teamNumber) :
-		    playerState(PS_DEAD),
-		    MovingRoundObject(material, Vector2D(), teamNumber) { }
+		    MovingRoundObject(material, Vector2D(), teamNumber),
+            playerState(PS_DEAD) { }
 
 		/**
 		 * Gets the player state.

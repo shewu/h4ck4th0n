@@ -345,6 +345,10 @@ class Player : public MovingRoundObject
 		Player *parent;
 		int numChildren;
 
+        static float PLAYER_RADIUS;
+        static float PLAYER_MASS;
+        static float PLAYER_HEIGHT_RATIO;
+
 	public:
 		/**
 		 * Creates a Player with the given material and team.
@@ -352,7 +356,7 @@ class Player : public MovingRoundObject
 		 * @param teamNumber the number of this player's team.
 		 */
 		Player(Material material, unsigned teamNumber) :
-		    MovingRoundObject(material, Vector2D(), PLAYER_RADIUS, PLAYER_MASS, PLAYER_HEIGHT_RATIO)
+		    MovingRoundObject(material, Vector2D(), Player::PLAYER_RADIUS, Player::PLAYER_MASS, Player::PLAYER_HEIGHT_RATIO)
             playerState(PS_DEAD), teamNumber(teamNumber) { }
 
 		/**
@@ -405,6 +409,10 @@ class Player : public MovingRoundObject
 		 */
 		static Player readFromPacket(ReadPacket *rp);
 };
+
+float Player::PLAYER_RADIUS = 1;
+float Player::PLAYER_MASS = 1;
+float Player::PLAYER_HEIGHT_RATIO = 1;
 
 #endif
 

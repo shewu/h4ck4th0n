@@ -356,7 +356,7 @@ class Player : public MovingRoundObject
 		 * @param teamNumber the number of this player's team.
 		 */
 		Player(Material material, unsigned teamNumber) :
-		    MovingRoundObject(material, Vector2D(), Player::PLAYER_RADIUS, Player::PLAYER_MASS, Player::PLAYER_HEIGHT_RATIO)
+		    MovingRoundObject(material, Vector2D(), Player::PLAYER_RADIUS, Player::PLAYER_MASS, Player::PLAYER_HEIGHT_RATIO),
             playerState(PS_DEAD), teamNumber(teamNumber) { }
 
 		/**
@@ -371,7 +371,7 @@ class Player : public MovingRoundObject
 		 * Gets the team number.
 		 * @return the team number.
 		 */
-		PlayerState getTeamNumber() const {
+		unsigned getTeamNumber() const {
 			return teamNumber;
 		}
 

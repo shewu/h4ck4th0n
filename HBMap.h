@@ -65,7 +65,7 @@ class HBMap {
 		 * @return the team list containing TeamDescriptor objects in no particular
 		 * order.
 		 */
-        const std::vector<TeamDescriptor>& getTeamDescriptors() const {
+        const std::vector<TeamDescriptor> getTeamDescriptors() const {
             return teams;
         }
 
@@ -77,7 +77,7 @@ class HBMap {
 		 *
 		 * @return the spawns for team.
 		 */
-        const std::vector<Obstacle>& getSpawnsForTeam(unsigned team) const {
+        const std::vector<SpawnDescriptor> getSpawnsForTeam(unsigned team) const {
             if (team >= teams.size()) {
                 return spawns[0];
             }
@@ -92,7 +92,7 @@ class HBMap {
 		 *
 		 * @return the flags for team.
 		 */
-        const std::vector<Spawn>& getFlagsForTeam(unsigned team) const {
+        const std::vector<Flag>& getFlagsForTeam(unsigned team) const {
             if (team >= teams.size()) {
                 return flags[0];
             }
@@ -131,6 +131,12 @@ class HBMap {
 		std::vector<TeamDescriptor> teams;
 		std::vector<RectangularWall> walls;
 		std::vector<Flag> flags;
+        std::vector<SpawnDescriptor> spawns[HBMap::MAX_TEAMS];
+
+        Color getColorForTeam(int team) {
+            int colorFrac = int(255*float(team)/teams.size());
+            return Color(colorFrac, 0, 255-colorFrac);
+        }
 };
 
 #endif

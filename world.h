@@ -62,10 +62,10 @@ class World
             return worldMap.getHeight()/2.0f;
         }
 		
-		std::map<int, std::vector<Spawn> > spawns;
+		std::map<int, std::vector<Player> > spawns;
 		std::map<int, Object> objects;
 		std::vector<Light> lights;
-		std::vector<Obstacle> obstacles;
+		std::vector<Flag> obstacles;
 		//std::vector<std::pair<char, Vector2D> > sounds;
 		void doSimulation(float dt, std::vector<std::pair<char, Vector2D> >& sounds);
 		

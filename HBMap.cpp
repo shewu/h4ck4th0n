@@ -140,9 +140,11 @@ void HBMap::parseSpawn(std::string& s) {
         y = atoi(st.nextToken().c_str());
     }
 
-    if (id < 0 || st.hasMoreTokens()) {
+    if (id < 0 || id >= teams.size() || st.hasMoreTokens()) {
         throw ParseException("parseSpawn fail");
     }
+
+    spawns[id].push_back(SpawnDescriptor(x, y, x+5, y+5));
 }
 
 void HBMap::parseFlag(std::string& s) {
@@ -158,11 +160,11 @@ void HBMap::parseFlag(std::string& s) {
         y = atoi(st.nextToken().c_str());
     }
 
-    if (id < 0 || st.hasMoreTokens()) {
+    if (id < 0 || id >= teams.size() || st.hasMoreTokens()) {
         throw ParseException("parseFlag fail");
     }
 
-    //flags.push_back(Spawn(Vector2D(), Vector2D(), Color(), true, ));
+    flags.push_back(Flag(getColorForTeam(id), Vector2D(x, y), id));
 }
 
 WallType parseWallType(std::string& s) {

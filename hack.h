@@ -15,6 +15,8 @@
 #define P(x)
 #endif
 
+#define foreach(name,conttype,cont) for(conttype::iterator name = cont.begin(); name != cont.end(); ++ name )
+
 enum GameMode {
     GM_INVALID = -1,
     GM_TAG,

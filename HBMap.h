@@ -19,7 +19,7 @@ class HBMap {
 		 *
 		 * @throw ParseException when the parser encounters invalid syntax.
 		 */
-        HBMap(std::string filename) {
+        HBMap(std::string filename const) {
             parse(filename);
         }
 

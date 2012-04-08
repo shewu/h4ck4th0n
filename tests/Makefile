@@ -4,7 +4,7 @@ test:
 	rm HackTest
 
 test2:
-	$(CC) $(TESTFLAGS) test.cpp
+	$(CC) test.cpp $(TESTFLAGS)
 	./test
 	rm test
 	

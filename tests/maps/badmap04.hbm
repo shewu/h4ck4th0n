@@ -1,0 +1,10 @@
+name "dim not specified"
+
+dim 50 50
+mode TAG
+
+team 0 1-4
+spawn 0 0
+spawn 5 5
+spawn 10 10
+spawn 15 15

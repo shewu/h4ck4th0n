@@ -1,0 +1,22 @@
+name "no flag for CTF"
+
+dim 50 50
+mode CTF
+
+team 1 1-4
+team 2 1-4
+
+spawn 0 -5 -5
+spawn 0 5 5
+spawn 0 15 15
+spawn 0 20 20
+spawn 1 15 15
+spawn 1 15 16
+spawn 1 15 17
+spawn 1 15 18
+spawn 2 25 25
+spawn 2 24 25
+spawn 2 23 25
+spawn 2 22 25
+spawn 2 21 25
+flag 1 13 13

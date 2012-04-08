@@ -1,0 +1,11 @@
+name "no team for CTF"
+
+dim 50 50
+mode TAG CTF
+
+team 0 1-4
+
+spawn 0 0 0
+spawn 0 5 5
+spawn 0 10 10
+spawn 0 15 15

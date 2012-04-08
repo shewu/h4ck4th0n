@@ -1,0 +1,27 @@
+name "has a float instead of int"
+
+mode TAG CTF % comment comment comment %%%
+%comment
+
+dim 50 50
+team 0 1-4 % number of players
+team 1 1-4
+team 2 1-4
+spawn 0 -5 -5
+spawn 0 5 5
+spawn 0 15 15
+spawn 0 20 20
+spawn 1 15 15
+spawn 1 15 16
+spawn 1 15 17
+spawn 1 15 18
+spawn 2 25 25.0
+spawn 2 24 25
+spawn 2 23 25
+spawn 2 22 25
+spawn 2 21 25
+flag 1 13 13
+flag 2 15 25
+wall normal 4 4 5 5
+wall deadly 6 6 7 7
+wall bouncy 8 8 9 9

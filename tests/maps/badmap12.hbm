@@ -1,0 +1,20 @@
+name "spawn point intersects wall"
+
+dim 50 50
+mode CTF
+
+team 1 1-4
+team 2 1-4
+spawn 1 0 0
+spawn 1 0 5
+spawn 1 0 10
+spawn 1 0 15
+spawn 2 5 0
+spawn 2 5 5
+spawn 2 5 10
+spawn 2 5 15
+
+flag 1 -5 0
+flag 2 -5 5
+
+wall normal 0 10 0 11

@@ -1,0 +1,13 @@
+name "wall goes off map"
+
+dim 50 50
+mode CTF
+
+team 0 1-4
+
+spawn 0 0 0
+spawn 0 5 5
+spawn 0 10 10
+spawn 0 55 55
+
+wall deadly 0 0 0 100

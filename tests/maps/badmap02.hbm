@@ -1,0 +1,10 @@
+name "not enough spawns"
+
+mode TAG
+dim 50 50
+
+team 0 1-4
+
+spawn 0 0 0
+spawn 0 5 5
+spawn 0 10 10

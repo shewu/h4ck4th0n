@@ -1,0 +1,20 @@
+name "no team for TAG"
+
+dim 50 50
+mode TAG CTF
+
+team 1 1-4
+team 2 1-4
+
+spawn 1 15 15
+spawn 1 15 16
+spawn 1 15 17
+spawn 1 15 18
+spawn 2 25 25
+spawn 2 24 25
+spawn 2 23 25
+spawn 2 22 25
+spawn 2 21 25
+
+flag 1 13 13
+flag 2 15 25

@@ -66,14 +66,10 @@ multiclient.o: client.cpp *.h
 	$(CC) -c $(CCFLAGS) -DMULTI -o multiclient.o $<
 
 test:
-	#$(CC) -o HackTest HackTest.cpp hack.h vec.cpp HBMap.h HBMap.cpp
-	#./HackTest
-	#rm HackTest
+	(cd tests; make test)
 
 test2:
-	$(CC) $(TESTFLAGS) test.cpp
-	./test
-	rm test
+	(cd tests; make test2)
 
 clean:
 	rm -rf $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET) $(MULTI_BALLS_TARGET) *.o

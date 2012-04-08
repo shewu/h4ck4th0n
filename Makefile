@@ -12,6 +12,8 @@ UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
 #HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
 HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -L/opt/AMDAPP/lib/x86_64 -O2 -g
 
+TESTFLAGS=-Igtest/include -o test
+
 SERVER_TARGET=server
 UNHOLY_BALLS_TARGET=unholyballs
 HOLY_BALLS_TARGET=holyballs
@@ -64,9 +66,14 @@ multiclient.o: client.cpp *.h
 	$(CC) -c $(CCFLAGS) -DMULTI -o multiclient.o $<
 
 test:
-	$(CC) -o HackTest HackTest.cpp hack.h vec.cpp HBMap.h HBMap.cpp
-	./HackTest
-	rm HackTest
+	#$(CC) -o HackTest HackTest.cpp hack.h vec.cpp HBMap.h HBMap.cpp
+	#./HackTest
+	#rm HackTest
+
+test2:
+	$(CC) $(TESTFLAGS) test.cpp
+	./test
+	rm test
 
 clean:
 	rm -rf $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET) $(MULTI_BALLS_TARGET) *.o

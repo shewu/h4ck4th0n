@@ -20,7 +20,7 @@ MULTI_BALLS_TARGET=multiballs
 
 SHARED_OBJECTS = socket.o \
 	vec.o \
-	object.o \
+	Object.o \
 	world.o \
 	menu.o \
     HBMap.o \

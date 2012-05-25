@@ -1,16 +1,17 @@
-ifeq ($(DEBUG_MODE),on)
- DEBUG_FLAGS=-DDEBUG
-else
- DEBUG_FLAGS=
-endif
-
 CC=g++
 LD=g++
 
-CCFLAGS=-g -Wall $(DEBUG_FLAGS)
+CCFLAGS = -Wall
+
+ifeq ($(DEBUG_MODE),on)
+CCFLAGS += -O0 -g -DDEBUG -Werror
+else
+CCFLAGS += -O2 -w
+endif
+
 UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
-#HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
-HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -L/opt/AMDAPP/lib/x86_64 -O2 -g
+HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
+#HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -L/opt/AMDAPP/lib/x86_64 -O2 -g
 
 SERVER_TARGET=server
 UNHOLY_BALLS_TARGET=unholyballs
@@ -63,10 +64,10 @@ holyclient.o: client.cpp *.h
 multiclient.o: client.cpp *.h
 	$(CC) -c $(CCFLAGS) -DMULTI -o multiclient.o $<
 
-test:
+test: $(SHARED_OBJECTS)
 	(cd tests; make test)
 
-test2:
+test2: $(SHARED_OBJECTS)
 	(cd tests; make test2)
 
 clean:

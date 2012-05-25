@@ -1,7 +1,9 @@
 #include <cstdio>
 
-#include "hack.h"
-#include "HBMap.h"
+#include <hack.h>
+#include <HBMap.h>
+//#include "hack.h"
+//#include "HBMap.h"
 
 #define TEST_EQ(d, x, y) \
 	do { \

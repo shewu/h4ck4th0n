@@ -1,10 +1,12 @@
+TESTFLAGS=-I./tests/gtest/include -Ltests/gtest/lib -o test
+
 test:
-	$(CC) -o HackTest HackTest.cpp hack.h vec.cpp HBMap.h HBMap.cpp
+	$(CC) -o HackTest HackTest.cpp -I../
 	./HackTest
 	rm HackTest
 
 test2:
-	$(CC) test.cpp $(TESTFLAGS)
+	$(CC) test.cpp $(TESTFLAGS) -I../
 	./test
 	rm test
 	

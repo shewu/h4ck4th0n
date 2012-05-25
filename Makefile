@@ -12,8 +12,6 @@ UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
 #HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
 HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -L/opt/AMDAPP/lib/x86_64 -O2 -g
 
-TESTFLAGS=-I./tests/gtest/include -Ltests/gtest/lib -o test
-
 SERVER_TARGET=server
 UNHOLY_BALLS_TARGET=unholyballs
 HOLY_BALLS_TARGET=holyballs

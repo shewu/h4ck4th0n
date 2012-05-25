@@ -19,7 +19,7 @@ class HBMap {
 		 *
 		 * @throw ParseException when the parser encounters invalid syntax.
 		 */
-        HBMap(std::string filename const) {
+        HBMap(std::string const filename) {
             parse(filename);
         }
 
@@ -112,6 +112,7 @@ class HBMap {
 		 * The maximum number of teams allowed in maps.
 		 */
         const static unsigned MAX_TEAMS = 10;
+
     private:
         void parse(std::string filename);
         void parseHBMapName(std::string& s);
@@ -130,7 +131,7 @@ class HBMap {
 		std::set<GameMode> modes;
 		std::vector<TeamDescriptor> teams;
 		std::vector<RectangularWall> walls;
-		std::vector<Flag> flags;
+		std::vector<Flag> flags[HBMap::MAX_TEAMS];
         std::vector<SpawnDescriptor> spawns[HBMap::MAX_TEAMS];
 
         Color getColorForTeam(int team) {

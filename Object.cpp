@@ -39,15 +39,7 @@ void Object::read_data(ReadPacket *rp) {
 }
 */
 
-void RectangularObject::writeToPacket(WritePacket* wp) {
-	// TODO
-}
-
 void RectangularWall::writeToPacket(WritePacket* wp) {
-	// TODO
-}
-
-void RoundObject::writeToPacket(WritePacket* wp) {
 	// TODO
 }
 
@@ -55,7 +47,7 @@ void RoundWall::writeToPacket(WritePacket* wp) {
 	// TODO
 }
 
-void MovingRoundObject::writeToPacket(WritePacket* wp) {
+void Flag::writeToPacket(WritePacket* wp) {
 	// TODO
 }
 

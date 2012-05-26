@@ -69,7 +69,7 @@ class Object
 		 * Writes the object to a WritePacket
 		 * @param wp the WritePacket to write this object to
 		 */
-		virtual void writeToPacket(WritePacket *wp);
+		virtual void writeToPacket(WritePacket *wp) = 0;
 };
 
 unsigned Object::nextId = 0;
@@ -103,6 +103,8 @@ class RectangularObject : public Object
 		const Vector2D& getP2() const {
 			return p2;
 		}
+
+		virtual void writeToPacket(WritePacket *wp) = 0;
 };
 
 enum WallType
@@ -148,6 +150,8 @@ class RectangularWall : public RectangularObject
 		 * @return a RectangularWall object read from the ReadPacket
 		 */
 		static RectangularWall readFromPacket(ReadPacket *rp);
+
+		void writeToPacket(WritePacket* wp);
 };
 
 class RoundObject : public Object
@@ -201,6 +205,8 @@ class RoundObject : public Object
 		float getEndAngle() const {
 			return endAngle;
 		}
+
+		virtual void writeToPacket(WritePacket *wp) = 0;
 };
 
 class RoundWall : public RoundObject
@@ -239,6 +245,8 @@ class RoundWall : public RoundObject
 		 * @return a RoundWall object read from the ReadPacket
 		 */
 		static RoundWall readFromPacket(ReadPacket *rp);
+
+		void writeToPacket(WritePacket* wp);
 };
 
 class MovingRoundObject : public RoundObject
@@ -281,6 +289,8 @@ class MovingRoundObject : public RoundObject
 		float getMass() const {
 			return mass;
 		}
+
+		virtual void writeToPacket(WritePacket *wp);
 };
 
 class Flag : public MovingRoundObject
@@ -317,6 +327,8 @@ class Flag : public MovingRoundObject
 		 * @return a Flag object read from the ReadPacket
 		 */
 		static Flag readFromPacket(ReadPacket *rp);
+
+		void writeToPacket(WritePacket* wp);
 };
 
 float Flag::FLAG_RADIUS = 1.0f;
@@ -408,6 +420,8 @@ class Player : public MovingRoundObject
 		 * @return a Player object read from the ReadPacket
 		 */
 		static Player readFromPacket(ReadPacket *rp);
+
+		void writeToPacket(WritePacket* wp);
 };
 
 float Player::PLAYER_RADIUS = 1;

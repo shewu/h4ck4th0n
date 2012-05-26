@@ -199,6 +199,6 @@ void HBMap::parseWall(std::string& s) {
     }
 
     // assign wall colors later
-    walls.push_back(Obstacle(Vector2D(a, b), Vector2D(c, d), Color(0, 0, 0), parseWallType(wallType)));
+    rectangularWalls.push_back(Obstacle(Vector2D(a, b), Vector2D(c, d), Color(0, 0, 0), parseWallType(wallType)));
 }
 

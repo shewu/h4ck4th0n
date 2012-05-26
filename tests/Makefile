@@ -1,4 +1,5 @@
-TESTFLAGS=-I./tests/gtest/include -Ltests/gtest/lib -o test
+GTEST_DIR=./gtest
+GTESTFLAGS=-I${GTEST_DIR}/include ${GTEST_DIR}/libgtest.a ${GTEST_DIR}/libgtest_main.a
 
 test:
 	$(CC) -o HackTest HackTest.cpp -I../ -L../
@@ -6,7 +7,7 @@ test:
 	rm HackTest
 
 test2:
-	$(CC) test.cpp $(TESTFLAGS) -I../ -L../
+	$(CC) -o test $(GTESTFLAGS) test.cpp -I../ -L../
 	./test
 	rm test
 	

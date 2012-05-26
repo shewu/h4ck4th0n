@@ -1,53 +1,52 @@
 src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
-  /usr/include/c++/4.2.1/iostream \
-  /usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/c++config.h \
-  /usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/os_defines.h \
-  /usr/include/unistd.h /usr/include/_types.h /usr/include/sys/_types.h \
-  /usr/include/sys/cdefs.h /usr/include/machine/_types.h \
+  /usr/include/c++/4.2.1/iostream /usr/include/c++/4.2.1/bits/c++config.h \
+  /usr/include/c++/4.2.1/bits/os_defines.h /usr/include/unistd.h \
+  /usr/include/_types.h /usr/include/sys/_types.h \
+  /usr/include/sys/cdefs.h /usr/include/sys/_symbol_aliasing.h \
+  /usr/include/sys/_posix_availability.h /usr/include/machine/_types.h \
   /usr/include/i386/_types.h /usr/include/sys/unistd.h \
+  /usr/include/Availability.h /usr/include/AvailabilityInternal.h \
   /usr/include/sys/select.h /usr/include/sys/appleapiopts.h \
   /usr/include/sys/_structs.h /usr/include/sys/_select.h \
-  /usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/cpu_defines.h \
+  /usr/include/c++/4.2.1/bits/cpu_defines.h \
   /usr/include/c++/4.2.1/ostream /usr/include/c++/4.2.1/ios \
-  /usr/include/c++/4.2.1/iosfwd \
-  /usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/c++locale.h \
+  /usr/include/c++/4.2.1/iosfwd /usr/include/c++/4.2.1/bits/c++locale.h \
   /usr/include/c++/4.2.1/clocale /usr/include/locale.h \
   /usr/include/_locale.h /usr/include/c++/4.2.1/cstring \
   /usr/include/c++/4.2.1/cstddef \
-  /usr/lib/gcc/i686-apple-darwin10/4.2.1/include/stddef.h \
-  /usr/include/string.h /usr/include/c++/4.2.1/cstdio \
-  /usr/include/stdio.h /usr/include/c++/4.2.1/cstdarg \
-  /usr/lib/gcc/i686-apple-darwin10/4.2.1/include/stdarg.h \
-  /usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/c++io.h \
-  /usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/gthr.h \
-  /usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/gthr-default.h \
-  /usr/include/pthread.h /usr/include/pthread_impl.h /usr/include/sched.h \
-  /usr/include/time.h /usr/include/_structs.h \
-  /usr/include/c++/4.2.1/cctype /usr/include/ctype.h \
-  /usr/include/runetype.h /usr/include/c++/4.2.1/bits/stringfwd.h \
+  /usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/stddef.h \
+  /usr/include/string.h /usr/include/strings.h \
+  /usr/include/c++/4.2.1/cstdio /usr/include/stdio.h \
+  /usr/include/c++/4.2.1/cstdarg \
+  /usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/stdarg.h \
+  /usr/include/c++/4.2.1/bits/c++io.h /usr/include/c++/4.2.1/bits/gthr.h \
+  /usr/include/c++/4.2.1/bits/gthr-default.h /usr/include/pthread.h \
+  /usr/include/pthread_impl.h /usr/include/sched.h /usr/include/time.h \
+  /usr/include/_structs.h /usr/include/c++/4.2.1/cctype \
+  /usr/include/ctype.h /usr/include/runetype.h \
+  /usr/include/c++/4.2.1/bits/stringfwd.h \
   /usr/include/c++/4.2.1/bits/postypes.h /usr/include/c++/4.2.1/cwchar \
   /usr/include/c++/4.2.1/ctime /usr/include/wchar.h \
-  /usr/include/_wctype.h \
-  /usr/lib/gcc/i686-apple-darwin10/4.2.1/include/stdint.h \
+  /usr/include/_wctype.h /usr/include/stdint.h \
   /usr/include/c++/4.2.1/bits/functexcept.h \
   /usr/include/c++/4.2.1/exception_defines.h \
   /usr/include/c++/4.2.1/exception \
   /usr/include/c++/4.2.1/bits/char_traits.h \
   /usr/include/c++/4.2.1/bits/stl_algobase.h \
   /usr/include/c++/4.2.1/climits \
-  /usr/lib/gcc/i686-apple-darwin10/4.2.1/include/limits.h \
-  /usr/lib/gcc/i686-apple-darwin10/4.2.1/include/syslimits.h \
+  /usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/limits.h \
+  /usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/syslimits.h \
+  /Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/include/limits.h \
+  /Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/include/syslimits.h \
   /usr/include/limits.h /usr/include/machine/limits.h \
   /usr/include/i386/limits.h /usr/include/i386/_limits.h \
   /usr/include/sys/syslimits.h /usr/include/c++/4.2.1/cstdlib \
-  /usr/include/stdlib.h /usr/include/Availability.h \
-  /usr/include/AvailabilityInternal.h /usr/include/sys/wait.h \
-  /usr/include/sys/signal.h /usr/include/machine/signal.h \
-  /usr/include/i386/signal.h /usr/include/i386/_structs.h \
-  /usr/include/machine/_structs.h /usr/include/mach/i386/_structs.h \
-  /usr/include/sys/resource.h /usr/include/machine/endian.h \
-  /usr/include/i386/endian.h /usr/include/sys/_endian.h \
-  /usr/include/libkern/_OSByteOrder.h \
+  /usr/include/stdlib.h /usr/include/sys/wait.h /usr/include/sys/signal.h \
+  /usr/include/machine/signal.h /usr/include/i386/signal.h \
+  /usr/include/i386/_structs.h /usr/include/machine/_structs.h \
+  /usr/include/mach/i386/_structs.h /usr/include/sys/resource.h \
+  /usr/include/machine/endian.h /usr/include/i386/endian.h \
+  /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
   /usr/include/libkern/i386/_OSByteOrder.h /usr/include/alloca.h \
   /usr/include/machine/types.h /usr/include/i386/types.h \
   /usr/include/i386/_types.h /usr/include/c++/4.2.1/bits/stl_pair.h \
@@ -62,11 +61,11 @@ src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
   /usr/include/c++/4.2.1/bits/localefwd.h \
   /usr/include/c++/4.2.1/bits/ios_base.h \
   /usr/include/c++/4.2.1/ext/atomicity.h \
-  /usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/atomic_word.h \
+  /usr/include/c++/4.2.1/bits/atomic_word.h \
   /usr/include/c++/4.2.1/bits/locale_classes.h \
   /usr/include/c++/4.2.1/string /usr/include/c++/4.2.1/memory \
   /usr/include/c++/4.2.1/bits/allocator.h \
-  /usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/c++allocator.h \
+  /usr/include/c++/4.2.1/bits/c++allocator.h \
   /usr/include/c++/4.2.1/ext/new_allocator.h /usr/include/c++/4.2.1/new \
   /usr/include/c++/4.2.1/bits/stl_construct.h \
   /usr/include/c++/4.2.1/bits/stl_uninitialized.h \
@@ -85,11 +84,11 @@ src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
   /usr/include/c++/4.2.1/bits/streambuf_iterator.h \
   /usr/include/c++/4.2.1/bits/locale_facets.h \
   /usr/include/c++/4.2.1/cwctype /usr/include/wctype.h \
-  /usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/ctype_base.h \
-  /usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/ctype_inline.h \
+  /usr/include/c++/4.2.1/bits/ctype_base.h \
+  /usr/include/c++/4.2.1/bits/ctype_inline.h \
   /usr/include/c++/4.2.1/bits/codecvt.h \
-  /usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/time_members.h \
-  /usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/messages_members.h \
+  /usr/include/c++/4.2.1/bits/time_members.h \
+  /usr/include/c++/4.2.1/bits/messages_members.h \
   /usr/include/c++/4.2.1/bits/basic_ios.tcc \
   /usr/include/c++/4.2.1/bits/ostream.tcc /usr/include/c++/4.2.1/locale \
   /usr/include/c++/4.2.1/bits/locale_facets.tcc \
@@ -128,9 +127,7 @@ src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
   /usr/include/c++/4.2.1/bits/stl_multiset.h \
   include/gtest/internal/gtest-string.h \
   include/gtest/internal/gtest-filepath.h \
-  include/gtest/internal/gtest-type-util.h \
-  /usr/include/c++/4.2.1/cxxabi.h \
-  /usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/cxxabi_tweaks.h \
+  include/gtest/internal/gtest-type-util.h /usr/include/cxxabi.h \
   include/gtest/internal/gtest-string.h include/gtest/gtest-death-test.h \
   include/gtest/internal/gtest-death-test-internal.h \
   include/gtest/internal/gtest-internal.h include/gtest/gtest-message.h \
@@ -149,9 +146,9 @@ src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
 
 /usr/include/c++/4.2.1/iostream:
 
-/usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/c++config.h:
+/usr/include/c++/4.2.1/bits/c++config.h:
 
-/usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/os_defines.h:
+/usr/include/c++/4.2.1/bits/os_defines.h:
 
 /usr/include/unistd.h:
 
@@ -161,11 +158,19 @@ src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
 
 /usr/include/sys/cdefs.h:
 
+/usr/include/sys/_symbol_aliasing.h:
+
+/usr/include/sys/_posix_availability.h:
+
 /usr/include/machine/_types.h:
 
 /usr/include/i386/_types.h:
 
 /usr/include/sys/unistd.h:
+
+/usr/include/Availability.h:
+
+/usr/include/AvailabilityInternal.h:
 
 /usr/include/sys/select.h:
 
@@ -175,7 +180,7 @@ src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
 
 /usr/include/sys/_select.h:
 
-/usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/cpu_defines.h:
+/usr/include/c++/4.2.1/bits/cpu_defines.h:
 
 /usr/include/c++/4.2.1/ostream:
 
@@ -183,7 +188,7 @@ src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
 
 /usr/include/c++/4.2.1/iosfwd:
 
-/usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/c++locale.h:
+/usr/include/c++/4.2.1/bits/c++locale.h:
 
 /usr/include/c++/4.2.1/clocale:
 
@@ -195,9 +200,11 @@ src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
 
 /usr/include/c++/4.2.1/cstddef:
 
-/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/stddef.h:
+/usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/stddef.h:
 
 /usr/include/string.h:
+
+/usr/include/strings.h:
 
 /usr/include/c++/4.2.1/cstdio:
 
@@ -205,13 +212,13 @@ src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
 
 /usr/include/c++/4.2.1/cstdarg:
 
-/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/stdarg.h:
+/usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/stdarg.h:
 
-/usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/c++io.h:
+/usr/include/c++/4.2.1/bits/c++io.h:
 
-/usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/gthr.h:
+/usr/include/c++/4.2.1/bits/gthr.h:
 
-/usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/gthr-default.h:
+/usr/include/c++/4.2.1/bits/gthr-default.h:
 
 /usr/include/pthread.h:
 
@@ -241,7 +248,7 @@ src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
 
 /usr/include/_wctype.h:
 
-/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/stdint.h:
+/usr/include/stdint.h:
 
 /usr/include/c++/4.2.1/bits/functexcept.h:
 
@@ -255,9 +262,13 @@ src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
 
 /usr/include/c++/4.2.1/climits:
 
-/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/limits.h:
+/usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/limits.h:
 
-/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/syslimits.h:
+/usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/syslimits.h:
+
+/Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/include/limits.h:
+
+/Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/include/syslimits.h:
 
 /usr/include/limits.h:
 
@@ -272,10 +283,6 @@ src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
 /usr/include/c++/4.2.1/cstdlib:
 
 /usr/include/stdlib.h:
-
-/usr/include/Availability.h:
-
-/usr/include/AvailabilityInternal.h:
 
 /usr/include/sys/wait.h:
 
@@ -337,7 +344,7 @@ src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
 
 /usr/include/c++/4.2.1/ext/atomicity.h:
 
-/usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/atomic_word.h:
+/usr/include/c++/4.2.1/bits/atomic_word.h:
 
 /usr/include/c++/4.2.1/bits/locale_classes.h:
 
@@ -347,7 +354,7 @@ src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
 
 /usr/include/c++/4.2.1/bits/allocator.h:
 
-/usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/c++allocator.h:
+/usr/include/c++/4.2.1/bits/c++allocator.h:
 
 /usr/include/c++/4.2.1/ext/new_allocator.h:
 
@@ -391,15 +398,15 @@ src/gtest_main.lo src/gtest_main.o: src/gtest_main.cc \
 
 /usr/include/wctype.h:
 
-/usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/ctype_base.h:
+/usr/include/c++/4.2.1/bits/ctype_base.h:
 
-/usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/ctype_inline.h:
+/usr/include/c++/4.2.1/bits/ctype_inline.h:
 
 /usr/include/c++/4.2.1/bits/codecvt.h:
 
-/usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/time_members.h:
+/usr/include/c++/4.2.1/bits/time_members.h:
 
-/usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/messages_members.h:
+/usr/include/c++/4.2.1/bits/messages_members.h:
 
 /usr/include/c++/4.2.1/bits/basic_ios.tcc:
 
@@ -503,9 +510,7 @@ include/gtest/internal/gtest-filepath.h:
 
 include/gtest/internal/gtest-type-util.h:
 
-/usr/include/c++/4.2.1/cxxabi.h:
-
-/usr/include/c++/4.2.1/i686-apple-darwin10/x86_64/bits/cxxabi_tweaks.h:
+/usr/include/cxxabi.h:
 
 include/gtest/internal/gtest-string.h:
 

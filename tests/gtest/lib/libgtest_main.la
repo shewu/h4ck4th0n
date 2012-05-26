@@ -17,7 +17,7 @@ old_library='libgtest_main.a'
 inherited_linker_flags=' '
 
 # Libraries that this one depends upon.
-dependency_libs=' /Users/shewu/Dropbox/Projects/h4ck4th0n/gtest/lib/libgtest.la'
+dependency_libs=' /Users/shewu/Dropbox/Projects/h4ck4th0n/tests/gtest/lib/libgtest.la'
 
 # Names of additional weak libraries provided by this library
 weak_library_names=''

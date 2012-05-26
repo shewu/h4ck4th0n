@@ -177,6 +177,7 @@ WallType parseWallType(std::string& s) {
 }
 
 void HBMap::parseWall(std::string& s) {
+	int a = b = c = d = 0;
     StringTokenizer st(s);
     WallType wallType;
     if (st.hasMoreTokens()) {

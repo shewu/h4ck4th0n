@@ -113,7 +113,7 @@ class HBMap {
 		 *
 		 * @return a list of round walls.
 		 */
-		const std::vector<RoundWalls>& getRoundWalls() const {
+		const std::vector<RoundWall>& getRoundWalls() const {
 			return roundWalls;
 		}
 

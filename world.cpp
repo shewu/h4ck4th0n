@@ -13,10 +13,7 @@ using namespace std;
 World::World(std::string mapName) : wallColor(101, 67, 33), worldMap(mapName) {
     rectWalls = worldMap.getRectangularWalls();
 
-    vector<Team> teams = worldMap.getTeams();
-    for (iterator<Team> team = teams.begin(); team != teams.end(); ++it) {
-        ;
-    }
+    teams = worldMap.getTeamDescriptors();
 
 	Light l;
 	l.position = Vector3D(0, 0, 10);

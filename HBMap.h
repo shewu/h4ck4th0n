@@ -19,7 +19,7 @@ class HBMap {
 		 *
 		 * @throw ParseException when the parser encounters invalid syntax.
 		 */
-        HBMap(std::string filename const) {
+        HBMap(std::string const filename) {
             parse(filename);
         }
 
@@ -92,7 +92,7 @@ class HBMap {
 		 *
 		 * @return the flags for team.
 		 */
-        const std::vector<Flag>& getFlagsForTeam(unsigned team) const {
+        const std::vector<FlagObject>& getFlagsForTeam(unsigned team) const {
             if (team >= teams.size()) {
                 return flags[0];
             }
@@ -130,7 +130,7 @@ class HBMap {
 		std::set<GameMode> modes;
 		std::vector<TeamDescriptor> teams;
 		std::vector<RectangularWall> walls;
-		std::vector<Flag> flags;
+		std::vector<FlagObject> flags;
         std::vector<SpawnDescriptor> spawns[HBMap::MAX_TEAMS];
 
         Color getColorForTeam(int team) {

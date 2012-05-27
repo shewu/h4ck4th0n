@@ -65,6 +65,10 @@ class Object
 			return id;
 		}
 
+		bool operator<(Object const& that) const {
+			return id < that.id;
+		}
+
 		/**
 		 * Writes the object to a WritePacket
 		 * @param wp the WritePacket to write this object to
@@ -241,18 +245,71 @@ class RoundWall : public RoundObject
 		static RoundWall readFromPacket(ReadPacket *rp);
 };
 
+enum MovingObjectState {
+	MOS_SPAWNING,
+	MOS_ALIVE,
+	MOS_SHRINKING,
+	MOS_DEAD,
+
+    MOS_NUM_STATES
+};
+
 class MovingRoundObject : public RoundObject
 {
 	private:
+		MovingObjectState state;
+
+		// MOS_SPAWNING
+		float timeUntilSpawn;
+
+		// MOS_SHRINKING
+		MovingRoundObject *parent;
+		int numChildren;
+
 		Vector2D velocity;
 		float mass;
 		float heightRatio;
 		
 	public:
 		MovingRoundObject(Material material, Vector2D center, float radius, float mass,
-		                  float heightRatio) :
-		    RoundObject(material, center, radius, 0.0, M_PI_2), velocity(0.0, 0.0), mass(mass), 
+		                  float heightRatio, float timeUntilSpawn) :
+		    RoundObject(material, center, radius, 0.0, M_PI_2), state(MOS_SPAWNING), timeUntilSpawn(timeUntilSpawn), velocity(0.0, 0.0), mass(mass), 
             heightRatio(heightRatio) { }
+
+		/**
+		 * Gets the state.
+		 * @return the state.
+		 */
+		MovingObjectState getState() const {
+			return state;
+		}
+
+		/**
+		 * Gets the time until spawn. Should only be called if the
+		 * state is MOS_SPAWNING.
+		 * @return the time until spawn
+		 */
+		float getTimeUntilSpawn() const {
+			return timeUntilSpawn;
+		}
+
+		/**
+		 * Gets the parent for shrinking, or NULL if there is no
+		 * parent. Should only be called if the state is MOS_SHRINKING
+		 * @return a pointer to the parent Player
+		 */
+		MovingRoundObject *getShrinkingParent() const {
+			return parent;
+		}
+
+		/**
+		 * Gets the time until spawn. Should only be called if the
+		 * state is MOS_SPAWNING.
+		 * @return the time until spawn
+		 */
+		int getNumShrinkingChildren() const {
+			return numChildren;
+		}
 
 		/**
 		 * @param center the new center for this object
@@ -283,7 +340,7 @@ class MovingRoundObject : public RoundObject
 		}
 };
 
-class Flag : public MovingRoundObject
+class FlagObject : public MovingRoundObject
 {
 	private:
 		unsigned teamNumber;
@@ -299,9 +356,9 @@ class Flag : public MovingRoundObject
 		 * @param center The center of the flag.
 		 * @param teamNumber The team number for this flag.
 		 */
-		Flag(Material material, Vector2D center, unsigned teamNumber) :
-		    MovingRoundObject(material, center, Flag::FLAG_RADIUS,
-                Flag::FLAG_MASS, Flag::FLAG_HEIGHT_RATIO),
+		FlagObject(Material material, unsigned teamNumber, float timeUntilSpawn) :
+		    MovingRoundObject(material, Vector2D(), FlagObject::FLAG_RADIUS,
+                              FlagObject::FLAG_MASS, FlagObject::FLAG_HEIGHT_RATIO, timeUntilSpawn),
             teamNumber(teamNumber) { }
 		
 		/**
@@ -316,34 +373,17 @@ class Flag : public MovingRoundObject
 		 * @param rp ReadPacket to read from
 		 * @return a Flag object read from the ReadPacket
 		 */
-		static Flag readFromPacket(ReadPacket *rp);
+		static FlagObject readFromPacket(ReadPacket *rp);
 };
 
-float Flag::FLAG_RADIUS = 1.0f;
-float Flag::FLAG_MASS = 1.2f;
-float Flag::FLAG_HEIGHT_RATIO = 2.0f;
+float FlagObject::FLAG_RADIUS = 1.0f;
+float FlagObject::FLAG_MASS = 1.2f;
+float FlagObject::FLAG_HEIGHT_RATIO = 2.0f;
 
-enum PlayerState {
-	PS_SPAWNING,
-	PS_ALIVE,
-	PS_SHRINKING,
-	PS_DEAD,
-
-    PS_NUM_STATES
-};
-
-class Player : public MovingRoundObject
+class PlayerObject : public MovingRoundObject
 {
 	private:
-		PlayerState playerState;
 		unsigned teamNumber;
-
-		// PS_SPAWNING
-		float timeUntilSpawn;
-
-		// PS_SHRINKING
-		Player *parent;
-		int numChildren;
 
         static float PLAYER_RADIUS;
         static float PLAYER_MASS;
@@ -355,17 +395,9 @@ class Player : public MovingRoundObject
 		 * @param material The material for this player.
 		 * @param teamNumber the number of this player's team.
 		 */
-		Player(Material material, unsigned teamNumber) :
-		    MovingRoundObject(material, Vector2D(), Player::PLAYER_RADIUS, Player::PLAYER_MASS, Player::PLAYER_HEIGHT_RATIO),
-            playerState(PS_DEAD), teamNumber(teamNumber) { }
-
-		/**
-		 * Gets the player state.
-		 * @return the player state.
-		 */
-		PlayerState getPlayerState() const {
-			return playerState;
-		}
+		PlayerObject(Material material, unsigned teamNumber, float timeUntilSpawn) :
+		    MovingRoundObject(material, Vector2D(), PlayerObject::PLAYER_RADIUS, PlayerObject::PLAYER_MASS, PlayerObject::PLAYER_HEIGHT_RATIO, timeUntilSpawn),
+            teamNumber(teamNumber) { }
 
 		/**
 		 * Gets the team number.
@@ -376,43 +408,16 @@ class Player : public MovingRoundObject
 		}
 
 		/**
-		 * Gets the time until spawn. Should only be called if the
-		 * playerState is PS_SPAWNING.
-		 * @return the time until spawn
-		 */
-		float getTimeUntilSpawn() const {
-			return timeUntilSpawn;
-		}
-
-		/**
-		 * Gets the parent for shrinking, or NULL if there is no
-		 * parent. Should only be called if the playerState is PS_SHRINKING
-		 * @return a pointer to the parent Player
-		 */
-		Player *getShrinkingParent() const {
-			return parent;
-		}
-
-		/**
-		 * Gets the time until spawn. Should only be called if the
-		 * playerState is PS_SPAWNING.
-		 * @return the time until spawn
-		 */
-		int getNumShrinkingChildren() const {
-			return numChildren;
-		}
-
-		/**
 		 * Creates a Player object by reading a ReadPacket
 		 * @param rp ReadPacket to read from
 		 * @return a Player object read from the ReadPacket
 		 */
-		static Player readFromPacket(ReadPacket *rp);
+		static PlayerObject readFromPacket(ReadPacket *rp);
 };
 
-float Player::PLAYER_RADIUS = 1;
-float Player::PLAYER_MASS = 1;
-float Player::PLAYER_HEIGHT_RATIO = 1;
+float PlayerObject::PLAYER_RADIUS = 1;
+float PlayerObject::PLAYER_MASS = 1;
+float PlayerObject::PLAYER_HEIGHT_RATIO = 1;
 
 #endif
 

@@ -104,10 +104,10 @@ void MultiGameViewController::render() {
 		obspoints[4 * ti + 1] = world.obstacles[i2].p1.y;
 		obspoints[4 * ti + 2] = world.obstacles[i2].p2.x;
 		obspoints[4 * ti + 3] = world.obstacles[i2].p2.y;
-		obscolor[4 * ti] = world.obstacles[i2].color.r;
-		obscolor[4 * ti + 1] = world.obstacles[i2].color.g;
-		obscolor[4 * ti + 2] = world.obstacles[i2].color.b;
-		obscolor[4 * ti + 3] = world.obstacles[i2].color.a;
+		obscolor[4 * ti] = world.obstacles[i2].color.getR();
+		obscolor[4 * ti + 1] = world.obstacles[i2].color.getG();
+		obscolor[4 * ti + 2] = world.obstacles[i2].color.getB();
+		obscolor[4 * ti + 3] = world.obstacles[i2].color.getA();
 		i2++;
 	}
 	vector<cl::Buffer> obspointsbuf, obscolorbuf, objpointbuf, objsizebuf, objcolorbuf, lightposbuf, lightcolorbuf;
@@ -128,10 +128,10 @@ void MultiGameViewController::render() {
 		objpoint[2*si+1] = it->second.p.y;
 		objsize[2*si] = it->second.rad;
 		objsize[2*si+1] = it->second.hrat;
-		objcolor[4*si] = it->second.color.r;
-		objcolor[4*si+1] = it->second.color.g;
-		objcolor[4*si+2] = it->second.color.b;
-		objcolor[4*si+3] = it->second.color.a;
+		objcolor[4*si] = it->second.color.getR();
+		objcolor[4*si+1] = it->second.color.getG();
+		objcolor[4*si+2] = it->second.color.getB();
+		objcolor[4*si+3] = it->second.color.getA();
 		it++;
 	}
 	for(unsigned i = 0; i < devices.size(); i++) {
@@ -143,13 +143,13 @@ void MultiGameViewController::render() {
 	float lightpos[3*world.lights.size()];
 	unsigned char lightcolor[4*world.lights.size()];
 	for (unsigned i = 0; i < world.lights.size(); i++) {
-		lightpos[3*i] = world.lights[i].position.x;
-		lightpos[3*i+1] = world.lights[i].position.y;
-		lightpos[3*i+2] = world.lights[i].position.z;
-		lightcolor[4*i] = world.lights[i].color.r;
-		lightcolor[4*i+1] = world.lights[i].color.g;
-		lightcolor[4*i+2] = world.lights[i].color.b;
-		lightcolor[4*i+3] = world.lights[i].color.a;
+		lightpos[3*i] = world.lights[i].getPosition().x;
+		lightpos[3*i+1] = world.lights[i].getPosition().y;
+		lightpos[3*i+2] = world.lights[i].getPosition().z;
+		lightcolor[4*i] = world.lights[i].getColor().getR();
+		lightcolor[4*i+1] = world.lights[i].getColor().getG();
+		lightcolor[4*i+2] = world.lights[i].getColor().getB();
+		lightcolor[4*i+3] = world.lights[i].getColor().getA();
 	}
 	for (unsigned i = 0; i < devices.size(); i++) {
 		lightposbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 3*world.lights.size()*sizeof(float), lightpos, NULL));

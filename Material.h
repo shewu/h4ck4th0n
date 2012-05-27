@@ -11,6 +11,9 @@ class Texture : public Material
 
 };
 
+/**
+ * An immutable representation of a color in RGBA.
+ */
 class Color : public Material
 {
     private:
@@ -55,6 +58,15 @@ class Color : public Material
         const unsigned char getB() const {
             return b;
         }
+
+		/**
+		 * Gets the alpha channel of this Color instance.
+		 *
+		 * @return the value of the alpha channel.
+		 */
+		const unsigned char getA() const {
+			return a;
+		}
 };
 
 #endif

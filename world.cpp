@@ -15,14 +15,10 @@ World::World(std::string mapName) : wallColor(101, 67, 33), worldMap(mapName) {
 
     teams = worldMap.getTeamDescriptors();
 
-	Light l;
-	l.position = Vector3D(0, 0, 10);
-	l.color = Color(255, 255, 255);
+	Light l(Vector3D(0,0,10), Color(255,255,255));
 	lights.push_back(l);
 	
-	Light l2;
-	l2.position = Vector3D(0, 30, 20);
-	l2.color = Color(255, 255, 255);
+	Light l2(Vector3D(0,30,20), Color(255,255,255));
 	lights.push_back(l2);
 	
 	while (spawn(1, -1, BLU) == -1);

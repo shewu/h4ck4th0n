@@ -177,6 +177,7 @@ WallType parseWallType(std::string& s) {
 }
 
 void HBMap::parseWall(std::string& s) {
+	int a = b = c = d = 0;
     StringTokenizer st(s);
     WallType wallType;
     if (st.hasMoreTokens()) {
@@ -199,6 +200,6 @@ void HBMap::parseWall(std::string& s) {
     }
 
     // assign wall colors later
-    walls.push_back(Obstacle(Vector2D(a, b), Vector2D(c, d), Color(0, 0, 0), parseWallType(wallType)));
+    rectangularWalls.push_back(Obstacle(Vector2D(a, b), Vector2D(c, d), Color(0, 0, 0), parseWallType(wallType)));
 }
 

@@ -15,6 +15,8 @@ class World
 		std::string mapName;
         Color wallColor;
         HBMap worldMap;
+		std::vector<RectangularWall> rectWalls;
+		std::vector<TeamDescriptor> teams;
 
 		std::vector<Light> lights;
 

@@ -1,7 +1,11 @@
-#include "hack.h"
 #include <netinet/in.h>
 #include <stdio.h>
 
+#include "hack.h"
+#include "Object.h"
+#include "packet.h"
+
+/*
 void Object::write_data(WritePacket* wp) {
     wp->write_float(p.x);
     wp->write_float(p.y);
@@ -33,3 +37,21 @@ void Object::read_data(ReadPacket *rp) {
     hrat = rp->read_float();
     id = rp->read_int();
 }
+*/
+
+void RectangularWall::writeToPacket(WritePacket* wp) {
+	// TODO
+}
+
+void RoundWall::writeToPacket(WritePacket* wp) {
+	// TODO
+}
+
+void Flag::writeToPacket(WritePacket* wp) {
+	// TODO
+}
+
+void Player::writeToPacket(WritePacket* wp) {
+	// TODO
+}
+

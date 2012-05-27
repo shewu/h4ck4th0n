@@ -11,20 +11,9 @@
 using namespace std;
 
 World::World(std::string mapName) : wallColor(101, 67, 33), worldMap(mapName) {
-	minX = -worldMap.getWidth()/2;
-	maxX = worldMap.getWidth() + minX;
-	minY = -worldMap.getHeight()/2;
-	maxY = worldMap.getHeight() + minY;
+    rectWalls = worldMap.getRectangularWalls();
 
-    vector<Obstacle> walls = worldMap.getWalls();
-    for (iterator<Obstacle> it = walls.begin(); it != walls.end(); ++it) {
-        obstacles.push_back(*it);
-    }
-
-    vector<Team> teams = worldMap.getTeams();
-    for (iterator<Team> team = teams.begin(); team != teams.end(); ++it) {
-        ;
-    }
+    teams = worldMap.getTeamDescriptors();
 
 	Light l;
 	l.position = Vector3D(0, 0, 10);

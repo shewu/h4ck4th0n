@@ -100,18 +100,28 @@ class HBMap {
         }
 
 		/**
-		 * Gets the walls for the map.
+		 * Gets the rectangular walls for the map.
 		 *
-		 * @return a list of walls.
+		 * @return a list of rectangular walls.
 		 */
-        const std::vector<RectangularWall>& getWalls() const {
-            return walls;
+        const std::vector<RectangularWall>& getRectangularWalls() const {
+            return rectangularWalls;
         }
+
+		/**
+		 * Gets the round walls for the map.
+		 *
+		 * @return a list of round walls.
+		 */
+		const std::vector<RoundWall>& getRoundWalls() const {
+			return roundWalls;
+		}
 
 		/**
 		 * The maximum number of teams allowed in maps.
 		 */
         const static unsigned MAX_TEAMS = 10;
+
     private:
         void parse(std::string filename);
         void parseHBMapName(std::string& s);
@@ -129,8 +139,9 @@ class HBMap {
 
 		std::set<GameMode> modes;
 		std::vector<TeamDescriptor> teams;
-		std::vector<RectangularWall> walls;
-		std::vector<FlagObject> flags;
+		std::vector<RectangularWall> rectangularWalls;
+		std::vector<RoundWall> roundWalls;
+		std::vector<FlagObject> flags[HBMap::MAX_TEAMS];
         std::vector<SpawnDescriptor> spawns[HBMap::MAX_TEAMS];
 
         Color getColorForTeam(int team) {

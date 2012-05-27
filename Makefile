@@ -3,8 +3,11 @@ LD=g++
 
 CCFLAGS = -Wall
 
-debug: CCFLAGS += -O0 -g -DDEBUG -Werror
-all: CCFLAGS += -O2 -w
+ifeq ($(DEBUG), 1)
+	CCFLAGS += -O0 -g -DDEBUG -Werror
+else
+	CCFLAGS += -O2 -w
+endif
 
 UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
 HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
@@ -38,8 +41,6 @@ MULTI_BALLS_OBJECTS+=$(SHARED_OBJECTS) multiclient.o MultiGameViewController.o
 executables: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET) $(MULTI_BALLS_TARGET)
 
 all: executables
-
-debug: executables
 
 $(SERVER_TARGET): $(SERVER_OBJECTS)
 	$(LD) -o $(SERVER_TARGET) $(SERVER_LDFLAGS) $(SERVER_OBJECTS)

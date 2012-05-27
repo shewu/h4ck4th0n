@@ -3,11 +3,8 @@ LD=g++
 
 CCFLAGS = -Wall
 
-ifeq ($(DEBUG_MODE),on)
-CCFLAGS += -O0 -g -DDEBUG -Werror
-else
-CCFLAGS += -O2 -w
-endif
+debug: CCFLAGS += -O0 -g -DDEBUG -Werror
+all: CCFLAGS += -O2 -w
 
 UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
 HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -O2 -g
@@ -33,12 +30,16 @@ SHARED_OBJECTS = socket.o \
 	packet.o \
 	SocketConnection.o
 
-SERVER_OBJECTS=server.o game.o world.o socket.o object.o vec.o simulate.o packet.o SocketConnection.o
+SERVER_OBJECTS+=$(SHARED_OBJECTS) server.o game.o simulate.o
 UNHOLY_BALLS_OBJECTS+=$(SHARED_OBJECTS) unholyclient.o UnholyGameViewController.o
 HOLY_BALLS_OBJECTS+=$(SHARED_OBJECTS) holyclient.o HolyGameViewController.o
 MULTI_BALLS_OBJECTS+=$(SHARED_OBJECTS) multiclient.o MultiGameViewController.o
 
-all: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET) $(MULTI_BALLS_TARGET)
+executables: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET) $(MULTI_BALLS_TARGET)
+
+all: executables
+
+debug: executables
 
 $(SERVER_TARGET): $(SERVER_OBJECTS)
 	$(LD) -o $(SERVER_TARGET) $(SERVER_LDFLAGS) $(SERVER_OBJECTS)

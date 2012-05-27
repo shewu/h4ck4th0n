@@ -25,48 +25,36 @@ World::World(std::string mapName) : wallColor(101, 67, 33), worldMap(mapName) {
 	while (spawn(3, -1, RED) == -1);
 }
 
-int World::spawn(int spawnl, int player, int flag) {
-	if (rand()/float(RAND_MAX) >= SPAWN_PROB) return -1;
-	
-	int oid;
-	do {
-		oid = rand();
-	} while (objects.count(oid));
-	
-	vector<Spawn>& sps = spawns[spawnl];
-	int which = rand()%sps.size();
-	
-	Object o;
-	o.v = Vector2D(0.0f, 0.0f);
-	o.mass = sps[which].mass;
-	o.rad = sps[which].rad;
-	o.color = sps[which].color;
-	o.hrat = sps[which].hrat;
-	o.dead = false;
-	o.id = oid;
-	o.player = player;
-	o.flag = flag;
-	o.spawnl = spawnl;
-	float min_x = sps[which].xmin + o.rad;
-	float max_x = sps[which].xmax - o.rad;
-	float min_y = sps[which].ymin + o.rad;
-	float max_y = sps[which].ymax - o.rad;
-	
-	o.p.x = rand()/float(RAND_MAX)*(max_x - min_x) + min_x;
-	o.p.y = rand()/float(RAND_MAX)*(max_y - min_y) + min_y;
+/**
+ * Attempts to spawn the given object at the given location.
+ * @param possibleSpawns Possible places to spawn at.
+ * @param obj The object to spawn. Should be in the MOS_SPAWNING state.
+ * @return True if the spawn is successful.
+ */
+bool World::spawn(vector<SpawnDescriptor> const& possibleSpawns, MovingRoundObject& obj) {
+	if (rand()/float(RAND_MAX) >= SPAWN_PROB) {
+		return false;
+	}
+
+	SpawnDescriptor const& spawn = possibleSpawns[rand() % possibleSpawns.size()];
+
+	Vector2D pos(random_uniform_float(spawn.getMinX(), spawn.getMaxX()),
+	             random_uniform_float(spawn.getMinY(), spawn.getMaxY()));
+
 	bool fail = false;
-	for (map<int, Object>::iterator it = objects.begin(); it != objects.end(); it++) {
-		Vector2D d = it->second.p - o.p;
-		if ((!it->second.dead || !it->second.stopped) && (it->second.rad + o.rad) * (it->second.rad + o.rad) > d*d) {
+	for (map<int, MovingRoundObject>::iterator it = movingRoundObjects.begin(); it != movingRoundObjects.end(); it++) {
+		MovingRoundObject const& otherObj = (*it).second;
+		Vector2D difference = obj.getCenter() - otherObj.getCenter();
+		float minDistance = obj.getRadius() + otherObj.getRadius();
+		if ((otherObj.getState() == MOS_ALIVE || otherObj.getState() == MOS_SHRINKING) &&
+			             minDistance * minDistance > difference * difference) {
 			fail = true;
 			break;
 		}
 	}
-	if (fail)
-		return -1;
-	
-	objects.insert(pair<int, Object>(o.id, o));
-	return oid;
+
+	if(fail)
+		return false;
 }
 
 void World::sendObjects(SocketConnection* sc, int obj) {

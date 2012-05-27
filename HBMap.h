@@ -92,7 +92,7 @@ class HBMap {
 		 *
 		 * @return the flags for team.
 		 */
-        const std::vector<Flag>& getFlagsForTeam(unsigned team) const {
+        const std::vector<FlagObject>& getFlagsForTeam(unsigned team) const {
             if (team >= teams.size()) {
                 return flags[0];
             }
@@ -141,7 +141,7 @@ class HBMap {
 		std::vector<TeamDescriptor> teams;
 		std::vector<RectangularWall> rectangularWalls;
 		std::vector<RoundWall> roundWalls;
-		std::vector<Flag> flags[HBMap::MAX_TEAMS];
+		std::vector<FlagObject> flags[HBMap::MAX_TEAMS];
         std::vector<SpawnDescriptor> spawns[HBMap::MAX_TEAMS];
 
         Color getColorForTeam(int team) {

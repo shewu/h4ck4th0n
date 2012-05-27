@@ -18,6 +18,11 @@ class World
 		std::vector<RectangularWall> rectWalls;
 		std::vector<TeamDescriptor> teams;
 
+		std::vector<Light> lights;
+
+		std::map<int, MovingRoundObject> movingRoundObjects;
+		std::set<RectangularWall> rectangularWalls;
+
 	public:
         /**
          * Default constructor for World given a map name from which to load
@@ -63,12 +68,16 @@ class World
         float getMaxY() const {
             return worldMap.getHeight()/2.0f;
         }
-		
-		std::map<int, std::vector<Player> > spawns;
-		std::map<int, Object> objects;
-		std::vector<Light> lights;
-		std::vector<Flag> flags;
 
+		/**
+		 * Returns the lights in the world.
+		 *
+		 * @return the lights.
+		 */
+        std::vector<Light> const& getLights() const {
+        	return lights;
+		}
+		
 		void doSimulation(float dt, std::vector<std::pair<char, Vector2D> >& sounds);
 		
 		void sendObjects(SocketConnection* sc, int obj);

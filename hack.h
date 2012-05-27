@@ -2,6 +2,7 @@
 #define HACK_H
 
 #include <vector>
+#include <cstdlib>
 
 #include "constants.h"
 #include "socket.h"
@@ -148,6 +149,10 @@ class TeamDescriptor {
         	return spawns;
 		}
 };
+
+float random_uniform_float(float l, float h) {
+	return rand() / float(RAND_MAX) * (h - l) + l;
+}
 
 #endif
 

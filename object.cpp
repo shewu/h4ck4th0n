@@ -43,7 +43,15 @@ void RectangularWall::writeToPacket(WritePacket* wp) {
 	// TODO
 }
 
+static RectangularWall RectangularWall::readFromPacket(ReadPacket *rp) {
+	// TODO
+}
+
 void RoundWall::writeToPacket(WritePacket* wp) {
+	// TODO
+}
+
+static RoundWall RoundWall::readFromPacket(ReadPacket *rp) {
 	// TODO
 }
 
@@ -51,7 +59,15 @@ void Flag::writeToPacket(WritePacket* wp) {
 	// TODO
 }
 
+static Flag::readFromPacket(ReadPacket *rp) {
+	// TODO
+}
+
 void Player::writeToPacket(WritePacket* wp) {
+	// TODO
+}
+
+static Player::readFroMPacket(ReadPacket *rp) {
 	// TODO
 }
 

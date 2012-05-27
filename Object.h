@@ -70,6 +70,8 @@ class Object
 		 * @param wp the WritePacket to write this object to
 		 */
 		virtual void writeToPacket(WritePacket *wp) = 0;
+
+		virtual ~Object();
 };
 
 unsigned Object::nextId = 0;
@@ -105,6 +107,8 @@ class RectangularObject : public Object
 		}
 
 		virtual void writeToPacket(WritePacket *wp) = 0;
+
+		virtual ~RectangularObject();
 };
 
 enum WallType
@@ -152,6 +156,8 @@ class RectangularWall : public RectangularObject
 		static RectangularWall readFromPacket(ReadPacket *rp);
 
 		void writeToPacket(WritePacket* wp);
+
+		~RectangularWall();
 };
 
 class RoundObject : public Object

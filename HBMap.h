@@ -17,11 +17,32 @@ class HBMap {
 		/**
 		 * Creates an HBMap instance given the map filename.
 		 *
+		 * @param filename the filename of the map file to be read.
+		 *
 		 * @throw ParseException when the parser encounters invalid syntax.
 		 */
         HBMap(std::string const filename) {
             parse(filename);
         }
+
+		/**
+		 * Copy constructor for HBMap.
+		 *
+		 * @param map the HBMap to be copied.
+		 */
+		HBMap(HBMap const& map) {
+			width = map.getWidth();
+			height = map.getHeight();
+
+			modes = map.getGameModes();
+			teams = map.getTeamDescriptors();
+			rectangularWalls = map.getRectangularWalls();
+			roudWalls = map.getRoundWalls();
+			for (int i = 0; i < teams.size(); ++i) {
+				flags[i] = map.getFlagsForTeam(i);
+				spawns[i] = map.getSpawnsForTeam(i);
+			}
+		}
 
 		/**
 		 * Gets the width of the map.

@@ -59,7 +59,7 @@ void Flag::writeToPacket(WritePacket* wp) {
 	// TODO
 }
 
-static Flag::readFromPacket(ReadPacket *rp) {
+static Flag Flag::readFromPacket(ReadPacket *rp) {
 	// TODO
 }
 

@@ -10,7 +10,7 @@
 #include "hack.h"
 #include "menu.h"
 #include "packet.h"
-#include "world.h"
+#include "World.h"
 
 extern SDL_Surface* screen;
 extern char* ipaddy;

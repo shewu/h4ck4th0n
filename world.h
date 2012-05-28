@@ -19,7 +19,7 @@ class World
 
 	protected:
 		std::map<int, MovingRoundObject> movingRoundObjects;
-		std::set<RectangularWall> rectangularWalls;
+		std::map<int, RectangularWall> rectangularWalls;
 
 	public:
         /**

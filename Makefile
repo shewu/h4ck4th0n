@@ -33,7 +33,7 @@ SHARED_OBJECTS = socket.o \
 	packet.o \
 	SocketConnection.o
 
-SERVER_OBJECTS+=$(SHARED_OBJECTS) server.o game.o simulate.o
+SERVER_OBJECTS+=$(SHARED_OBJECTS) server.o game.o Physics.o
 UNHOLY_BALLS_OBJECTS+=$(SHARED_OBJECTS) unholyclient.o UnholyGameViewController.o
 HOLY_BALLS_OBJECTS+=$(SHARED_OBJECTS) holyclient.o HolyGameViewController.o
 MULTI_BALLS_OBJECTS+=$(SHARED_OBJECTS) multiclient.o MultiGameViewController.o

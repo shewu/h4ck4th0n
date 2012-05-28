@@ -13,15 +13,13 @@ class World
 {
 	private:
 		std::string mapName;
-        Color wallColor;
         HBMap worldMap;
-		std::vector<RectangularWall> rectWalls;
-		std::vector<TeamDescriptor> teams;
 
 		std::vector<Light> lights;
 
+	protected:
 		std::map<int, MovingRoundObject> movingRoundObjects;
-		std::set<RectangularWall> rectangularWalls;
+		std::map<int, RectangularWall> rectangularWalls;
 
 	public:
         /**
@@ -78,7 +76,6 @@ class World
         	return lights;
 		}
 		
-		void doSimulation(float dt, std::vector<std::pair<char, Vector2D> >& sounds);
 		
 		void sendObjects(SocketConnection* sc, int obj);
 		void receiveObjects(ReadPacket* rp, int& obj);

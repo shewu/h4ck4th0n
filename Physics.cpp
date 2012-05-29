@@ -1,3 +1,6 @@
+#include <cmath>
+#include "hack.h"
+
 enum EventType
 {
 	ET_NONE,
@@ -21,7 +24,7 @@ struct collide_event
 	 */
 	int t1, t2;
 	bool operator<(collide_event const& a) const {
-		return (a.time > b.time);
+		return (time > a.time);
 	}
 	collide_event(float time, EventType type, int t1, int t2) :
 	              time(time), type(type), t1(t1), t2(t2) { }

@@ -373,6 +373,13 @@ class MovingRoundObject : public RoundObject
 		}
 
 		/**
+		 * @param radius the new radius for this object
+		 */
+		void setRadius(float radius) {
+			this->radius = radius;
+		}
+
+		/**
 		 * @param velocity the new velocity for this object
 		 */
 		void setVelocity(const Vector2D& velocity) {
@@ -382,7 +389,7 @@ class MovingRoundObject : public RoundObject
 		/**
 		 * @return the velocity
 		 */
-		const Vector2D& getWallType() const {
+		const Vector2D& getVelocity() const {
 			return velocity;
 		}
 
@@ -400,6 +407,10 @@ class MovingRoundObject : public RoundObject
 		bool shouldDieFromShrinkingObject(MovingRoundObject const& obj) const {
 			return obj.state == MOS_SHRINKING && (isFlag == obj.isFlag);
 		}
+
+		void startShrinking(MovingRoundObject *parent, Vector2D const& velocity);
+		bool shouldDieFromWall(RectangularWall const& wall) const;
+		void kill();
 
 		virtual void writeToPacket(WritePacket *wp);
 };

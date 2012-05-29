@@ -283,11 +283,13 @@ class MovingRoundObject : public RoundObject
 		Vector2D velocity;
 		float mass;
 		float heightRatio;
+
+		bool isFlag;
 		
 	public:
 		MovingRoundObject(Material material, Vector2D center, float radius, float mass,
-		                  float heightRatio, float timeUntilSpawn) :
-		    RoundObject(material, center, radius, 0.0, M_PI_2), state(MOS_SPAWNING), timeUntilSpawn(timeUntilSpawn), velocity(0.0, 0.0), mass(mass), 
+		                  float heightRatio, float timeUntilSpawn, bool isFlag) :
+		    RoundObject(material, center, radius, 0.0, M_PI_2), state(MOS_SPAWNING), timeUntilSpawn(timeUntilSpawn), velocity(0.0, 0.0), mass(mass), isFlag(isFlag),
             heightRatio(heightRatio) { }
 
 		/**
@@ -314,6 +316,16 @@ class MovingRoundObject : public RoundObject
 		 */
 		MovingRoundObject *getShrinkingParent() const {
 			return parent;
+		}
+
+		/**
+		 * Returns whether this object is currently shrinking.
+		 * This happens if and only if the state is MOS_SHRINKING and
+		 * there are no shrinking children.
+		 * @return True if the object is currently shrinking.
+		 */
+		bool isCurrentlyShrinking() const {
+			return state == MOS_SHRINKING && numChildren == 0;
 		}
 
 		/**
@@ -353,6 +365,14 @@ class MovingRoundObject : public RoundObject
 			return mass;
 		}
 
+		/**
+		 * @return whether or not this object should die if it runs into the given
+		 *         shrinking object.
+		 */
+		bool shouldDieFromShrinkingObject(MovingRoundObject const& obj) const {
+			return obj.state() == MOS_SHRINKING && (isFlag == obj.isFlag);
+		}
+
 		virtual void writeToPacket(WritePacket *wp);
 };
 
@@ -374,7 +394,7 @@ class FlagObject : public MovingRoundObject
 		 */
 		FlagObject(Material material, unsigned teamNumber, float timeUntilSpawn) :
 		    MovingRoundObject(material, Vector2D(), FlagObject::FLAG_RADIUS,
-                              FlagObject::FLAG_MASS, FlagObject::FLAG_HEIGHT_RATIO, timeUntilSpawn),
+                              FlagObject::FLAG_MASS, FlagObject::FLAG_HEIGHT_RATIO, timeUntilSpawn, true),
             teamNumber(teamNumber) { }
 		
 		/**
@@ -414,7 +434,7 @@ class PlayerObject : public MovingRoundObject
 		 * @param teamNumber the number of this player's team.
 		 */
 		PlayerObject(Material material, unsigned teamNumber, float timeUntilSpawn) :
-		    MovingRoundObject(material, Vector2D(), PlayerObject::PLAYER_RADIUS, PlayerObject::PLAYER_MASS, PlayerObject::PLAYER_HEIGHT_RATIO, timeUntilSpawn),
+		    MovingRoundObject(material, Vector2D(), PlayerObject::PLAYER_RADIUS, PlayerObject::PLAYER_MASS, PlayerObject::PLAYER_HEIGHT_RATIO, timeUntilSpawn, false),
             teamNumber(teamNumber) { }
 
 		/**

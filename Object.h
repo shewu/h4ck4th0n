@@ -42,6 +42,10 @@ class Object
 
 		static unsigned nextId;
 
+		// Make object non-copyable by making this private.
+		Object(Object const&);
+		Object& operator=(Object const&);
+
 	public:
 		/**
 		 * Constructs an object with the given material.
@@ -84,6 +88,10 @@ class RectangularObject : public Object
 {
 	private:
 		Vector2D p1, p2;
+
+		// Make object non-copyable by making this private.
+		RectangularObject(RectangularObject const&);
+		RectangularObject& operator=(RectangularObject const&);
 
 	public:
 		/**
@@ -134,6 +142,10 @@ class RectangularWall : public RectangularObject
 	private:
 		WallType wallType;
 
+		// Make object non-copyable by making this private.
+		RectangularWall(RectangularWall const&);
+		RectangularWall& operator=(RectangularWall const&);
+
 	public:
 		/**
 		 * Constructs a RectangularWall between the given two points
@@ -142,8 +154,8 @@ class RectangularWall : public RectangularObject
 		 * @param b Second endpoint of the wall.
 		 * @param material The material for the object being created.
 		 */
-		RectangularWall(Vector2D a, Vector2D b, Material material, WallType wt = WT_NORMAL) :
-		    RectangularObject(a, b, material), wallType(wt) { }
+		RectangularWall(Vector2D a, Vector2D b, WallType wt = WT_NORMAL) :
+		    RectangularObject(a, b, Color(101, 67, 33)), wallType(wt) { }
 
 		/**
 		 * @return the wall type
@@ -166,10 +178,17 @@ class RectangularWall : public RectangularObject
 
 class RoundObject : public Object
 {
+	private:
+
+		// Make object non-copyable by making this private.
+		RoundObject(RoundObject const&);
+		RoundObject& operator=(RoundObject const&);
+
 	protected:
 		Vector2D center;
 		float radius;
 		float startAngle, endAngle;
+
 
 	public:
 		/**
@@ -224,6 +243,10 @@ class RoundWall : public RoundObject
 	private:
 		WallType wallType;
 
+		// Make object non-copyable by making this private.
+		RoundWall(RoundWall const&);
+		RoundWall& operator=(RoundWall const&);
+
 	public:
 		/**
 		 * Constructs a RoundWall with the given material.
@@ -271,6 +294,11 @@ enum MovingObjectState {
 class MovingRoundObject : public RoundObject
 {
 	private:
+
+		// Make object non-copyable by making this private.
+		MovingRoundObject(MovingRoundObject const&);
+		MovingRoundObject& operator=(MovingRoundObject const&);
+
 		MovingObjectState state;
 
 		// MOS_SPAWNING
@@ -370,7 +398,7 @@ class MovingRoundObject : public RoundObject
 		 *         shrinking object.
 		 */
 		bool shouldDieFromShrinkingObject(MovingRoundObject const& obj) const {
-			return obj.state() == MOS_SHRINKING && (isFlag == obj.isFlag);
+			return obj.state == MOS_SHRINKING && (isFlag == obj.isFlag);
 		}
 
 		virtual void writeToPacket(WritePacket *wp);
@@ -380,6 +408,10 @@ class FlagObject : public MovingRoundObject
 {
 	private:
 		unsigned teamNumber;
+
+		// Make object non-copyable by making this private.
+		FlagObject(FlagObject const&);
+		FlagObject& operator=(FlagObject const&);
 
 	public:
         static float FLAG_RADIUS;
@@ -426,6 +458,10 @@ class PlayerObject : public MovingRoundObject
         static float PLAYER_RADIUS;
         static float PLAYER_MASS;
         static float PLAYER_HEIGHT_RATIO;
+
+		// Make object non-copyable by making this private.
+		PlayerObject(PlayerObject const&);
+		PlayerObject& operator=(PlayerObject const&);
 
 	public:
 		/**

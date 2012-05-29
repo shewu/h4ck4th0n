@@ -210,8 +210,8 @@ void bounceMovingRoundFromWall(MovingRoundObject& obj, Vector2D const& p1, Vecto
 }
 
 void updateRoundObjectsForward(map<int, MovingRoundObject>& objects, float dt) {
-	for(map<int, MovingRoundObject>::iterator i = objects.begin(); i != objects.end(); i++) {
-		MovingRoundObject& obj = i->second;
+	for(map<int, MovingRoundObject*>::iterator i = objects.begin(); i != objects.end(); i++) {
+		MovingRoundObject& obj = *(i->second);
 		if(obj.getState() == MOS_ALIVE) {
 			obj.setCenter(obj.getCenter() + obj.getVelocity() * dt);
 		}
@@ -228,15 +228,15 @@ void PhysicsWorld::doSimulation() {
 	map<int, collide_event> collideDisappear;
 	priority_queue<collide_event> collideEvents;
 
-	for (map<int, MovingRoundObject>::iterator i = movingRoundObjects.begin(); i != movingRoundObjects.end(); i++) {
-		map<int, MovingRoundObject>::iterator j = i;
+	for (map<int, MovingRoundObject*>::iterator i = movingRoundObjects.begin(); i != movingRoundObjects.end(); i++) {
+		map<int, MovingRoundObject*>::iterator j = i;
 		for (j++; j != movingRoundObjects.end(); j++) {
-			doObjectCollision(i->second, j->second, collideRoundWithRound, collideEvents, 0, dt);
+			doObjectCollision(*(i->second), *(j->second), collideRoundWithRound, collideEvents, 0, dt);
 		}
-		for (map<int, RectangularWall>::iterator k = rectangularWalls.begin(); k != rectangularWalls.end(); k++) {
-			doRectangularWallCollision(i->second, k->second, collideRoundWithWall, collideEvents, 0, dt);
+		for (map<int, RectangularWall*>::iterator k = rectangularWalls.begin(); k != rectangularWalls.end(); k++) {
+			doRectangularWallCollision(*(i->second), *(k->second), collideRoundWithWall, collideEvents, 0, dt);
 		}
-		doRoundObjectDisappearing(i->second, collideDisappear, collideEvents, 0, dt);
+		doRoundObjectDisappearing(*(i->second), collideDisappear, collideEvents, 0, dt);
 	}
 
 	int eventsDone = 0;
@@ -260,8 +260,8 @@ void PhysicsWorld::doSimulation() {
 			case ET_ROUND_ROUND:
 				collideRoundWithRound[pair<int, int>(e.t1, e.t2)] = collide_event(INFINITY, ET_NONE, e.t1, e.t2);
 
-				MovingRoundObject& obj1 = movingRoundObjects[e.t1];
-				MovingRoundObject& obj2 = movingRoundObjects[e.t2];
+				MovingRoundObject& obj1 = *(movingRoundObjects[e.t1]);
+				MovingRoundObject& obj2 = *(movingRoundObjects[e.t2]);
 
 				Vector2D normal = obj2.getCenter() - obj1.getCenter();
 				float nv1 = obj1.getVelocity() * normal;
@@ -286,15 +286,15 @@ void PhysicsWorld::doSimulation() {
 					                );
 				}
 
-				for (map<int, MovingRoundObject>::iterator i = movingRoundObjects.begin(); i != movingRoundObjects.end(); i++) {
+				for (map<int, MovingRoundObject*>::iterator i = movingRoundObjects.begin(); i != movingRoundObjects.end(); i++) {
 					if (i->first != obj1.getID() && i->first != obj2.getID()) {
-						MovingRoundObject& obj = i->second;
+						MovingRoundObject& obj = *(i->second);
 						doObjectCollision(obj, obj1, collideRoundWithRound, collideEvents, e.time, dt);
 						doObjectCollision(obj, obj2, collideRoundWithRound, collideEvents, e.time, dt);
 					}
 				}
-				for (map<int, RectangularWall>::iterator i = rectangularWalls.begin(); i != rectangularWalls.end(); i++) {
-					RectangularWall& wall = i->second; 
+				for (map<int, RectangularWall*>::iterator i = rectangularWalls.begin(); i != rectangularWalls.end(); i++) {
+					RectangularWall& wall = *(i->second);
 					doRectangularWallCollision(obj1, wall, collideRoundWithWall, collideEvents, e.time, dt);
 					doRectangularWallCollision(obj2, wall, collideRoundWithWall, collideEvents, e.time, dt);
 				}
@@ -307,8 +307,8 @@ void PhysicsWorld::doSimulation() {
 			case ET_ROUND_WALL_CORNER_2:
 			case ET_ROUND_WALL_LINE:
 				collideRoundWithWall[pair<int, int>(e.t1, e.t2)] = collide_event(INFINITY, ET_NONE, e.t1, e.t2);
-				MovingRoundObject& obj = movingRoundObjects[e.t1];
-				RectangularWall& wall = rectangularWalls[e.t2];
+				MovingRoundObject& obj = *(movingRoundObjects[e.t1]);
+				RectangularWall& wall = *(rectangularWalls[e.t2]);
 
 				if (obj.shouldDieFromWall(wall)) {
 					obj.startShrinking();
@@ -324,12 +324,12 @@ void PhysicsWorld::doSimulation() {
 					}
 				}
 
-				for (map<int, MovingRoundObject>::iterator i = movingRoundObjects.begin(); i != movingRoundObjects.end(); i++) {
+				for (map<int, MovingRoundObject*>::iterator i = movingRoundObjects.begin(); i != movingRoundObjects.end(); i++) {
 					if(i->first != e.t1) {
 						doObjectCollision(obj, i->second, collideRoundWithRound, collideEvents, e.time, dt);
 					}
 				}
-				for (map<int, RectangularWall>::iterator i = rectangularWalls.begin(); i != rectangularWalls.end(); i++) {
+				for (map<int, RectangularWall*>::iterator i = rectangularWalls.begin(); i != rectangularWalls.end(); i++) {
 					if(i->first != e.t2) {
 						doRectangularWallCollision(obj, i->second, collideRoundWithWall, collideEvents, e.time, dt);
 					}
@@ -338,22 +338,22 @@ void PhysicsWorld::doSimulation() {
 
 			case ET_ROUND_DISAPPEAR:
 				collideDisappear[e.t1] = collide_event(INFINITY, ET_NONE, e.t1, -1);
-				MovingRoundObject& obj = movingRoundObjects[e.t1];
+				MovingRoundObject& obj = *(movingRoundObjects[e.t1]);
 
 				MovingRoundObject *parent = obj.getShrinkingParent();
 				obj.kill();
 
-				for (map<int, MovingRoundObject>::iterator i = movingRoundObjects.begin(); i != movingRoundObjects.end(); i++) {
+				for (map<int, MovingRoundObject*>::iterator i = movingRoundObjects.begin(); i != movingRoundObjects.end(); i++) {
 					if (i->first != obj.getID() && (parent == NULL || i->first != parent->getID())) {
-						MovingRoundObject& obj = i->second;
+						MovingRoundObject& obj = *(i->second);
 						doObjectCollision(obj, obj, collideRoundWithRound, collideEvents, e.time, dt);
 						if(parent != NULL) {
 							doObjectCollision(obj, *parent, collideRoundWithRound, collideEvents, e.time, dt);
 						}
 					}
 				}
-				for (map<int, RectangularWall>::iterator i = rectangularWalls.begin(); i != rectangularWalls.end(); i++) {
-					RectangularWall& wall = i->second; 
+				for (map<int, RectangularWall*>::iterator i = rectangularWalls.begin(); i != rectangularWalls.end(); i++) {
+					RectangularWall& wall = *(i->second);
 					doRectangularWallCollision(obj, wall, collideRoundWithWall, collideEvents, e.time, dt);
 					if(parent != NULL) {
 						doRectangularWallCollision(*parent, wall, collideRoundWithWall, collideEvents, e.time, dt);

@@ -37,7 +37,7 @@ class HBMap {
 			modes = map.getGameModes();
 			teams = map.getTeamDescriptors();
 			rectangularWalls = map.getRectangularWalls();
-			roudWalls = map.getRoundWalls();
+			roundWalls = map.getRoundWalls();
 			for (int i = 0; i < teams.size(); ++i) {
 				flags[i] = map.getFlagsForTeam(i);
 				spawns[i] = map.getSpawnsForTeam(i);

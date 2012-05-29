@@ -18,8 +18,8 @@ class World
 		std::vector<Light> lights;
 
 	protected:
-		std::map<int, MovingRoundObject> movingRoundObjects;
-		std::map<int, RectangularWall> rectangularWalls;
+		std::map<int, MovingRoundObject*> movingRoundObjects;
+		std::map<int, RectangularWall*> rectangularWalls;
 
 	public:
         /**
@@ -29,7 +29,8 @@ class World
          * @param mapName the map file name. Defaults to "custom.hbm".
          */
 		World(HBMap const& map);
-		int spawn(int spawnl, int player, int flag);
+
+		bool spawn(std::vector<SpawnDescriptor> const& possibleSpawns, MovingRoundObject& obj);
 
         /**
          * Returns the minimum x coordinate of the world.

@@ -10,19 +10,14 @@
 
 using namespace std;
 
-World::World(HBMap const& map) : wallColor(101, 67, 33), worldMap(map) {
-    rectWalls = worldMap.getRectangularWalls();
-
-    teams = worldMap.getTeamDescriptors();
+World::World(HBMap const& map) : worldMap(map) {
+    //rectangularWalls = worldMap.getRectangularWalls();
 
 	Light l(Vector3D(0,0,10), Color(255,255,255));
 	lights.push_back(l);
 	
 	Light l2(Vector3D(0,30,20), Color(255,255,255));
 	lights.push_back(l2);
-	
-	while (spawn(1, -1, BLU) == -1);
-	while (spawn(3, -1, RED) == -1);
 }
 
 /**
@@ -42,8 +37,8 @@ bool World::spawn(vector<SpawnDescriptor> const& possibleSpawns, MovingRoundObje
 	             random_uniform_float(spawn.getMinY(), spawn.getMaxY()));
 
 	bool fail = false;
-	for (map<int, MovingRoundObject>::iterator it = movingRoundObjects.begin(); it != movingRoundObjects.end(); it++) {
-		MovingRoundObject const& otherObj = (*it).second;
+	for (map<int, MovingRoundObject *>::iterator it = movingRoundObjects.begin(); it != movingRoundObjects.end(); it++) {
+		MovingRoundObject const& otherObj = *(it->second);
 		Vector2D difference = obj.getCenter() - otherObj.getCenter();
 		float minDistance = obj.getRadius() + otherObj.getRadius();
 		if ((otherObj.getState() == MOS_ALIVE || otherObj.getState() == MOS_SHRINKING) &&
@@ -57,6 +52,8 @@ bool World::spawn(vector<SpawnDescriptor> const& possibleSpawns, MovingRoundObje
 		return false;
 }
 
+// TODO networking
+/*
 void World::sendObjects(SocketConnection* sc, int obj) {
     WritePacket wp(STC_WORLD_DATA, 12 + 35 * objects.size());
 
@@ -81,3 +78,4 @@ void World::receiveObjects(ReadPacket* rp, int& obj) {
         objects[o.id] = o;
     }
 }
+*/

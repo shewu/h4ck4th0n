@@ -6,6 +6,10 @@
 
 using namespace std;
 
+// TODO bouncy wall support
+// TODO round wall support
+// TODO compute velocities
+
 enum EventType
 {
 	ET_NONE,

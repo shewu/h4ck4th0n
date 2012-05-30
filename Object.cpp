@@ -71,3 +71,23 @@ PlayerObject PlayerObject::readFromPacket(ReadPacket *rp) {
 	// TODO
 }
 
+
+void MovingRoundObject::startShrinking(MovingRoundObject *parent, Vector2D const& velocity) {
+	this->parent = parent;
+	this->state = MOS_SHRINKING;
+	this->velocity = velocity;
+	if(parent != NULL) {
+		parent->numChildren++;
+	}
+}
+
+void MovingRoundObject::kill() {
+	state = MOS_DEAD;
+	if(parent != NULL) {
+		parent->numChildren--;
+	}
+}
+
+bool MovingRoundObject::shouldDieFromWall(RectangularWall const& wall) {
+
+}

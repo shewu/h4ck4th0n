@@ -409,8 +409,9 @@ class MovingRoundObject : public RoundObject
 		}
 
 		void startShrinking(MovingRoundObject *parent, Vector2D const& velocity);
-		bool shouldDieFromWall(RectangularWall const& wall) const;
 		void kill();
+
+		bool shouldDieFromWall(RectangularWall const& wall) const;
 
 		virtual void writeToPacket(WritePacket *wp);
 };

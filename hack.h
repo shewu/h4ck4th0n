@@ -18,6 +18,20 @@
 
 #define foreach(name,conttype,cont) for(conttype::iterator name = cont.begin(); name != cont.end(); ++ name )
 
+enum WallType
+{
+    WT_INVALID = -1,
+    WT_NORMAL,
+    WT_DEADLY,
+    WT_BOUNCY,
+
+    NUM_WALLTYPES // always the last mode
+};
+
+const std::string wallTypeStrings[] = {
+    "normal", "deadly", "bouncy"
+};
+
 enum GameMode {
     GM_INVALID = -1,
     GM_TAG,
@@ -150,7 +164,81 @@ class TeamDescriptor {
 		}
 };
 
-float random_uniform_float(float l, float h) {
+/**
+ * An immutable class that describes a Flag. Used by HBMap.
+ */
+class FlagDescriptor {
+	public:
+		FlagDescriptor(int team_, Vector2D pos_) : _team(team_), _pos(pos_) { }
+		~FlagDescriptor() { }
+
+		/**
+		 * Returns the position of the flag.
+		 *
+		 * @return the position.
+		 */
+		const Vector2D getPos() const {
+			return _pos;
+		}
+
+		/**
+		 * Returns the team to which the flag belongs.
+		 *
+		 * @return the team number.
+		 */
+		const int getTeam() const {
+			return _team;
+		}
+
+	private:
+		int _team;
+		Vector2D _pos;
+};
+
+/**
+ * An immutable class that describes a Wall. Uesd by HBMap.
+ */
+class WallDescriptor {
+	public:
+		WallDescriptor(WallType wallType_, Vector2D pos1_) : _wallType(wallType_), _pos1(pos1_) { }
+		WallType getWallType() const {
+			return _wallType;
+		}
+
+	protected:
+		WallType _wallType;
+		Vector2D _pos1;
+};
+
+/**
+ * An immutable class that describes a rectangular wall. Used by HBMap.
+ */
+class RectangularWallDescriptor : public WallDescriptor {
+	public:
+		RectangularWallDescriptor(WallType wallType_, Vector2D pos1_, Vector2D pos2_) : WallDescriptor(wallType_, pos1_), _pos2(pos2_) { }
+		Vector2D getPos1() const {
+			return this->_pos1;
+		}
+		Vector2D getPos2() const {
+			return this->_pos2;
+		}
+
+	private:
+		Vector2D _pos2;
+};
+
+/**
+ * An immutable class that describes a round wall. Used by HBMap.
+ */
+class RoundWallDescriptor : public WallDescriptor {
+	public:
+		RoundWallDescriptor(WallType wallType_, Vector2D pos1_) : WallDescriptor(wallType_, pos1_) { }
+		Vector2D getPos() const {
+			return this->_pos1;
+		}
+};
+
+inline float random_uniform_float(float l, float h) {
 	return rand() / float(RAND_MAX) * (h - l) + l;
 }
 

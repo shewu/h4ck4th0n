@@ -2,9 +2,11 @@
 #include <cstring>
 #include <cstdlib>
 #include <exception>
+#include <stdexcept>
 
 #include "HBMap.h"
 #include "Exceptions.h"
+#include "Object.h"
 
 class StringTokenizer {
     public:
@@ -68,7 +70,7 @@ void HBMap::parse(std::string filename) {
         } else if (cmd.compare("flag") == 0) {
             parseFlag(s);
         } else if (cmd.compare("wall") == 0) {
-            parseWall(s);
+            parseRectangularWall(s);
         }
         cmd = "";
     }
@@ -90,7 +92,7 @@ GameMode parseGameMode(std::string str) {
 void HBMap::parseModes(std::string& s) {
     StringTokenizer st(s);
     while (st.hasMoreTokens()) {
-        modes.push_back(parseGameMode(st.nextToken()));
+        modes.insert(parseGameMode(st.nextToken()));
     }
 }
 
@@ -124,7 +126,7 @@ void HBMap::parseTeam(std::string& s) {
         throw ParseException("parseTeam fail");
     }
 
-    teams.push_back(Team(teamNum, minPlayers, maxPlayers));
+    teams.push_back(TeamDescriptor(teamNum, minPlayers, maxPlayers));
 }
 
 void HBMap::parseSpawn(std::string& s) {
@@ -164,7 +166,7 @@ void HBMap::parseFlag(std::string& s) {
         throw ParseException("parseFlag fail");
     }
 
-    flags.push_back(Flag(getColorForTeam(id), Vector2D(x, y), id));
+	flags[id].push_back(FlagDescriptor(id, Vector2D(x, y)));
 }
 
 WallType parseWallType(std::string& s) {
@@ -176,12 +178,13 @@ WallType parseWallType(std::string& s) {
     return WT_INVALID;
 }
 
-void HBMap::parseWall(std::string& s) {
-	int a = b = c = d = 0;
+void HBMap::parseRectangularWall(std::string& s) {
+	int a = 0, b = 0, c = 0, d = 0;
     StringTokenizer st(s);
     WallType wallType;
     if (st.hasMoreTokens()) {
-        wallType = parseWallType(st.nextToken());
+		std::string tok = st.nextToken();
+        wallType = parseWallType(tok);
     }
     if (st.hasMoreTokens()) {
         a = atoi(st.nextToken().c_str());
@@ -199,7 +202,6 @@ void HBMap::parseWall(std::string& s) {
         throw ParseException("parseWall fail");
     }
 
-    // assign wall colors later
-    rectangularWalls.push_back(Obstacle(Vector2D(a, b), Vector2D(c, d), Color(0, 0, 0), parseWallType(wallType)));
+	rectangularWalls.push_back(RectangularWallDescriptor(wallType, Vector2D(a, b), Vector2D(c, d)));
 }
 

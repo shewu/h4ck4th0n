@@ -25,14 +25,6 @@ bool NORAPE = true;
 SDL_Surface* screen;
 char* ipaddy = (char *)"127.0.0.1";
 
-static float abs(float f) {
-	if (f < 0) {
-		return -f;
-	} else {
-		return f;
-	}
-}
-
 void initVideo() {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		printf("Something went wrong!\n");

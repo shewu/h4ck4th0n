@@ -6,6 +6,7 @@ class Vector2D
 	public:
 		float x, y;
 		Vector2D(float a = 0, float b = 0) : x(a), y(b) {}
+		Vector2D(Vector2D const& o) : x(o.x), y(o.y) {}
 		Vector2D operator+(const Vector2D&) const;
 		Vector2D operator-(const Vector2D&) const;
 		Vector2D operator-() const;

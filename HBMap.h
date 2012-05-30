@@ -5,7 +5,7 @@
 #include <vector>
 #include <set>
 
-#include "Object.h"
+#include "hack.h"
 
 class HBMap {
     public:
@@ -113,7 +113,7 @@ class HBMap {
 		 *
 		 * @return the flags for team.
 		 */
-        const std::vector<FlagObject>& getFlagsForTeam(unsigned team) const {
+        const std::vector<FlagDescriptor>& getFlagsForTeam(unsigned team) const {
             if (team >= teams.size()) {
                 return flags[0];
             }
@@ -125,7 +125,7 @@ class HBMap {
 		 *
 		 * @return a list of rectangular walls.
 		 */
-        const std::vector<RectangularWall>& getRectangularWalls() const {
+        const std::vector<RectangularWallDescriptor>& getRectangularWalls() const {
             return rectangularWalls;
         }
 
@@ -134,7 +134,7 @@ class HBMap {
 		 *
 		 * @return a list of round walls.
 		 */
-		const std::vector<RoundWall>& getRoundWalls() const {
+		const std::vector<RoundWallDescriptor>& getRoundWalls() const {
 			return roundWalls;
 		}
 
@@ -151,7 +151,7 @@ class HBMap {
         void parseTeam(std::string& s);
         void parseSpawn(std::string& s);
         void parseFlag(std::string& s);
-        void parseWall(std::string& s);
+        void parseRectangularWall(std::string& s);
 
         std::ifstream in;
 
@@ -160,9 +160,9 @@ class HBMap {
 
 		std::set<GameMode> modes;
 		std::vector<TeamDescriptor> teams;
-		std::vector<RectangularWall> rectangularWalls;
-		std::vector<RoundWall> roundWalls;
-		std::vector<FlagObject> flags[HBMap::MAX_TEAMS];
+		std::vector<RectangularWallDescriptor> rectangularWalls;
+		std::vector<RoundWallDescriptor> roundWalls;
+		std::vector<FlagDescriptor> flags[HBMap::MAX_TEAMS];
         std::vector<SpawnDescriptor> spawns[HBMap::MAX_TEAMS];
 
         Color getColorForTeam(int team) {

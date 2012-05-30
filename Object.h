@@ -123,20 +123,6 @@ class RectangularObject : public Object
 		virtual ~RectangularObject();
 };
 
-enum WallType
-{
-    WT_INVALID = -1,
-    WT_NORMAL,
-    WT_DEADLY,
-    WT_BOUNCY,
-
-    NUM_WALLTYPES // always the last mode
-};
-
-const std::string wallTypeStrings[] = {
-    "normal", "deadly", "bouncy"
-};
-
 class RectangularWall : public RectangularObject
 {
 	private:

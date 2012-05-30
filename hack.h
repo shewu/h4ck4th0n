@@ -24,6 +24,7 @@ enum WallType
     WT_NORMAL,
     WT_DEADLY,
     WT_BOUNCY,
+    WT_GOAL,
 
     NUM_WALLTYPES // always the last mode
 };

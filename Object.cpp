@@ -88,6 +88,10 @@ void MovingRoundObject::kill() {
 	}
 }
 
-bool MovingRoundObject::shouldDieFromWall(RectangularWall const& wall) {
-
+bool MovingRoundObject::shouldDieFromWall(RectangularWall const& wall) const {
+	if(isFlag) {
+		return wall.getWallType() == WT_GOAL;
+	} else {
+		return wall.getWallType() == WT_DEADLY;
+	}
 }

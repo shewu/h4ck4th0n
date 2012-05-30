@@ -146,7 +146,7 @@ class RectangularWall : public RectangularObject
 		/**
 		 * @return the wall type
 		 */
-		WallType getWallType() {
+		WallType getWallType() const {
 			return wallType;
 		}
 

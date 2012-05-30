@@ -9,8 +9,8 @@
 using namespace std;
 
 Game::Game() {
-    team_count[RED] = 0;
-    team_count[BLU] = 0;
+	hbmap("custom.hbm");
+	world(hmbap);
 }
 
 bool Game::add_player(Client cl) {

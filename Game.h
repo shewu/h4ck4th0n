@@ -19,10 +19,10 @@ class Player {
 
 class Game {
     private:
+    	HBMap hbmap;
         World world;
-        int team_count[2];
 
-        std::map<int, Player> players;
+        std::map<int, Player> players[2];
         std::vector<std::pair<char, Vector2D> > sounds;
 
         SocketConnection *sc;

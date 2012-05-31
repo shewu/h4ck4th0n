@@ -26,7 +26,7 @@ SHARED_OBJECTS = Socket.o \
 	Packet.o \
 	SocketConnection.o
 
-CLIENT_OBJECTS = menu.o \
+CLIENT_OBJECTS = Menu.o \
 	menuitem.o \
 	menudraw.o \
 	font.o \

@@ -35,9 +35,9 @@ CLIENT_OBJECTS = Menu.o \
 	GameViewController.o
 
 SERVER_OBJECTS+=$(SHARED_OBJECTS) Server.o Game.o Physics.o
-UNHOLY_BALLS_OBJECTS+=$(SHARED_OBJECTS) unholyclient.o UnholyGameViewController.o
-HOLY_BALLS_OBJECTS+=$(SHARED_OBJECTS) holyclient.o HolyGameViewController.o
-MULTI_BALLS_OBJECTS+=$(SHARED_OBJECTS) multiclient.o MultiGameViewController.o
+UNHOLY_BALLS_OBJECTS+=$(SHARED_OBJECTS) Unholyclient.o UnholyGameViewController.o
+HOLY_BALLS_OBJECTS+=$(SHARED_OBJECTS) Holyclient.o HolyGameViewController.o
+MULTI_BALLS_OBJECTS+=$(SHARED_OBJECTS) Multiclient.o MultiGameViewController.o
 
 executables: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET) $(MULTI_BALLS_TARGET)
 
@@ -58,14 +58,14 @@ $(MULTI_BALLS_TARGET): $(MULTI_BALLS_OBJECTS)
 %.o: %.cpp *.h
 	$(CC) -c $(CCFLAGS) $<
 
-unholyclient.o: client.cpp *.h
-	$(CC) -c $(CCFLAGS) -DUNHOLY -o unholyclient.o $<
+Unholyclient.o: Client.cpp *.h
+	$(CC) -c $(CCFLAGS) -DUNHOLY -o Unholyclient.o $<
 
-holyclient.o: client.cpp *.h
-	$(CC) -c $(CCFLAGS) -o holyclient.o $<
+Holyclient.o: client.cpp *.h
+	$(CC) -c $(CCFLAGS) -o Holyclient.o $<
 
-multiclient.o: client.cpp *.h
-	$(CC) -c $(CCFLAGS) -DMULTI -o multiclient.o $<
+Multiclient.o: client.cpp *.h
+	$(CC) -c $(CCFLAGS) -DMULTI -o Multiclient.o $<
 
 test: $(SHARED_OBJECTS)
 	(cd tests; make test)

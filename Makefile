@@ -29,7 +29,7 @@ SHARED_OBJECTS = Socket.o \
 CLIENT_OBJECTS = Menu.o \
 	menuitem.o \
 	menudraw.o \
-	font.o \
+	Font.o \
 	SplashViewController.o \
 	ServerConnectViewController.o \
 	GameViewController.o

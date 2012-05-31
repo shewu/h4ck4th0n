@@ -7,40 +7,18 @@
 #include "Hack.h"
 #include "Packet.h"
 
-/*
-class Object
-{
-	public:
-		Vector2D p;
-		Vector2D v;
-		float mass;
-		float rad;
-		Color color;
-		float hrat;
-		int id;
-		
-		bool dead;
-		bool stopped;
-		int spawnl;
-		int spawny;
-		double time_until_spawn;
-		int nattached;
-		int attachedTo;
-		int player;
-		int flag;
-		
-		void write_data(WritePacket* wp);
-		void read_data(ReadPacket* rp);
-};
-*/
-
 class Object
 {
 	private:
-		Material material;
+		Material *material;
 		unsigned id;
 
 		static unsigned nextId;
+
+	protected:
+		mutable bool diff;
+	
+	private:
 
 		// Make object non-copyable by making this private.
 		Object(Object const&);
@@ -51,14 +29,20 @@ class Object
 		 * Constructs an object with the given material.
 		 * @param material The material for the object being created.
 		 */
-		Object(Material material) : material(material) {
+		Object(Material *material) : material(material) {
 			id = (Object::nextId++);
+			diff = false;
 		}
+
+		/**
+		 * Constructs an Object by reading the given packet.
+		 */
+		Object(ReadPacket *rp);
 
 		/**
 		 * @return the material
 		 */
-		const Material& getMaterial() const {
+		Material *getMaterial() const {
 			return material;
 		}
 
@@ -77,9 +61,18 @@ class Object
 		 * Writes the object to a WritePacket
 		 * @param wp the WritePacket to write this object to
 		 */
-		virtual void writeToPacket(WritePacket *wp) = 0;
+		virtual void writeToPacket(WritePacket *wp) const;
 
-		virtual ~Object();
+		bool hasDiff() const {
+			return diff;
+		}
+
+		virtual void writeDiff(WritePacket *wp) const { }
+		virtual void applyDiff(ReadPacket *rp) { }
+
+		virtual ~Object() {
+			delete material;
+		}
 };
 
 unsigned Object::nextId = 0;
@@ -101,8 +94,10 @@ class RectangularObject : public Object
 		 * @param b Second endpoint of the wall.
 		 * @param material The material for the object being created.
 		 */
-		RectangularObject(Vector2D a, Vector2D b, Material material)
+		RectangularObject(Vector2D a, Vector2D b, Material *material)
 		    : Object(material), p1(a), p2(b) { }
+
+		RectangularObject(ReadPacket *rp);
 
 		/**
 		 * @return the first endpoint of the object
@@ -118,7 +113,11 @@ class RectangularObject : public Object
 			return p2;
 		}
 
-		virtual void writeToPacket(WritePacket *wp) = 0;
+		/**
+		 * Writes the object to a WritePacket
+		 * @param wp the WritePacket to write this object to
+		 */
+		virtual void writeToPacket(WritePacket *wp) const;
 
 		virtual ~RectangularObject();
 };
@@ -141,7 +140,9 @@ class RectangularWall : public RectangularObject
 		 * @param material The material for the object being created.
 		 */
 		RectangularWall(Vector2D a, Vector2D b, WallType wt = WT_NORMAL) :
-		    RectangularObject(a, b, Color(101, 67, 33)), wallType(wt) { }
+		    RectangularObject(a, b, new Color(101, 67, 33)), wallType(wt) { }
+
+		RectangularWall(ReadPacket *rp);
 
 		/**
 		 * @return the wall type
@@ -151,13 +152,10 @@ class RectangularWall : public RectangularObject
 		}
 
 		/**
-		 * Creates a RectangularWall object by reading a ReadPacket
-		 * @param rp ReadPacket to read from
-		 * @return a RectangularWall object read from the ReadPacket
+		 * Writes the object to a WritePacket
+		 * @param wp the WritePacket to write this object to
 		 */
-		static RectangularWall readFromPacket(ReadPacket *rp);
-
-		void writeToPacket(WritePacket* wp);
+		virtual void writeToPacket(WritePacket* wp) const;
 
 		~RectangularWall();
 };
@@ -188,10 +186,12 @@ class RoundObject : public Object
 		 * @param startAngle The starting angle for the arc.
 		 * @param endAngle The ending angle for the arc.
 		 */
-		RoundObject(Material material, Vector2D& center, float radius,
+		RoundObject(Material *material, Vector2D& center, float radius,
 		            float startAngle = 0.0, float endAngle = M_PI_2) :
 		    Object(material), center(center), radius(radius), startAngle(startAngle), 
             endAngle(endAngle) { }
+
+        RoundObject(ReadPacket *rp);
 
 		/**
 		 * @return the center
@@ -221,7 +221,11 @@ class RoundObject : public Object
 			return endAngle;
 		}
 
-		virtual void writeToPacket(WritePacket *wp) = 0;
+		/**
+		 * Writes the object to a WritePacket
+		 * @param wp the WritePacket to write this object to
+		 */
+		virtual void writeToPacket(WritePacket* wp) const;
 };
 
 class RoundWall : public RoundObject
@@ -246,10 +250,12 @@ class RoundWall : public RoundObject
 		 * @param endAngle The ending angle for the arc.
 		 * @param wt The wall type for this wall.
 		 */
-		RoundWall(Material material, Vector2D center, float radius,
+		RoundWall(Material *material, Vector2D center, float radius,
 		            float startAngle = 0.0, float endAngle = M_PI_2,
 		            WallType wt = WT_NORMAL) : 
             RoundObject(material, center, radius, startAngle, endAngle), wallType(wt) { }
+
+		RoundWall(ReadPacket *rp);
 
 		/**
 		 * @return the wall type
@@ -259,13 +265,10 @@ class RoundWall : public RoundObject
 		}
 
 		/**
-		 * Creates a RoundWall object by reading a ReadPacket
-		 * @param rp ReadPacket to read from
-		 * @return a RoundWall object read from the ReadPacket
+		 * Writes the object to a WritePacket
+		 * @param wp the WritePacket to write this object to
 		 */
-		static RoundWall readFromPacket(ReadPacket *rp);
-
-		void writeToPacket(WritePacket* wp);
+		virtual void writeToPacket(WritePacket* wp) const;
 };
 
 enum MovingObjectState {
@@ -301,10 +304,12 @@ class MovingRoundObject : public RoundObject
 		bool isFlag;
 		
 	public:
-		MovingRoundObject(Material material, Vector2D center, float radius, float mass,
+		MovingRoundObject(Material *material, Vector2D center, float radius, float mass,
 		                  float heightRatio, float timeUntilSpawn, bool isFlag) :
 		    RoundObject(material, center, radius, 0.0, M_PI_2), state(MOS_SPAWNING), timeUntilSpawn(timeUntilSpawn), velocity(0.0, 0.0), mass(mass), isFlag(isFlag),
             heightRatio(heightRatio) { }
+
+		MovingRoundObject(ReadPacket *rp);
 
 		/**
 		 * Gets the state.
@@ -355,6 +360,7 @@ class MovingRoundObject : public RoundObject
 		 * @param center the new center for this object
 		 */
 		void setCenter(const Vector2D& center) {
+			diff = true;
 			this->center = center;
 		}
 
@@ -362,6 +368,7 @@ class MovingRoundObject : public RoundObject
 		 * @param radius the new radius for this object
 		 */
 		void setRadius(float radius) {
+			diff = true;
 			this->radius = radius;
 		}
 
@@ -369,6 +376,7 @@ class MovingRoundObject : public RoundObject
 		 * @param velocity the new velocity for this object
 		 */
 		void setVelocity(const Vector2D& velocity) {
+			diff = true;
 			this->velocity = velocity;
 		}
 
@@ -399,7 +407,14 @@ class MovingRoundObject : public RoundObject
 
 		bool shouldDieFromWall(RectangularWall const& wall) const;
 
-		virtual void writeToPacket(WritePacket *wp);
+		/**
+		 * Writes the object to a WritePacket
+		 * @param wp the WritePacket to write this object to
+		 */
+		virtual void writeToPacket(WritePacket* wp) const;
+
+		virtual void writeDiff(WritePacket *wp) const;
+		virtual void applyDiff(ReadPacket *rp);
 };
 
 class FlagObject : public MovingRoundObject
@@ -422,11 +437,13 @@ class FlagObject : public MovingRoundObject
 		 * @param center The center of the flag.
 		 * @param teamNumber The team number for this flag.
 		 */
-		FlagObject(Material material, unsigned teamNumber, float timeUntilSpawn) :
+		FlagObject(Material *material, unsigned teamNumber, float timeUntilSpawn) :
 		    MovingRoundObject(material, Vector2D(), FlagObject::FLAG_RADIUS,
                               FlagObject::FLAG_MASS, FlagObject::FLAG_HEIGHT_RATIO, timeUntilSpawn, true),
             teamNumber(teamNumber) { }
 		
+		FlagObject(ReadPacket *rp);
+
 		/**
 		 * @return the team number
 		 */
@@ -439,9 +456,13 @@ class FlagObject : public MovingRoundObject
 		 * @param rp ReadPacket to read from
 		 * @return a Flag object read from the ReadPacket
 		 */
-		static FlagObject readFromPacket(ReadPacket *rp);
+		static FlagObject *readFromPacket(ReadPacket *rp);
 
-		void writeToPacket(WritePacket* wp);
+		/**
+		 * Writes the object to a WritePacket
+		 * @param wp the WritePacket to write this object to
+		 */
+		virtual void writeToPacket(WritePacket* wp) const;
 };
 
 float FlagObject::FLAG_RADIUS = 1.0f;
@@ -467,7 +488,7 @@ class PlayerObject : public MovingRoundObject
 		 * @param material The material for this player.
 		 * @param teamNumber the number of this player's team.
 		 */
-		PlayerObject(Material material, unsigned teamNumber, float timeUntilSpawn) :
+		PlayerObject(Material *material, unsigned teamNumber, float timeUntilSpawn) :
 		    MovingRoundObject(material, Vector2D(), PlayerObject::PLAYER_RADIUS, PlayerObject::PLAYER_MASS, PlayerObject::PLAYER_HEIGHT_RATIO, timeUntilSpawn, false),
             teamNumber(teamNumber) { }
 
@@ -482,11 +503,14 @@ class PlayerObject : public MovingRoundObject
 		/**
 		 * Creates a Player object by reading a ReadPacket
 		 * @param rp ReadPacket to read from
-		 * @return a Player object read from the ReadPacket
 		 */
-		static PlayerObject readFromPacket(ReadPacket *rp);
+		PlayerObject(ReadPacket *rp);
 
-		void writeToPacket(WritePacket* wp);
+		/**
+		 * Writes the object to a WritePacket
+		 * @param wp the WritePacket to write this object to
+		 */
+		virtual void writeToPacket(WritePacket* wp) const;
 };
 
 float PlayerObject::PLAYER_RADIUS = 1;

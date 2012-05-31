@@ -1,8 +1,8 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 
-#include "constants.h"
-#include "packet.h"
+#include "Constants.h"
+#include "Packet.h"
 
 #include <string>
 

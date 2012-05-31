@@ -68,6 +68,10 @@ Vector2D operator*(const float s, const Vector2D v) {
 	return Vector2D(v.x*s,v.y*s);
 }
 
+Vector2D getRotation(const float theta) const {
+	return Vector2D(x*cos(theta) - y*sin(theta), x*sin(theta) + y*cos(theta));
+}
+
 Vector3D Vector3D::operator+(const Vector3D& v) const
 {
   return Vector3D(x+v.x, y+v.y, z+v.z);

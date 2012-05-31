@@ -17,6 +17,7 @@ class Vector2D
 		float operator*(const Vector2D&) const;
 		Vector2D operator*(const float) const;
 		Vector2D getNormalVector() const;
+		Vector2D getRotation(const float) const;
 };
 
 Vector2D operator*(const float, const Vector2D);

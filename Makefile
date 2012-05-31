@@ -18,7 +18,7 @@ UNHOLY_BALLS_TARGET=unholyballs
 HOLY_BALLS_TARGET=holyballs
 MULTI_BALLS_TARGET=multiballs
 
-SHARED_OBJECTS = socket.o \
+SHARED_OBJECTS = Socket.o \
 	Vector.o \
 	Object.o \
 	World.o \

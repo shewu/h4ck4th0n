@@ -36,7 +36,7 @@ void MultiGameViewController::_initGL() {
 
 	string clCode;
 	{
-		ifstream code("multirender.cl");
+		ifstream code("MultiRender.cl");
 		clCode = string((std::istreambuf_iterator<char>(code)), std::istreambuf_iterator<char>());
 	}
 

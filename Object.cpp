@@ -1,9 +1,9 @@
 #include <netinet/in.h>
 #include <stdio.h>
 
-#include "hack.h"
+#include "Hack.h"
 #include "Object.h"
-#include "packet.h"
+#include "Packet.h"
 
 /*
 void Object::write_data(WritePacket* wp) {

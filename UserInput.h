@@ -24,4 +24,4 @@ class UserInput {
 		 * @return the forward acceleration indicated by the key input.
 		 */
 		Vector2D getForwardAcceleration() const;
-}
+};

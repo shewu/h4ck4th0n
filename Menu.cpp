@@ -1,4 +1,4 @@
-#include "menu.h"
+#include "Menu.h"
 
 menu::menu() {
 	current_index = 0;

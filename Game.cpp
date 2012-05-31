@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "constants.h"
+#include "Constants.h"
 
 #include <cmath>
 #include <cstdlib>
@@ -10,7 +10,7 @@ using namespace std;
 
 Game::Game() {
 	hbmap("custom.hbm");
-	world(hmbap);
+	world(hbmap);
 }
 
 bool Game::add_player(Client cl) {

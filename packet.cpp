@@ -1,11 +1,11 @@
-#include "packet.h"
-
+#include <assert.h>
 #include <netdb.h>
 #include <cstring>
 #include <stdint.h>
 #include <inttypes.h>
 #include <cstdio>
-#include "assert.h"
+
+#include "Packet.h"
 
 // Constructor
 WritePacket::WritePacket(char type, int ms) {

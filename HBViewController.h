@@ -6,7 +6,7 @@
 #ifndef HB_VIEW_CONTROLLER
 #define HB_VIEW_CONTROLLER
 
-#include "constants.h"
+#include "Constants.h"
 
 class HBViewController {
 	public:

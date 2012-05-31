@@ -1,8 +1,8 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "hack.h"
-#include "socket.h"
+#include "Hack.h"
+#include "Socket.h"
 
 class Client {
 	public:

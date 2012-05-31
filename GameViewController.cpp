@@ -8,7 +8,7 @@
 #include <netdb.h>
 
 #include "GameViewController.h"
-#include "menufuncs.h"
+#include "MenuFuncs.h"
 
 #define MAX_SOUND_LATENESS 100
 

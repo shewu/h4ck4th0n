@@ -34,7 +34,7 @@ void HolyGameViewController::_initGL() {
 	}
 	string clCode;
 	{
-		ifstream code("render.cl");
+		ifstream code("Render.cl");
 		clCode = string((std::istreambuf_iterator<char>(code)), std::istreambuf_iterator<char>());
 	}
 	cl::Program::Sources clSource(1, pair<const char*, int>(clCode.c_str(), clCode.length()+1));

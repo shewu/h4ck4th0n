@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <SDL/SDL.h>
+
 using namespace std;
 
 #define MENU_KEY_LEFT		SDLK_LEFT

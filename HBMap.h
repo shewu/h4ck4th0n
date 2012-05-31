@@ -5,7 +5,7 @@
 #include <vector>
 #include <set>
 
-#include "hack.h"
+#include "Hack.h"
 
 class HBMap {
     public:

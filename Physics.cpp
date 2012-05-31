@@ -1,6 +1,7 @@
 #include <cmath>
 #include <map>
-#include "hack.h"
+
+#include "Hack.h"
 #include "Object.h"
 #include "Physics.h"
 

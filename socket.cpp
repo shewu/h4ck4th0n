@@ -1,5 +1,5 @@
 #include "socket.h"
-#include "hack.h"
+#include "Hack.h"
 
 #include <cstdio>
 #include <cstring>

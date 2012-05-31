@@ -4,8 +4,8 @@
 #include <cmath>
 
 #include "Material.h"
-#include "hack.h"
-#include "packet.h"
+#include "Hack.h"
+#include "Packet.h"
 
 /*
 class Object

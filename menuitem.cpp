@@ -1,5 +1,6 @@
-#include "menu.h"
 #include <cstring>
+
+#include "Menu.h"
 
 //menuitem
 //(these guys shouldn't actually be called, since

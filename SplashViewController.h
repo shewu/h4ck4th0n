@@ -1,5 +1,5 @@
-#include "menu.h"
-#include "font.h"
+#include "Menu.h"
+#include "Font.h"
 #include "HBViewController.h"
 
 class SplashViewController : public HBViewController {

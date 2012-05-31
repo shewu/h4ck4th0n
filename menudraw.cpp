@@ -1,6 +1,6 @@
-#include "menu.h"
-#include "font.h"
-#include "render.h"
+#include "Menu.h"
+#include "Font.h"
+#include "Render.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #else

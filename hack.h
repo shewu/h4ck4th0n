@@ -4,9 +4,9 @@
 #include <vector>
 #include <cstdlib>
 
-#include "constants.h"
-#include "socket.h"
-#include "packet.h"
+#include "Constants.h"
+#include "Socket.h"
+#include "Packet.h"
 #include "Vector.h"
 #include "Material.h"
 

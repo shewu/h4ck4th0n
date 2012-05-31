@@ -7,9 +7,9 @@
 #endif
 
 #include "HBViewController.h"
-#include "hack.h"
-#include "menu.h"
-#include "packet.h"
+#include "Hack.h"
+#include "Menu.h"
+#include "Packet.h"
 #include "World.h"
 
 extern SDL_Surface* screen;

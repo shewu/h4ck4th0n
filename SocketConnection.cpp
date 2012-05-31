@@ -1,7 +1,3 @@
-#include "socket.h"
-#include "packet.h"
-#include "hack.h"
-
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
@@ -9,6 +5,10 @@
 
 #include <netdb.h>
 #include <sys/socket.h>
+
+#include "Socket.h"
+#include "Packet.h"
+#include "Hack.h"
 
 /* PACKET HEADER (13 bytes total):
    - four bytes MESSAGE_HEADER_INIT, for confirmation

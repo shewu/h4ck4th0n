@@ -1,8 +1,3 @@
-#include "server.h"
-#include "packet.h"
-#include "game.h"
-#include "hack.h"
-
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -21,6 +16,11 @@
 #include <errno.h>
 
 #include <sys/poll.h>
+
+#include "Server.h"
+#include "Packet.h"
+#include "Game.h"
+#include "Hack.h"
 
 using namespace std;
 

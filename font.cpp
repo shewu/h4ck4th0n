@@ -3,8 +3,8 @@
 #else
 #include <GL/gl.h>
 #endif
-#include "font.h"
-#include "render.h"
+#include "Font.h"
+#include "Render.h"
 #include <cstdio>
 #include <cstdlib>
 

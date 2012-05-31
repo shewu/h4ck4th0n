@@ -7,7 +7,7 @@
 #endif
 
 #include "SplashViewController.h"
-#include "menufuncs.h"
+#include "MenuFuncs.h"
 
 static HBViewMode finishedView = kHBNoView;
 

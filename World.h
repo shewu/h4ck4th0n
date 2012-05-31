@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 
-#include "hack.h"
+#include "Hack.h"
 #include "Object.h"
 #include "HBMap.h"
 #include "Light.h"

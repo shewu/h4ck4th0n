@@ -1,10 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "socket.h"
-#include "server.h"
+#include "Socket.h"
+#include "Server.h"
 
-#include "hack.h"
+#include "Hack.h"
 #include "World.h"
 
 class Player {

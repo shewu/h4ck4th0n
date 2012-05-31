@@ -61,10 +61,10 @@ $(MULTI_BALLS_TARGET): $(MULTI_BALLS_OBJECTS)
 Unholyclient.o: Client.cpp *.h
 	$(CC) -c $(CCFLAGS) -DUNHOLY -o Unholyclient.o $<
 
-Holyclient.o: client.cpp *.h
+Holyclient.o: Client.cpp *.h
 	$(CC) -c $(CCFLAGS) -o Holyclient.o $<
 
-Multiclient.o: client.cpp *.h
+Multiclient.o: Client.cpp *.h
 	$(CC) -c $(CCFLAGS) -DMULTI -o Multiclient.o $<
 
 test: $(SHARED_OBJECTS)

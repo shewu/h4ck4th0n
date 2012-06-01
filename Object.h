@@ -417,6 +417,11 @@ class MovingRoundObject : public RoundObject
 		virtual void applyDiff(ReadPacket *rp);
 };
 
+Material *materialsByTeamNumber[] = {new Color(0, 255, 0),
+	                                 new Color(255, 0, 0),
+                                     new Color(0, 0, 255)
+                                    };
+
 class FlagObject : public MovingRoundObject
 {
 	private:
@@ -437,8 +442,9 @@ class FlagObject : public MovingRoundObject
 		 * @param center The center of the flag.
 		 * @param teamNumber The team number for this flag.
 		 */
-		FlagObject(Material *material, unsigned teamNumber, float timeUntilSpawn) :
-		    MovingRoundObject(material, Vector2D(), FlagObject::FLAG_RADIUS,
+		FlagObject(unsigned teamNumber, float timeUntilSpawn) :
+		    MovingRoundObject(materialsByTeamNumber[teamNumber],
+		                      Vector2D(), FlagObject::FLAG_RADIUS,
                               FlagObject::FLAG_MASS, FlagObject::FLAG_HEIGHT_RATIO, timeUntilSpawn, true),
             teamNumber(teamNumber) { }
 		
@@ -488,9 +494,12 @@ class PlayerObject : public MovingRoundObject
 		 * @param material The material for this player.
 		 * @param teamNumber the number of this player's team.
 		 */
-		PlayerObject(Material *material, unsigned teamNumber, float timeUntilSpawn) :
-		    MovingRoundObject(material, Vector2D(), PlayerObject::PLAYER_RADIUS, PlayerObject::PLAYER_MASS, PlayerObject::PLAYER_HEIGHT_RATIO, timeUntilSpawn, false),
-            teamNumber(teamNumber) { }
+		PlayerObject(unsigned teamNumber, float timeUntilSpawn) :
+		    MovingRoundObject(materialsByTeamNumber[teamNumber],
+		                      Vector2D(),
+		                      PlayerObject::PLAYER_RADIUS, PlayerObject::PLAYER_MASS
+		                      PlayerObject::PLAYER_HEIGHT_RATIO, timeUntilSpawn, false),
+                              teamNumber(teamNumber) { }
 
 		/**
 		 * Gets the team number.

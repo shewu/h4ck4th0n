@@ -76,11 +76,18 @@ class World
         std::vector<Light> const& getLights() const {
         	return lights;
 		}
-		
-		
-		void sendObjects(SocketConnection* sc, int obj);
-		void receiveObjects(ReadPacket* rp, int& obj);
 };
+
+enum ObjectType {
+	OT_FLAG_OBJECT,
+	OT_PLAYER_OBJECT
+};
+
+enum DiffType {
+	DT_ADD,
+	DT_REMOVE,
+	DT_UPDATE
+}
 
 #endif
 

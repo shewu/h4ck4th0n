@@ -1,5 +1,5 @@
-#ifndef __MENUFUNCS_H__
-#define __MENUFUNCS_H__
+#ifndef MENUFUNCS_H
+#define MENUFUNCS_H
 
 // file for shared menu functors
 
@@ -17,4 +17,3 @@ class quitfunc {
 };
 
 #endif
-

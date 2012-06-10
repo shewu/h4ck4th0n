@@ -244,4 +244,3 @@ inline float random_uniform_float(float l, float h) {
 }
 
 #endif
-

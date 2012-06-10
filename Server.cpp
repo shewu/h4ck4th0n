@@ -215,5 +215,4 @@ int main() {
 		// next iteration.
         usleep(TIMESTEP_MICROSECONDS);
     }
-
 }

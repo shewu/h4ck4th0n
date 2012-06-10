@@ -1,4 +1,4 @@
-#include "clconstants.h"
+#include "CLConstants.h"
 
 const sampler_t texSample = CLK_NORMALIZED_COORDS_TRUE|CLK_ADDRESS_REPEAT|CLK_FILTER_LINEAR;
 
@@ -163,8 +163,6 @@ render(
 		zdir = nextdir.z;
 	}
 	pcolor += tcolor;
-	}	
+	}
 	write_imagef(im, (int2)(get_global_id(0), get_global_id(1)), pcolor/(AA * AA));
 }
-
-

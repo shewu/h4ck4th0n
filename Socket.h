@@ -93,7 +93,7 @@ class Socket
 		 * and pass this data to the SocketConnections.
 		 */
 		void recv_all();
-		
+
     private:
         int socket;
 		bool listening;

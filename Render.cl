@@ -88,7 +88,7 @@ render(
 	xdir = nxdir;
 	ydir = nydir;
 	zdir += (get_global_id(1)-(HEIGHT-1)/2.0)/((float)HEIGHT-1);
-	
+
 	float4 tcolor = (float4)(0, 0, 0, 0);
 	float mult = 1;
 	for (int s = 0; s < 6; s++) {
@@ -161,8 +161,6 @@ render(
 		ydir = nextdir.y;
 		zdir = nextdir.z;
 	}
-	
+
 	write_imagef(im, (int2)(get_global_id(0), get_global_id(1)), tcolor);
 }
-
-

@@ -1,5 +1,5 @@
-#ifndef __MENU_H__
-#define __MENU_H__
+#ifndef MENU_H
+#define MENU_H
 
 #include <vector>
 #include <SDL/SDL.h>
@@ -90,7 +90,7 @@ class menuitem {
 		virtual void onDeselect();
 	protected:
 		char *name;
-		
+
 };
 
 // The menu "owns" its menuitems and will free them on destruction
@@ -167,7 +167,7 @@ class inputmenuitem : public menuitem {
 				strcpy(input, initInput);
 				len = strlen(input);
 			}
-	
+
 			vali = wrappedfuncobj<bool, char*>(inputValidator);
 			invalidInputError = iie;
 			displayError = false;
@@ -204,7 +204,7 @@ class togglemenuitem : public menuitem {
 	private:
 		bool state;
 		wrappedfuncobj<voidtype, bool> action;
-		
+
 };
 
 class slidermenuitem : public menuitem {

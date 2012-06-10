@@ -1,12 +1,8 @@
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
 #include <GL/gl.h>
-#endif
-#include "Font.h"
-#include "Render.h"
 #include <cstdio>
 #include <cstdlib>
+#include "Font.h"
+#include "Render.h"
 
 #define fontmap_width 1024
 #define fontmap_height 1024

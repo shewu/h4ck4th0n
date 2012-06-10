@@ -4,7 +4,7 @@
 #include <GL/glx.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <CL/cl.hpp>
+#include "CL/cl.hpp"
 
 #include "GameViewController.h"
 

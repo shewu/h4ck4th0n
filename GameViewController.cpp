@@ -118,9 +118,10 @@ void GameViewController::process() {
 		else if (rp->message_type != STC_WORLD_DATA || rp->packet_number <= latestPacket) {
 			delete rp;
 			continue;
+		} else {
+			world.receiveObjects(rp, myId);
 		}
 		latestPacket = rp->packet_number;
-		world.receiveObjects(rp, myId);
 		delete rp;
 #ifndef __APPLE__
 #endif

@@ -30,8 +30,8 @@ class Game {
     public:
         Game();
 
-        bool add_player(Client cl);
-        void remove_player(int id);
+		bool addPlayer();
+		void removePlayer();
 
         void send_world();
         void send_sounds_to(SocketConnection* c);

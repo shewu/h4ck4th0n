@@ -105,28 +105,7 @@ PlayerObject::PlayerObject(ReadPacket *rp) : MovingRoundObject(rp) {
 	teamNumber = rp->read_int();
 }
 
-
-void MovingRoundObject::writeDiff(WritePacket *wp) const {
-	wp->write_float(center.x);
-	wp->write_float(center.y);
-	wp->write_float(velocity.x);
-	wp->write_float(velocity.x);
-	wp->write_float(radius);
-	diff = false;
-}
-
-void MovingRoundObject::applyDiff(ReadPacket *rp) {
-	center.x = rp->read_float();
-	center.y = rp->read_float();
-	velocity.x = rp->read_float();
-	velocity.y = rp->read_float();
-	radius = rp->read_float();
-	diff = false;
-}
-
-
 void MovingRoundObject::startShrinking(MovingRoundObject *parent, Vector2D const& velocity) {
-	diff = true;
 	this->parent = parent;
 	this->state = MOS_SHRINKING;
 	this->velocity = velocity;
@@ -136,7 +115,6 @@ void MovingRoundObject::startShrinking(MovingRoundObject *parent, Vector2D const
 }
 
 void MovingRoundObject::kill() {
-	diff = true;
 	state = MOS_DEAD;
 	if(parent != NULL) {
 		parent->numChildren--;

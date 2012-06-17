@@ -83,11 +83,5 @@ enum ObjectType {
 	OT_PLAYER_OBJECT
 };
 
-enum DiffType {
-	DT_ADD,
-	DT_REMOVE,
-	DT_UPDATE
-}
-
 #endif
 

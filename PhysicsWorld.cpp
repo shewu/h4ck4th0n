@@ -22,7 +22,6 @@ void removeDeadObjects() {
 		MovingRoundObject *obj = iter->second;
 		if (obj->getState() == MOS_DEAD) {
 			movingRoundObjects.erase(iter);
-			deletions.push_back(obj->getID());
 			delete obj;
 		}
 
@@ -31,26 +30,10 @@ void removeDeadObjects() {
 }
 
 void writeUpdates(WritePacket *wp) {
-	for(int i = 0; i < additions.size(); i++) {
-		wp->write_char((char) DT_ADD);
-		wp->write_char((char) additions[i].second);
-		additions[i].first->writeToPacket(wp);
-	}
-	additions.clear();
-
-	for(int i = 0; i < deletions.size(); i++) {
-		wp->write_char((char) DT_REMOVE);
-		wp->write_int(deletions[i]);
-	}
-	deletions.clear();
-
 	for(map<int, MovingRoundObject*>::iterator iter = movingRoundObjects.begin();
 	              iter != movingRoundObjects.end(); ++iter) {
 		MovingRoundObject *obj = iter->second;
-		if(obj->hasDiff()) {
-			wp->write_char((char) DT_UPDATE);
-			wp->write_int(obj->getID());
-			obj->writeDiff(wp);
-		}
+		wp->write_int(obj->getID());
+		obj->writeDiff(wp);
 	}
 }

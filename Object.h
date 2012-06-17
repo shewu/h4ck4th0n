@@ -15,9 +15,6 @@ class Object
 
 		static unsigned nextId;
 
-	protected:
-		mutable bool diff;
-	
 	private:
 
 		// Make object non-copyable by making this private.
@@ -31,7 +28,6 @@ class Object
 		 */
 		Object(Material *material) : material(material) {
 			id = (Object::nextId++);
-			diff = false;
 		}
 
 		/**
@@ -62,13 +58,6 @@ class Object
 		 * @param wp the WritePacket to write this object to
 		 */
 		virtual void writeToPacket(WritePacket *wp) const;
-
-		bool hasDiff() const {
-			return diff;
-		}
-
-		virtual void writeDiff(WritePacket *wp) const { }
-		virtual void applyDiff(ReadPacket *rp) { }
 
 		virtual ~Object() {
 			delete material;
@@ -360,7 +349,6 @@ class MovingRoundObject : public RoundObject
 		 * @param center the new center for this object
 		 */
 		void setCenter(const Vector2D& center) {
-			diff = true;
 			this->center = center;
 		}
 
@@ -368,7 +356,6 @@ class MovingRoundObject : public RoundObject
 		 * @param radius the new radius for this object
 		 */
 		void setRadius(float radius) {
-			diff = true;
 			this->radius = radius;
 		}
 
@@ -376,7 +363,6 @@ class MovingRoundObject : public RoundObject
 		 * @param velocity the new velocity for this object
 		 */
 		void setVelocity(const Vector2D& velocity) {
-			diff = true;
 			this->velocity = velocity;
 		}
 
@@ -412,9 +398,6 @@ class MovingRoundObject : public RoundObject
 		 * @param wp the WritePacket to write this object to
 		 */
 		virtual void writeToPacket(WritePacket* wp) const;
-
-		virtual void writeDiff(WritePacket *wp) const;
-		virtual void applyDiff(ReadPacket *rp);
 };
 
 Material *materialsByTeamNumber[] = {new Color(0, 255, 0),
@@ -497,7 +480,7 @@ class PlayerObject : public MovingRoundObject
 		PlayerObject(unsigned teamNumber, float timeUntilSpawn) :
 		    MovingRoundObject(materialsByTeamNumber[teamNumber],
 		                      Vector2D(),
-		                      PlayerObject::PLAYER_RADIUS, PlayerObject::PLAYER_MASS
+		                      PlayerObject::PLAYER_RADIUS, PlayerObject::PLAYER_MASS,
 		                      PlayerObject::PLAYER_HEIGHT_RATIO, timeUntilSpawn, false),
                               teamNumber(teamNumber) { }
 

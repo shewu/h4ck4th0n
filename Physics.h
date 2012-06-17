@@ -10,9 +10,7 @@ class PhysicsWorld : World
 
 		void removeDeadObjects();
 
-		void writeUpdates(WritePacket *wp);
+		void writeToPacket(WritePacket *wp);
 
 	private:
-		vector<pair<Object*,ObjectType> > additions;
-		vector<int> deletions;
 };

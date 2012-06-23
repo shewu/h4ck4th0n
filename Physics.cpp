@@ -3,7 +3,7 @@
 
 #include "Hack.h"
 #include "Object.h"
-#include "Physics.h"
+#include "PhysicsWorld.h"
 
 using namespace std;
 

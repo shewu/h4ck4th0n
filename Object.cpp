@@ -1,9 +1,30 @@
-#include <netinet/in.h>
-#include <stdio.h>
+#include "Object.h"
 
 #include "Hack.h"
-#include "Object.h"
 #include "Packet.h"
+
+ObjectPtr::ObjectPtr(Object* obj) : ptr_(obj) {
+	obj->refCount++;
+}
+
+ObjectPtr::~ObjectPtr() {
+	ptr_->refCount--;
+}
+
+ObjectPtr::ObjectPtr(ObjectPtr const& other) {
+	ptr_ = other.ptr_;
+	ptr_->refCount++;
+}
+
+ObjectPtr& ObjectPtr::operator=(ObjectPtr const& other) {
+	ptr_->refCount--;
+	ptr_ = other.ptr_;
+	ptr_->refCount++;
+}
+
+Object& ObjectPtr::operator*() {
+	return *ptr_;
+}
 
 void Object::writeToPacket(WritePacket *wp) const {
 	wp->write_int(id);

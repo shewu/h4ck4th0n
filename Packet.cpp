@@ -1,11 +1,15 @@
+#include "Packet.h"
+
+#include <inttypes.h>
 #include <assert.h>
 #include <netdb.h>
-#include <cstring>
 #include <stdint.h>
-#include <inttypes.h>
-#include <cstdio>
 
-#include "Packet.h"
+#include <cstring>
+#include <cstdio>
+#include <string>
+
+using std::string;
 
 // Constructor
 WritePacket::WritePacket(char type, int ms) {
@@ -18,6 +22,10 @@ WritePacket::WritePacket(char type, int ms) {
 // Destructor
 WritePacket::~WritePacket() {
     delete[] buf;
+}
+
+void WritePacket::reset() {
+	size = 0;
 }
 
 // Constructor
@@ -96,16 +104,16 @@ void WritePacket::write_short(short s) {
 // length as a 16-bit integer, followed
 // by the characters of the string.
 
-std::string ReadPacket::read_string() {
+string ReadPacket::read_string() {
     int length = (int)read_short();
     if(length == 0 || index + length > size)
-        return (std::string)"";
-    std::string s = std::string(buf + index, length);
+        return (string)"";
+    string s = string(buf + index, length);
     index += length;
     return s;
 }
 
-void WritePacket::write_string(std::string s) {
+void WritePacket::write_string(string const& s) {
 	assert(s.length() < (1 << 15));
 
     write_short((short)s.length());
@@ -197,4 +205,18 @@ void WritePacket::_increase_buf_size() {
     delete[] buf;
     buf = buf2;
     max_size *= 2;
+}
+
+// Getters for WritePacket
+
+char WritePacket::getMessageType() const {
+	return message_type;
+}
+
+int WritePacket::getSize() const {
+	return size;
+}
+
+char const* WritePacket::getContents() const {
+	return buf;
 }

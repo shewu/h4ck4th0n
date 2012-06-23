@@ -51,26 +51,29 @@ void SocketConnection::recv_data(char *buf, int length) {
     char type = buf[4];
 
     ReadPacket* rp = new ReadPacket(type, length - 5, num);
-    if(length - 5 > 0)
+    if(length - 5 > 0) {
       memcpy(rp->buf, buf + 5, length - 5);
+	}
 
     lastTimeReceived = time(NULL);
 	read_packets.push(rp);
 }
 
-void SocketConnection::send_packet(WritePacket& wp) {
+void SocketConnection::send_packet(WritePacket const& wp) {
     int header_ints[3];
 
-    char *msg = new char[13 + wp.size];
+    int size = wp.getSize();
+
+    char *msg = new char[13 + size];
     header_ints[0] = htonl(MESSAGE_HEADER_INIT);
     header_ints[1] = htonl(my_id);
     header_ints[2] = htonl(num_sent++);
     memcpy((void *)msg, (void *)header_ints, 12);
-    msg[12] = wp.message_type;
+    msg[12] = wp.getMessageType();
 
-    memcpy((void *)(msg + 13), (void *)wp.buf, wp.size);
+    memcpy((void *)(msg + 13), (void const *)wp.getContents(), size);
 
-    sendto(socket, msg, 13 + wp.size, MSG_NOSIGNAL, addr, addrlen);
+    sendto(socket, msg, 13 + size, MSG_NOSIGNAL, addr, addrlen);
 
     delete[] msg;
 }

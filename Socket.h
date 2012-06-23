@@ -110,7 +110,7 @@ class SocketConnection {
 
 		SocketConnection(int socket, struct sockaddr *addr, socklen_t addrlen,
 		                 int my_id, int their_id);
-		void send_packet(WritePacket&);
+		void send_packet(WritePacket const&);
 		ReadPacket* receive_packet();
 		void recv_data(char *buf, int length);
 		~SocketConnection();

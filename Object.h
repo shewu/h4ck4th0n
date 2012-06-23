@@ -12,10 +12,9 @@ class Object
 	private:
 		Material *material;
 		unsigned id;
+		unsigned refCount;
 
 		static unsigned nextId;
-
-	private:
 
 		// Make object non-copyable by making this private.
 		Object(Object const&);
@@ -26,7 +25,7 @@ class Object
 		 * Constructs an object with the given material.
 		 * @param material The material for the object being created.
 		 */
-		Object(Material *material) : material(material) {
+		Object(Material *material) : material(material), refCount(0) {
 			id = (Object::nextId++);
 		}
 
@@ -62,9 +61,25 @@ class Object
 		virtual ~Object() {
 			delete material;
 		}
+
+	friend class ObjectPtr;
 };
 
 unsigned Object::nextId = 0;
+
+class ObjectPtr {
+	public: 
+		ObjectPtr(Object*);
+
+		~ObjectPtr();
+		ObjectPtr(ObjectPtr const&);
+		ObjectPtr& operator=(ObjectPtr const&);
+
+		Object& operator*();
+
+	private:
+		Object* ptr_;
+};
 
 class RectangularObject : public Object
 {

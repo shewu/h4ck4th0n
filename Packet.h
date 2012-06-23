@@ -31,10 +31,6 @@
 
 class WritePacket {
     public:
-        int max_size, size;
-        char *buf;
-        char message_type;
-
         WritePacket(char message_type, int max_size = 1);
         virtual ~WritePacket();
 
@@ -42,20 +38,25 @@ class WritePacket {
         void write_int(int i);
         void write_short(short s);
         void write_float(float f);
-        void write_string(std::string s);
+        void write_string(std::string const& s);
+
+        void reset();
+
+        char getMessageType() const;
+        int getSize() const;
+        char const* getContents() const;
 
     private:
         void _increase_buf_size();
-};
 
-class ReadPacket {
-    public:
-        int size;
+        int max_size, size;
         char *buf;
         char message_type;
-        int index;
-        int packet_number;
+};
 
+// TODO make stuff private
+class ReadPacket {
+    public:
         ReadPacket(char message_type, int size, int packet_number);
         virtual ~ReadPacket();
 
@@ -64,6 +65,12 @@ class ReadPacket {
         short read_short();
         float read_float();
         std::string read_string();
+
+        int size;
+        char *buf;
+        char message_type;
+        int index;
+        int packet_number;
 };
 
 #endif

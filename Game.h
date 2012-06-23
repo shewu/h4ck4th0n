@@ -7,28 +7,19 @@
 #include "Hack.h"
 #include "World.h"
 
-class Player {
-    public:
-        Client cl;
-        int object_id;
-        char key_pressed;
-        float angle;
-        double time_until_spawn;
-        int team;
-};
-
 class Game {
     private:
-    	HBMap hbmap;
-        World world;
+        PhysicsWorld world_;
 
-        std::map<int, Player> players[2];
-        std::vector<std::pair<char, Vector2D> > sounds;
+        WritePacket* worldWritePacket_;
 
-        SocketConnection *sc;
+		// Make Game non-copyable by making this private.
+		Game(Game const&);
+		Game& operator=(Game const&);
 
     public:
         Game();
+        ~Game();
 
 		bool addPlayer();
 		void removePlayer();
@@ -38,6 +29,9 @@ class Game {
         void process_packet(int id, ReadPacket *rp);
 
         void update(float dt);
+
+        virtual void doGameLogic();
+        virtual void sendGameInfoToClients();
 };
 
 #endif

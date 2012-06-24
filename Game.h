@@ -2,10 +2,9 @@
 #define GAME_H
 
 #include "Socket.h"
-#include "Server.h"
-
-#include "Hack.h"
 #include "World.h"
+#include "PhysicsWorld.h"
+#include "Hack.h"
 
 class Game {
     private:
@@ -26,7 +25,7 @@ class Game {
 
         void send_world();
         void send_sounds_to(SocketConnection* c);
-        void process_packet(int id, ReadPacket *rp);
+        void process_packet(SocketConnection* sc, ReadPacket* rp);
 
         void update(float dt);
 

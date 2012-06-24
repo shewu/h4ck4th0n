@@ -1,14 +1,18 @@
-#include <cstring>
-#include <cstdio>
-#include <cstdlib>
-#include <ctime>
+#include "Socket.h"
 
 #include <netdb.h>
 #include <sys/socket.h>
 
-#include "Socket.h"
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
+
 #include "Packet.h"
 #include "Hack.h"
+
+using std::max;
 
 /* PACKET HEADER (13 bytes total):
    - four bytes MESSAGE_HEADER_INIT, for confirmation
@@ -27,6 +31,8 @@ SocketConnection::SocketConnection(int socket, sockaddr *addr, socklen_t addrlen
 	this->addrlen = addrlen;
 	this->my_id = my_id;
 	this->their_id = their_id;
+
+	this->largestPacketNum = 0;
 }
 
 SocketConnection::~SocketConnection() {
@@ -38,6 +44,9 @@ ReadPacket* SocketConnection::receive_packet() {
 		return NULL;
 	ReadPacket *rp = read_packets.front();
 	read_packets.pop();
+
+	largestPacketNum = max(largestPacketNum, rp->packet_number);
+
 	return rp;
 }
 

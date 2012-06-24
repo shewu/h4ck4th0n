@@ -116,6 +116,7 @@ class SocketConnection {
 		~SocketConnection();
 
 		int lastTimeReceived;
+		int largestPacketNum;
 
     private:
         int num_sent;

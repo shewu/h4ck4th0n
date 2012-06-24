@@ -1,28 +1,29 @@
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/poll.h>
+#include <sys/time.h>
 #include <netinet/in.h>
 #include <fcntl.h>
 #include <netdb.h>
+#include <unistd.h>
+#include <errno.h>
 
 #include <cstring>
-#include <sys/time.h>
 #include <ctime>
 #include <cstdlib>
 #include <cstdio>
 #include <cmath>
 #include <iostream>
+#include <set>
 
-#include <unistd.h>
-#include <errno.h>
-
-#include <sys/poll.h>
-
-#include "Server.h"
 #include "Packet.h"
+#include "Socket.h"
 #include "Game.h"
 #include "Hack.h"
 
-using namespace std;
+using std::set;
+using std::cout;
+using std::cin;
 
 #define MYPORT "55555"
 
@@ -35,7 +36,7 @@ using namespace std;
 */
 
 // A map from the ID numbers to the Client structs
-map<int, Client> clients;
+set<SocketConnection*> clients;
 
 // Global variable keeping track of time
 timeval tim;
@@ -60,9 +61,10 @@ void verify() {
 }
 
 // Remove a client from the game
-void remove_client(Client cl) {
-    s->closeConnection(cl.sc);
-    clients.erase(cl.id);
+void remove_client(SocketConnection *sc) {
+    s->closeConnection(sc);
+    clients.erase(sc);
+    delete sc;
 }
 
 int main() {
@@ -117,30 +119,23 @@ int main() {
 
 		// Checking for new connections from clients
         SocketConnection *sc = s->receiveConnection();
+
         if(sc != NULL) {
             printf("Connection made\n");
 
-            Client cl;
-
-            do { cl.id = rand(); }
-            while(clients.count(cl.id));
-
-            cl.sc = sc;
-            cl.latestPacket = 0;
-
-            clients[cl.id] = cl;
+            clients.insert(sc);
 
             printf("Client added to clients map\n");
         }
 
 		// Loop through all clients, and see if there are
 		// any messages to be received.
-        for(map<int, Client>::iterator it = clients.begin();
+        for(set<SocketConnection*>::iterator it = clients.begin();
                 it != clients.end();) {
-            map<int, Client>::iterator next_it = it;
+            set<SocketConnection*>::iterator next_it = it;
             ++next_it;
 
-            Client cl = it->second;
+            SocketConnection* sc = *it;
 
 			// First, we see when the last time we received
 			// a packet from them is. If it was too long ago,
@@ -148,12 +143,12 @@ int main() {
 			// and server requires that the client send a message
 			// at least once every TIMEOUT seconds to demonstrate
 			// that it is still present.
-            if(cl.sc->lastTimeReceived < time(NULL) - TIMEOUT) {
+            if(sc->lastTimeReceived < time(NULL) - TIMEOUT) {
 				WritePacket wp(STC_DISCONNECT, 0);
-				cl.sc->send_packet(wp);
+				sc->send_packet(wp);
 
-                game.remove_player(cl.id);
-                remove_client(cl);
+                game.remove_player(sc);
+                remove_client(sc);
                 printf("Client timed out, currently %zu clients\n",
                         clients.size());
             }
@@ -164,20 +159,20 @@ int main() {
 			// are the CTS_CONNECT and CTS_DISCONNECT messages.
             else {
                 ReadPacket* rp;
-                while((rp = cl.sc->receive_packet()) != NULL) {
+                while((rp = sc->receive_packet()) != NULL) {
                     // Connect
                     if(rp->message_type == CTS_CONNECT) {
                         printf("Received connect message\n");
 
-                        if(game.add_player(cl))
+                        if(game.add_player(sc))
                             printf("Player added to game; currently %zu clients\n",
                                      clients.size());
                     }
 
                     // Disconnect
                     else if(rp->message_type == CTS_DISCONNECT) {
-                        game.remove_player(cl.id);
-                        remove_client(cl);
+                        game.remove_player(sc);
+                        remove_client(sc);
                         printf("Player disconnected, currently %zu clients\n",
 											clients.size());
                     }
@@ -185,9 +180,8 @@ int main() {
 					// Give packet to game for processing
 					// if the packet is of any other type.
                     else if (rp->message_type == CTS_USER_STATE &&
-                             rp->packet_number > cl.latestPacket) {
-                    	cl.latestPacket = rp->packet_number;
-                        game.process_packet(cl.id, rp);
+                             rp->packet_number >= sc->largestPacketNum) {
+                        game.process_packet(sc, rp);
                     }
 
                     delete rp;

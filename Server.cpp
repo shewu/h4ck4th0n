@@ -94,6 +94,8 @@ int main() {
 
 	printf("Server started, hit 'q' to quit.\n");
 
+	WritePacket worldWritePacket(STC_WORLD_DATA);
+
 	// Main server loop
     while(true) {
 
@@ -147,7 +149,7 @@ int main() {
 				WritePacket wp(STC_DISCONNECT, 0);
 				sc->send_packet(wp);
 
-                game.remove_player(sc);
+                game.removePlayer(sc);
                 remove_client(sc);
                 printf("Client timed out, currently %zu clients\n",
                         clients.size());
@@ -164,14 +166,14 @@ int main() {
                     if(rp->message_type == CTS_CONNECT) {
                         printf("Received connect message\n");
 
-                        if(game.add_player(sc))
+                        if(game.addPlayer(sc))
                             printf("Player added to game; currently %zu clients\n",
                                      clients.size());
                     }
 
                     // Disconnect
                     else if(rp->message_type == CTS_DISCONNECT) {
-                        game.remove_player(sc);
+                        game.removePlayer(sc);
                         remove_client(sc);
                         printf("Player disconnected, currently %zu clients\n",
 											clients.size());
@@ -203,7 +205,15 @@ int main() {
         game.update(dt);
 
 		// Send the world state to all clients
-        game.send_world();
+		worldWritePacket.reset();
+		game.getWorld().writeToPacket(&worldWritePacket);
+		for(set<SocketConnection*>::iterator iter = clients.begin();
+		        iter != clients.end(); ++iter) {
+		    SocketConnection *sc = *iter;
+		    worldWritePacket.write_int(game.getObjectIDOf(sc));
+			sc->send_packet(worldWritePacket);
+			worldWritePacket.backup(sizeof(int));
+		}
 
 		// Sleep a little while before the
 		// next iteration.

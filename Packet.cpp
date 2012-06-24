@@ -220,3 +220,8 @@ int WritePacket::getSize() const {
 char const* WritePacket::getContents() const {
 	return buf;
 }
+
+void backup(int nbytes) {
+	assert(size >= nbytes);
+	size -= nbytes;
+}

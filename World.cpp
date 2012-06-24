@@ -51,31 +51,3 @@ bool World::spawn(vector<SpawnDescriptor> const& possibleSpawns, MovingRoundObje
 	if(fail)
 		return false;
 }
-
-// TODO networking
-/*
-void World::sendObjects(SocketConnection* sc, int obj) {
-    WritePacket wp(STC_WORLD_DATA, 12 + 35 * objects.size());
-
-    wp.write_int(obj);
-
-    wp.write_int(objects.size());
-    for(map<int, Object>::iterator it = objects.begin(); it != objects.end(); ++it) {
-        it->second.write_data(&wp);
-    }
-
-    sc->send_packet(wp);
-}
-
-void World::receiveObjects(ReadPacket* rp, int& obj) {
-    obj = rp->read_int();
-
-    int numObjects = rp->read_int();
-    objects.clear();
-    for(int i = 0; i < numObjects; i++) {
-        Object o;
-        o.read_data(rp);
-        objects[o.id] = o;
-    }
-}
-*/

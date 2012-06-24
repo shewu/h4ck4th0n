@@ -25,12 +25,4 @@ void Game::update(float dt) {
 	// clean up dead objects that Game does not have
 	// any more pointers to
 	world_.cleanUp();
-
-	// send game-type specific information (like score)
-	// to the clients
-	sendGameInfoToClients();
-
-	// send the world state to the clients
-	worldWritePacket_.reset();
-	world_.writeToPackete(worldWritePacket);
 }

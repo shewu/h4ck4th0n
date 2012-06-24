@@ -7,12 +7,15 @@ class PhysicsWorld : World
 	public:
 		void doSimulation(float dt);
 
-		FlagObject *addFlagObject(int teamNumber, std::vector<SpawnDescriptor> *possibleSpawns);
-		PlayerObject *addPlayerObject(int teamNumber, std::vector<SpawnDescriptor> *possibleSpawns);
+		FlagObject *addFlagObject(int teamNumber,
+		    std::vector<SpawnDescriptor> *possibleSpawns);
+
+		PlayerObject *addPlayerObject(int teamNumber,
+		    std::vector<SpawnDescriptor> *possibleSpawns);
 
 		void removeDeadObjects();
 
-		void writeToPacket(WritePacket *wp);
+		void writeToPacket(WritePacket *wp) const;
 
 	private:
 };

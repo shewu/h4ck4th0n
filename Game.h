@@ -20,10 +20,14 @@ class Game {
         Game();
         ~Game();
 
-		bool addPlayer();
-		void removePlayer();
+		bool addPlayer(SocketConnection*);
+		void removePlayer(SocketConnection*);
+		int getObjectIDOf(SocketConnection*);
 
-        void send_world();
+		PhysicsWorld const& getWorld() const {
+			return world_;
+		}
+
         void send_sounds_to(SocketConnection* c);
         void process_packet(SocketConnection* sc, ReadPacket* rp);
 

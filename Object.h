@@ -124,6 +124,8 @@ class RectangularObject : public Object
 		virtual void writeToPacket(WritePacket *wp) const;
 
 		virtual ~RectangularObject();
+
+	friend class PhysicsWorld;
 };
 
 class RectangularWall : public RectangularObject
@@ -413,6 +415,8 @@ class MovingRoundObject : public RoundObject
 		 * @param wp the WritePacket to write this object to
 		 */
 		virtual void writeToPacket(WritePacket* wp) const;
+
+	friend class PhysicsWorld;
 };
 
 Material *materialsByTeamNumber[] = {new Color(0, 255, 0),

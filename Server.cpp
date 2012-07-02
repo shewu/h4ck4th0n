@@ -210,9 +210,12 @@ int main() {
 		for(set<SocketConnection*>::iterator iter = clients.begin();
 		        iter != clients.end(); ++iter) {
 		    SocketConnection *sc = *iter;
-		    worldWritePacket.write_int(game.getObjectIDOf(sc));
-			sc->send_packet(worldWritePacket);
-			worldWritePacket.backup(sizeof(int));
+		    int playerID = game.getObjectIDOf(sc);
+		    if (playerID != -1) {
+				worldWritePacket.write_int(game.getObjectIDOf(sc));
+				sc->send_packet(worldWritePacket);
+				worldWritePacket.backup(sizeof(int));
+			}
 		}
 
 		// Sleep a little while before the

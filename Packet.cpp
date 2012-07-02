@@ -221,7 +221,7 @@ char const* WritePacket::getContents() const {
 	return buf;
 }
 
-void backup(int nbytes) {
+void WritePacket::backup(int nbytes) {
 	assert(size >= nbytes);
 	size -= nbytes;
 }

@@ -9,10 +9,10 @@ class PhysicsWorld : World
 
 		void doSimulation(float dt);
 
-		FlagObject *addFlagObject(int teamNumber,
+		FlagObject* addFlagObject(int teamNumber,
 		    std::vector<SpawnDescriptor> *possibleSpawns);
 
-		PlayerObject *addPlayerObject(int teamNumber,
+		PlayerObject* addPlayerObject(int teamNumber,
 		    std::vector<SpawnDescriptor> *possibleSpawns);
 
 		void removeDeadObjects();

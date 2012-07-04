@@ -55,6 +55,10 @@ class Object
 			return id < that.id;
 		}
 
+		int getRefCount() const {
+			return refCount;
+		}
+
 		/**
 		 * Writes the object to a WritePacket
 		 * @param wp the WritePacket to write this object to

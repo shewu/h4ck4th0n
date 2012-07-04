@@ -4,8 +4,6 @@
 #include <vector>
 #include <SDL/SDL.h>
 
-using namespace std;
-
 #define MENU_KEY_LEFT		SDLK_LEFT
 #define MENU_KEY_RIGHT		SDLK_RIGHT
 #define MENU_KEY_UP 		SDLK_UP
@@ -109,7 +107,7 @@ class menu {
 		void setAppearanceFull();
 		void setAppearanceMiddle();
 	private:
-		vector<menuitem*> menuitems;
+		std::vector<menuitem*> menuitems;
 		int current_index;
 		bool is_item_active;
 		bool is_menu_active;

@@ -34,9 +34,8 @@ CLIENT_OBJECTS = Menu.o \
 	SplashViewController.o \
 	ServerConnectViewController.o \
 	GameViewController.o \
-	Material.o
 
-SERVER_OBJECTS+=$(SHARED_OBJECTS) Server.o Game.o Physics.o
+SERVER_OBJECTS+=$(SHARED_OBJECTS) Server.o Game.o Physics.o PhysicsWorld.o
 UNHOLY_BALLS_OBJECTS+=$(SHARED_OBJECTS) Unholyclient.o UnholyGameViewController.o
 HOLY_BALLS_OBJECTS+=$(SHARED_OBJECTS) Holyclient.o HolyGameViewController.o
 MULTI_BALLS_OBJECTS+=$(SHARED_OBJECTS) Multiclient.o MultiGameViewController.o

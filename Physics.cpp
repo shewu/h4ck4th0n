@@ -5,49 +5,13 @@
 #include "Object.h"
 #include "PhysicsWorld.h"
 
-using namespace std;
+using std::map;
+using std::pair;
+using std::priority_queue;
 
 // TODO bouncy wall support
 // TODO round wall support
 // TODO compute velocities
-
-enum EventType
-{
-	ET_NONE,
-	ET_ROUND_ROUND,
-	ET_ROUND_DISAPPEAR,
-	ET_ROUND_WALL_CORNER_1,
-	ET_ROUND_WALL_CORNER_2,
-	ET_ROUND_WALL_LINE
-};
-
-struct collide_event
-{
-	float time;
-	enum EventType type;
-
-	/*
-	 * Depends on type.
-	 * ET_ROUND_ROUND: IDs of round objects
-	 * ET_ROUND_DISAPPEAR: t1 is the ID of the object, t2 is unused.
-	 * ET_ROUND_WALL_*: t1 is the ID of the round object, t2 ID of the wall.
-	 */
-	int t1, t2;
-
-	collide_event() { }
-	collide_event(float time, EventType type, int t1, int t2) :
-	              time(time), type(type), t1(t1), t2(t2) { }
-
-	bool operator==(collide_event const &a) const {
-		return type == a.type && t1 == a.t1 && t2 == a.t2 && time == a.time;
-	}
-	bool operator!=(collide_event const &a) const {
-		return !(operator==(a));
-	}
-	bool operator<(collide_event const& a) const {
-		return (time > a.time);
-	}
-};
 
 /**
  * Computes the time when two circle objects will intersect.
@@ -57,7 +21,7 @@ struct collide_event
  * @param rc Total rate at which r is decreasing.
  * @return The time at which the two objects will intersect if uninterrupted.
  */
-float collideCircles(Vector2D diff, Vector2D vel, float r, float rc) {
+float PhysicsWorld::collideCircles(Vector2D diff, Vector2D vel, float r, float rc) {
 	if (diff*vel+rc*sqrt(diff*diff) >= 0) return INFINITY;
 	float a = vel*vel-rc*rc, b = 2*(diff*vel)+2*rc*r, c = diff*diff-r*r;
 	float discrim = b*b-4*a*c;
@@ -78,9 +42,9 @@ float collideCircles(Vector2D diff, Vector2D vel, float r, float rc) {
  * @param dt The amount of time to look into the future. Collision is not added to the queue
  *           if it occurs after dt time has passed.
  */
-void doObjectCollision(MovingRoundObject const& fo, MovingRoundObject const& so,
-                       map<pair<int,int>, collide_event>& collideRoundWithRound,
-                       priority_queue<collide_event>& collideEvents,
+void PhysicsWorld::doObjectCollision(MovingRoundObject const& fo, MovingRoundObject const& so,
+                       map<pair<int,int>, PhysicsWorld::collide_event>& collideRoundWithRound,
+                       priority_queue<PhysicsWorld::collide_event>& collideEvents,
                        float cur, float dt) {
 	if (fo.state == MOS_DEAD || so.state == MOS_DEAD ||
 		fo.state == MOS_SPAWNING || so.state == MOS_SPAWNING || 
@@ -125,10 +89,10 @@ void doObjectCollision(MovingRoundObject const& fo, MovingRoundObject const& so,
 	}
 }
 
-void doRectangularWallCollision(MovingRoundObject const& obj,
+void PhysicsWorld::doRectangularWallCollision(MovingRoundObject const& obj,
                                 RectangularWall const& wall,
-                                map<pair<int, int>, collide_event>& collideRoundWithWall,
-                                priority_queue<collide_event>& collideEvents,
+                                map<pair<int, int>, PhysicsWorld::collide_event>& collideRoundWithWall,
+                                priority_queue<PhysicsWorld::collide_event>& collideEvents,
                                 float cur, float dt) {
     if (obj.state != MOS_ALIVE) {
 		collideRoundWithWall[pair<int, int>(obj.getID(), wall.getID())] =
@@ -138,7 +102,7 @@ void doRectangularWallCollision(MovingRoundObject const& obj,
 
 	float time1 = collideCircles(obj.center - wall.p1, obj.velocity,
 	                             obj.radius, 0);
-	float time2 = collideCircles(obj.center - wall.p2, obj.velocity
+	float time2 = collideCircles(obj.center - wall.p2, obj.velocity,
 	                             obj.radius, 0);
 
 	float time3;
@@ -182,9 +146,9 @@ void doRectangularWallCollision(MovingRoundObject const& obj,
 	}
 }
 
-void doRoundObjectDisappearing(MovingRoundObject const& obj,
-                               map<int, collide_event>& collideDisappear,
-                               priority_queue<collide_event>& collideEvents,
+void PhysicsWorld::doRoundObjectDisappearing(MovingRoundObject const& obj,
+                               map<int, PhysicsWorld::collide_event>& collideDisappear,
+                               priority_queue<PhysicsWorld::collide_event>& collideEvents,
                                float cur, float dt) {
 	if(obj.isCurrentlyShrinking()) {
 		float time = obj.radius / DEATH_RATE;
@@ -204,7 +168,9 @@ void doRoundObjectDisappearing(MovingRoundObject const& obj,
  * @param obj1 A shrinking round object.
  * @param obj2 A moving object which hits obj1.
  */
-void bounceMovingRoundAndShrinkingRound(MovingRoundObject& obj1, MovingRoundObject& obj2) {
+void PhysicsWorld::bounceMovingRoundAndShrinkingRound(
+			MovingRoundObject& obj1,
+			MovingRoundObject& obj2) {
 	Vector2D normal = obj2.center - obj1.center;
 	float nv1 = obj1.velocity * normal;
 	float nv2 = obj2.velocity * normal;
@@ -219,19 +185,19 @@ void bounceMovingRoundAndShrinkingRound(MovingRoundObject& obj1, MovingRoundObje
 	}
 }
 
-void bounceMovingRoundFromPoint(MovingRoundObject& obj, Vector2D const& p) {
+void PhysicsWorld::bounceMovingRoundFromPoint(MovingRoundObject& obj, Vector2D const& p) {
 	Vector2D normal = obj.velocity - p;
 	float nv1 = obj.velocity * normal;
 	obj.velocity -= 2.0 * (nv1/(normal*normal)) * normal;
 }
 
-void bounceMovingRoundFromWall(MovingRoundObject& obj, Vector2D const& p1, Vector2D const& p2) {
+void PhysicsWorld::bounceMovingRoundFromWall(MovingRoundObject& obj, Vector2D const& p1, Vector2D const& p2) {
 	Vector2D normal = (p2 - p1).getNormalVector();
 	float nv1 = obj.velocity * normal;
 	obj.velocity -= 2.0 * (nv1/(normal*normal)) * normal;
 }
 
-void updateRoundObjectsForward(map<int, MovingRoundObject*>& objects, float dt) {
+void PhysicsWorld::updateRoundObjectsForward(map<int, MovingRoundObject*>& objects, float dt) {
 	for(map<int, MovingRoundObject*>::iterator i = objects.begin(); i != objects.end(); i++) {
 		MovingRoundObject& obj = *(i->second);
 		if(obj.state == MOS_ALIVE) {
@@ -245,10 +211,10 @@ void updateRoundObjectsForward(map<int, MovingRoundObject*>& objects, float dt) 
 }
 
 void PhysicsWorld::doSimulation(float dt) {
-	map<pair<int, int>, collide_event> collideRoundWithRound;
-	map<pair<int, int>, collide_event> collideRoundWithWall;
-	map<int, collide_event> collideDisappear;
-	priority_queue<collide_event> collideEvents;
+	map<pair<int, int>, PhysicsWorld::collide_event> collideRoundWithRound;
+	map<pair<int, int>, PhysicsWorld::collide_event> collideRoundWithWall;
+	map<int, PhysicsWorld::collide_event> collideDisappear;
+	priority_queue<PhysicsWorld::collide_event> collideEvents;
 
 	for (map<int, MovingRoundObject*>::iterator i = movingRoundObjects.begin(); i != movingRoundObjects.end(); i++) {
 		map<int, MovingRoundObject*>::iterator j = i;

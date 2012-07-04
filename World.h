@@ -28,7 +28,7 @@ class World
          *
          * @param mapName the map file name. Defaults to "custom.hbm".
          */
-		World(HBMap const& map);
+		World(HBMap const&);
 
 		bool spawn(std::vector<SpawnDescriptor> const& possibleSpawns, MovingRoundObject& obj);
 

@@ -41,10 +41,6 @@ set<SocketConnection*> clients;
 // Global variable keeping track of time
 timeval tim;
 
-// Deals with the game state, i.e., scores, teams,
-// world, etc.
-Game game;
-
 // A Socket class which returns SocketConnection
 // instances as clients connect
 Socket *s;
@@ -95,6 +91,8 @@ int main() {
 	printf("Server started, hit 'q' to quit.\n");
 
 	WritePacket worldWritePacket(STC_WORLD_DATA);
+
+	Game game(HBMap("map.hbm"));
 
 	// Main server loop
     while(true) {

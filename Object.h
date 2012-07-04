@@ -232,6 +232,9 @@ class RoundObject : public Object
 		 * @param wp the WritePacket to write this object to
 		 */
 		virtual void writeToPacket(WritePacket* wp) const;
+
+	friend class PhysicsWorld;
+
 };
 
 class RoundWall : public RoundObject

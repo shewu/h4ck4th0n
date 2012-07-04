@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "NetworkProtocol.h"
 #include "Socket.h"
 #include "World.h"
 #include "PhysicsWorld.h"
@@ -10,15 +11,14 @@ class Game {
     private:
         PhysicsWorld world_;
 
-        WritePacket* worldWritePacket_;
-
 		// Make Game non-copyable by making this private.
 		Game(Game const&);
 		Game& operator=(Game const&);
 
     public:
-        Game();
-        ~Game();
+        Game(HBMap const& hbmap) : world_(hbmap) { }
+
+        virtual ~Game() { }
 
 		bool addPlayer(SocketConnection*);
 		void removePlayer(SocketConnection*);

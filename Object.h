@@ -69,21 +69,55 @@ class Object
 			delete material;
 		}
 
-	friend class ObjectPtr;
+	template<class> friend class ObjectPtr;
 };
 
+template <class T>
 class ObjectPtr {
 	public: 
-		ObjectPtr(Object*);
+		ObjectPtr(T* obj = NULL) : ptr_(obj) {
+			if (obj != NULL) {
+				obj->refCount++;
+			}
+		}
 
-		~ObjectPtr();
-		ObjectPtr(ObjectPtr const&);
-		ObjectPtr& operator=(ObjectPtr const&);
+		~ObjectPtr() {
+			if (ptr_ != NULL) {
+				ptr_->refCount--;
+			}
+		}
 
-		Object& operator*();
+		ObjectPtr(ObjectPtr const& other) {
+			ptr_ = other.ptr_;
+			if (ptr_ != NULL) {
+				ptr_->refCount++;
+			}
+		}
+
+		ObjectPtr& operator=(ObjectPtr const& other) {
+			if (ptr_ != NULL) {
+				ptr_->refCount--;
+			}
+			ptr_ = other.ptr_;
+			if (ptr_ != NULL) {
+				ptr_->refCount++;
+			}
+		}
+
+		T& operator*() {
+			return *ptr_;
+		}
+
+		T* operator->() {
+			return ptr_;
+		}
+
+		bool empty() const {
+			return ptr_ == NULL;
+		}
 
 	private:
-		Object* ptr_;
+		T* ptr_;
 };
 
 class RectangularObject : public Object
@@ -104,7 +138,7 @@ class RectangularObject : public Object
 		 * @param material The material for the object being created.
 		 */
 		RectangularObject(Vector2D a, Vector2D b, Material *material)
-		    : Object(material), p1(a), p2(b) { }
+			: Object(material), p1(a), p2(b) { }
 
 		RectangularObject(ReadPacket *rp);
 
@@ -128,7 +162,7 @@ class RectangularObject : public Object
 		 */
 		virtual void writeToPacket(WritePacket *wp) const;
 
-	friend class PhysicsWorld;
+		friend class PhysicsWorld;
 };
 
 class RectangularWall : public RectangularObject
@@ -149,7 +183,7 @@ class RectangularWall : public RectangularObject
 		 * @param material The material for the object being created.
 		 */
 		RectangularWall(Vector2D a, Vector2D b, WallType wt = WT_NORMAL) :
-		    RectangularObject(a, b, new Color(101, 67, 33)), wallType(wt) { }
+			RectangularObject(a, b, new Color(101, 67, 33)), wallType(wt) { }
 
 		RectangularWall(ReadPacket *rp);
 
@@ -194,11 +228,11 @@ class RoundObject : public Object
 		 * @param endAngle The ending angle for the arc.
 		 */
 		RoundObject(Material *material, Vector2D& center, float radius,
-		            float startAngle = 0.0, float endAngle = M_PI_2) :
-		    Object(material), center(center), radius(radius), startAngle(startAngle), 
-            endAngle(endAngle) { }
+				float startAngle = 0.0, float endAngle = M_PI_2) :
+			Object(material), center(center), radius(radius), startAngle(startAngle), 
+			endAngle(endAngle) { }
 
-        RoundObject(ReadPacket *rp);
+		RoundObject(ReadPacket *rp);
 
 		/**
 		 * @return the center
@@ -234,7 +268,7 @@ class RoundObject : public Object
 		 */
 		virtual void writeToPacket(WritePacket* wp) const;
 
-	friend class PhysicsWorld;
+		friend class PhysicsWorld;
 
 };
 
@@ -261,9 +295,9 @@ class RoundWall : public RoundObject
 		 * @param wt The wall type for this wall.
 		 */
 		RoundWall(Material *material, Vector2D center, float radius,
-		            float startAngle = 0.0, float endAngle = M_PI_2,
-		            WallType wt = WT_NORMAL) : 
-            RoundObject(material, center, radius, startAngle, endAngle), wallType(wt) { }
+				float startAngle = 0.0, float endAngle = M_PI_2,
+				WallType wt = WT_NORMAL) : 
+			RoundObject(material, center, radius, startAngle, endAngle), wallType(wt) { }
 
 		RoundWall(ReadPacket *rp);
 
@@ -287,7 +321,7 @@ enum MovingObjectState {
 	MOS_SHRINKING,
 	MOS_DEAD,
 
-    MOS_NUM_STATES
+	MOS_NUM_STATES
 };
 
 class MovingRoundObject : public RoundObject
@@ -312,12 +346,12 @@ class MovingRoundObject : public RoundObject
 		float heightRatio;
 
 		bool isFlag;
-		
+
 	public:
 		MovingRoundObject(Material *material, Vector2D center, float radius, float mass,
-		                  float heightRatio, float timeUntilSpawn, bool isFlag) :
-		    RoundObject(material, center, radius, 0.0, M_PI_2), state(MOS_SPAWNING), timeUntilSpawn(timeUntilSpawn), velocity(0.0, 0.0), mass(mass), isFlag(isFlag),
-            heightRatio(heightRatio) { }
+				float heightRatio, float timeUntilSpawn, bool isFlag) :
+			RoundObject(material, center, radius, 0.0, M_PI_2), state(MOS_SPAWNING), timeUntilSpawn(timeUntilSpawn), velocity(0.0, 0.0), mass(mass), isFlag(isFlag),
+			heightRatio(heightRatio) { }
 
 		MovingRoundObject(ReadPacket *rp);
 
@@ -420,7 +454,7 @@ class MovingRoundObject : public RoundObject
 		 */
 		virtual void writeToPacket(WritePacket* wp) const;
 
-	friend class PhysicsWorld;
+		friend class PhysicsWorld;
 };
 
 class FlagObject : public MovingRoundObject
@@ -433,9 +467,9 @@ class FlagObject : public MovingRoundObject
 		FlagObject& operator=(FlagObject const&);
 
 	public:
-        static float FLAG_RADIUS;
-        static float FLAG_MASS;
-        static float FLAG_HEIGHT_RATIO;
+		static float FLAG_RADIUS;
+		static float FLAG_MASS;
+		static float FLAG_HEIGHT_RATIO;
 
 		/**
 		 * Constructs a flag with the given material, center, and team.
@@ -444,11 +478,11 @@ class FlagObject : public MovingRoundObject
 		 * @param teamNumber The team number for this flag.
 		 */
 		FlagObject(unsigned teamNumber, float timeUntilSpawn) :
-		    MovingRoundObject(materialsByTeamNumber[teamNumber],
-		                      Vector2D(), FLAG_RADIUS,
-                              FLAG_MASS, FLAG_HEIGHT_RATIO, timeUntilSpawn, true),
-            teamNumber(teamNumber) { }
-		
+			MovingRoundObject(materialsByTeamNumber[teamNumber],
+					Vector2D(), FLAG_RADIUS,
+					FLAG_MASS, FLAG_HEIGHT_RATIO, timeUntilSpawn, true),
+			teamNumber(teamNumber) { }
+
 		FlagObject(ReadPacket *rp);
 
 		/**
@@ -477,9 +511,9 @@ class PlayerObject : public MovingRoundObject
 	private:
 		unsigned teamNumber;
 
-        static float PLAYER_RADIUS;
-        static float PLAYER_MASS;
-        static float PLAYER_HEIGHT_RATIO;
+		static float PLAYER_RADIUS;
+		static float PLAYER_MASS;
+		static float PLAYER_HEIGHT_RATIO;
 
 		// Make object non-copyable by making this private.
 		PlayerObject(PlayerObject const&);
@@ -492,11 +526,11 @@ class PlayerObject : public MovingRoundObject
 		 * @param teamNumber the number of this player's team.
 		 */
 		PlayerObject(unsigned teamNumber, float timeUntilSpawn) :
-		    MovingRoundObject(materialsByTeamNumber[teamNumber],
-		                      Vector2D(),
-		                      PlayerObject::PLAYER_RADIUS, PlayerObject::PLAYER_MASS,
-		                      PlayerObject::PLAYER_HEIGHT_RATIO, timeUntilSpawn, false),
-                              teamNumber(teamNumber) { }
+			MovingRoundObject(materialsByTeamNumber[teamNumber],
+					Vector2D(),
+					PlayerObject::PLAYER_RADIUS, PlayerObject::PLAYER_MASS,
+					PlayerObject::PLAYER_HEIGHT_RATIO, timeUntilSpawn, false),
+			teamNumber(teamNumber) { }
 
 		/**
 		 * Gets the team number.

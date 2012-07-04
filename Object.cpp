@@ -18,30 +18,6 @@ Material* Object::materialsByTeamNumber[] = {new Color(0, 255, 0),
                                              new Color(0, 0, 255)
                                             };
 
-
-ObjectPtr::ObjectPtr(Object* obj) : ptr_(obj) {
-	obj->refCount++;
-}
-
-ObjectPtr::~ObjectPtr() {
-	ptr_->refCount--;
-}
-
-ObjectPtr::ObjectPtr(ObjectPtr const& other) {
-	ptr_ = other.ptr_;
-	ptr_->refCount++;
-}
-
-ObjectPtr& ObjectPtr::operator=(ObjectPtr const& other) {
-	ptr_->refCount--;
-	ptr_ = other.ptr_;
-	ptr_->refCount++;
-}
-
-Object& ObjectPtr::operator*() {
-	return *ptr_;
-}
-
 void Object::writeToPacket(WritePacket *wp) const {
 	wp->write_int(id);
 	material->writeToPacket(wp);

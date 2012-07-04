@@ -1,3 +1,5 @@
+#include "Vector.h"
+
 /**
  * Represents a user input state.
  */
@@ -17,11 +19,14 @@ class UserInput {
 		UserInput(bool left, bool right, bool up, bool down, float theta) :
 		    _left(left), _right(right), _up(up), _down(down), _theta(theta) { }
 
+
+		UserInput() :
+		    _left(false), _right(false), _up(false), _down(false), _theta(0.0) { }
+
 		/**
-		 * Returns the forward acceleration vector indicated by the key input; that is,
-		 * the acceleration of the player, where (0, 1) points in the direction the player
-		 * is currently facing.
-		 * @return the forward acceleration indicated by the key input.
+		 * Returns the acceleration vector indicated by the key input; takes into account
+		 * the direction that the player is facing.
+		 * @return the acceleration indicated by the key input.
 		 */
-		Vector2D getForwardAcceleration() const;
+		Vector2D getAcceleration() const;
 };

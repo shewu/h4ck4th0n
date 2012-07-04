@@ -6,10 +6,20 @@
 #include "World.h"
 #include "PhysicsWorld.h"
 #include "Hack.h"
+#include "UserInput.h"
+
+struct GamePlayer {
+	UserInput input;
+	ObjectPtr<PlayerObject> obj;
+};
 
 class Game {
     private:
         PhysicsWorld world_;
+
+        std::map<SocketConnection*, GamePlayer> players;
+
+        void applyForcesFromInput(float dt);
 
 		// Make Game non-copyable by making this private.
 		Game(Game const&);

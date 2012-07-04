@@ -1,12 +1,42 @@
+#include "Game.h"
+
 #include <cmath>
-#include <cstdlib>
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 
-#include "Game.h"
-#include "Constants.h"
+using std::map;
+using std::pair;
+
+bool Game::addPlayer(SocketConnection *sc) {
+	if (players.find(sc) != players.end()) {
+		return false;
+	}
+
+	players.insert(pair<SocketConnection*, GamePlayer>(
+				sc, GamePlayer()));
+
+	// TODO handshake
+
+	return true;
+}
+
+void Game::applyForcesFromInput(float dt) {
+	for (map<SocketConnection*, GamePlayer>::iterator iter = players.begin();
+			iter != players.end(); ++iter) {
+		GamePlayer& player = iter->second;
+		if (!player.obj.empty()) {
+			Vector2D accel = player.input.getAcceleration();
+			player.obj->setVelocity(player.obj->getVelocity() + accel * dt);
+		}
+	}
+
+	// TODO friction
+}
 
 void Game::update(float dt) {
+	applyForcesFromInput(dt);
+
 	// physics
 	world_.doSimulation(dt);
 

@@ -10,7 +10,7 @@ class Material
 		 * Writes the material to a packet.
 		 * @param wp The packet to write the Material to.
 		 */
-		virtual void writeToPacket(WritePacket *wp);
+		virtual void writeToPacket(WritePacket *wp) = 0;
 
 		/**
 		 * Reads the material from the packet.
@@ -41,9 +41,11 @@ class Color : public Material
          * @param x the red channel. Defaults to 0.
          * @param y the green channel. Defaults to 0.
          * @param z the blue channel. Defaults to 0.
+         * @param alpha the alpha channel. Defaults to 0.
          */
-		Color(unsigned char x = 0, unsigned char y = 0, unsigned char z = 0) 
-            : r(x), g(y), b(z), a(0) {} 
+		Color(unsigned char x = 0, unsigned char y = 0, unsigned char z = 0,
+		      unsigned char alpha = 0) 
+            : r(x), g(y), b(z), a(alpha) {} 
 
         /**
          * Gets the red channel of this Color instance.

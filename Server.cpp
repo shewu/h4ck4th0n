@@ -1,29 +1,31 @@
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/poll.h>
-#include <sys/time.h>
-#include <netinet/in.h>
+
+#include <errno.h>
 #include <fcntl.h>
 #include <netdb.h>
+#include <netinet/in.h>
+#include <sys/poll.h>
+#include <sys/socket.h>
+#include <sys/time.h>
+#include <sys/types.h>
 #include <unistd.h>
-#include <errno.h>
 
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <cstdlib>
-#include <cstdio>
-#include <cmath>
 #include <iostream>
 #include <set>
 
-#include "Packet.h"
-#include "Socket.h"
+#include "CTFGame.h"
 #include "Game.h"
 #include "Hack.h"
+#include "Packet.h"
+#include "Socket.h"
 
-using std::set;
-using std::cout;
 using std::cin;
+using std::cout;
+using std::set;
 
 #define MYPORT "55555"
 
@@ -92,7 +94,7 @@ int main() {
 
 	WritePacket worldWritePacket(STC_WORLD_DATA);
 
-	Game game(HBMap("map.hbm"));
+	Game* game = new CTFGame(HBMap("map.hbm"));
 
 	// Main server loop
     while(true) {
@@ -147,7 +149,7 @@ int main() {
 				WritePacket wp(STC_DISCONNECT, 0);
 				sc->send_packet(wp);
 
-                game.removePlayer(sc);
+                game->removePlayer(sc);
                 remove_client(sc);
                 printf("Client timed out, currently %zu clients\n",
                         clients.size());
@@ -164,14 +166,14 @@ int main() {
                     if(rp->message_type == CTS_CONNECT) {
                         printf("Received connect message\n");
 
-                        if(game.addPlayer(sc))
+                        if(game->addPlayer(sc))
                             printf("Player added to game; currently %zu clients\n",
                                      clients.size());
                     }
 
                     // Disconnect
                     else if(rp->message_type == CTS_DISCONNECT) {
-                        game.removePlayer(sc);
+                        game->removePlayer(sc);
                         remove_client(sc);
                         printf("Player disconnected, currently %zu clients\n",
 											clients.size());
@@ -181,7 +183,7 @@ int main() {
 					// if the packet is of any other type.
                     else if (rp->message_type == CTS_USER_STATE &&
                              rp->packet_number >= sc->largestPacketNum) {
-                        game.process_packet(sc, rp);
+                        game->process_packet(sc, rp);
                     }
 
                     delete rp;
@@ -200,17 +202,17 @@ int main() {
 
 		// Update game state, e.g., do physics
 		// computations
-        game.update(dt);
+        game->update(dt);
 
 		// Send the world state to all clients
 		worldWritePacket.reset();
-		game.getWorld().writeToPacket(&worldWritePacket);
+		game->getWorld().writeToPacket(&worldWritePacket);
 		for(set<SocketConnection*>::iterator iter = clients.begin();
 		        iter != clients.end(); ++iter) {
 		    SocketConnection *sc = *iter;
-		    int playerID = game.getObjectIDOf(sc);
+		    int playerID = game->getObjectIDOf(sc);
 		    if (playerID != -1) {
-				worldWritePacket.write_int(game.getObjectIDOf(sc));
+				worldWritePacket.write_int(game->getObjectIDOf(sc));
 				sc->send_packet(worldWritePacket);
 				worldWritePacket.backup(sizeof(int));
 			}

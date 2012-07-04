@@ -24,7 +24,8 @@ SHARED_OBJECTS = Socket.o \
 	World.o \
     HBMap.o \
 	Packet.o \
-	SocketConnection.o
+	SocketConnection.o \
+	Material.o
 
 CLIENT_OBJECTS = Menu.o \
 	MenuItem.o \
@@ -32,7 +33,8 @@ CLIENT_OBJECTS = Menu.o \
 	Font.o \
 	SplashViewController.o \
 	ServerConnectViewController.o \
-	GameViewController.o
+	GameViewController.o \
+	Material.o
 
 SERVER_OBJECTS+=$(SHARED_OBJECTS) Server.o Game.o Physics.o
 UNHOLY_BALLS_OBJECTS+=$(SHARED_OBJECTS) Unholyclient.o UnholyGameViewController.o

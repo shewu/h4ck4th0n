@@ -33,8 +33,7 @@ class Game {
 
         void update(float dt);
 
-        virtual void doGameLogic();
-        virtual void sendGameInfoToClients();
+        virtual void doGameLogic() = 0;
 };
 
 #endif

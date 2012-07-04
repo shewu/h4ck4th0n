@@ -20,6 +20,9 @@ class Object
 		Object(Object const&);
 		Object& operator=(Object const&);
 
+	protected:
+		static Material* materialsByTeamNumber[];
+
 	public:
 		/**
 		 * Constructs an object with the given material.
@@ -64,8 +67,6 @@ class Object
 
 	friend class ObjectPtr;
 };
-
-unsigned Object::nextId = 0;
 
 class ObjectPtr {
 	public: 
@@ -123,8 +124,6 @@ class RectangularObject : public Object
 		 */
 		virtual void writeToPacket(WritePacket *wp) const;
 
-		virtual ~RectangularObject();
-
 	friend class PhysicsWorld;
 };
 
@@ -162,8 +161,6 @@ class RectangularWall : public RectangularObject
 		 * @param wp the WritePacket to write this object to
 		 */
 		virtual void writeToPacket(WritePacket* wp) const;
-
-		~RectangularWall();
 };
 
 class RoundObject : public Object
@@ -422,11 +419,6 @@ class MovingRoundObject : public RoundObject
 	friend class PhysicsWorld;
 };
 
-Material *materialsByTeamNumber[] = {new Color(0, 255, 0),
-	                                 new Color(255, 0, 0),
-                                     new Color(0, 0, 255)
-                                    };
-
 class FlagObject : public MovingRoundObject
 {
 	private:
@@ -449,8 +441,8 @@ class FlagObject : public MovingRoundObject
 		 */
 		FlagObject(unsigned teamNumber, float timeUntilSpawn) :
 		    MovingRoundObject(materialsByTeamNumber[teamNumber],
-		                      Vector2D(), FlagObject::FLAG_RADIUS,
-                              FlagObject::FLAG_MASS, FlagObject::FLAG_HEIGHT_RATIO, timeUntilSpawn, true),
+		                      Vector2D(), FLAG_RADIUS,
+                              FLAG_MASS, FLAG_HEIGHT_RATIO, timeUntilSpawn, true),
             teamNumber(teamNumber) { }
 		
 		FlagObject(ReadPacket *rp);
@@ -475,10 +467,6 @@ class FlagObject : public MovingRoundObject
 		 */
 		virtual void writeToPacket(WritePacket* wp) const;
 };
-
-float FlagObject::FLAG_RADIUS = 1.0f;
-float FlagObject::FLAG_MASS = 1.2f;
-float FlagObject::FLAG_HEIGHT_RATIO = 2.0f;
 
 class PlayerObject : public MovingRoundObject
 {
@@ -527,9 +515,5 @@ class PlayerObject : public MovingRoundObject
 		virtual void writeToPacket(WritePacket* wp) const;
 };
 
-float PlayerObject::PLAYER_RADIUS = 1;
-float PlayerObject::PLAYER_MASS = 1;
-float PlayerObject::PLAYER_HEIGHT_RATIO = 1;
 
 #endif
-

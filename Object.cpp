@@ -3,6 +3,22 @@
 #include "Hack.h"
 #include "Packet.h"
 
+float PlayerObject::PLAYER_RADIUS = 1;
+float PlayerObject::PLAYER_MASS = 1;
+float PlayerObject::PLAYER_HEIGHT_RATIO = 1;
+
+float FlagObject::FLAG_RADIUS = 1.0f;
+float FlagObject::FLAG_MASS = 1.2f;
+float FlagObject::FLAG_HEIGHT_RATIO = 2.0f;
+
+unsigned Object::nextId = 0;
+
+Material* Object::materialsByTeamNumber[] = {new Color(0, 255, 0),
+                                             new Color(255, 0, 0),
+                                             new Color(0, 0, 255)
+                                            };
+
+
 ObjectPtr::ObjectPtr(Object* obj) : ptr_(obj) {
 	obj->refCount++;
 }

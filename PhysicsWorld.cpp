@@ -17,9 +17,9 @@ PlayerObject* PhysicsWorld::addPlayerObject(
 }
 
 void PhysicsWorld::removeDeadObjects() {
-	map<int, MovingRoundObject*>::iterator iter = movingRoundObjects.begin();
+	auto iter = movingRoundObjects.begin();
 	while(iter != movingRoundObjects.end()) {
-		map<int, MovingRoundObject*>::iterator iter2 = iter;
+		auto iter2 = iter;
 		++iter2;
 
 		MovingRoundObject *obj = iter->second;
@@ -33,8 +33,7 @@ void PhysicsWorld::removeDeadObjects() {
 }
 
 void PhysicsWorld::writeToPacket(WritePacket *wp) const {
-	for(map<int, MovingRoundObject*>::const_iterator iter = movingRoundObjects.begin();
-	              iter != movingRoundObjects.end(); ++iter) {
+	for(auto iter = movingRoundObjects.begin(); iter != movingRoundObjects.end(); ++iter) {
 		MovingRoundObject *obj = iter->second;
 		wp->write_int(obj->getID());
 		obj->writeToPacket(wp);

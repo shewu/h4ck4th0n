@@ -37,7 +37,7 @@ bool World::spawn(vector<SpawnDescriptor> const& possibleSpawns, MovingRoundObje
 	             random_uniform_float(spawn.getMinY(), spawn.getMaxY()));
 
 	bool fail = false;
-	for (map<int, MovingRoundObject *>::iterator it = movingRoundObjects.begin(); it != movingRoundObjects.end(); it++) {
+	for (auto it = movingRoundObjects.begin(); it != movingRoundObjects.end(); it++) {
 		MovingRoundObject const& otherObj = *(it->second);
 		Vector2D difference = obj.getCenter() - otherObj.getCenter();
 		float minDistance = obj.getRadius() + otherObj.getRadius();

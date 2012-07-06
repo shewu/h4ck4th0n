@@ -22,8 +22,7 @@ bool Game::addPlayer(SocketConnection *sc) {
 }
 
 void Game::applyForcesFromInput(float dt) {
-	for (map<SocketConnection*, GamePlayer>::iterator iter = players.begin();
-			iter != players.end(); ++iter) {
+	for (auto iter = players.begin(); iter != players.end(); ++iter) {
 		GamePlayer& player = iter->second;
 		if (!player.obj.empty()) {
 			Vector2D accel = player.input.getAcceleration();

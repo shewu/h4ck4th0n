@@ -132,9 +132,9 @@ int main() {
 
 		// Loop through all clients, and see if there are
 		// any messages to be received.
-        for(set<SocketConnection*>::iterator it = clients.begin();
+        for(auto it = clients.begin();
                 it != clients.end();) {
-            set<SocketConnection*>::iterator next_it = it;
+            auto next_it = it;
             ++next_it;
 
             SocketConnection* sc = *it;
@@ -207,7 +207,7 @@ int main() {
 		// Send the world state to all clients
 		worldWritePacket.reset();
 		game->getWorld().writeToPacket(&worldWritePacket);
-		for(set<SocketConnection*>::iterator iter = clients.begin();
+		for(auto iter = clients.begin();
 		        iter != clients.end(); ++iter) {
 		    SocketConnection *sc = *iter;
 		    int playerID = game->getObjectIDOf(sc);

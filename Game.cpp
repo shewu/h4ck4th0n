@@ -10,7 +10,7 @@
 using std::map;
 using std::pair;
 
-bool Game::addPlayer(SocketConnection *sc) {
+bool Game::addPlayer(SocketConnection* sc) {
 	if (players.find(sc) != players.end()) {
 		return false;
 	}
@@ -21,6 +21,34 @@ bool Game::addPlayer(SocketConnection *sc) {
 	// TODO handshake
 
 	return true;
+}
+
+void Game::removePlayer(SocketConnection* sc) {
+	auto iter = players.find(sc);
+	if (iter == players.end()) {
+		return;
+	}
+	GamePlayer& player = iter->second;
+
+	if (!player.obj.empty() && player.obj->getState() == MOS_ALIVE) {
+		player.obj->instantKill();
+	}
+
+	players.erase(iter);
+}
+
+int Game::getObjectIDOf(SocketConnection* sc) {
+	auto iter = players.find(sc);
+	if (iter == players.end()) {
+		return kNoPlayerExists;
+	}
+	GamePlayer& player = iter->second;
+
+	if (player.obj.empty()) {
+		return kNoObjectExists;
+	} else {
+		return player.obj->getID();
+	}
 }
 
 void Game::applyForcesFromInput(float dt) {

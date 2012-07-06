@@ -450,6 +450,10 @@ class MovingRoundObject : public RoundObject
 		void startShrinking(MovingRoundObject *parent, Vector2D const& velocity);
 		void kill();
 
+		void instantKill() {
+			state = MOS_DEAD;
+		}
+
 		bool shouldDieFromWall(RectangularWall const& wall) const;
 
 		/**

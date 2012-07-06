@@ -32,16 +32,21 @@ class Game {
 
 		bool addPlayer(SocketConnection*);
 		void removePlayer(SocketConnection*);
-		int getObjectIDOf(SocketConnection*);
         void processPacket(SocketConnection* sc, ReadPacket* rp);
+        void update(float dt);
+
+		/**
+		 * @return object id, or kNoObjectExists or kNoPlayerExists
+		 */
+		int getObjectIDOf(SocketConnection*);
+        static const int kNoObjectExists = -1;
+        static const int kNoPlayerExists = -2;
 
 		PhysicsWorld const& getWorld() const {
 			return world_;
 		}
 
         void send_sounds_to(SocketConnection* c);
-
-        void update(float dt);
 
         virtual void doGameLogic() = 0;
 };

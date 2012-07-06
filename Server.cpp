@@ -211,7 +211,7 @@ int main() {
 		        iter != clients.end(); ++iter) {
 		    SocketConnection *sc = *iter;
 		    int playerID = game->getObjectIDOf(sc);
-		    if (playerID != -1) {
+		    if (playerID != Game::kNoPlayerExists) {
 				worldWritePacket.write_int(game->getObjectIDOf(sc));
 				sc->send_packet(worldWritePacket);
 				worldWritePacket.backup(sizeof(int));

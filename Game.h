@@ -33,13 +33,13 @@ class Game {
 		bool addPlayer(SocketConnection*);
 		void removePlayer(SocketConnection*);
 		int getObjectIDOf(SocketConnection*);
+        void processPacket(SocketConnection* sc, ReadPacket* rp);
 
 		PhysicsWorld const& getWorld() const {
 			return world_;
 		}
 
         void send_sounds_to(SocketConnection* c);
-        void process_packet(SocketConnection* sc, ReadPacket* rp);
 
         void update(float dt);
 

@@ -5,6 +5,8 @@
 #include <cstdlib>
 #include <cstring>
 
+// TODO spawning
+
 using std::map;
 using std::pair;
 
@@ -29,6 +31,16 @@ void Game::applyForcesFromInput(float dt) {
 			player.obj->setVelocity(player.obj->getVelocity() + accel * dt);
 		}
 	}
+}
+
+void Game::processPacket(SocketConnection* sc, ReadPacket* rp) {
+	auto iter = players.find(sc);
+	if (iter == players.end()) {
+		return;
+	}
+	GamePlayer& player = iter->second;
+
+	player.input = UserInput(rp);
 }
 
 void Game::update(float dt) {

@@ -2,6 +2,7 @@
 #define USER_INPUT_H
 
 #include "Vector.h"
+#include "Packet.h"
 
 /**
  * Represents a user input state.
@@ -22,9 +23,11 @@ class UserInput {
 		UserInput(bool left, bool right, bool up, bool down, float theta) :
 		    _left(left), _right(right), _up(up), _down(down), _theta(theta) { }
 
-
 		UserInput() :
 		    _left(false), _right(false), _up(false), _down(false), _theta(0.0) { }
+
+		UserInput(ReadPacket*);
+		void writeToPacket(WritePacket*);
 
 		/**
 		 * Returns the acceleration vector indicated by the key input; takes into account

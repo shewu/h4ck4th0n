@@ -183,7 +183,7 @@ int main() {
 					// if the packet is of any other type.
                     else if (rp->message_type == CTS_USER_STATE &&
                              rp->packet_number >= sc->largestPacketNum) {
-                        game->process_packet(sc, rp);
+                        game->processPacket(sc, rp);
                     }
 
                     delete rp;

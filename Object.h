@@ -96,7 +96,7 @@ class ObjectPtr {
 		}
 
 		template <class U>
-		ObjectPtr& operator=(ObjectPtr<U> const& other) {
+		ObjectPtr<T>& operator=(ObjectPtr<U> const& other) {
 			if (ptr_ != NULL) {
 				ptr_->refCount--;
 			}

@@ -4,9 +4,9 @@ LD=g++
 CCFLAGS = -Wall
 
 ifeq ($(DEBUG), 1)
-	CCFLAGS += -O0 -g -DDEBUG -Werror
+	CCFLAGS += --std=c++11 -O0 -g -DDEBUG -Werror
 else
-	CCFLAGS += -O2 -w
+	CCFLAGS += --std=c++11 -O2 -w
 endif
 
 UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW -lglut

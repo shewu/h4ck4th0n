@@ -42,6 +42,8 @@ MULTI_BALLS_OBJECTS+=$(SHARED_OBJECTS) Multiclient.o MultiGameViewController.o
 
 executables: $(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HOLY_BALLS_TARGET) $(MULTI_BALLS_TARGET)
 
+include Makefile-overrides
+
 all: executables
 
 $(SERVER_TARGET): $(SERVER_OBJECTS)

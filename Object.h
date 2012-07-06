@@ -87,18 +87,20 @@ class ObjectPtr {
 			}
 		}
 
-		ObjectPtr(ObjectPtr const& other) {
-			ptr_ = other.ptr_;
+		template <class U>
+		ObjectPtr(ObjectPtr<U> const& other) {
+			ptr_ = (T *) other.ptr_;
 			if (ptr_ != NULL) {
 				ptr_->refCount++;
 			}
 		}
 
-		ObjectPtr& operator=(ObjectPtr const& other) {
+		template <class U>
+		ObjectPtr& operator=(ObjectPtr<U> const& other) {
 			if (ptr_ != NULL) {
 				ptr_->refCount--;
 			}
-			ptr_ = other.ptr_;
+			ptr_ = (T *) other.ptr_;
 			if (ptr_ != NULL) {
 				ptr_->refCount++;
 			}
@@ -118,6 +120,8 @@ class ObjectPtr {
 
 	private:
 		T* ptr_;
+
+	template<class U> friend class ObjectPtr;
 };
 
 class RectangularObject : public Object

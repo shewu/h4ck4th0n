@@ -1,3 +1,6 @@
+#ifndef PHYSICS_WORLD_H
+#define PHYSICS_WORLD_H
+
 #include "World.h"
 
 #include <vector>
@@ -7,6 +10,7 @@ class PhysicsWorld : World
 	public:
 		PhysicsWorld(HBMap const& hbmap) : World(hbmap) { }
 
+		void applyForces(float dt);
 		void doSimulation(float dt);
 
 		FlagObject* addFlagObject(int teamNumber,
@@ -79,3 +83,5 @@ class PhysicsWorld : World
 		static void bounceMovingRoundFromWall(MovingRoundObject& obj, Vector2D const& p1, Vector2D const& p2);
 		static void updateRoundObjectsForward(std::map<int, MovingRoundObject*>& objects, float dt);
 };
+
+#endif

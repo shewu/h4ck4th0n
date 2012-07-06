@@ -1,3 +1,6 @@
+#ifndef NETWORK_PROTOCOL_H
+#define NETWORK_PROTOCOL_H
+
 /* The following are the message types which can be sent
    across the network, along with explanations of what
    data is sent along with the message. This data is
@@ -34,3 +37,5 @@
 #define STC_INITIAL_ANGLE 1
 #define STC_WORLD_DATA 2
 #define STC_SOUND 4
+
+#endif

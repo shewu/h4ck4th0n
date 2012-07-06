@@ -1,3 +1,6 @@
+#ifndef EXCEPTIONS_H
+#define EXCEPTIONS_H
+
 #include <exception>
 
 class ParseException : public std::exception {
@@ -12,3 +15,4 @@ class ParseException : public std::exception {
 		}
 };
 
+#endif

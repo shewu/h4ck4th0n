@@ -1,3 +1,6 @@
+#ifndef USER_INPUT_H
+#define USER_INPUT_H
+
 #include "Vector.h"
 
 /**
@@ -30,3 +33,5 @@ class UserInput {
 		 */
 		Vector2D getAcceleration() const;
 };
+
+#endif

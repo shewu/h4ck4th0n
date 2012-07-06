@@ -29,12 +29,12 @@ void Game::applyForcesFromInput(float dt) {
 			player.obj->setVelocity(player.obj->getVelocity() + accel * dt);
 		}
 	}
-
-	// TODO friction
 }
 
 void Game::update(float dt) {
+	// apply forces
 	applyForcesFromInput(dt);
+	world_.applyForces(dt);
 
 	// physics
 	world_.doSimulation(dt);

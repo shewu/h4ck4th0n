@@ -27,4 +27,3 @@ class UnholyGameViewController : public GameViewController {
 };
 
 #endif
-

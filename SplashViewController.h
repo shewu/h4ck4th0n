@@ -1,3 +1,6 @@
+#ifndef MENU_H
+#define MENU_H
+
 #include "Menu.h"
 #include "Font.h"
 #include "HBViewController.h"
@@ -16,4 +19,4 @@ class SplashViewController : public HBViewController {
 		bool quit();
 };
 
-
+#endif

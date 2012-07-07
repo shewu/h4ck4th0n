@@ -3,6 +3,7 @@
 
 #include "World.h"
 
+#include <functional>
 #include <vector>
 
 class PhysicsWorld : World
@@ -11,13 +12,18 @@ class PhysicsWorld : World
 		PhysicsWorld(HBMap const& hbmap) : World(hbmap) { }
 
 		void applyForces(float dt);
-		void doSimulation(float dt);
+		void doSimulation(float dt,
+			std::function<void(ObjectPtr<Object>,ObjectPtr<Object>)> collisionHandler);
 
+		/**
+		 * possibleSpawns should not be mutated or destructed after being passed
+		 * as an argument to these, until after this PhysicsWorld object has been
+		 * destructed.
+		 */
 		FlagObject* addFlagObject(int teamNumber,
-		    std::vector<SpawnDescriptor> *possibleSpawns);
-
+		    std::vector<SpawnDescriptor> const* possibleSpawns);
 		PlayerObject* addPlayerObject(int teamNumber,
-		    std::vector<SpawnDescriptor> *possibleSpawns);
+		    std::vector<SpawnDescriptor> const* possibleSpawns);
 
 		void removeDeadObjects();
 

@@ -12,6 +12,7 @@ class CTFGame : public Game {
 	private:
 		
 		void doGameLogic();
+		void handleCollision(ObjectPtr<Object>, ObjectPtr<Object>);
 
 };
 

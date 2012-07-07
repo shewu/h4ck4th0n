@@ -340,6 +340,7 @@ class MovingRoundObject : public RoundObject
 
 		// MOS_SPAWNING
 		float timeUntilSpawn;
+		std::vector<SpawnDescriptor> const* possibleSpawns;
 
 		// MOS_SHRINKING
 		MovingRoundObject *parent;
@@ -353,8 +354,14 @@ class MovingRoundObject : public RoundObject
 
 	public:
 		MovingRoundObject(Material *material, Vector2D center, float radius, float mass,
-				float heightRatio, float timeUntilSpawn, bool isFlag) :
-			RoundObject(material, center, radius, 0.0, M_PI_2), state(MOS_SPAWNING), timeUntilSpawn(timeUntilSpawn), velocity(0.0, 0.0), mass(mass), isFlag(isFlag),
+				float heightRatio, float timeUntilSpawn, std::vector<SpawnDescriptor> const* possibleSpawns, bool isFlag) :
+			RoundObject(material, center, radius, 0.0, M_PI_2),
+			state(MOS_SPAWNING),
+			timeUntilSpawn(timeUntilSpawn),
+			possibleSpawns(possibleSpawns),
+			velocity(0.0, 0.0),
+			mass(mass),
+			isFlag(isFlag),
 			heightRatio(heightRatio) { }
 
 		MovingRoundObject(ReadPacket *rp);
@@ -485,10 +492,10 @@ class FlagObject : public MovingRoundObject
 		 * @param center The center of the flag.
 		 * @param teamNumber The team number for this flag.
 		 */
-		FlagObject(unsigned teamNumber, float timeUntilSpawn) :
+		FlagObject(unsigned teamNumber, float timeUntilSpawn, std::vector<SpawnDescriptor> const* possibleSpawns) :
 			MovingRoundObject(materialsByTeamNumber[teamNumber],
 					Vector2D(), FLAG_RADIUS,
-					FLAG_MASS, FLAG_HEIGHT_RATIO, timeUntilSpawn, true),
+					FLAG_MASS, FLAG_HEIGHT_RATIO, timeUntilSpawn, possibleSpawns, true),
 			teamNumber(teamNumber) { }
 
 		FlagObject(ReadPacket *rp);
@@ -533,11 +540,11 @@ class PlayerObject : public MovingRoundObject
 		 * @param material The material for this player.
 		 * @param teamNumber the number of this player's team.
 		 */
-		PlayerObject(unsigned teamNumber, float timeUntilSpawn) :
+		PlayerObject(unsigned teamNumber, float timeUntilSpawn, std::vector<SpawnDescriptor> const* possibleSpawns) :
 			MovingRoundObject(materialsByTeamNumber[teamNumber],
 					Vector2D(),
 					PlayerObject::PLAYER_RADIUS, PlayerObject::PLAYER_MASS,
-					PlayerObject::PLAYER_HEIGHT_RATIO, timeUntilSpawn, false),
+					PlayerObject::PLAYER_HEIGHT_RATIO, timeUntilSpawn, possibleSpawns, false),
 			teamNumber(teamNumber) { }
 
 		/**

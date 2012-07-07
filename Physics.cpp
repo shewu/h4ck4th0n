@@ -5,6 +5,7 @@
 #include "Object.h"
 #include "PhysicsWorld.h"
 
+using std::function;
 using std::map;
 using std::pair;
 using std::priority_queue;
@@ -209,7 +210,9 @@ void PhysicsWorld::updateRoundObjectsForward(map<int, MovingRoundObject*>& objec
 	}
 }
 
-void PhysicsWorld::doSimulation(float dt) {
+void PhysicsWorld::doSimulation(float dt,
+   			function<void(ObjectPtr<Object>,ObjectPtr<Object>)> collisionHandler) {
+
 	map<pair<int, int>, PhysicsWorld::collide_event> collideRoundWithRound;
 	map<pair<int, int>, PhysicsWorld::collide_event> collideRoundWithWall;
 	map<int, PhysicsWorld::collide_event> collideDisappear;
@@ -364,6 +367,51 @@ void PhysicsWorld::doSimulation(float dt) {
 	float elapsed = dt;
 	if (!collideEvents.empty() && collideEvents.top().time < elapsed) {
 		elapsed = knownTime;
+	} else {
+		updateRoundObjectsForward(movingRoundObjects, elapsed - knownTime);
 	}
-	updateRoundObjectsForward(movingRoundObjects, elapsed);
+
+	// Spawning.
+	// For simplicity, we do this on the boundary of a simulation interval.
+	// It won't screw up physics if an object spawns slightly "late",
+	// whereas things like collisions need to happen in order.
+	for (auto iter : movingRoundObjects) {
+		MovingRoundObject& obj = iter.second;
+		if (obj.state != MOS_SPAWNING) {
+			continue;
+		}
+
+		obj.timeUntilSpawn -= elapsed;
+		if (obj.timeUntilSpawn > 0) {
+			continue;
+		}
+
+		if (rand() / float(RAND_MAX) >= SPAWN_PROB) {
+			continue;
+		}
+
+		int which = rand() % obj.possibleSpawns->size();
+		SpawnDescriptor const& spawn = (*(obj.possibleSpawns))[which];
+		obj.x = random_uniform_float(spawn.getMinX(), spawn.getMaxX());
+		obj.y = random_uniform_float(spawn.getMinY(), spawn.getMaxY());
+
+		// check that we aren't intersecting any other objects if we spawn here
+		bool okayToSpawn = true;
+		for (auto jter : movingRoundObjects) {
+			MovingRoundObject& obj2 = jter.second;
+			if ((obj2.state == MOS_ALIVE || obj2.state == MOS_SHRINKING) &&
+				    (obj2.x - obj.x) * (obj2.x - obj.x) +
+					(obj2.y - obj.y) * (obj2.y - obj.y) <=
+					(obj.radius + obj2.radius) * (obj.radius + obj2.radius)) {
+				okayToSpawn = false;
+				break;
+			}
+		}
+		if (!okayToSpawn) {
+			continue;
+		}
+
+		// TODO check for collisions with rectangular walls if deemed necessary
+		obj.state = MOS_ALIVE;
+	}
 }

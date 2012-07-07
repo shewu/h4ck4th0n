@@ -5,14 +5,14 @@ using std::pair;
 using std::vector;
 
 FlagObject* PhysicsWorld::addFlagObject(
-		int teamNumber, vector<SpawnDescriptor> *possibleSpawns) {
-	FlagObject *obj = new FlagObject(teamNumber, SPAWN_TIME);
+		int teamNumber, vector<SpawnDescriptor> const* possibleSpawns) {
+	FlagObject *obj = new FlagObject(teamNumber, SPAWN_TIME, possibleSpawns);
 	movingRoundObjects.insert(pair<int, MovingRoundObject*>(obj->getID(), obj));
 }
 
 PlayerObject* PhysicsWorld::addPlayerObject(
-		int teamNumber, vector<SpawnDescriptor> *possibleSpawns) {
-	PlayerObject *obj = new PlayerObject(teamNumber, SPAWN_TIME);
+		int teamNumber, vector<SpawnDescriptor> const* possibleSpawns) {
+	PlayerObject *obj = new PlayerObject(teamNumber, SPAWN_TIME, possibleSpawns);
 	movingRoundObjects.insert(pair<int, MovingRoundObject*>(obj->getID(), obj));
 }
 

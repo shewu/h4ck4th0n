@@ -9,6 +9,8 @@
 
 using std::map;
 using std::pair;
+using std::placeholders::_1;
+using std::placeholders::_2;
 
 bool Game::addPlayer(SocketConnection* sc) {
 	if (players.find(sc) != players.end()) {
@@ -77,7 +79,7 @@ void Game::update(float dt) {
 	world_.applyForces(dt);
 
 	// physics
-	world_.doSimulation(dt);
+	world_.doSimulation(dt, std::bind(&Game::handleCollision, this, _1, _2));
 
 	// game logic - compute score, etc.
 	// any operation which is game-type specific

@@ -32,8 +32,8 @@ class Game {
 
 		bool addPlayer(SocketConnection*);
 		void removePlayer(SocketConnection*);
-        void processPacket(SocketConnection* sc, ReadPacket* rp);
-        void update(float dt);
+		void processPacket(SocketConnection* sc, ReadPacket* rp);
+		void update(float dt);
 
 		/**
 		 * @return object id, or kNoObjectExists or kNoPlayerExists
@@ -49,6 +49,7 @@ class Game {
         void send_sounds_to(SocketConnection* c);
 
         virtual void doGameLogic() = 0;
+        virtual void handleCollision(ObjectPtr<Object>, ObjectPtr<Object>) = 0;
 };
 
 #endif

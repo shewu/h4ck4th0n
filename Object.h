@@ -2,6 +2,7 @@
 #define OBJECT_H
 
 #include <cmath>
+#include <functional>
 
 #include "Material.h"
 #include "Hack.h"
@@ -75,7 +76,7 @@ class Object
 template <class T>
 class ObjectPtr {
 	public: 
-		ObjectPtr(T* obj = NULL) : ptr_(obj) {
+		explicit ObjectPtr(T* obj = NULL) : ptr_(obj) {
 			if (obj != NULL) {
 				obj->refCount++;
 			}
@@ -231,7 +232,7 @@ class RoundObject : public Object
 		 * @param startAngle The starting angle for the arc.
 		 * @param endAngle The ending angle for the arc.
 		 */
-		RoundObject(Material *material, Vector2D& center, float radius,
+		RoundObject(Material *material, Vector2D const& center, float radius,
 				float startAngle = 0.0, float endAngle = M_PI_2) :
 			Object(material), center(center), radius(radius), startAngle(startAngle), 
 			endAngle(endAngle) { }
@@ -340,7 +341,7 @@ class MovingRoundObject : public RoundObject
 
 		// MOS_SPAWNING
 		float timeUntilSpawn;
-		std::vector<SpawnDescriptor> const* possibleSpawns;
+		std::function<void()> onSpawnCallback;
 
 		// MOS_SHRINKING
 		MovingRoundObject *parent;
@@ -351,18 +352,30 @@ class MovingRoundObject : public RoundObject
 		float heightRatio;
 
 		bool isFlag;
+		int teamNumber;
 
 	public:
-		MovingRoundObject(Material *material, Vector2D center, float radius, float mass,
-				float heightRatio, float timeUntilSpawn, std::vector<SpawnDescriptor> const* possibleSpawns, bool isFlag) :
-			RoundObject(material, center, radius, 0.0, M_PI_2),
+		MovingRoundObject(Material *material, float radius, float mass,
+				float heightRatio, float timeUntilSpawn,
+				std::function<void()> const& onSpawnCallback,	
+				int teamNumber, bool isFlag) :
+			RoundObject(material, Vector2D(0.0,0.0), radius, 0.0f, (float)M_PI_2),
 			state(MOS_SPAWNING),
 			timeUntilSpawn(timeUntilSpawn),
-			possibleSpawns(possibleSpawns),
+			onSpawnCallback(onSpawnCallback),
 			velocity(0.0, 0.0),
 			mass(mass),
 			isFlag(isFlag),
-			heightRatio(heightRatio) { }
+			heightRatio(heightRatio),
+			teamNumber(teamNumber) { }
+
+		static const float kPlayerRadius;
+		static const float kPlayerMass;
+		static const float kPlayerHeightRatio;
+
+		static const float kFlagRadius;
+		static const float kFlagMass;
+		static const float kFlagHeightRatio;
 
 		MovingRoundObject(ReadPacket *rp);
 
@@ -471,102 +484,5 @@ class MovingRoundObject : public RoundObject
 
 		friend class PhysicsWorld;
 };
-
-class FlagObject : public MovingRoundObject
-{
-	private:
-		unsigned teamNumber;
-
-		// Make object non-copyable by making this private.
-		FlagObject(FlagObject const&);
-		FlagObject& operator=(FlagObject const&);
-
-	public:
-		static float FLAG_RADIUS;
-		static float FLAG_MASS;
-		static float FLAG_HEIGHT_RATIO;
-
-		/**
-		 * Constructs a flag with the given material, center, and team.
-		 * @param material Material to use for the flag.
-		 * @param center The center of the flag.
-		 * @param teamNumber The team number for this flag.
-		 */
-		FlagObject(unsigned teamNumber, float timeUntilSpawn, std::vector<SpawnDescriptor> const* possibleSpawns) :
-			MovingRoundObject(materialsByTeamNumber[teamNumber],
-					Vector2D(), FLAG_RADIUS,
-					FLAG_MASS, FLAG_HEIGHT_RATIO, timeUntilSpawn, possibleSpawns, true),
-			teamNumber(teamNumber) { }
-
-		FlagObject(ReadPacket *rp);
-
-		/**
-		 * @return the team number
-		 */
-		unsigned getTeamNumber() const {
-			return teamNumber;
-		}
-
-		/**
-		 * Creates a Flag object by reading a ReadPacket
-		 * @param rp ReadPacket to read from
-		 * @return a Flag object read from the ReadPacket
-		 */
-		static FlagObject *readFromPacket(ReadPacket *rp);
-
-		/**
-		 * Writes the object to a WritePacket
-		 * @param wp the WritePacket to write this object to
-		 */
-		virtual void writeToPacket(WritePacket* wp) const;
-};
-
-class PlayerObject : public MovingRoundObject
-{
-	private:
-		unsigned teamNumber;
-
-		static float PLAYER_RADIUS;
-		static float PLAYER_MASS;
-		static float PLAYER_HEIGHT_RATIO;
-
-		// Make object non-copyable by making this private.
-		PlayerObject(PlayerObject const&);
-		PlayerObject& operator=(PlayerObject const&);
-
-	public:
-		/**
-		 * Creates a Player with the given material and team.
-		 * @param material The material for this player.
-		 * @param teamNumber the number of this player's team.
-		 */
-		PlayerObject(unsigned teamNumber, float timeUntilSpawn, std::vector<SpawnDescriptor> const* possibleSpawns) :
-			MovingRoundObject(materialsByTeamNumber[teamNumber],
-					Vector2D(),
-					PlayerObject::PLAYER_RADIUS, PlayerObject::PLAYER_MASS,
-					PlayerObject::PLAYER_HEIGHT_RATIO, timeUntilSpawn, possibleSpawns, false),
-			teamNumber(teamNumber) { }
-
-		/**
-		 * Gets the team number.
-		 * @return the team number.
-		 */
-		unsigned getTeamNumber() const {
-			return teamNumber;
-		}
-
-		/**
-		 * Creates a Player object by reading a ReadPacket
-		 * @param rp ReadPacket to read from
-		 */
-		PlayerObject(ReadPacket *rp);
-
-		/**
-		 * Writes the object to a WritePacket
-		 * @param wp the WritePacket to write this object to
-		 */
-		virtual void writeToPacket(WritePacket* wp) const;
-};
-
 
 #endif

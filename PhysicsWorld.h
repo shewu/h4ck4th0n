@@ -20,10 +20,8 @@ class PhysicsWorld : World
 		 * as an argument to these, until after this PhysicsWorld object has been
 		 * destructed.
 		 */
-		FlagObject* addFlagObject(int teamNumber,
-		    std::vector<SpawnDescriptor> const* possibleSpawns);
-		PlayerObject* addPlayerObject(int teamNumber,
-		    std::vector<SpawnDescriptor> const* possibleSpawns);
+		ObjectPtr<MovingRoundObject> addFlagObject(int teamNumber, std::function<void()> const& onSpawnCallback);
+		ObjectPtr<MovingRoundObject> addPlayerObject(int teamNumber, std::function<void()> const& onSpawnCallback);
 
 		void removeDeadObjects();
 

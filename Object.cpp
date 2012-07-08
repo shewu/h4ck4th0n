@@ -3,13 +3,13 @@
 #include "Hack.h"
 #include "Packet.h"
 
-float PlayerObject::PLAYER_RADIUS = 1;
-float PlayerObject::PLAYER_MASS = 1;
-float PlayerObject::PLAYER_HEIGHT_RATIO = 1;
+const float MovingRoundObject::kPlayerRadius = 1.0f;
+const float MovingRoundObject::kPlayerMass = 1.0f;
+const float MovingRoundObject::kPlayerHeightRatio = 1.0f;
 
-float FlagObject::FLAG_RADIUS = 1.0f;
-float FlagObject::FLAG_MASS = 1.2f;
-float FlagObject::FLAG_HEIGHT_RATIO = 2.0f;
+const float MovingRoundObject::kFlagRadius = 1.0f;
+const float MovingRoundObject::kFlagMass = 1.2f;
+const float MovingRoundObject::kFlagHeightRatio = 2.0f;
 
 unsigned Object::nextId = 0;
 
@@ -60,16 +60,6 @@ void MovingRoundObject::writeToPacket(WritePacket *wp) const {
 	wp->write_char((char) isFlag);
 }
 
-void FlagObject::writeToPacket(WritePacket *wp) const {
-	MovingRoundObject::writeToPacket(wp);
-	wp->write_int(teamNumber);
-}
-
-void PlayerObject::writeToPacket(WritePacket *wp) const {
-	MovingRoundObject::writeToPacket(wp);
-	wp->write_int(teamNumber);
-}
-
 Object::Object(ReadPacket *rp) {
 	id = rp->read_int();
 	material = Material::readFromPacket(rp);
@@ -108,14 +98,6 @@ MovingRoundObject::MovingRoundObject(ReadPacket *rp) : RoundObject(rp) {
 
 	parent = NULL;
 	numChildren = 0;
-}
-
-FlagObject::FlagObject(ReadPacket *rp) : MovingRoundObject(rp) {
-	teamNumber = rp->read_int();
-}
-
-PlayerObject::PlayerObject(ReadPacket *rp) : MovingRoundObject(rp) {
-	teamNumber = rp->read_int();
 }
 
 void MovingRoundObject::startShrinking(MovingRoundObject *parent, Vector2D const& velocity) {

@@ -13,13 +13,13 @@ class World
 {
 	private:
 		std::string mapName;
-        HBMap worldMap;
 
 		std::vector<Light> lights;
 
 	protected:
 		std::map<int, MovingRoundObject*> movingRoundObjects;
 		std::map<int, RectangularWall*> rectangularWalls;
+        HBMap worldMap;
 
 	public:
         /**

@@ -10,7 +10,7 @@
 
 struct GamePlayer {
 	UserInput input;
-	ObjectPtr<PlayerObject> obj;
+	ObjectPtr<MovingRoundObject> obj;
 };
 
 class Game {

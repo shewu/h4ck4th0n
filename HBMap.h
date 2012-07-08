@@ -98,7 +98,7 @@ class HBMap {
 		 *
 		 * @return the spawns for team.
 		 */
-        const std::vector<SpawnDescriptor> getSpawnsForTeam(unsigned team) const {
+        const std::vector<SpawnDescriptor>& getSpawnsForTeam(unsigned team) const {
             if (team >= teams.size()) {
                 return spawns[0];
             }

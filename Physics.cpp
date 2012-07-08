@@ -9,6 +9,7 @@ using std::function;
 using std::map;
 using std::pair;
 using std::priority_queue;
+using std::vector;
 
 // TODO bouncy wall support
 // TODO round wall support
@@ -376,7 +377,7 @@ void PhysicsWorld::doSimulation(float dt,
 	// It won't screw up physics if an object spawns slightly "late",
 	// whereas things like collisions need to happen in order.
 	for (auto iter : movingRoundObjects) {
-		MovingRoundObject& obj = iter.second;
+		MovingRoundObject& obj = *(iter.second);
 		if (obj.state != MOS_SPAWNING) {
 			continue;
 		}
@@ -390,18 +391,20 @@ void PhysicsWorld::doSimulation(float dt,
 			continue;
 		}
 
-		int which = rand() % obj.possibleSpawns->size();
-		SpawnDescriptor const& spawn = (*(obj.possibleSpawns))[which];
-		obj.x = random_uniform_float(spawn.getMinX(), spawn.getMaxX());
-		obj.y = random_uniform_float(spawn.getMinY(), spawn.getMaxY());
+		vector<SpawnDescriptor> const& possibleSpawns =
+			worldMap.getSpawnsForTeam(obj.teamNumber);
+		int which = rand() % possibleSpawns.size();
+		SpawnDescriptor const& spawn = possibleSpawns[which];
+		obj.center.x = random_uniform_float(spawn.getMinX(), spawn.getMaxX());
+		obj.center.y = random_uniform_float(spawn.getMinY(), spawn.getMaxY());
 
 		// check that we aren't intersecting any other objects if we spawn here
 		bool okayToSpawn = true;
 		for (auto jter : movingRoundObjects) {
-			MovingRoundObject& obj2 = jter.second;
+			MovingRoundObject& obj2 = *(jter.second);
 			if ((obj2.state == MOS_ALIVE || obj2.state == MOS_SHRINKING) &&
-				    (obj2.x - obj.x) * (obj2.x - obj.x) +
-					(obj2.y - obj.y) * (obj2.y - obj.y) <=
+				    (obj2.center.x - obj.center.x) * (obj2.center.x - obj.center.x) +
+					(obj2.center.y - obj.center.y) * (obj2.center.y - obj.center.y) <=
 					(obj.radius + obj2.radius) * (obj.radius + obj2.radius)) {
 				okayToSpawn = false;
 				break;

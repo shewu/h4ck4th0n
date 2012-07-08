@@ -4,16 +4,36 @@ using std::map;
 using std::pair;
 using std::vector;
 
-FlagObject* PhysicsWorld::addFlagObject(
-		int teamNumber, vector<SpawnDescriptor> const* possibleSpawns) {
-	FlagObject *obj = new FlagObject(teamNumber, SPAWN_TIME, possibleSpawns);
+ObjectPtr<MovingRoundObject> PhysicsWorld::addFlagObject(
+	int teamNumber,
+	std::function<void()> const& onSpawnCallback) {
+	MovingRoundObject *obj = new MovingRoundObject(
+			Object::materialsByTeamNumber[teamNumber],
+			MovingRoundObject::kFlagRadius,
+			MovingRoundObject::kFlagMass,
+			MovingRoundObject::kFlagHeightRatio,
+			SPAWN_TIME,
+			onSpawnCallback,
+			teamNumber,
+			true);
 	movingRoundObjects.insert(pair<int, MovingRoundObject*>(obj->getID(), obj));
+	return ObjectPtr<MovingRoundObject>(obj);
 }
 
-PlayerObject* PhysicsWorld::addPlayerObject(
-		int teamNumber, vector<SpawnDescriptor> const* possibleSpawns) {
-	PlayerObject *obj = new PlayerObject(teamNumber, SPAWN_TIME, possibleSpawns);
+ObjectPtr<MovingRoundObject> PhysicsWorld::addPlayerObject(
+	int teamNumber,
+	std::function<void()> const& onSpawnCallback) {
+	MovingRoundObject *obj = new MovingRoundObject(
+			Object::materialsByTeamNumber[teamNumber],
+			MovingRoundObject::kPlayerRadius,
+			MovingRoundObject::kPlayerMass,
+			MovingRoundObject::kPlayerHeightRatio,
+			SPAWN_TIME,
+			onSpawnCallback,
+			teamNumber,
+			false);
 	movingRoundObjects.insert(pair<int, MovingRoundObject*>(obj->getID(), obj));
+	return ObjectPtr<MovingRoundObject>(obj);
 }
 
 void PhysicsWorld::removeDeadObjects() {

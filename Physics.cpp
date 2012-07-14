@@ -11,22 +11,22 @@ using std::pair;
 using std::priority_queue;
 using std::vector;
 
-bool PhysicsWorld::objectsIntersect(MovingRoundObject& obj1, MovingRoundObject& obj2) {
+bool PhysicsWorld::objectsIntersect(MovingRoundObject const& obj1, MovingRoundObject const& obj2) {
 	return ((obj2.state == MOS_ALIVE || obj2.state == MOS_SHRINKING) &&
 	        (obj2.center.x - obj1.center.x) * (obj2.center.x - obj1.center.x) +
 	        (obj2.center.y - obj1.center.y) * (obj2.center.y - obj1.center.y) <=
 	        (obj1.radius + obj2.radius) * (obj1.radius + obj2.radius));
 }
 
-bool PhysicsWorld::objectsIntersect(MovingRoundObject& obj, RectangularWall& wall) {
+bool PhysicsWorld::objectsIntersect(MovingRoundObject const& obj, RectangularWall const& wall) {
 	if ((obj.center - wall.p1).lengthSquared() <= obj.radius * obj.radius ||
 	    (obj.center - wall.p2).lengthSquared() <= obj.radius * obj.radius) {
 		return true;
 	}
 
 	Vector2D dir = wall.p2 - wall.p1;
-	if ((dir * p1) < (dir * obj.center) &&
-	    (dir * p2) > (dir * obj.center)) {
+	if ((dir * wall.p1) < (dir * obj.center) &&
+	    (dir * wall.p2) > (dir * obj.center)) {
 		Vector2D vec = obj.center - wall.p1;
 		Vector2D proj = ((vec*proj) / dir.lengthSquared()) * dir;
 		return (vec - proj).lengthSquared() <= obj.radius * obj.radius;

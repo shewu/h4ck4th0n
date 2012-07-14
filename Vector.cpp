@@ -72,7 +72,7 @@ Vector2D Vector2D::getRotation(const float theta) const {
 	return Vector2D(x*cos(theta) - y*sin(theta), x*sin(theta) + y*cos(theta));
 }
 
-float Vector2D::lengthSquared() {
+float Vector2D::lengthSquared() const {
 	return x*x + y*y;
 }
 

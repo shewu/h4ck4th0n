@@ -79,6 +79,8 @@ class PhysicsWorld : World
 		};
 
 		// Helper methods for physics (see Physics.cpp)
+		static bool objectsIntersect(MovingRoundObject const& obj1, MovingRoundObject const& obj2);
+		static bool objectsIntersect(MovingRoundObject const& obj, RectangularWall const& wall);
 		static float collideCircles(Vector2D diff, Vector2D vel, float r, float rc);
 		static void doObjectCollision(MovingRoundObject const& fo, MovingRoundObject const& so,
 				std::map<std::pair<int,int>, collide_event>& collideRoundWithRound,

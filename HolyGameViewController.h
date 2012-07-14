@@ -1,5 +1,5 @@
-#ifndef __HOLYGAMEVIEWCONTROLLER_H__
-#define __HOLYGAMEVIEWCONTROLLER_H__
+#ifndef HOLYGAMEVIEWCONTROLLER_H
+#define HOLYGAMEVIEWCONTROLLER_H
 
 #include <GL/glx.h>
 #include <GL/gl.h>

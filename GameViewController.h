@@ -1,10 +1,5 @@
-#ifndef __GAMEVIEWCONTROLLER_H__
-#define __GAMEVIEWCONTROLLER_H__
-
-#ifndef __APPLE__
-#include <AL/alut.h>
-#include <AL/al.h>
-#endif
+#ifndef GAMEVIEWCONTROLLER_H
+#define GAMEVIEWCONTROLLER_H
 
 #include "HBViewController.h"
 #include "Hack.h"

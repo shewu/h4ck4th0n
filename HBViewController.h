@@ -1,6 +1,6 @@
 /*
  * a generic view controller that should be subclassed for any views.
- * TODO: separate out ViewController tasks and View tasks.
+ * TODO: separate ViewController tasks and View tasks.
  */
 
 #ifndef HB_VIEW_CONTROLLER

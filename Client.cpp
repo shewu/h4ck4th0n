@@ -14,7 +14,7 @@
 #include "HolyGameViewController.h"
 #endif
 #endif
-#include "constants.h"
+#include "Constants.h"
 
 using namespace std;
 

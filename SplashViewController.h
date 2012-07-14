@@ -1,5 +1,5 @@
-#ifndef MENU_H
-#define MENU_H
+#ifndef SPLASH_VIEW_CONTROLLER_H
+#define SPLASH_VIEW_CONTROLLER_H
 
 #include "Menu.h"
 #include "Font.h"

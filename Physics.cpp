@@ -11,6 +11,30 @@ using std::pair;
 using std::priority_queue;
 using std::vector;
 
+bool PhysicsWorld::objectsIntersect(MovingRoundObject& obj1, MovingRoundObject& obj2) {
+	return ((obj2.state == MOS_ALIVE || obj2.state == MOS_SHRINKING) &&
+	        (obj2.center.x - obj1.center.x) * (obj2.center.x - obj1.center.x) +
+	        (obj2.center.y - obj1.center.y) * (obj2.center.y - obj1.center.y) <=
+	        (obj1.radius + obj2.radius) * (obj1.radius + obj2.radius));
+}
+
+bool PhysicsWorld::objectsIntersect(MovingRoundObject& obj, RectangularWall& wall) {
+	if ((obj.center - wall.p1).lengthSquared() <= obj.radius * obj.radius ||
+	    (obj.center - wall.p2).lengthSquared() <= obj.radius * obj.radius) {
+		return true;
+	}
+
+	Vector2D dir = wall.p2 - wall.p1;
+	if ((dir * p1) < (dir * obj.center) &&
+	    (dir * p2) > (dir * obj.center)) {
+		Vector2D vec = obj.center - wall.p1;
+		Vector2D proj = ((vec*proj) / dir.lengthSquared()) * dir;
+		return (vec - proj).lengthSquared() <= obj.radius * obj.radius;
+	}
+
+	return false;
+}
+
 // TODO bouncy wall support
 // TODO round wall support
 
@@ -418,10 +442,18 @@ void PhysicsWorld::doSimulation(float dt,
 		bool okayToSpawn = true;
 		for (auto jter : movingRoundObjects) {
 			MovingRoundObject& obj2 = *(jter.second);
-			if ((obj2.state == MOS_ALIVE || obj2.state == MOS_SHRINKING) &&
-				    (obj2.center.x - obj.center.x) * (obj2.center.x - obj.center.x) +
-					(obj2.center.y - obj.center.y) * (obj2.center.y - obj.center.y) <=
-					(obj.radius + obj2.radius) * (obj.radius + obj2.radius)) {
+			if (objectsIntersect(obj, obj2)) {
+				okayToSpawn = false;
+				break;
+			}
+			
+		}
+		if (!okayToSpawn) {
+			continue;
+		}
+		for (auto jter : rectangularWalls) {
+			RectangularWall& wall = *(jter.second);
+			if (objectsIntersect(obj, wall)) {
 				okayToSpawn = false;
 				break;
 			}
@@ -430,7 +462,6 @@ void PhysicsWorld::doSimulation(float dt,
 			continue;
 		}
 
-		// TODO check for collisions with rectangular walls if deemed necessary
 		obj.state = MOS_ALIVE;
 	}
 }

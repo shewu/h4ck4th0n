@@ -1,6 +1,8 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+// TODO this stuff ought to be inlined probably...
+
 class Vector2D
 {
 	public:
@@ -18,6 +20,7 @@ class Vector2D
 		Vector2D operator*(const float) const;
 		Vector2D getNormalVector() const;
 		Vector2D getRotation(const float) const;
+		float lengthSquared() const;
 };
 
 Vector2D operator*(const float, const Vector2D);

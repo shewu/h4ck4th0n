@@ -9,7 +9,10 @@
 class PhysicsWorld : World
 {
 	public:
-		PhysicsWorld(HBMap const& hbmap) : World(hbmap) { }
+		PhysicsWorld(HBMap const& hbmap) : World(hbmap) {
+			roundWallCollisionCallback = [](MovingRoundObject const& a, RectangularWall const&b) { return false; };
+			roundRoundCollisionCallback = [](MovingRoundObject const& a, MovingRoundObject const&b) { return std::pair<bool,bool>(false,false); };
+		}
 
 		void applyForces(float dt);
 		void doSimulation(float dt,
@@ -30,6 +33,14 @@ class PhysicsWorld : World
 		void removeDeadObjects();
 
 		void writeToPacket(WritePacket *wp) const;
+
+		void setRoundWallCollisionCallback(std::function<bool(MovingRoundObject const&, RectangularWall const&)> callback) {
+			roundWallCollisionCallback = callback;
+		}
+
+		void setRoundRoundCollisionCallback(std::function<std::pair<bool,bool>(MovingRoundObject const&, MovingRoundObject const&)> callback) {
+			roundRoundCollisionCallback = callback;
+		}
 
 	private:
 		

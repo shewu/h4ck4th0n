@@ -5,33 +5,35 @@ using std::pair;
 using std::vector;
 
 ObjectPtr<MovingRoundObject> PhysicsWorld::addFlagObject(
-	int teamNumber,
-	std::function<void()> const& onSpawnCallback) {
+	int regionNumber,
+	std::function<void()> const& onSpawnCallback,
+	std::function<void()> const& onDeathCallback) {
 	MovingRoundObject *obj = new MovingRoundObject(
-			Object::materialsByTeamNumber[teamNumber],
+			Object::materialsByTeamNumber[regionNumber], // TODO fix this, this will work for now but materials should not in general come from here
 			MovingRoundObject::kFlagRadius,
 			MovingRoundObject::kFlagMass,
 			MovingRoundObject::kFlagHeightRatio,
 			SPAWN_TIME,
+			regionNumber,
 			onSpawnCallback,
-			teamNumber,
-			true);
+			onDeathCallback);
 	movingRoundObjects.insert(pair<int, MovingRoundObject*>(obj->getID(), obj));
 	return ObjectPtr<MovingRoundObject>(obj);
 }
 
 ObjectPtr<MovingRoundObject> PhysicsWorld::addPlayerObject(
-	int teamNumber,
-	std::function<void()> const& onSpawnCallback) {
+	int regionNumber,
+	std::function<void()> const& onSpawnCallback,
+	std::function<void()> const& onDeathCallback) {
 	MovingRoundObject *obj = new MovingRoundObject(
-			Object::materialsByTeamNumber[teamNumber],
+			Object::materialsByTeamNumber[regionNumber],
 			MovingRoundObject::kPlayerRadius,
 			MovingRoundObject::kPlayerMass,
 			MovingRoundObject::kPlayerHeightRatio,
 			SPAWN_TIME,
+			regionNumber,
 			onSpawnCallback,
-			teamNumber,
-			false);
+			onDeathCallback);
 	movingRoundObjects.insert(pair<int, MovingRoundObject*>(obj->getID(), obj));
 	return ObjectPtr<MovingRoundObject>(obj);
 }
@@ -53,9 +55,17 @@ void PhysicsWorld::removeDeadObjects() {
 }
 
 void PhysicsWorld::writeToPacket(WritePacket *wp) const {
-	for(auto iter = movingRoundObjects.begin(); iter != movingRoundObjects.end(); ++iter) {
-		MovingRoundObject *obj = iter->second;
-		wp->write_int(obj->getID());
+	// TODO write dimenions of the board
+
+	wp->write_int(movingRoundObjects.size());
+	for (auto pa : movingRoundObjects) {
+		MovingRoundObject* obj = pa.second;
+		obj->writeToPacket(wp);
+	}
+
+	wp->write_int(rectangularWalls.size());
+	for (auto pa : rectangularWalls) {
+		RectangularWall* obj = pa.second;
 		obj->writeToPacket(wp);
 	}
 }

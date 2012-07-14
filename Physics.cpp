@@ -171,11 +171,11 @@ void PhysicsWorld::doRoundObjectDisappearing(MovingRoundObject const& obj,
  */
 void PhysicsWorld::bounceMovingRoundAndShrinkingRound(
 			MovingRoundObject& obj1,
-			MovingRoundObject& obj2) {
+			MovingRoundObject& obj2, bool shouldDie) {
 	Vector2D normal = obj2.center - obj1.center;
 	float nv1 = obj1.velocity * normal;
 	float nv2 = obj2.velocity * normal;
-	if (obj2.shouldDieFromShrinkingObject(obj1)) {
+	if (shouldDie) {
 		obj2.startShrinking(&obj1, -normal*(1/sqrt(normal*normal))*DEATH_RATE);
 	} else {
 		if (obj1.isCurrentlyShrinking()) {
@@ -219,12 +219,12 @@ void PhysicsWorld::doSimulation(float dt,
 	map<int, PhysicsWorld::collide_event> collideDisappear;
 	priority_queue<PhysicsWorld::collide_event> collideEvents;
 
-	for (auto i = movingRoundObjects.begin(); i != movingRoundObjects.end(); i++) {
+	for (auto i = movingRoundObjects.begin(); i != movingRoundObjects.end(); ++i) {
 		auto j = i;
-		for (j++; j != movingRoundObjects.end(); j++) {
+		for (++j; j != movingRoundObjects.end(); ++j) {
 			doObjectCollision(*(i->second), *(j->second), collideRoundWithRound, collideEvents, 0, dt);
 		}
-		for (auto k = rectangularWalls.begin(); k != rectangularWalls.end(); k++) {
+		for (auto k = rectangularWalls.begin(); k != rectangularWalls.end(); ++k) {
 			doRectangularWallCollision(*(i->second), *(k->second), collideRoundWithWall, collideEvents, 0, dt);
 		}
 		doRoundObjectDisappearing(*(i->second), collideDisappear, collideEvents, 0, dt);
@@ -254,13 +254,15 @@ void PhysicsWorld::doSimulation(float dt,
 				MovingRoundObject& obj1 = *(movingRoundObjects[e.t1]);
 				MovingRoundObject& obj2 = *(movingRoundObjects[e.t2]);
 
+				pair<bool,bool> shouldDie =
+					roundRoundCollisionCallback(obj1, obj2);
 
 				if (obj1.state == MOS_SHRINKING) {
-					bounceMovingRoundAndShrinkingRound(obj1, obj2);
+					bounceMovingRoundAndShrinkingRound(obj1, obj2, shouldDie.second);
 				}
 
 				else if (obj2.state == MOS_SHRINKING) {
-					bounceMovingRoundAndShrinkingRound(obj2, obj1);
+					bounceMovingRoundAndShrinkingRound(obj2, obj1, shouldDie.first);
 				}
 
 				else {
@@ -303,8 +305,22 @@ void PhysicsWorld::doSimulation(float dt,
 				MovingRoundObject& obj = *(movingRoundObjects[e.t1]);
 				RectangularWall& wall = *(rectangularWalls[e.t2]);
 
-				if (obj.shouldDieFromWall(wall)) {
-					Vector2D normal = obj.center - wall.p2;
+				bool shouldDie = roundWallCollisionCallback(obj, wall);
+
+				if (shouldDie) {
+					Vector2D normal;
+					if (e.type == ET_ROUND_WALL_CORNER_1) {
+						normal = obj.center - wall.p1;
+					}
+					else if (e.type == ET_ROUND_WALL_CORNER_2) {
+						normal = obj.center - wall.p2;
+					}
+					else if (e.type == ET_ROUND_WALL_LINE) {
+						normal = (wall.p2 - wall.p1).getNormalVector();
+						if (obj.velocity * normal > 0) {
+							normal = -normal;
+						}
+					}
 					obj.startShrinking(NULL, -normal*(1/sqrt(normal*normal))*DEATH_RATE);
 				} else {
 					if (e.type == ET_ROUND_WALL_CORNER_1) {
@@ -392,7 +408,7 @@ void PhysicsWorld::doSimulation(float dt,
 		}
 
 		vector<SpawnDescriptor> const& possibleSpawns =
-			worldMap.getSpawnsForTeam(obj.teamNumber);
+			worldMap.getSpawnsForTeam(obj.regionNumber);
 		int which = rand() % possibleSpawns.size();
 		SpawnDescriptor const& spawn = possibleSpawns[which];
 		obj.center.x = random_uniform_float(spawn.getMinX(), spawn.getMaxX());

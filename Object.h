@@ -1,8 +1,11 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include <assert.h>
+
 #include <cmath>
 #include <functional>
+#include <memory>
 
 #include "Material.h"
 #include "Hack.h"
@@ -11,7 +14,7 @@
 class Object
 {
 	private:
-		Material *material;
+		MaterialPtr material;
 		unsigned id;
 		unsigned refCount;
 
@@ -21,15 +24,14 @@ class Object
 		Object(Object const&);
 		Object& operator=(Object const&);
 
-	protected:
-		static Material* materialsByTeamNumber[];
-
 	public:
+		static const MaterialPtr materialsByTeamNumber[];
+
 		/**
 		 * Constructs an object with the given material.
 		 * @param material The material for the object being created.
 		 */
-		Object(Material *material) : material(material), refCount(0) {
+		Object(MaterialPtr material) : material(material), refCount(0) {
 			id = (Object::nextId++);
 		}
 
@@ -41,8 +43,16 @@ class Object
 		/**
 		 * @return the material
 		 */
-		Material *getMaterial() const {
+		MaterialPtr getMaterial() const {
 			return material;
+		}
+
+		/**
+		 * Sets the material.
+		 * @param m should not be destructed until after PhysicsWorld is
+		 */
+		void setMaterial(MaterialPtr m) {
+			material = m;
 		}
 
 		/**
@@ -66,9 +76,7 @@ class Object
 		 */
 		virtual void writeToPacket(WritePacket *wp) const;
 
-		virtual ~Object() {
-			delete material;
-		}
+		virtual ~Object() { }
 
 	template<class> friend class ObjectPtr;
 };
@@ -142,7 +150,7 @@ class RectangularObject : public Object
 		 * @param b Second endpoint of the wall.
 		 * @param material The material for the object being created.
 		 */
-		RectangularObject(Vector2D a, Vector2D b, Material *material)
+		RectangularObject(Vector2D a, Vector2D b, MaterialPtr material)
 			: Object(material), p1(a), p2(b) { }
 
 		RectangularObject(ReadPacket *rp);
@@ -188,7 +196,7 @@ class RectangularWall : public RectangularObject
 		 * @param material The material for the object being created.
 		 */
 		RectangularWall(Vector2D a, Vector2D b, WallType wt = WT_NORMAL) :
-			RectangularObject(a, b, new Color(101, 67, 33)), wallType(wt) { }
+			RectangularObject(a, b, MaterialPtr(new Color(101, 67, 33))), wallType(wt) { }
 
 		RectangularWall(ReadPacket *rp);
 
@@ -232,7 +240,7 @@ class RoundObject : public Object
 		 * @param startAngle The starting angle for the arc.
 		 * @param endAngle The ending angle for the arc.
 		 */
-		RoundObject(Material *material, Vector2D const& center, float radius,
+		RoundObject(MaterialPtr material, Vector2D const& center, float radius,
 				float startAngle = 0.0, float endAngle = M_PI_2) :
 			Object(material), center(center), radius(radius), startAngle(startAngle), 
 			endAngle(endAngle) { }
@@ -299,7 +307,7 @@ class RoundWall : public RoundObject
 		 * @param endAngle The ending angle for the arc.
 		 * @param wt The wall type for this wall.
 		 */
-		RoundWall(Material *material, Vector2D center, float radius,
+		RoundWall(MaterialPtr material, Vector2D center, float radius,
 				float startAngle = 0.0, float endAngle = M_PI_2,
 				WallType wt = WT_NORMAL) : 
 			RoundObject(material, center, radius, startAngle, endAngle), wallType(wt) { }
@@ -341,33 +349,39 @@ class MovingRoundObject : public RoundObject
 
 		// MOS_SPAWNING
 		float timeUntilSpawn;
-		std::function<void()> onSpawnCallback;
 
 		// MOS_SHRINKING
 		MovingRoundObject *parent;
 		int numChildren;
 
+		// Callbacks
+		std::function<void()> onSpawnCallback;
+		std::function<void()> onDeathCallback;
+
 		Vector2D velocity;
 		float mass;
 		float heightRatio;
 
-		bool isFlag;
-		int teamNumber;
+		int regionNumber;
+
+		// helpers used by PhysicsWorld
+		void startShrinking(MovingRoundObject *parent, Vector2D const& velocity);
+		void kill();
 
 	public:
-		MovingRoundObject(Material *material, float radius, float mass,
-				float heightRatio, float timeUntilSpawn,
-				std::function<void()> const& onSpawnCallback,	
-				int teamNumber, bool isFlag) :
+		MovingRoundObject(MaterialPtr material, float radius, float mass, 
+				float heightRatio, float timeUntilSpawn, int regionNumber,
+				std::function<void()> const& onSpawnCallback,
+				std::function<void()> const& onDeathCallback) :
 			RoundObject(material, Vector2D(0.0,0.0), radius, 0.0f, (float)M_PI_2),
 			state(MOS_SPAWNING),
-			timeUntilSpawn(timeUntilSpawn),
-			onSpawnCallback(onSpawnCallback),
-			velocity(0.0, 0.0),
 			mass(mass),
-			isFlag(isFlag),
 			heightRatio(heightRatio),
-			teamNumber(teamNumber) { }
+			timeUntilSpawn(timeUntilSpawn),
+			regionNumber(regionNumber),
+			onSpawnCallback(onSpawnCallback),
+			onDeathCallback(onDeathCallback),
+			velocity(0.0, 0.0) { }
 
 		static const float kPlayerRadius;
 		static const float kPlayerMass;
@@ -425,23 +439,10 @@ class MovingRoundObject : public RoundObject
 		}
 
 		/**
-		 * @param center the new center for this object
-		 */
-		void setCenter(const Vector2D& center) {
-			this->center = center;
-		}
-
-		/**
-		 * @param radius the new radius for this object
-		 */
-		void setRadius(float radius) {
-			this->radius = radius;
-		}
-
-		/**
 		 * @param velocity the new velocity for this object
 		 */
 		void setVelocity(const Vector2D& velocity) {
+			assert(state == MOS_ALIVE);
 			this->velocity = velocity;
 		}
 
@@ -459,22 +460,10 @@ class MovingRoundObject : public RoundObject
 			return mass;
 		}
 
-		/**
-		 * @return whether or not this object should die if it runs into the given
-		 *         shrinking object.
-		 */
-		bool shouldDieFromShrinkingObject(MovingRoundObject const& obj) const {
-			return obj.state == MOS_SHRINKING && (isFlag == obj.isFlag);
-		}
-
-		void startShrinking(MovingRoundObject *parent, Vector2D const& velocity);
-		void kill();
 
 		void instantKill() {
 			state = MOS_DEAD;
 		}
-
-		bool shouldDieFromWall(RectangularWall const& wall) const;
 
 		/**
 		 * Writes the object to a WritePacket

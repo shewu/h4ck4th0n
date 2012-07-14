@@ -61,6 +61,10 @@ class ReadPacket {
         ReadPacket(char message_type, int size, int packet_number);
         virtual ~ReadPacket();
 
+        bool hasBytesLeft() {
+        	return index < size;
+		}
+
         char read_char();
         int read_int();
         short read_short();

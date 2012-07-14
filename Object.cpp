@@ -13,10 +13,10 @@ const float MovingRoundObject::kFlagHeightRatio = 2.0f;
 
 unsigned Object::nextId = 0;
 
-Material* Object::materialsByTeamNumber[] = {new Color(0, 255, 0),
-                                             new Color(255, 0, 0),
-                                             new Color(0, 0, 255)
-                                            };
+const MaterialPtr Object::materialsByTeamNumber[] = {MaterialPtr(new Color(0, 255, 0)),
+                                                     MaterialPtr(new Color(255, 0, 0)),
+                                                     MaterialPtr(new Color(0, 0, 255))
+                                                    };
 
 void Object::writeToPacket(WritePacket *wp) const {
 	wp->write_int(id);
@@ -57,12 +57,11 @@ void MovingRoundObject::writeToPacket(WritePacket *wp) const {
 	wp->write_float(velocity.y);
 	wp->write_float(mass);
 	wp->write_float(heightRatio);
-	wp->write_char((char) isFlag);
 }
 
 Object::Object(ReadPacket *rp) {
 	id = rp->read_int();
-	material = Material::readFromPacket(rp);
+	material.reset(Material::readFromPacket(rp));
 }
 
 RectangularObject::RectangularObject(ReadPacket *rp) : Object(rp) { 
@@ -94,7 +93,6 @@ MovingRoundObject::MovingRoundObject(ReadPacket *rp) : RoundObject(rp) {
 	velocity.y = rp->read_float();
 	mass = rp->read_float();
 	heightRatio = rp->read_float();
-	isFlag = (bool) rp->read_char();
 
 	parent = NULL;
 	numChildren = 0;
@@ -113,13 +111,5 @@ void MovingRoundObject::kill() {
 	state = MOS_DEAD;
 	if(parent != NULL) {
 		parent->numChildren--;
-	}
-}
-
-bool MovingRoundObject::shouldDieFromWall(RectangularWall const& wall) const {
-	if(isFlag) {
-		return wall.getWallType() == WT_GOAL;
-	} else {
-		return wall.getWallType() == WT_DEADLY;
 	}
 }

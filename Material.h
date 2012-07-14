@@ -1,6 +1,8 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
+#include <memory>
+
 #include "Packet.h"
 
 class Material
@@ -10,13 +12,13 @@ class Material
 		 * Writes the material to a packet.
 		 * @param wp The packet to write the Material to.
 		 */
-		virtual void writeToPacket(WritePacket *wp) = 0;
+		virtual void writeToPacket(WritePacket *wp) const = 0;
 
 		/**
 		 * Reads the material from the packet.
 		 * @param rp the packet to read the Material from.
 		 */
-		static Material *readFromPacket(ReadPacket *rp);
+		static Material* readFromPacket(ReadPacket *rp);
 };
 
 class Texture : public Material
@@ -87,12 +89,14 @@ class Color : public Material
 		 * Writes the material to a packet.
 		 * @param wp The packet to write the Material to.
 		 */
-		virtual void writeToPacket(WritePacket *wp) {
+		virtual void writeToPacket(WritePacket *wp) const {
 			wp->write_char(r);
 			wp->write_char(g);
 			wp->write_char(b);
 			wp->write_char(a);
 		}
 };
+
+typedef std::shared_ptr<Material const> MaterialPtr;
 
 #endif

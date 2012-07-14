@@ -20,14 +20,26 @@ class PhysicsWorld : World
 		 * as an argument to these, until after this PhysicsWorld object has been
 		 * destructed.
 		 */
-		ObjectPtr<MovingRoundObject> addFlagObject(int teamNumber, std::function<void()> const& onSpawnCallback);
-		ObjectPtr<MovingRoundObject> addPlayerObject(int teamNumber, std::function<void()> const& onSpawnCallback);
+		ObjectPtr<MovingRoundObject> addFlagObject(int regionNumber,
+			std::function<void()> const& onSpawnCallback,
+			std::function<void()> const& onDeathCallback);
+		ObjectPtr<MovingRoundObject> addPlayerObject(int regionNumber,
+			std::function<void()> const& onSpawnCallback,
+			std::function<void()> const& onDeathCallback);
 
 		void removeDeadObjects();
 
 		void writeToPacket(WritePacket *wp) const;
 
 	private:
+		
+		std::function<bool(MovingRoundObject const&, RectangularWall const&)>
+			roundWallCollisionCallback;
+
+		std::function<std::pair<bool,bool>(
+				MovingRoundObject const&, MovingRoundObject const&)>
+			roundRoundCollisionCallback;
+
 		enum EventType
 		{
 			ET_NONE,
@@ -82,7 +94,7 @@ class PhysicsWorld : World
 				std::priority_queue<collide_event>& collideEvents,
 				float cur, float dt);
 		static void bounceMovingRoundAndShrinkingRound(MovingRoundObject& obj1,
-				MovingRoundObject& obj2);
+				MovingRoundObject& obj2, bool shouldDie);
 		static void bounceMovingRoundFromPoint(MovingRoundObject& obj, Vector2D const& p);
 		static void bounceMovingRoundFromWall(MovingRoundObject& obj, Vector2D const& p1, Vector2D const& p2);
 		static void updateRoundObjectsForward(std::map<int, MovingRoundObject*>& objects, float dt);

@@ -72,7 +72,6 @@ Credits
 
 Style Guide
 ===========
-If you are contributing code to Holy Balls, ensure that your code meets the following standards:
 * Indentation: tabs, not spaces
 * Variable naming conventions: camelCase
 * Class and file naming conventions: CamelCase

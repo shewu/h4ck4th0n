@@ -9,14 +9,20 @@
 class PhysicsWorld : World
 {
 	public:
+		typedef std::function<bool(ObjectPtr<MovingRoundObject>,
+		                           ObjectPtr<RectangularWall>
+		                  )> RoundWallCollisionCallback;
+		typedef std::function<std::pair<bool,bool>(ObjectPtr<MovingRoundObject>,
+		                                           ObjectPtr<RectangularWall>
+		                  )> RoundRoundCollisionCallback;
+
 		PhysicsWorld(HBMap const& hbmap) : World(hbmap) {
-			roundWallCollisionCallback = [](MovingRoundObject const& a, RectangularWall const&b) { return false; };
-			roundRoundCollisionCallback = [](MovingRoundObject const& a, MovingRoundObject const&b) { return std::pair<bool,bool>(false,false); };
+			roundWallCollisionCallback = [](ObjectPtr<MovingRoundObject> a, ObjectPtr<RectangularWall> b) { return false; };
+			roundRoundCollisionCallback = [](ObjectPtr<MovingRoundObject> a, ObjectPtr<MovingRoundObject> b) { return std::pair<bool,bool>(false,false); };
 		}
 
 		void applyForces(float dt);
-		void doSimulation(float dt,
-			std::function<void(ObjectPtr<Object>,ObjectPtr<Object>)> collisionHandler);
+		void doSimulation(float dt);
 
 		/**
 		 * possibleSpawns should not be mutated or destructed after being passed
@@ -34,22 +40,18 @@ class PhysicsWorld : World
 
 		void writeToPacket(WritePacket *wp) const;
 
-		void setRoundWallCollisionCallback(std::function<bool(MovingRoundObject const&, RectangularWall const&)> callback) {
+		void setRoundWallCollisionCallback(RoundWallCollisionCallback const& callback) {
 			roundWallCollisionCallback = callback;
 		}
 
-		void setRoundRoundCollisionCallback(std::function<std::pair<bool,bool>(MovingRoundObject const&, MovingRoundObject const&)> callback) {
+		void setRoundRoundCollisionCallback(RoundRoundCollisionCallback const& callback) {
 			roundRoundCollisionCallback = callback;
 		}
 
 	private:
 		
-		std::function<bool(MovingRoundObject const&, RectangularWall const&)>
-			roundWallCollisionCallback;
-
-		std::function<std::pair<bool,bool>(
-				MovingRoundObject const&, MovingRoundObject const&)>
-			roundRoundCollisionCallback;
+		RoundWallCollisionCallback  roundWallCollisionCallback;
+		RoundRoundCollisionCallback roundRoundCollisionCallback;
 
 		enum EventType
 		{

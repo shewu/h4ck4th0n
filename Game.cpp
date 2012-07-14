@@ -7,10 +7,19 @@
 
 // TODO spawning
 
+using std::bind;
 using std::map;
 using std::pair;
 using std::placeholders::_1;
 using std::placeholders::_2;
+
+Game::Game(HBMap const& hbmap) :
+		world_(hbmap) {
+	world_.setRoundWallCollisionCallback (
+		std::bind(&Game::roundWallCollision,  this, _1, _2));
+	world_.setRoundRoundCollisionCallback(
+		std::bind(&Game::roundRoundCollision, this, _1, _2));
+}
 
 bool Game::addPlayer(SocketConnection* sc) {
 	if (players.find(sc) != players.end()) {
@@ -79,7 +88,7 @@ void Game::update(float dt) {
 	world_.applyForces(dt);
 
 	// physics
-	world_.doSimulation(dt, std::bind(&Game::handleCollision, this, _1, _2));
+	world_.doSimulation(dt);
 
 	// game logic - compute score, etc.
 	// any operation which is game-type specific

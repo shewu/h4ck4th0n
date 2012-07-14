@@ -25,8 +25,13 @@ class Game {
 		Game(Game const&);
 		Game& operator=(Game const&);
 
+        virtual bool roundWallCollision(
+        	ObjectPtr<MovingRoundObject>, ObjectPtr<RectangularWall>) = 0;
+        virtual std::pair<bool, bool> roundRoundCollision(
+        	ObjectPtr<MovingRoundObject>, ObjectPtr<MovingRoundObject>) = 0;
+
     public:
-        Game(HBMap const& hbmap) : world_(hbmap) { }
+        Game(HBMap const& hbmap);
 
         virtual ~Game() { }
 
@@ -49,7 +54,6 @@ class Game {
         void send_sounds_to(SocketConnection* c);
 
         virtual void doGameLogic() = 0;
-        virtual void handleCollision(ObjectPtr<Object>, ObjectPtr<Object>) = 0;
 };
 
 #endif

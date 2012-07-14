@@ -235,9 +235,7 @@ void PhysicsWorld::updateRoundObjectsForward(map<int, MovingRoundObject*>& objec
 	}
 }
 
-void PhysicsWorld::doSimulation(float dt,
-   			function<void(ObjectPtr<Object>,ObjectPtr<Object>)> collisionHandler) {
-
+void PhysicsWorld::doSimulation(float dt) {
 	map<pair<int, int>, PhysicsWorld::collide_event> collideRoundWithRound;
 	map<pair<int, int>, PhysicsWorld::collide_event> collideRoundWithWall;
 	map<int, PhysicsWorld::collide_event> collideDisappear;
@@ -278,8 +276,10 @@ void PhysicsWorld::doSimulation(float dt,
 				MovingRoundObject& obj1 = *(movingRoundObjects[e.t1]);
 				MovingRoundObject& obj2 = *(movingRoundObjects[e.t2]);
 
-				pair<bool,bool> shouldDie =
-					roundRoundCollisionCallback(obj1, obj2);
+				pair<bool,bool> shouldDie = roundRoundCollisionCallback(
+						ObjectPtr<MovingRoundObject>(&obj1),
+						ObjectPtr<MovingRoundObject>(&obj2)
+					);
 
 				if (obj1.state == MOS_SHRINKING) {
 					bounceMovingRoundAndShrinkingRound(obj1, obj2, shouldDie.second);
@@ -329,7 +329,10 @@ void PhysicsWorld::doSimulation(float dt,
 				MovingRoundObject& obj = *(movingRoundObjects[e.t1]);
 				RectangularWall& wall = *(rectangularWalls[e.t2]);
 
-				bool shouldDie = roundWallCollisionCallback(obj, wall);
+				bool shouldDie = roundWallCollisionCallback(
+					ObjectPtr<MovingRoundObject>(&obj),
+					ObjectPtr<RectangularWall>(&wall)
+				);
 
 				if (shouldDie) {
 					Vector2D normal;

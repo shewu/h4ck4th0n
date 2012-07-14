@@ -14,6 +14,11 @@ class CTFGame : public Game {
 		void doGameLogic();
 		void handleCollision(ObjectPtr<Object>, ObjectPtr<Object>);
 
+        bool roundWallCollision(
+        	ObjectPtr<MovingRoundObject>, ObjectPtr<RectangularWall>);
+        std::pair<bool, bool> roundRoundCollision(
+        	ObjectPtr<MovingRoundObject>, ObjectPtr<MovingRoundObject>);
+
 };
 
 #endif

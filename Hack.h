@@ -16,11 +16,15 @@
 #define P(x)
 #endif
 
+// TODO move to more general wall numbering system
 enum WallType
 {
     WT_INVALID = -1,
     WT_NORMAL,
     WT_DEADLY,
+
+    // walls should just be able to specify a coeff, so WT_BOUNCY 
+    // should probably not be its own thing
     WT_BOUNCY,
     WT_GOAL,
 

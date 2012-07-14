@@ -290,6 +290,8 @@ void PhysicsWorld::doSimulation(float dt) {
 				}
 
 				else {
+					// TODO deaths when there are collisions of two nondying objects
+
 					Vector2D normal = obj2.center - obj1.center;
 					float nv1 = obj1.velocity * normal;
 					float nv2 = obj2.velocity * normal;

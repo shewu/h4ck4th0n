@@ -394,6 +394,14 @@ class MovingRoundObject : public RoundObject
 		MovingRoundObject(ReadPacket *rp);
 
 		/**
+		 * Gets the region number.
+		 * @return the region number.
+		 */
+		int getRegionNumber() const {
+			return regionNumber;
+		}
+
+		/**
 		 * Gets the state.
 		 * @return the state.
 		 */

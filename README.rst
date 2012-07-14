@@ -73,9 +73,9 @@ Credits
 Style Guide
 ===========
 If you are contributing code to Holy Balls, ensure that your code meets the following standards:
-- Indentation: tabs, not spaces
-- Variable naming conventions: camelCase
-- Class and file naming conventions: CamelCase
-- Open curly brace on the same line as clause or function signature
-- File extensions for C++ code are cpp for implementations and h for headers
-- Include guards match the following pattern: [A-Z]+(_[A-Z]+)*_H
+* Indentation: tabs, not spaces
+* Variable naming conventions: camelCase
+* Class and file naming conventions: CamelCase
+* Open curly brace on the same line as clause or function signature
+* File extensions for C++ code are cpp for implementations and h for headers
+* Include guards match the following pattern: [A-Z]+(_[A-Z]+)*_H

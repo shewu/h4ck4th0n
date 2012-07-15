@@ -8,7 +8,6 @@
 #include <netdb.h>
 
 #include "GameViewController.h"
-#include "MenuFuncs.h"
 
 #define MAX_SOUND_LATENESS 100
 
@@ -24,7 +23,7 @@ GameViewController::GameViewController() {
 	_initSound();
 	SDL_ShowCursor(false);
 	SDL_WM_GrabInput(SDL_GRAB_ON);
-	cout << "Starting client\n";
+	std::cout << "Starting client\n";
 
 	addrinfo hints, *res;
 
@@ -56,16 +55,16 @@ GameViewController::GameViewController() {
 		}
 	}
 	if (!done) {
-		cout << "Failed to connect" << endl;
+		std::cout << "Failed to connect" << std::endl;
 		leave();
 	}
 
 	if (done) {
-		cout << "Connected to server" << endl;
+		std::cout << "Connected to server" << std::endl;
 
 		angle = rp->read_float();
 		HBMap hbmap(rp);
-		world = MirroringWorld(hbmap)
+		world = new MirroringWorld(hbmap);
 		delete rp;
 
 		myId = -1;
@@ -122,7 +121,7 @@ void GameViewController::process() {
 			continue;
 		}
 		latestPacket = rp->packet_number;
-		world.receiveObjects(rp, myId);
+		world->receiveObjects(rp, myId);
 		delete rp;
 #ifndef __APPLE__
 #endif
@@ -172,8 +171,8 @@ void GameViewController::process() {
 	sc->send_packet(wp);
 	
 #ifndef __APPLE__
-	ALfloat alpos[] = { world.objects[myId].p.x, world.objects[myId].p.y, 0 };
-	ALfloat alvel[] = { world.objects[myId].v.x, world.objects[myId].v.y, 0 };
+	ALfloat alpos[] = { world->objects[myId].p.x, world->objects[myId].p.y, 0 };
+	ALfloat alvel[] = { world->objects[myId].v.x, world->objects[myId].v.y, 0 };
 	ALfloat alori[] = { 0.0, cos(angle), sin(angle), 0.0, 1.0, 0.0 };
 	alListenerfv(AL_POSITION, alpos);
 	alListenerfv(AL_VELOCITY, alvel);
@@ -183,8 +182,8 @@ void GameViewController::process() {
 		int time = SDL_GetTicks();
 		float fps = 100000./(time - oldTime);
 		printf("\r");
-		cout.width(6);
-		cout << (int)fps << "fps" << flush;
+		std::cout.width(6);
+		std::cout << (int)fps << "fps" << std::flush;
 		oldTime = time;
 	}
 }
@@ -200,13 +199,12 @@ bool GameViewController::leave() {
 	return (sFinishedView = kHBServerConnectView) != kHBNoView;
 }
 
-static voidtype action_toggle_fullscreen(bool b) {
+static void action_toggle_fullscreen(bool b) {
 	if(b) {
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
 	} else {
 		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
 	}
-	return voidtype();
 }
 
 void GameViewController::_disconnect() {
@@ -218,11 +216,11 @@ void GameViewController::_disconnect() {
 
 void GameViewController::_initMenus() {
 	mainmenu = new menu();
-	mainmenu->add_menuitem(new actionmenuitem(leavefunc(this), (char *)"Leave Game"));
+	mainmenu->add_menuitem(new actionmenuitem([this](){return leave();}, (char *)"Leave Game"));
 #ifndef __APPLE__
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
 #endif
-	mainmenu->add_menuitem(new actionmenuitem(quitfunc(this), (char *)"Quit"));
+	mainmenu->add_menuitem(new actionmenuitem([this](){return quit();}, (char *)"Quit"));
 }
 
 void GameViewController::_initSound() {

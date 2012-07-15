@@ -7,7 +7,6 @@
 #endif
 
 #include "SplashViewController.h"
-#include "MenuFuncs.h"
 
 static HBViewMode finishedView = kHBNoView;
 
@@ -16,7 +15,7 @@ bool SplashViewController::quit() {
 	return true;
 }
 
-static bool menuConnectToServer(voidtype) {
+static bool menuConnectToServer() {
 	finishedView = kHBServerConnectView;
 	return true;
 }
@@ -26,7 +25,7 @@ SplashViewController::SplashViewController() {
 
 	splashMenu = new menu();
 	splashMenu->add_menuitem(new actionmenuitem(menuConnectToServer, (char *)"Play Game"));
-	splashMenu->add_menuitem(new actionmenuitem(quitfunc(this), (char *)"Quit"));
+	splashMenu->add_menuitem(new actionmenuitem([this](){return quit();}, (char *)"Quit"));
 
 	splashMenu->set_active(true);
 }

@@ -53,10 +53,9 @@ void Game::removePlayer(SocketConnection* sc) {
 	}
 	GamePlayer* player = iter->second;
 
-	if (!player->obj.empty() && player->obj->getState() == MOS_ALIVE) {
-		player->obj->instantKill();
-	}
+	onPlayerRemoved(player);
 
+	delete player;
 	players.erase(iter);
 }
 

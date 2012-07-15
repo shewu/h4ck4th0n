@@ -55,11 +55,11 @@ GamePlayer* CTFGame::onPlayerAdded() {
 	return gp;
 }
 
-void CTFGame::onPlayerRemoved(GamePlayer*) {
-	// TODO implement this
-	// TODO have this be called from Game
-	// TODO make sure the GamePlayer gets deleted at some point (and decide whose
-	// responsibility it is)
+void CTFGame::onPlayerRemoved(GamePlayer* player) {
+	// remove the player's object from the game
+	if (!player->obj.empty() && player->obj->getState() == MOS_ALIVE) {
+		player->obj->instantKill();
+	}
 }
 
 void CTFGame::createFlag(int regionNum) {

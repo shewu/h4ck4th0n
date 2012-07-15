@@ -10,6 +10,11 @@ class MirroringWorld : public World
 		MirroringWorld(HBMap const& hbmap) : World(hbmap) { }
 
 		void readFromPacket(ReadPacket *rp);
+
+		MovingRoundObject* getMyObject();
+
+	private:
+		int myId_;
 };
 
 #endif

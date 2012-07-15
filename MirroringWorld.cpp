@@ -16,4 +16,14 @@ void MirroringWorld::readFromPacket(ReadPacket *rp) {
 		RectangularWall *obj = new RectangularWall(rp);
 		rectangularWalls[obj->getID()] = obj;
 	}
+
+	myId_ = rp->read_int();
+}
+
+MovingRoundObject* MirroringWorld::getMyObject() {
+	if (myId_ == -1) {
+		return NULL;
+	} else {
+		return movingRoundObjects[myId_];
+	}
 }

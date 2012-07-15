@@ -176,6 +176,7 @@ class RectangularObject : public Object
 		virtual void writeToPacket(WritePacket *wp) const;
 
 		friend class PhysicsWorld;
+		friend class UnholyGameViewController;
 };
 
 class RectangularWall : public RectangularObject
@@ -282,6 +283,7 @@ class RoundObject : public Object
 		virtual void writeToPacket(WritePacket* wp) const;
 
 		friend class PhysicsWorld;
+		friend class UnholyGameViewController;
 
 };
 
@@ -486,6 +488,7 @@ class MovingRoundObject : public RoundObject
 		virtual void writeToPacket(WritePacket* wp) const;
 
 		friend class PhysicsWorld;
+		friend class UnholyGameViewController;
 };
 
 #endif

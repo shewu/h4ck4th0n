@@ -83,6 +83,14 @@ class World
         std::vector<Light> const& getLights() const {
         	return lights;
 		}
+
+		std::map<int, MovingRoundObject*> const& getMovingRoundObjects() const {
+			return movingRoundObjects;
+		}
+
+		std::map<int, RectangularWall*> const& getRectangularWalls() const {
+			return rectangularWalls;
+		}
 };
 
 enum ObjectType {

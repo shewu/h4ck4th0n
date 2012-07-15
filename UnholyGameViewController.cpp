@@ -1,6 +1,6 @@
-#include <cmath>
-
 #include "UnholyGameViewController.h"
+
+#include <cmath>
 
 UnholyGameViewController::UnholyGameViewController() : GameViewController() {
 	_initGL();
@@ -53,11 +53,12 @@ void UnholyGameViewController::render() {
 
 	glLoadIdentity();
 	
-	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
-	if (focusx < world.minX+6) focusx = world.minX+6;
-	if (focusx > world.maxX-6) focusx = world.maxX-6;
-	if (focusy < world.minY+6) focusy = world.minY+6;
-	if (focusy > world.maxY-6) focusy = world.maxY-6;
+	float focusx = world.getMyObject()->center.x;
+	float focusy = world.getMyObject()->center.y;
+	if (focusx < world.getMinX()+6) focusx = world.getMinX()+6;
+	if (focusx > world.getMaxX()-6) focusx = world.getMaxX()-6;
+	if (focusy < world.getMinY()+6) focusy = world.getMinY()+6;
+	if (focusy > world.getMaxY()-6) focusy = world.getMaxY()-6;
 	
 	gluLookAt(focusx-6*cos(angle), focusy-6*sin(angle), 3, focusx, focusy, 0.0, 0.0, 0.0, 1.0);
 	float matrix[16];
@@ -95,23 +96,27 @@ void UnholyGameViewController::_drawWalls() {
 	// obstaclesUnholyGameViewController* gvc;
 	//glUseProgram(0);
 	glBegin(GL_QUADS);
-	for (vector<Obstacle>::iterator i = world.obstacles.begin(); i != world.obstacles.end(); i++) {
-		glColor3f(i->color.r/255.0, i->color.g/255.0, i->color.b/255.0);
-		glVertex3f(i->p1.x, i->p1.y, 0);
-		glVertex3f(i->p2.x, i->p2.y, 0);
-		glVertex3f(i->p2.x, i->p2.y, 1);
-		glVertex3f(i->p1.x, i->p1.y, 1);
+	for (auto iter : world.getRectangularWalls()) {
+		RectangularWall* wall = iter.second;
+		MaterialPtr color = wall->getMaterial();
+		glColor3f(color->getR()/255.0, color->getG()/255.0, color->getB()/255.0);
+		glVertex3f(wall->p1.x, wall->p1.y, 0);
+		glVertex3f(wall->p2.x, wall->p2.y, 0);
+		glVertex3f(wall->p2.x, wall->p2.y, 1);
+		glVertex3f(wall->p1.x, wall->p1.y, 1);
 	}
 	glEnd();
 }
 
 void UnholyGameViewController::_drawObjects() {
 	glEnable(GL_NORMALIZE);
-	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {
+	for (auto iter : world.getMovingRoundObjects()) {
+		MovingRoundObject* obj = iter.second;
 		glPushMatrix();
-		glTranslatef(i->second.p.x, i->second.p.y, 0);
-		glScalef(i->second.rad, i->second.rad, i->second.hrat*i->second.rad);
-		glColor3f(i->second.color.r/255.0, i->second.color.g/255.0, i->second.color.b/255.0);
+		glTranslatef(obj->center.x, obj->center.y, 0);
+		glScalef(obj->radius, obj->radius, obj->heightRatio*obj->radius);
+		MaterialPtr color = obj->getMaterial();
+		glColor3f(color->getR()/255.0, color->getG()/255.0, color->getB()/255.0);
 		gluSphere(quad, 1.0, 50, 50);
 		glPopMatrix();
 	}
@@ -120,8 +125,8 @@ void UnholyGameViewController::_drawObjects() {
 
 void UnholyGameViewController::_drawFloor(float alpha) {
 	// checkerboard
-	unsigned int GridSizeX = world.maxX/3;
-	unsigned int GridSizeY = world.maxY/3;
+	unsigned int GridSizeX = world.getMaxX()/3;
+	unsigned int GridSizeY = world.getMaxY()/3;
 	unsigned int SizeX = 6;
 	unsigned int SizeY = 6;
 
@@ -136,10 +141,10 @@ void UnholyGameViewController::_drawFloor(float alpha) {
 			}
 
 			glNormal3f(                  0,                  0, 1);
-			glVertex3f(    x*SizeX + world.minX,    y*SizeY + world.minY, 0);
-			glVertex3f((x+1)*SizeX + world.minX,    y*SizeY + world.minY, 0);
-			glVertex3f((x+1)*SizeX + world.minX,(y+1)*SizeY + world.minY, 0);
-			glVertex3f(    x*SizeX + world.minX,(y+1)*SizeY + world.minY, 0);
+			glVertex3f(    x*SizeX + world.getMinX(),    y*SizeY + world.getMinY(), 0);
+			glVertex3f((x+1)*SizeX + world.getMinX(),    y*SizeY + world.getMinY(), 0);
+			glVertex3f((x+1)*SizeX + world.getMinX(),(y+1)*SizeY + world.getMinY(), 0);
+			glVertex3f(    x*SizeX + world.getMinX(),(y+1)*SizeY + world.getMinY(), 0);
 
 		}
 	}

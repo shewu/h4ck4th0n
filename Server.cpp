@@ -93,7 +93,7 @@ int main() {
 
 	WritePacket worldWritePacket(STC_WORLD_DATA);
 
-	Game* game = new CTFGame(HBMap("map.hbm"));
+	Game* game = new CTFGame(HBMap("custom.hbm"));
 	game->init();
 
 	// Main server loop
@@ -132,8 +132,7 @@ int main() {
 
 		// Loop through all clients, and see if there are
 		// any messages to be received.
-        for(auto it = clients.begin();
-                it != clients.end();) {
+        for(auto it = clients.begin(); it != clients.end(); ) {
             auto next_it = it;
             ++next_it;
 

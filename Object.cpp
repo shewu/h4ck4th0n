@@ -13,7 +13,10 @@ const float MovingRoundObject::kFlagHeightRatio = 2.0f;
 
 unsigned Object::nextId = 0;
 
+// TODO fix materials
 const MaterialPtr Object::materialsByTeamNumber[] = {MaterialPtr(new Color(0, 255, 0)),
+                                                     MaterialPtr(new Color(255, 0, 0)),
+                                                     MaterialPtr(new Color(0, 0, 255)),
                                                      MaterialPtr(new Color(255, 0, 0)),
                                                      MaterialPtr(new Color(0, 0, 255))
                                                     };

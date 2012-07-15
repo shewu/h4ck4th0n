@@ -5,7 +5,7 @@
 #include "Hack.h"
 #include "Menu.h"
 #include "Packet.h"
-#include "World.h"
+#include "MirroringWorld.h"
 
 extern SDL_Surface* screen;
 extern char* ipaddy;
@@ -22,7 +22,7 @@ class GameViewController : public HBViewController {
 		unsigned int albuf[3], alsrcs[ALSRCS];
 		Socket *sock;
 		SocketConnection* sc;
-		World world;
+		MirroringWorld world;
 		float angle;
 		int myId;
 		int latestPacket;
@@ -55,4 +55,3 @@ class leavefunc {
 };
 
 #endif
-

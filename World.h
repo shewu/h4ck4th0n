@@ -22,6 +22,11 @@ class World
         HBMap worldMap;
 
 	public:
+		/**
+		 * Constructs an empty world, should not be used.
+		 */
+		World();
+
         /**
          * Default constructor for World given a map name from which to load
          * the world.

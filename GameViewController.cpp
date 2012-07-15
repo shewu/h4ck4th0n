@@ -64,6 +64,8 @@ GameViewController::GameViewController() {
 		cout << "Connected to server" << endl;
 
 		angle = rp->read_float();
+		HBMap hbmap(rp);
+		world = MirroringWorld(hbmap)
 		delete rp;
 
 		myId = -1;

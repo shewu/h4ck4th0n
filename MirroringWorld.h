@@ -6,6 +6,7 @@
 class MirroringWorld : public World
 {
 	public:
+		MirroringWorld() : World() { }
 		MirroringWorld(HBMap const& hbmap) : World(hbmap) { }
 
 		void readFromPacket(ReadPacket *rp);

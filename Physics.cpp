@@ -86,14 +86,16 @@ void PhysicsWorld::doObjectCollision(MovingRoundObject const& fo, MovingRoundObj
 
 	float rc = 0.0;
 	Vector2D v(0, 0);
-	if (fo.state == MOS_ALIVE || fo.state == MOS_SHRINKING) {
+	if (fo.state == MOS_ALIVE || fo.isCurrentlyShrinking()) {
 		v -= fo.velocity;
-	} else if (fo.isCurrentlyShrinking()) {
+	}
+	if (fo.isCurrentlyShrinking()) {
 		rc += DEATH_RATE;
 	}
-	if (so.state == MOS_ALIVE || fo.state == MOS_SHRINKING) {
+	if (so.state == MOS_ALIVE || fo.isCurrentlyShrinking()) {
 		v += so.velocity;
-	} else if (so.isCurrentlyShrinking()) {
+	}
+	if (so.isCurrentlyShrinking()) {
 		rc += DEATH_RATE;
 	}
 	

@@ -6,6 +6,7 @@
 #include "Menu.h"
 #include "Packet.h"
 #include "MirroringWorld.h"
+#include "AL/alut.h"
 
 extern SDL_Surface* screen;
 extern char* ipaddy;

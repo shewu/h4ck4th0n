@@ -68,7 +68,7 @@ void HolyGameViewController::_initGL() {
 
 void HolyGameViewController::render() {
 	glDisable(GL_DEPTH_TEST);
-	if (myId == -1) {
+	if (world.getMyObject() == NULL) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		return;
 	}

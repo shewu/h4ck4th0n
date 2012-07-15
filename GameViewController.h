@@ -25,7 +25,6 @@ class GameViewController : public HBViewController {
 		SocketConnection* sc;
 		MirroringWorld* world;
 		float angle;
-		int myId;
 		int latestPacket;
 		int count;
 		int oldTime;

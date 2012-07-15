@@ -1,3 +1,5 @@
+#include "GameViewController.h"
+
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
@@ -7,7 +9,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
-#include "GameViewController.h"
+#include "UserInput.h"
 
 #define MAX_SOUND_LATENESS 100
 
@@ -119,7 +121,7 @@ void GameViewController::process() {
 			continue;
 		}
 		latestPacket = rp->packet_number;
-		world->receiveObjects(rp, myId);
+		world->readFromPacket(rp);
 		delete rp;
 #ifndef __APPLE__
 #endif
@@ -166,8 +168,8 @@ void GameViewController::process() {
 	sc->send_packet(wp);
 
 #ifndef __APPLE__
-	ALfloat alpos[] = { world->objects[myId].p.x, world->objects[myId].p.y, 0 };
-	ALfloat alvel[] = { world->objects[myId].v.x, world->objects[myId].v.y, 0 };
+	ALfloat alpos[] = { world->getMyObject()->center.x,   world->getMyObject()->center.y,   0 };
+	ALfloat alvel[] = { world->getMyObject()->velocity.x, world->getMyObject()->velocity.y, 0 };
 	ALfloat alori[] = { 0.0, cos(angle), sin(angle), 0.0, 1.0, 0.0 };
 	alListenerfv(AL_POSITION, alpos);
 	alListenerfv(AL_VELOCITY, alvel);

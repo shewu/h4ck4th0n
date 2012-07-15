@@ -23,6 +23,7 @@ class CTFGame : public Game {
         void onInit();
 
 		void createFlag(int regionNum);
+		void createNewPlayer(int teamNum, GamePlayer* gp);
 
 };
 

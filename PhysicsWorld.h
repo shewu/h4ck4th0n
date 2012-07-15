@@ -25,9 +25,7 @@ class PhysicsWorld : World
 		void doSimulation(float dt);
 
 		/**
-		 * possibleSpawns should not be mutated or destructed after being passed
-		 * as an argument to these, until after this PhysicsWorld object has been
-		 * destructed.
+		 * These must be safe to call from a callback during a simulation
 		 */
 		ObjectPtr<MovingRoundObject> addFlagObject(int regionNumber,
 			std::function<void()> const& onSpawnCallback,

@@ -48,7 +48,9 @@ void CTFGame::onInit() {
 GamePlayer* CTFGame::onPlayerAdded() {
 	GamePlayer* gp = new GamePlayer();
 
-	// TODO add the object
+	// TODO better team selection
+	int teamNum = (rand() % 2) + 1;
+	createNewPlayer(teamNum, gp);
 
 	return gp;
 }
@@ -62,4 +64,12 @@ void CTFGame::onPlayerRemoved(GamePlayer*) {
 
 void CTFGame::createFlag(int regionNum) {
 	world_.addFlagObject(regionNum, [](){}, std::bind(&CTFGame::createFlag, this, regionNum));
+}
+
+void CTFGame::createNewPlayer(int teamNum, GamePlayer* gp) {
+	ObjectPtr<MovingRoundObject> obj = world_.addPlayerObject(teamNum, [](){}, [](){});
+
+	obj->setSpawnCallback([obj, gp](){ gp->obj = obj; });
+
+	obj->setDeathCallback(std::bind(&CTFGame::createNewPlayer, this, teamNum, gp));
 }

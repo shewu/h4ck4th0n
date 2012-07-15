@@ -468,9 +468,15 @@ class MovingRoundObject : public RoundObject
 			return mass;
 		}
 
-
 		void instantKill() {
 			state = MOS_DEAD;
+		}
+
+		void setSpawnCallback(std::function<void()> callback) {
+			onSpawnCallback = callback;
+		}
+		void setDeathCallback(std::function<void()> callback) {
+			onDeathCallback = callback;
 		}
 
 		/**

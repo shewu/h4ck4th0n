@@ -35,8 +35,7 @@ CLIENT_OBJECTS = $(SHARED_OBJECTS) \
 	SplashViewController.o \
 	ServerConnectViewController.o \
 	GameViewController.o \
-	MirroringWorld.o \
-	Font.o
+	MirroringWorld.o
 
 SERVER_OBJECTS+=$(SHARED_OBJECTS) Server.o Game.o Physics.o PhysicsWorld.o Forces.o CTFGame.o UserInput.o
 UNHOLY_BALLS_OBJECTS+=$(CLIENT_OBJECTS) Unholyclient.o UnholyGameViewController.o

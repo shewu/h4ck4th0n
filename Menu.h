@@ -2,6 +2,7 @@
 #define MENU_H
 
 #include <vector>
+#include <functional>
 #include <SDL/SDL.h>
 
 #define MENU_KEY_LEFT		SDLK_LEFT
@@ -13,65 +14,6 @@
 #define MENU_KEY_BACKSPACE 	SDLK_BACKSPACE
 #define MENU_KEY_A		SDLK_a
 #define MENU_KEY_0		SDLK_0
-
-struct voidtype { };
-
-template<class R, class I> class funcobj {
-	public:
-	virtual R operator()(I) = 0;
-};
-
-template<class R, class I, class A> class funcobjwrapper : public funcobj<R, I> {
-	public:
-	funcobjwrapper(A internal) {
-		_internal = internal;
-	}
-
-	R operator()(I i) {
-		return _internal(i);
-	}
-	private:
-	A _internal;
-};
-
-template<class R, class I> class wrappedfuncobj {
-	public:
-	wrappedfuncobj() {
-		real = NULL;
-		refcount = new int(1);
-	}
-	wrappedfuncobj(const wrappedfuncobj<R, I>& toCopy) {
-		real = toCopy.real;
-		refcount = toCopy.refcount;
-		(*refcount)++;
-	}
-	template<class A> wrappedfuncobj(A internal) {
-		real = new funcobjwrapper<R, I, A>(internal);
-		refcount = new int(1);
-	}
-	wrappedfuncobj& operator=(const wrappedfuncobj& toCopy) {
-		(*(toCopy.refcount))++;
-		if (--(*refcount) == 0) {
-			delete refcount;
-			if (real) delete real;
-		}
-		real = toCopy.real;
-		refcount = toCopy.refcount;
-		return *this;
-	}
-	R operator()(I i) {
-		return (*real)(i);
-	}
-	~wrappedfuncobj() {
-		if (--(*refcount) == 0) {
-			delete refcount;
-			if (real) delete real;
-		}
-	}
-	private:
-	funcobj<R, I>* real;
-	int* refcount;
-};
 
 class menuitem {
 	public:
@@ -136,8 +78,8 @@ class submenuitem : public menuitem {
 class actionmenuitem : public menuitem {
 	public:
 		virtual ~actionmenuitem();
-		template <class A> actionmenuitem(A init1, char *name1) {
-			init = wrappedfuncobj<bool, voidtype>(init1);
+		actionmenuitem(const std::function<bool()>& init1, char *name1) {
+			init = init1;
 			name = name1;
 		}
 
@@ -145,13 +87,13 @@ class actionmenuitem : public menuitem {
 		virtual bool shouldMenuBeDrawn();
 
 	private:
-		wrappedfuncobj<bool, voidtype> init;
+		std::function<bool()> init;
 };
 
 class inputmenuitem : public menuitem {
 	public:
-		template <class A> inputmenuitem(  int maxInputLen, 
-				A inputValidator,
+		inputmenuitem(  int maxInputLen, 
+				const std::function<bool(char*)>& inputValidator,
 				char *initInput,
 				char *iie,
 				char *t,
@@ -166,7 +108,7 @@ class inputmenuitem : public menuitem {
 				len = strlen(input);
 			}
 
-			vali = wrappedfuncobj<bool, char*>(inputValidator);
+			vali = inputValidator;
 			invalidInputError = iie;
 			displayError = false;
 
@@ -185,15 +127,15 @@ class inputmenuitem : public menuitem {
 
 		char *invalidInputError;
 		bool displayError;
-		wrappedfuncobj<bool, char*> vali;
+		std::function<bool(char*)> vali;
 };
 
 class togglemenuitem : public menuitem {
 	public:
-		template <class A> togglemenuitem(char *name1, bool state1, A act) {
+		togglemenuitem(char *name1, bool state1, const std::function<void(bool)>& act) {
 			name = name1;
 			state = state1;
-			action = wrappedfuncobj<voidtype, bool>(act);
+			action = act;
 		}
 		virtual ~togglemenuitem();
 		virtual bool activate();
@@ -201,19 +143,19 @@ class togglemenuitem : public menuitem {
 		virtual void draw(bool selected, float x1, float y1, float width, float height, unsigned char alpha);
 	private:
 		bool state;
-		wrappedfuncobj<voidtype, bool> action;
+		std::function<void(bool)> action;
 
 };
 
 class slidermenuitem : public menuitem {
 	public:
-		template <class A> slidermenuitem(char *name1, char** states1, int len1, int curstate1, A act) {
+		slidermenuitem(char *name1, char** states1, int len1, int curstate1, const std::function<void(int)>& act) {
 			name = name1;
 			states = states1;
 			len = len1;
 			curstate = curstate1;
 			newcurstate = curstate1;
-			action = wrappedfuncobj<voidtype, int>(act);
+			action = act;
 		}
 		virtual ~slidermenuitem();
 		virtual void key_input_non_active(int key);
@@ -224,7 +166,7 @@ class slidermenuitem : public menuitem {
 	private:
 		char** states;
 		int curstate, len, newcurstate;
-		wrappedfuncobj<voidtype, int> action;
+		std::function<void(int)> action;
 };
 
 #endif

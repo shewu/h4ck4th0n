@@ -6,7 +6,6 @@
 #endif
 
 #include "ServerConnectViewController.h"
-#include "menufuncs.h"
 
 extern char* ipaddy;
 static HBViewMode finishedView = kHBNoView;
@@ -27,7 +26,7 @@ bool ServerConnectViewController::quit() {
 	return true;
 }
 
-static bool goBack(voidtype) {
+static bool goBack() {
 	finishedView = kHBMainMenuView;
 	return true;
 }
@@ -39,7 +38,7 @@ ServerConnectViewController::ServerConnectViewController() {
 	serverConnectMenu = new menu();
 	serverConnectMenu->add_menuitem(new inputmenuitem(20, menuGetIP, (char *)"", (char *)"Must not be empty", (char *)"Enter Server IP Address", (char *)"Stuff"));
 	serverConnectMenu->add_menuitem(new actionmenuitem(goBack, (char *)"Back"));
-	serverConnectMenu->add_menuitem(new actionmenuitem(quitfunc(this), (char *)"Quit"));
+	serverConnectMenu->add_menuitem(new actionmenuitem([this](){return quit();}, (char *)"Quit"));
 
 	serverConnectMenu->set_active(true);
 }

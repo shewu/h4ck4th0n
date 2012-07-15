@@ -23,7 +23,7 @@ class GameViewController : public HBViewController {
 		unsigned int albuf[3], alsrcs[ALSRCS];
 		Socket *sock;
 		SocketConnection* sc;
-		MirroringWorld world;
+		MirroringWorld* world;
 		float angle;
 		int myId;
 		int latestPacket;
@@ -50,7 +50,7 @@ class leavefunc {
 		leavefunc(GameViewController* gvc) {
 			_gvc = gvc;
 		}
-		bool operator()(voidtype) {
+		bool operator()() {
 			return _gvc->leave();
 		}
 };

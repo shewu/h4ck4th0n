@@ -40,7 +40,7 @@ bool submenuitem::shouldMenuBeDrawn() {return false;}
 actionmenuitem::~actionmenuitem() { }
 
 bool actionmenuitem::activate() {
-	return init(voidtype());
+	return init();
 }
 
 bool actionmenuitem::shouldMenuBeDrawn() {return true;}

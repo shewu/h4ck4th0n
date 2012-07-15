@@ -40,9 +40,10 @@ std::pair<bool, bool> CTFGame::roundRoundCollision(
 	}
 }
 
+// TODO have this be called from Game
 void CTFGame::onInit() {
-	// TODO make flags
-	// TODO have this be called from Game
+	createFlag(3);
+	createFlag(4);
 }
 
 GamePlayer* CTFGame::onPlayerAdded() {
@@ -58,4 +59,8 @@ void CTFGame::onPlayerRemoved(GamePlayer*) {
 	// TODO have this be called from Game
 	// TODO make sure the GamePlayer gets deleted at some point (and decide whose
 	// responsibility it is)
+}
+
+void CTFGame::createFlag(int regionNum) {
+	world_.addFlagObject(regionNum, [](){}, std::bind(&CTFGame::createFlag, this, regionNum));
 }

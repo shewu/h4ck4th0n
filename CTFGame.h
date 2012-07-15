@@ -22,6 +22,8 @@ class CTFGame : public Game {
         void onPlayerRemoved(GamePlayer*);
         void onInit();
 
+		void createFlag(int regionNum);
+
 };
 
 #endif

@@ -417,6 +417,8 @@ void PhysicsWorld::doSimulation(float dt) {
 		updateRoundObjectsForward(movingRoundObjects, elapsed - knownTime);
 	}
 
+	// TODO callbacks on spawn and on dying
+
 	// Spawning.
 	// For simplicity, we do this on the boundary of a simulation interval.
 	// It won't screw up physics if an object spawns slightly "late",

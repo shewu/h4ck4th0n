@@ -67,8 +67,6 @@ GameViewController::GameViewController() {
 		HBMap hbmap(rp);
 		world = MirroringWorld(hbmap)
 		delete rp;
-
-		myId = -1;
 	}
 	latestPacket = 0;
 

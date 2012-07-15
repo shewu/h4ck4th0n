@@ -132,8 +132,7 @@ int main() {
 
 		// Loop through all clients, and see if there are
 		// any messages to be received.
-        for(auto it = clients.begin();
-                it != clients.end();) {
+        for(auto it = clients.begin(); it != clients.end(); ) {
             auto next_it = it;
             ++next_it;
 

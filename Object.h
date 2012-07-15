@@ -177,6 +177,7 @@ class RectangularObject : public Object
 
 		friend class PhysicsWorld;
 		friend class UnholyGameViewController;
+		friend class HolyGameViewController;
 };
 
 class RectangularWall : public RectangularObject
@@ -284,6 +285,7 @@ class RoundObject : public Object
 
 		friend class PhysicsWorld;
 		friend class UnholyGameViewController;
+		friend class HolyGameViewController;
 
 };
 
@@ -489,6 +491,7 @@ class MovingRoundObject : public RoundObject
 
 		friend class PhysicsWorld;
 		friend class UnholyGameViewController;
+		friend class HolyGameViewController;
 };
 
 #endif

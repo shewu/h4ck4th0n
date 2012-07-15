@@ -5,6 +5,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "CL/cl.hpp"
+#include <vector>
 
 #include "GameViewController.h"
 
@@ -13,9 +14,9 @@ class HolyGameViewController : public GameViewController {
 		void _initGL();
 		cl::Context context;
 		cl::Program program;
-		vector<cl::Device> devices;
+		std::vector<cl::Device> devices;
 		cl::CommandQueue cq;
-		vector<cl::Memory> bs;
+		std::vector<cl::Memory> bs;
 		cl::Image2DGL igl;
 		GLuint texture;
 

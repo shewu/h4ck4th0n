@@ -1,8 +1,8 @@
+#include "HolyGameViewController.h"
+
 #include <iostream>
 #include <fstream>
 #include <cmath>
-
-#include "HolyGameViewController.h"
 
 HolyGameViewController::HolyGameViewController() : GameViewController() {
 	_initGL();
@@ -65,10 +65,10 @@ void HolyGameViewController::render() {
 	}
 	
 	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
-	if (focusx < world.minX+14) focusx += (14-focusx+world.minX)*(14-focusx+world.minX)/28.0;
-	if (focusx > world.maxX-14) focusx -= (14+focusx-world.maxX)*(14+focusx-world.maxX)/28.0;
-	if (focusy < world.minY+14) focusy += (14-focusy+world.minY)*(14-focusy+world.minY)/28.0;
-	if (focusy > world.maxY-14) focusy -= (14+focusy-world.maxY)*(14+focusy-world.maxY)/28.0;
+	if (focusx < world.getMinX()+14) focusx += (14-focusx+world.getMinX())*(14-focusx+world.getMinX())/28.0;
+	if (focusx > world.getMaxX()-14) focusx -= (14+focusx-world.getMaxX())*(14+focusx-world.getMaxX())/28.0;
+	if (focusy < world.getMinY()+14) focusy += (14-focusy+world.getMinY())*(14-focusy+world.getMinY())/28.0;
+	if (focusy > world.getMaxY()-14) focusy -= (14+focusy-world.getMaxY())*(14+focusy-world.getMaxY())/28.0;
 	
 	float obspoints[4*world.obstacles.size()];
 	unsigned char obscolor[4*world.obstacles.size()];
@@ -155,10 +155,10 @@ void HolyGameViewController::render() {
 	renderKern.setArg(16, igl);
 	renderKern.setArg(17, WIDTH);
 	renderKern.setArg(18, HEIGHT);
-	renderKern.setArg(19, world.minX);
-	renderKern.setArg(20, world.maxX);
-	renderKern.setArg(21, world.minY);
-	renderKern.setArg(22, world.maxY);
+	renderKern.setArg(19, world.getMinX());
+	renderKern.setArg(20, world.getMaxX());
+	renderKern.setArg(21, world.getMinY());
+	renderKern.setArg(22, world.getMaxY());
 	cq.enqueueNDRangeKernel(renderKern, cl::NullRange, cl::NDRange((WIDTH+15)/16*16, (HEIGHT+15)/16*16), cl::NDRange(16, 16));
 	cq.enqueueReleaseGLObjects(&bs);
 	cq.finish();

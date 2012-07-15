@@ -68,21 +68,21 @@ void HolyGameViewController::_initGL() {
 
 void HolyGameViewController::render() {
 	glDisable(GL_DEPTH_TEST);
-	if (world.getMyObject() == NULL) {
+	if (world->getMyObject() == NULL) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		return;
 	}
 
-	map<int, MovingRoundObject*> const& roundObjects = world.getMovingRoundObjects();
+	map<int, MovingRoundObject*> const& roundObjects = world->getMovingRoundObjects();
 	
-	float focusx = world.getMyObject()->center.x;
-	float focusy = world.getMyObject()->center.y;
-	if (focusx < world.getMinX()+14) focusx += (14-focusx+world.getMinX())*(14-focusx+world.getMinX())/28.0;
-	if (focusx > world.getMaxX()-14) focusx -= (14+focusx-world.getMaxX())*(14+focusx-world.getMaxX())/28.0;
-	if (focusy < world.getMinY()+14) focusy += (14-focusy+world.getMinY())*(14-focusy+world.getMinY())/28.0;
-	if (focusy > world.getMaxY()-14) focusy -= (14+focusy-world.getMaxY())*(14+focusy-world.getMaxY())/28.0;
+	float focusx = world->getMyObject()->center.x;
+	float focusy = world->getMyObject()->center.y;
+	if (focusx < world->getMinX()+14) focusx += (14-focusx+world->getMinX())*(14-focusx+world->getMinX())/28.0;
+	if (focusx > world->getMaxX()-14) focusx -= (14+focusx-world->getMaxX())*(14+focusx-world->getMaxX())/28.0;
+	if (focusy < world->getMinY()+14) focusy += (14-focusy+world->getMinY())*(14-focusy+world->getMinY())/28.0;
+	if (focusy > world->getMaxY()-14) focusy -= (14+focusy-world->getMaxY())*(14+focusy-world->getMaxY())/28.0;
 
-	map<int, RectangularWall*> const& rectangularWalls = world.getRectangularWalls();
+	map<int, RectangularWall*> const& rectangularWalls = world->getRectangularWalls();
 	
 	float obspoints[4*rectangularWalls.size()];
 	unsigned char obscolor[4*rectangularWalls.size()];
@@ -137,19 +137,19 @@ void HolyGameViewController::render() {
 	cl::Buffer objsizebuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 2*roundObjects.size()*sizeof(float), objsize, NULL);
 	cl::Buffer objcolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*roundObjects.size()*sizeof(char), objcolor, NULL);
 	
-	float lightpos[3*world.getLights().size()];
-	unsigned char lightcolor[4*world.getLights().size()];
-	for (unsigned i = 0; i < world.getLights().size(); i++) {
-		lightpos[3*i] = world.getLights()[i].getPosition().x;
-		lightpos[3*i+1] = world.getLights()[i].getPosition().y;
-		lightpos[3*i+2] = world.getLights()[i].getPosition().z;
-		lightcolor[4*i] = world.getLights()[i].getColor().getR();
-		lightcolor[4*i+1] = world.getLights()[i].getColor().getG();
-		lightcolor[4*i+2] = world.getLights()[i].getColor().getB();
-		lightcolor[4*i+3] = world.getLights()[i].getColor().getA();
+	float lightpos[3*world->getLights().size()];
+	unsigned char lightcolor[4*world->getLights().size()];
+	for (unsigned i = 0; i < world->getLights().size(); i++) {
+		lightpos[3*i] = world->getLights()[i].getPosition().x;
+		lightpos[3*i+1] = world->getLights()[i].getPosition().y;
+		lightpos[3*i+2] = world->getLights()[i].getPosition().z;
+		lightcolor[4*i] = world->getLights()[i].getColor().getR();
+		lightcolor[4*i+1] = world->getLights()[i].getColor().getG();
+		lightcolor[4*i+2] = world->getLights()[i].getColor().getB();
+		lightcolor[4*i+3] = world->getLights()[i].getColor().getA();
 	}
-	cl::Buffer lightposbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 3*world.getLights().size()*sizeof(float), lightpos, NULL);
-	cl::Buffer lightcolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.getLights().size()*sizeof(char), lightcolor, NULL);
+	cl::Buffer lightposbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 3*world->getLights().size()*sizeof(float), lightpos, NULL);
+	cl::Buffer lightcolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world->getLights().size()*sizeof(char), lightcolor, NULL);
 	
 	cq.enqueueAcquireGLObjects(&bs);
 	cl::Kernel renderKern(program, "render", NULL);
@@ -166,16 +166,16 @@ void HolyGameViewController::render() {
 	renderKern.setArg(10, objpointbuf);
 	renderKern.setArg(11, objsizebuf);
 	renderKern.setArg(12, objcolorbuf);
-	renderKern.setArg(13, (int)world.getLights().size());
+	renderKern.setArg(13, (int)world->getLights().size());
 	renderKern.setArg(14, lightposbuf);
 	renderKern.setArg(15, lightcolorbuf);
 	renderKern.setArg(16, igl);
 	renderKern.setArg(17, WIDTH);
 	renderKern.setArg(18, HEIGHT);
-	renderKern.setArg(19, world.getMinX());
-	renderKern.setArg(20, world.getMaxX());
-	renderKern.setArg(21, world.getMinY());
-	renderKern.setArg(22, world.getMaxY());
+	renderKern.setArg(19, world->getMinX());
+	renderKern.setArg(20, world->getMaxX());
+	renderKern.setArg(21, world->getMinY());
+	renderKern.setArg(22, world->getMaxY());
 	cq.enqueueNDRangeKernel(renderKern, cl::NullRange, cl::NDRange((WIDTH+15)/16*16, (HEIGHT+15)/16*16), cl::NDRange(16, 16));
 	cq.enqueueReleaseGLObjects(&bs);
 	cq.finish();

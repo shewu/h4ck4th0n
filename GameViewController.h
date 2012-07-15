@@ -8,6 +8,8 @@
 #include "MirroringWorld.h"
 #include "AL/alut.h"
 
+#include <memory>
+
 extern SDL_Surface* screen;
 extern char* ipaddy;
 extern int WIDTH;
@@ -23,7 +25,7 @@ class GameViewController : public HBViewController {
 		unsigned int albuf[3], alsrcs[ALSRCS];
 		Socket *sock;
 		SocketConnection* sc;
-		MirroringWorld* world;
+		std::unique_ptr<MirroringWorld> world;
 		float angle;
 		int myId;
 		int latestPacket;

@@ -64,7 +64,7 @@ GameViewController::GameViewController() {
 
 		angle = rp->read_float();
 		HBMap hbmap(rp);
-		world = new MirroringWorld(hbmap);
+		world.reset(new MirroringWorld(hbmap));
 		delete rp;
 
 		myId = -1;

@@ -17,10 +17,10 @@ bool CTFGame::roundWallCollision(
 	int rn = obj1->getRegionNumber();
 	if (wall->getWallType() == WT_DEADLY) {
 		return rn == 1 || rn == 2;
-	} else if (wall->getWallType() == WT_GOAL) {
-		// TODO also need to check that the goal is for the right team
-		// suggest adding to the WallType enum... that will hold for now...
-		return rn == 3 || rn == 4;
+	} else if (wall->getWallType() == WT_GOAL1) {
+		return rn == 4;
+	} else if (wall->getWallType() == WT_GOAL2) {
+		return rn == 3;
 	} else {
 		return false;
 	}

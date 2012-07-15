@@ -26,13 +26,14 @@ enum WallType
     // walls should just be able to specify a coeff, so WT_BOUNCY 
     // should probably not be its own thing
     WT_BOUNCY,
-    WT_GOAL,
+    WT_GOAL1,
+    WT_GOAL2,
 
     NUM_WALLTYPES // always the last mode
 };
 
 const std::string wallTypeStrings[] = {
-    "normal", "deadly", "bouncy"
+    "normal", "deadly", "bouncy", "goal1", "goal2"
 };
 
 enum GameMode {

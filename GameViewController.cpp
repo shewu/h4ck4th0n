@@ -158,18 +158,15 @@ void GameViewController::process() {
 	}
 
 	Uint8* keystate = SDL_GetKeyState(NULL);
+	UserInput ui(!!keystate[SDLK_a],
+	             !!keystate[SDLK_d],
+	             !!keystate[SDLK_w],
+	             !!keystate[SDLK_s],
+	             angle);
 	WritePacket wp(CTS_USER_STATE);
-	wp.write_float(angle);
-	char keystate_byte = 0;
-	if(!mainmenu->is_active()) {
-		if (keystate[SDLK_a]) keystate_byte ^= 1;
-		if (keystate[SDLK_d]) keystate_byte ^= 2;
-		if (keystate[SDLK_w]) keystate_byte ^= 4;
-		if (keystate[SDLK_s]) keystate_byte ^= 8;
-	}
-	wp.write_char(keystate_byte);
+	ui.writeToPacket(&wp);
 	sc->send_packet(wp);
-	
+
 #ifndef __APPLE__
 	ALfloat alpos[] = { world->objects[myId].p.x, world->objects[myId].p.y, 0 };
 	ALfloat alvel[] = { world->objects[myId].v.x, world->objects[myId].v.y, 0 };

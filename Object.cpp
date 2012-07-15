@@ -105,6 +105,7 @@ void MovingRoundObject::startShrinking(MovingRoundObject *parent, Vector2D const
 	if(parent != NULL) {
 		parent->numChildren++;
 	}
+	onDeathCallback();
 }
 
 void MovingRoundObject::kill() {

@@ -417,8 +417,6 @@ void PhysicsWorld::doSimulation(float dt) {
 		updateRoundObjectsForward(movingRoundObjects, elapsed - knownTime);
 	}
 
-	// TODO callbacks on spawn and on dying
-
 	// Spawning.
 	// For simplicity, we do this on the boundary of a simulation interval.
 	// It won't screw up physics if an object spawns slightly "late",
@@ -469,6 +467,9 @@ void PhysicsWorld::doSimulation(float dt) {
 			continue;
 		}
 
+		obj.velocity = Vector2D(0.0f, 0.0f);
 		obj.state = MOS_ALIVE;
+
+		obj.onSpawnCallback();
 	}
 }

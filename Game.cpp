@@ -5,8 +5,6 @@
 #include <cstdlib>
 #include <cstring>
 
-// TODO spawning
-
 using std::bind;
 using std::make_pair;
 using std::map;

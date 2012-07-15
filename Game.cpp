@@ -41,6 +41,8 @@ bool Game::addPlayer(SocketConnection* sc) {
 	// dumb handshake
 	WritePacket wp(STC_INITIAL_ANGLE, 4);
 	wp.write_float(gp->input.getTheta());
+	world_.getMap().writeToPacket(wp);
+
 	sc->send_packet(wp);
 
 	return true;

@@ -55,8 +55,6 @@ void PhysicsWorld::removeDeadObjects() {
 }
 
 void PhysicsWorld::writeToPacket(WritePacket *wp) const {
-	// TODO write dimenions of the board
-
 	wp->write_int(movingRoundObjects.size());
 	for (auto pa : movingRoundObjects) {
 		MovingRoundObject* obj = pa.second;

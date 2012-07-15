@@ -25,6 +25,21 @@ class HBMap {
             parse(filename);
         }
 
+        /**
+         * Creates an HBMap instance by reading from the ReadPacket
+         */
+        HBMap(ReadPacket *rp) {
+			width = rp->read_int();
+			height = rp->read_int();
+		}
+
+		void writeToPacket(WritePacket& wp) const {
+			wp.write_int(width);
+			wp.write_int(height);
+		}
+		// TODO read/write more info from these
+
+		// TODO we should consider making map noncopyable
 		/**
 		 * Copy constructor for HBMap.
 		 *

@@ -30,7 +30,9 @@ class World
          */
 		World(HBMap const&);
 
-		bool spawn(std::vector<SpawnDescriptor> const& possibleSpawns, MovingRoundObject& obj);
+		HBMap const& getMap() const {
+			return worldMap;
+		}
 
         /**
          * Returns the minimum x coordinate of the world.

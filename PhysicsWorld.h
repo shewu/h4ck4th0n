@@ -6,7 +6,7 @@
 #include <functional>
 #include <vector>
 
-class PhysicsWorld : World
+class PhysicsWorld : public World
 {
 	public:
 		typedef std::function<bool(ObjectPtr<MovingRoundObject>,

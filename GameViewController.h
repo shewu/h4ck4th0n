@@ -27,7 +27,6 @@ class GameViewController : public HBViewController {
 		SocketConnection* sc;
 		std::unique_ptr<MirroringWorld> world;
 		float angle;
-		int myId;
 		int latestPacket;
 		int count;
 		int oldTime;

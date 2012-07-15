@@ -74,12 +74,12 @@ void MultiGameViewController::_initGL() {
 
 void MultiGameViewController::render() {
 	glDisable(GL_DEPTH_TEST);
-	if (myId == -1) {
+	if (world.getMyObject() == NULL) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		return;
 	}
 
-	float focusx = world.objects[myId].p.x, focusy = world.objects[myId].p.y;
+	float focusx = world.getMyObject()->center.x, focusy = world.getMyObject()->center.y;
 	if (focusx < world.minX + 14) focusx += (14 - focusx + world.minX) * (14 - focusx + world.minX) / 28.0;
 	if (focusx > world.maxX - 14) focusx -= (14 + focusx - world.maxX) * (14 + focusx - world.maxX) / 28.0;
 	if (focusy < world.minY + 14) focusy += (14 - focusy + world.minY) * (14 - focusy + world.minY) / 28.0;

@@ -6,8 +6,8 @@
 class MirroringWorld : public World
 {
 	public:
-		MirroringWorld() : World() { }
-		MirroringWorld(HBMap const& hbmap) : World(hbmap) { }
+		MirroringWorld() : World(), myId_(-1) { }
+		MirroringWorld(HBMap const& hbmap) : World(hbmap), myId_(-1) { }
 
 		void readFromPacket(ReadPacket *rp);
 

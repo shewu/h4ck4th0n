@@ -22,6 +22,10 @@ Game::Game(HBMap const& hbmap) :
 		std::bind(&Game::roundRoundCollision, this, _1, _2));
 }
 
+void Game::init() {
+	onInit();
+}
+
 bool Game::addPlayer(SocketConnection* sc) {
 	if (players.find(sc) != players.end()) {
 		return false;

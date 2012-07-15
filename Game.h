@@ -41,6 +41,8 @@ class Game {
 
         virtual ~Game() { }
 
+        void init();
+
 		bool addPlayer(SocketConnection*);
 		void removePlayer(SocketConnection*);
 

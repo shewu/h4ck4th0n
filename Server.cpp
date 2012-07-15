@@ -94,6 +94,7 @@ int main() {
 	WritePacket worldWritePacket(STC_WORLD_DATA);
 
 	Game* game = new CTFGame(HBMap("map.hbm"));
+	game->init();
 
 	// Main server loop
     while(true) {

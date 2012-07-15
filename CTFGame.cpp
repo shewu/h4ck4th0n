@@ -40,7 +40,6 @@ std::pair<bool, bool> CTFGame::roundRoundCollision(
 	}
 }
 
-// TODO have this be called from Game
 void CTFGame::onInit() {
 	createFlag(3);
 	createFlag(4);

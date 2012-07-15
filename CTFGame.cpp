@@ -18,11 +18,14 @@ bool CTFGame::roundWallCollision(
 	if (wall->getWallType() == WT_DEADLY) {
 		return rn == 1 || rn == 2;
 	} else if (wall->getWallType() == WT_GOAL) {
+		// TODO also need to check that the goal is for the right team
+		// suggest adding to the WallType enum... that will hold for now...
 		return rn == 3 || rn == 4;
 	} else {
 		return false;
 	}
 }
+
 std::pair<bool, bool> CTFGame::roundRoundCollision(
 		ObjectPtr<MovingRoundObject> obj1, ObjectPtr<MovingRoundObject> obj2) {
 	int rn1 = obj1->getRegionNumber();
@@ -35,4 +38,24 @@ std::pair<bool, bool> CTFGame::roundRoundCollision(
 	} else {
 		return pair<bool, bool>(false, false);
 	}
+}
+
+void CTFGame::onInit() {
+	// TODO make flags
+	// TODO have this be called from Game
+}
+
+GamePlayer* CTFGame::onPlayerAdded() {
+	GamePlayer* gp = new GamePlayer();
+
+	// TODO add the object
+
+	return gp;
+}
+
+void CTFGame::onPlayerRemoved(GamePlayer*) {
+	// TODO implement this
+	// TODO have this be called from Game
+	// TODO make sure the GamePlayer gets deleted at some point (and decide whose
+	// responsibility it is)
 }

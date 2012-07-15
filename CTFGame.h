@@ -18,6 +18,9 @@ class CTFGame : public Game {
         	ObjectPtr<MovingRoundObject>, ObjectPtr<RectangularWall>);
         std::pair<bool, bool> roundRoundCollision(
         	ObjectPtr<MovingRoundObject>, ObjectPtr<MovingRoundObject>);
+        GamePlayer* onPlayerAdded();
+        void onPlayerRemoved(GamePlayer*);
+        void onInit();
 
 };
 

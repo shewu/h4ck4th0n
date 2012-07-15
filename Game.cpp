@@ -8,6 +8,7 @@
 // TODO spawning
 
 using std::bind;
+using std::make_pair;
 using std::map;
 using std::pair;
 using std::placeholders::_1;
@@ -26,10 +27,14 @@ bool Game::addPlayer(SocketConnection* sc) {
 		return false;
 	}
 
-	players.insert(pair<SocketConnection*, GamePlayer>(
-				sc, GamePlayer()));
+	GamePlayer* gp = onPlayerAdded();
+	if (gp == NULL) {
+		return false;
+	}
 
-	// TODO handshake
+	players.insert(make_pair(sc, gp));
+
+	// TODO handshake (i.e., send the initial angle and maybe something else?)
 
 	return true;
 }
@@ -39,10 +44,10 @@ void Game::removePlayer(SocketConnection* sc) {
 	if (iter == players.end()) {
 		return;
 	}
-	GamePlayer& player = iter->second;
+	GamePlayer* player = iter->second;
 
-	if (!player.obj.empty() && player.obj->getState() == MOS_ALIVE) {
-		player.obj->instantKill();
+	if (!player->obj.empty() && player->obj->getState() == MOS_ALIVE) {
+		player->obj->instantKill();
 	}
 
 	players.erase(iter);
@@ -53,21 +58,21 @@ int Game::getObjectIDOf(SocketConnection* sc) {
 	if (iter == players.end()) {
 		return kNoPlayerExists;
 	}
-	GamePlayer& player = iter->second;
+	GamePlayer* player = iter->second;
 
-	if (player.obj.empty()) {
+	if (player->obj.empty()) {
 		return kNoObjectExists;
 	} else {
-		return player.obj->getID();
+		return player->obj->getID();
 	}
 }
 
 void Game::applyForcesFromInput(float dt) {
 	for (auto iter = players.begin(); iter != players.end(); ++iter) {
-		GamePlayer& player = iter->second;
-		if (!player.obj.empty()) {
-			Vector2D accel = player.input.getAcceleration();
-			player.obj->setVelocity(player.obj->getVelocity() + accel * dt);
+		GamePlayer* player = iter->second;
+		if (!player->obj.empty()) {
+			Vector2D accel = player->input.getAcceleration();
+			player->obj->setVelocity(player->obj->getVelocity() + accel * dt);
 		}
 	}
 }
@@ -77,9 +82,9 @@ void Game::processPacket(SocketConnection* sc, ReadPacket* rp) {
 	if (iter == players.end()) {
 		return;
 	}
-	GamePlayer& player = iter->second;
+	GamePlayer* player = iter->second;
 
-	player.input = UserInput(rp);
+	player->input = UserInput(rp);
 }
 
 void Game::update(float dt) {

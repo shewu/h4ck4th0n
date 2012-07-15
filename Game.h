@@ -15,9 +15,7 @@ struct GamePlayer {
 
 class Game {
     private:
-        PhysicsWorld world_;
-
-        std::map<SocketConnection*, GamePlayer> players;
+        std::map<SocketConnection*, GamePlayer*> players;
 
         void applyForcesFromInput(float dt);
 
@@ -25,10 +23,18 @@ class Game {
 		Game(Game const&);
 		Game& operator=(Game const&);
 
+		// interface that needs to be implemented by inheriting Game class
         virtual bool roundWallCollision(
         	ObjectPtr<MovingRoundObject>, ObjectPtr<RectangularWall>) = 0;
         virtual std::pair<bool, bool> roundRoundCollision(
         	ObjectPtr<MovingRoundObject>, ObjectPtr<MovingRoundObject>) = 0;
+        virtual void doGameLogic() = 0;
+        virtual GamePlayer* onPlayerAdded() = 0;
+        virtual void onPlayerRemoved(GamePlayer*) = 0;
+        virtual void onInit() = 0;
+
+    protected:
+        PhysicsWorld world_;
 
     public:
         Game(HBMap const& hbmap);
@@ -37,6 +43,7 @@ class Game {
 
 		bool addPlayer(SocketConnection*);
 		void removePlayer(SocketConnection*);
+
 		void processPacket(SocketConnection* sc, ReadPacket* rp);
 		void update(float dt);
 
@@ -52,8 +59,6 @@ class Game {
 		}
 
         void send_sounds_to(SocketConnection* c);
-
-        virtual void doGameLogic() = 0;
 };
 
 #endif

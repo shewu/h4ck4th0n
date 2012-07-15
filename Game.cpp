@@ -38,7 +38,10 @@ bool Game::addPlayer(SocketConnection* sc) {
 
 	players.insert(make_pair(sc, gp));
 
-	// TODO handshake (i.e., send the initial angle and maybe something else?)
+	// dumb handshake
+	WritePacket wp(STC_INITIAL_ANGLE, 4);
+	wp.write_float(gp->input.getTheta());
+	sc->send_packet(wp);
 
 	return true;
 }

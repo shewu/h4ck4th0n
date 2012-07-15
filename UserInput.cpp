@@ -10,7 +10,7 @@ UserInput::UserInput(ReadPacket* rp) {
 	_theta = rp->read_float();
 }
 
-void UserInput::writeToPacket(WritePacket* wp) {
+void UserInput::writeToPacket(WritePacket* wp) const {
 	uint8_t mask = ((uint8_t) _left) |
 	               (((uint8_t) _right) << 1) |
 	               (((uint8_t) _up)    << 2) |

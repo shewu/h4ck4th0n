@@ -27,7 +27,6 @@ class UserInput {
 		    _left(false), _right(false), _up(false), _down(false), _theta(0.0) { }
 
 		UserInput(ReadPacket*);
-		void writeToPacket(WritePacket*);
 
 		/**
 		 * Returns the acceleration vector indicated by the key input; takes into account
@@ -35,6 +34,12 @@ class UserInput {
 		 * @return the acceleration indicated by the key input.
 		 */
 		Vector2D getAcceleration() const;
+
+		void writeToPacket(WritePacket*) const;
+
+		float getTheta() const {
+			return _theta;
+		}
 };
 
 #endif

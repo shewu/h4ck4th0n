@@ -376,6 +376,8 @@ void PhysicsWorld::doSimulation(float dt) {
 					}
 				}
 				doRoundObjectDisappearing(obj, collideDisappear, collideEvents, e.time, dt);
+
+				break;
 			}
 
 			case ET_ROUND_DISAPPEAR:
@@ -406,6 +408,13 @@ void PhysicsWorld::doSimulation(float dt) {
 				if (parent != NULL) {
 					doRoundObjectDisappearing(*parent, collideDisappear, collideEvents, e.time, dt);
 				}
+
+				break;
+			}
+
+			case ET_NONE:
+			{
+				assert(false); // should never get here
 			}
 		}
 

@@ -17,6 +17,8 @@ class HBViewController {
 		virtual void render() = 0;
 		/* quits */
 		virtual bool quit() = 0;
+
+		virtual ~HBViewController() { }
 };
 
 #endif

@@ -15,7 +15,7 @@ class Object
 {
 	private:
 		MaterialPtr material;
-		unsigned id;
+		int id;
 		unsigned refCount;
 
 		static unsigned nextId;
@@ -58,7 +58,7 @@ class Object
 		/**
 		 * @return the object's unique ID
 		 */
-		unsigned getID() const {
+		int getID() const {
 			return id;
 		}
 
@@ -353,6 +353,9 @@ class MovingRoundObject : public RoundObject
 
 		MovingObjectState state;
 
+		float mass;
+		float heightRatio;
+
 		// MOS_SPAWNING
 		float timeUntilSpawn;
 
@@ -360,15 +363,13 @@ class MovingRoundObject : public RoundObject
 		MovingRoundObject *parent;
 		int numChildren;
 
+		int regionNumber;
+
 		// Callbacks
 		std::function<void()> onSpawnCallback;
 		std::function<void()> onDeathCallback;
 
 		Vector2D velocity;
-		float mass;
-		float heightRatio;
-
-		int regionNumber;
 
 		// helpers used by PhysicsWorld
 		void startShrinking(MovingRoundObject *parent, Vector2D const& velocity);

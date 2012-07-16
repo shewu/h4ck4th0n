@@ -21,8 +21,8 @@ spawn 2 22 25
 spawn 2 21 25
 
 flag 2 15 25
-wall normal 0 0 25 -25
-wall normal 50 0 25 -25
-wall normal 50 50 -25 25
-wall normal 0 50 -25 -25
+wall normal -25 -25 -25 25
+wall normal -25 25 25 25
+wall normal 25 25 25 -25
+wall normal 25 -25 -25 -25
 

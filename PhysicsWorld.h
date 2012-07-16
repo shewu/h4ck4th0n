@@ -19,6 +19,11 @@ class PhysicsWorld : public World
 		PhysicsWorld(HBMap const& hbmap) : World(hbmap) {
 			roundWallCollisionCallback = [](ObjectPtr<MovingRoundObject> a, ObjectPtr<RectangularWall> b) { return false; };
 			roundRoundCollisionCallback = [](ObjectPtr<MovingRoundObject> a, ObjectPtr<MovingRoundObject> b) { return std::pair<bool,bool>(false,false); };
+			for (auto wallDesc : hbmap.getRectangularWalls()) {
+				RectangularWall* wall = new RectangularWall(
+					wallDesc.getPos1(), wallDesc.getPos2(), wallDesc.getWallType());
+				rectangularWalls.insert(std::pair<int,RectangularWall*>(wall->getID(),wall));
+			}
 		}
 
 		void applyForces(float dt);

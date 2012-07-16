@@ -126,7 +126,7 @@ void GameViewController::process() {
 #ifndef __APPLE__
 #endif
 	}
-	
+
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		switch(event.type) {
@@ -168,8 +168,14 @@ void GameViewController::process() {
 	sc->send_packet(wp);
 
 #ifndef __APPLE__
-	ALfloat alpos[] = { world->getMyObject()->center.x,   world->getMyObject()->center.y,   0 };
-	ALfloat alvel[] = { world->getMyObject()->velocity.x, world->getMyObject()->velocity.y, 0 };
+	Vector2D center(0.0f, 0.0f);
+	Vector2D velocity(0.0f, 0.0f);
+	if (world->getMyObject() != NULL) {
+		center = world->getMyObject()->center;
+		velocity = world->getMyObject()->velocity;
+	}
+	ALfloat alpos[] = { center.x,   center.y,   0 };
+	ALfloat alvel[] = { velocity.x, velocity.y, 0 };
 	ALfloat alori[] = { 0.0, cos(angle), sin(angle), 0.0, 1.0, 0.0 };
 	alListenerfv(AL_POSITION, alpos);
 	alListenerfv(AL_VELOCITY, alvel);

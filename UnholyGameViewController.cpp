@@ -53,8 +53,12 @@ void UnholyGameViewController::render() {
 
 	glLoadIdentity();
 	
-	float focusx = world->getMyObject()->center.x;
-	float focusy = world->getMyObject()->center.y;
+	float focusx = 0.0f;
+	float focusy = 0.0f;
+	if (world->getMyObject() != NULL) {
+		focusx = world->getMyObject()->center.x;
+		focusy = world->getMyObject()->center.y;
+	}
 	if (focusx < world->getMinX()+6) focusx = world->getMinX()+6;
 	if (focusx > world->getMaxX()-6) focusx = world->getMaxX()-6;
 	if (focusy < world->getMinY()+6) focusy = world->getMinY()+6;

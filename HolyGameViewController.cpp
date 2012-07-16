@@ -74,9 +74,13 @@ void HolyGameViewController::render() {
 	}
 
 	map<int, MovingRoundObject*> const& roundObjects = world->getMovingRoundObjects();
-	
-	float focusx = world->getMyObject()->center.x;
-	float focusy = world->getMyObject()->center.y;
+
+	float focusx = 0.0f;
+	float focusy = 0.0f;
+	if (world->getMyObject() != NULL) {
+		focusx = world->getMyObject()->center.x;
+		focusy = world->getMyObject()->center.y;
+	}
 	if (focusx < world->getMinX()+14) focusx += (14-focusx+world->getMinX())*(14-focusx+world->getMinX())/28.0;
 	if (focusx > world->getMaxX()-14) focusx -= (14+focusx-world->getMaxX())*(14+focusx-world->getMaxX())/28.0;
 	if (focusy < world->getMinY()+14) focusy += (14-focusy+world->getMinY())*(14-focusy+world->getMinY())/28.0;

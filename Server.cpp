@@ -61,7 +61,6 @@ void verify() {
 void remove_client(SocketConnection *sc) {
     s->closeConnection(sc);
     clients.erase(sc);
-    delete sc;
 }
 
 int main() {

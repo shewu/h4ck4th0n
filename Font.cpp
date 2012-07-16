@@ -39,7 +39,7 @@ void textquad::inc(float s) {
 void init_font() {
 	FILE *bitmapfile = fopen("fontmap.bitmap","r");
 	bitmapdata = (unsigned char *)malloc(fontmap_width * fontmap_height * 4);
-	size_t freadresult = fread(bitmapdata, 1, fontmap_width * fontmap_height * 4, bitmapfile);
+	fread(bitmapdata, 1, fontmap_width * fontmap_height * 4, bitmapfile);
 	fclose(bitmapfile);
 
 	glGenTextures(1, &font_texture);
@@ -55,10 +55,10 @@ void init_font() {
 	free(bitmapdata);
 
 	FILE *fontdata = fopen("font.dat","r");
-	freadresult = fread((char *)character_x1, 1, 256*4, fontdata); // this seems to be slightly wonky...
-	freadresult = fread((char *)character_x2, 1, 256*4, fontdata); // this too...
-	freadresult = fread((char *)character_y1, 1, 256*4, fontdata);
-	freadresult = fread((char *)character_y2, 1, 256*4, fontdata);
+	fread((char *)character_x1, 1, 256*4, fontdata); // this seems to be slightly wonky...
+	fread((char *)character_x2, 1, 256*4, fontdata); // this too...
+	fread((char *)character_y1, 1, 256*4, fontdata);
+	fread((char *)character_y2, 1, 256*4, fontdata);
 	fclose(fontdata);
 }
 

@@ -91,8 +91,8 @@ void GameViewController::process() {
 			break;
 		if (rp->message_type == STC_SOUND && rp->packet_number >= latestPacket - MAX_SOUND_LATENESS) {
 			char c = rp->read_char();
-		    int v1 = rp->read_float();
-		    int v2 = rp->read_float();
+		    float v1 = rp->read_float();
+		    float v2 = rp->read_float();
 
 			int src = -1;
 			for (int s = 0; s < ALSRCS; s++) {
@@ -176,7 +176,7 @@ void GameViewController::process() {
 	}
 	ALfloat alpos[] = { center.x,   center.y,   0 };
 	ALfloat alvel[] = { velocity.x, velocity.y, 0 };
-	ALfloat alori[] = { 0.0, cos(angle), sin(angle), 0.0, 1.0, 0.0 };
+	ALfloat alori[] = { 0.0, (ALfloat) cos(angle), (ALfloat) sin(angle), 0.0, 1.0, 0.0 };
 	alListenerfv(AL_POSITION, alpos);
 	alListenerfv(AL_VELOCITY, alvel);
 	alListenerfv(AL_ORIENTATION, alori);

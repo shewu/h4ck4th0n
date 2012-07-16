@@ -142,7 +142,7 @@ void HBMap::parseSpawn(std::string& s) {
         y = atoi(st.nextToken().c_str());
     }
 
-    if (id < 0 || id >= teams.size() || st.hasMoreTokens()) {
+    if (id < 0 || id >= (int) teams.size() || st.hasMoreTokens()) {
         throw ParseException("parseSpawn fail");
     }
 
@@ -162,7 +162,7 @@ void HBMap::parseFlag(std::string& s) {
         y = atoi(st.nextToken().c_str());
     }
 
-    if (id < 0 || id >= teams.size() || st.hasMoreTokens()) {
+    if (id < 0 || id >= (int) teams.size() || st.hasMoreTokens()) {
         throw ParseException("parseFlag fail");
     }
 

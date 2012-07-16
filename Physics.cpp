@@ -407,6 +407,11 @@ void PhysicsWorld::doSimulation(float dt) {
 					doRoundObjectDisappearing(*parent, collideDisappear, collideEvents, e.time, dt);
 				}
 			}
+
+			case ET_NONE:
+			{
+				assert(false); // should never get here
+			}
 		}
 
 		knownTime = e.time;

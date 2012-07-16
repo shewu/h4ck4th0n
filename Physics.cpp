@@ -298,10 +298,10 @@ void PhysicsWorld::doSimulation(float dt) {
 					float nv1 = obj1.velocity * normal;
 					float nv2 = obj2.velocity * normal;
 					obj1.velocity -=
-					                 (nv1/(normal*normal))*normal +
+					                 (nv1/(normal*normal))*normal -
 					                 (((obj1.mass-obj2.mass)/(obj1.mass+obj2.mass)*nv1+2*obj2.mass/(obj1.mass+obj2.mass)*nv2)/(normal*normal))*normal;
 					obj2.velocity -=
-					                 (nv2/(normal*normal))*normal +
+					                 (nv2/(normal*normal))*normal -
 					                 (((obj2.mass-obj1.mass)/(obj2.mass+obj1.mass)*nv2+2*obj1.mass/(obj2.mass+obj1.mass)*nv1)/(normal*normal))*normal;
 				}
 

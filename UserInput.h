@@ -40,6 +40,22 @@ class UserInput {
 		float getTheta() const {
 			return _theta;
 		}
+
+		bool getUp() const {
+			return _up;
+		}
+
+		bool getDown() const {
+			return _down;
+		}
+
+		bool getLeft() const {
+			return _left;
+		}
+
+		bool getRight() const {
+			return _right;
+		}
 };
 
 #endif

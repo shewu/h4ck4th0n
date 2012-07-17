@@ -26,3 +26,4 @@ wall normal -25 25 25 25
 wall normal 25 25 25 -25
 wall normal 25 -25 -25 -25
 
+wall deadly 0 5 0 -5

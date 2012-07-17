@@ -28,7 +28,7 @@ bool PhysicsWorld::objectsIntersect(MovingRoundObject const& obj, RectangularWal
 	if ((dir * wall.p1) < (dir * obj.center) &&
 	    (dir * wall.p2) > (dir * obj.center)) {
 		Vector2D vec = obj.center - wall.p1;
-		Vector2D proj = ((vec*proj) / dir.lengthSquared()) * dir;
+		Vector2D proj = ((vec*dir) / dir.lengthSquared()) * dir;
 		return (vec - proj).lengthSquared() <= obj.radius * obj.radius;
 	}
 

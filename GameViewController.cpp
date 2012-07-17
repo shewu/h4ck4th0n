@@ -93,6 +93,7 @@ void GameViewController::process() {
 			char c = rp->read_char();
 		    float v1 = rp->read_float();
 		    float v2 = rp->read_float();
+		    printf("hi %d %f %f\n", (int)c, v1, v2);
 
 			int src = -1;
 			for (int s = 0; s < ALSRCS; s++) {
@@ -118,11 +119,12 @@ void GameViewController::process() {
 		}
 		else if (rp->message_type != STC_WORLD_DATA || rp->packet_number <= latestPacket) {
 			delete rp;
-			continue;
 		}
-		latestPacket = rp->packet_number;
-		world->readFromPacket(rp);
-		delete rp;
+		else {
+			latestPacket = rp->packet_number;
+			world->readFromPacket(rp);
+			delete rp;
+		}
 #ifndef __APPLE__
 #endif
 	}
@@ -237,9 +239,9 @@ void GameViewController::_initSound() {
 	ori[0] = 0.0; ori[1] = 0.0; ori[2] = 1.0; ori[3] = 0.0; ori[4] = 1.0; ori[5] = 0.0;
 	
 	alutInit(NULL, NULL);
-	albuf[0] = alutCreateBufferFromFile("sounds/boing2.wav");
-	albuf[1] = alutCreateBufferFromFile("sounds/splat2.wav");
-	albuf[2] = alutCreateBufferFromFile("sounds/ding.wav");
+	for (int i = 0; i < NUM_SOUND_TYPES; i++) {
+		albuf[i] = alutCreateBufferFromFile(("sounds/" + kSoundFilenames[i] + ".wav").data());
+	} 
 	alGenSources(ALSRCS, alsrcs);
 #endif
 }

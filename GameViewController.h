@@ -7,6 +7,7 @@
 #include "Packet.h"
 #include "MirroringWorld.h"
 #include "AL/alut.h"
+#include "Sound.h"
 
 #include <memory>
 
@@ -22,7 +23,7 @@ class GameViewController : public HBViewController {
 		void _initSound();
 
 	protected:
-		unsigned int albuf[3], alsrcs[ALSRCS];
+		unsigned int albuf[NUM_SOUND_TYPES], alsrcs[ALSRCS];
 		Socket *sock;
 		SocketConnection* sc;
 		std::unique_ptr<MirroringWorld> world;

@@ -7,6 +7,7 @@
 #include "PhysicsWorld.h"
 #include "Hack.h"
 #include "UserInput.h"
+#include "Sound.h"
 
 struct GamePlayer {
 	UserInput input;
@@ -36,6 +37,8 @@ class Game {
     protected:
         PhysicsWorld world_;
 
+        std::vector<Sound> sounds;
+
     public:
         Game(HBMap const& hbmap);
 
@@ -61,6 +64,14 @@ class Game {
 		}
 
         void send_sounds_to(SocketConnection* c);
+
+		std::vector<Sound> const& getSounds() const {
+			return sounds;
+		}
+
+		void clearSounds() {
+			sounds.clear();
+		}
 };
 
 #endif

@@ -15,15 +15,28 @@ void CTFGame::doGameLogic() {
 bool CTFGame::roundWallCollision(
 		ObjectPtr<MovingRoundObject> obj1, ObjectPtr<RectangularWall> wall) {
 	int rn = obj1->getRegionNumber();
+	bool ans;
 	if (wall->getWallType() == WT_DEADLY) {
-		return rn == 1 || rn == 2;
+		ans = (rn == 1 || rn == 2);
 	} else if (wall->getWallType() == WT_GOAL1) {
-		return rn == 4;
+		ans = (rn == 4);
 	} else if (wall->getWallType() == WT_GOAL2) {
-		return rn == 3;
+		ans = (rn == 3);
 	} else {
-		return false;
+		ans = false;
 	}
+
+	if (ans) {
+		sounds.push_back(Sound(SOUND_BOING2, world_.getCollisionPoint()));
+	} else {
+		if (rn == 1 || rn == 2) {
+			sounds.push_back(Sound(SOUND_SPLAT2, world_.getCollisionPoint()));
+		} else {
+			sounds.push_back(Sound(SOUND_DING, world_.getCollisionPoint()));
+		}
+	}
+
+	return ans;
 }
 
 std::pair<bool, bool> CTFGame::roundRoundCollision(
@@ -32,10 +45,21 @@ std::pair<bool, bool> CTFGame::roundRoundCollision(
 	int rn2 = obj2->getRegionNumber();
 	bool sameType = !( (rn1 == 1 || rn1 == 2) ^ (rn2 == 1 || rn2 == 2) );
 	if (obj1->getState() == MOS_SHRINKING) {
+		if (sameType) {
+			sounds.push_back(Sound(SOUND_SPLAT2, world_.getCollisionPoint()));
+		} else {
+			sounds.push_back(Sound(SOUND_BOING2, world_.getCollisionPoint()));
+		}
 		return pair<bool, bool>(false, sameType);
 	} else if (obj2->getState() == MOS_SHRINKING) {
+		if (sameType) {
+			sounds.push_back(Sound(SOUND_SPLAT2, world_.getCollisionPoint()));
+		} else {
+			sounds.push_back(Sound(SOUND_BOING2, world_.getCollisionPoint()));
+		}
 		return pair<bool, bool>(sameType, false);
 	} else {
+		sounds.push_back(Sound(SOUND_BOING2, world_.getCollisionPoint()));
 		return pair<bool, bool>(false, false);
 	}
 }

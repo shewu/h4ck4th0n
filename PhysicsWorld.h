@@ -38,6 +38,12 @@ class PhysicsWorld : public World
 		ObjectPtr<MovingRoundObject> addPlayerObject(int regionNumber,
 			std::function<void()> const& onSpawnCallback,
 			std::function<void()> const& onDeathCallback);
+		/**
+		 * When called from a collision callback, returns the point of collision.
+		 */
+		Vector2D const& getCollisionPoint() const {
+			return collisionPoint;
+		}
 
 		void removeDeadObjects();
 
@@ -52,6 +58,8 @@ class PhysicsWorld : public World
 		}
 
 	private:
+
+		Vector2D collisionPoint;
 		
 		RoundWallCollisionCallback  roundWallCollisionCallback;
 		RoundRoundCollisionCallback roundRoundCollisionCallback;

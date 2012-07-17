@@ -15,10 +15,10 @@ spawn 1 15 16
 spawn 1 15 17
 spawn 1 15 18
 
-spawn 2 24 25
-spawn 2 23 25
-spawn 2 22 25
-spawn 2 21 25
+spawn 2 -15 -15
+spawn 2 -15 -16
+spawn 2 -15 -17
+spawn 2 -15 -18
 
 flag 2 15 25
 wall normal -25 -25 -25 25
@@ -26,3 +26,7 @@ wall normal -25 25 25 25
 wall normal 25 25 25 -25
 wall normal 25 -25 -25 -25
 
+wall deadly 0 5 0 -5
+
+wall goal1 -5 5 -5 -5
+wall goal2 5 5 5 -5

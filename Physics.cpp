@@ -28,7 +28,7 @@ bool PhysicsWorld::objectsIntersect(MovingRoundObject const& obj, RectangularWal
 	if ((dir * wall.p1) < (dir * obj.center) &&
 	    (dir * wall.p2) > (dir * obj.center)) {
 		Vector2D vec = obj.center - wall.p1;
-		Vector2D proj = ((vec*proj) / dir.lengthSquared()) * dir;
+		Vector2D proj = ((vec*dir) / dir.lengthSquared()) * dir;
 		return (vec - proj).lengthSquared() <= obj.radius * obj.radius;
 	}
 
@@ -278,6 +278,9 @@ void PhysicsWorld::doSimulation(float dt) {
 				MovingRoundObject& obj1 = *(movingRoundObjects[e.t1]);
 				MovingRoundObject& obj2 = *(movingRoundObjects[e.t2]);
 
+				Vector2D normal = obj2.center - obj1.center;
+
+				collisionPoint = obj1.center+normal*(1/sqrt(normal*normal))*obj1.radius;
 				pair<bool,bool> shouldDie = roundRoundCollisionCallback(
 						ObjectPtr<MovingRoundObject>(&obj1),
 						ObjectPtr<MovingRoundObject>(&obj2)
@@ -294,7 +297,6 @@ void PhysicsWorld::doSimulation(float dt) {
 				else {
 					// TODO deaths when there are collisions of two nondying objects
 
-					Vector2D normal = obj2.center - obj1.center;
 					float nv1 = obj1.velocity * normal;
 					float nv2 = obj2.velocity * normal;
 					obj1.velocity -=
@@ -333,25 +335,27 @@ void PhysicsWorld::doSimulation(float dt) {
 				MovingRoundObject& obj = *(movingRoundObjects[e.t1]);
 				RectangularWall& wall = *(rectangularWalls[e.t2]);
 
+				Vector2D normal;
+				if (e.type == ET_ROUND_WALL_CORNER_1) {
+					normal = obj.center - wall.p1;
+				}
+				else if (e.type == ET_ROUND_WALL_CORNER_2) {
+					normal = obj.center - wall.p2;
+				}
+				else if (e.type == ET_ROUND_WALL_LINE) {
+					normal = (wall.p2 - wall.p1).getNormalVector();
+					if (obj.velocity * normal > 0) {
+						normal = -normal;
+					}
+				}
+
+				collisionPoint = obj.center+normal*(1/sqrt(normal*normal))*obj.radius;
 				bool shouldDie = roundWallCollisionCallback(
-					ObjectPtr<MovingRoundObject>(&obj),
-					ObjectPtr<RectangularWall>(&wall)
-				);
+						ObjectPtr<MovingRoundObject>(&obj),
+						ObjectPtr<RectangularWall>(&wall)
+						);
 
 				if (shouldDie) {
-					Vector2D normal;
-					if (e.type == ET_ROUND_WALL_CORNER_1) {
-						normal = obj.center - wall.p1;
-					}
-					else if (e.type == ET_ROUND_WALL_CORNER_2) {
-						normal = obj.center - wall.p2;
-					}
-					else if (e.type == ET_ROUND_WALL_LINE) {
-						normal = (wall.p2 - wall.p1).getNormalVector();
-						if (obj.velocity * normal > 0) {
-							normal = -normal;
-						}
-					}
 					obj.startShrinking(NULL, -normal*(1/sqrt(normal*normal))*DEATH_RATE);
 				} else {
 					if (e.type == ET_ROUND_WALL_CORNER_1) {
@@ -462,7 +466,7 @@ void PhysicsWorld::doSimulation(float dt) {
 				okayToSpawn = false;
 				break;
 			}
-			
+
 		}
 		if (!okayToSpawn) {
 			continue;

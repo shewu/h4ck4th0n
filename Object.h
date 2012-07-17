@@ -38,7 +38,7 @@ class Object
 		/**
 		 * Constructs an Object by reading the given packet.
 		 */
-		Object(ReadPacket *rp);
+		explicit Object(ReadPacket *rp);
 
 		/**
 		 * @return the material
@@ -153,7 +153,7 @@ class RectangularObject : public Object
 		RectangularObject(Vector2D a, Vector2D b, MaterialPtr material)
 			: Object(material), p1(a), p2(b) { }
 
-		RectangularObject(ReadPacket *rp);
+		explicit RectangularObject(ReadPacket *rp);
 
 		/**
 		 * @return the first endpoint of the object
@@ -201,7 +201,7 @@ class RectangularWall : public RectangularObject
 		RectangularWall(Vector2D a, Vector2D b, WallType wt = WT_NORMAL) :
 			RectangularObject(a, b, MaterialPtr(new Color(101, 67, 33))), wallType(wt) { }
 
-		RectangularWall(ReadPacket *rp);
+		explicit RectangularWall(ReadPacket *rp);
 
 		/**
 		 * @return the wall type
@@ -248,7 +248,7 @@ class RoundObject : public Object
 			Object(material), center(center), radius(radius), startAngle(startAngle), 
 			endAngle(endAngle) { }
 
-		RoundObject(ReadPacket *rp);
+		explicit RoundObject(ReadPacket *rp);
 
 		/**
 		 * @return the center
@@ -318,7 +318,7 @@ class RoundWall : public RoundObject
 				WallType wt = WT_NORMAL) : 
 			RoundObject(material, center, radius, startAngle, endAngle), wallType(wt) { }
 
-		RoundWall(ReadPacket *rp);
+		explicit RoundWall(ReadPacket *rp);
 
 		/**
 		 * @return the wall type
@@ -398,7 +398,7 @@ class MovingRoundObject : public RoundObject
 		static const float kFlagMass;
 		static const float kFlagHeightRatio;
 
-		MovingRoundObject(ReadPacket *rp);
+		explicit MovingRoundObject(ReadPacket *rp);
 
 		/**
 		 * Gets the region number.

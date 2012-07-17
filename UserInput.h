@@ -26,7 +26,7 @@ class UserInput {
 		UserInput() :
 		    _left(false), _right(false), _up(false), _down(false), _theta(0.0) { }
 
-		UserInput(ReadPacket*);
+		explicit UserInput(ReadPacket*);
 
 		/**
 		 * Returns the acceleration vector indicated by the key input; takes into account

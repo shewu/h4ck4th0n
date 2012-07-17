@@ -90,9 +90,10 @@ void GameViewController::process() {
 		if(rp == NULL)
 			break;
 		if (rp->message_type == STC_SOUND && rp->packet_number >= latestPacket - MAX_SOUND_LATENESS) {
-			char c = rp->read_char();
-		    float v1 = rp->read_float();
-		    float v2 = rp->read_float();
+			Sound s(rp);
+			char c = (char) s.type;
+		    float v1 = s.pos.x;
+		    float v2 = s.pos.y;
 		    printf("hi %d %f %f\n", (int)c, v1, v2);
 
 			int src = -1;

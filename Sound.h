@@ -26,7 +26,7 @@ struct Sound {
 		type(SOUND_DING), pos(0.0f, 0.0f) { }
 	Sound(SoundType type, Vector2D const& pos) :
 		type(type), pos(pos) { }
-	Sound(ReadPacket *rp) {
+	explicit Sound(ReadPacket *rp) {
 		type = (SoundType) rp->read_char();
 		pos.x = rp->read_float();
 		pos.y = rp->read_float();

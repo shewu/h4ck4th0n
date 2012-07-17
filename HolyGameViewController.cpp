@@ -157,11 +157,11 @@ void HolyGameViewController::render() {
 	
 	cq.enqueueAcquireGLObjects(&bs);
 	cl::Kernel renderKern(program, "render", NULL);
-	renderKern.setArg(0, focusx-7*cos(angle));
-	renderKern.setArg(1, focusy-7*sin(angle));
+	renderKern.setArg(0, focusx-7*cosf(angle));
+	renderKern.setArg(1, focusy-7*sinf(angle));
 	renderKern.setArg(2, 4.0f);
-	renderKern.setArg(3, cos(angle));
-	renderKern.setArg(4, sin(angle));
+	renderKern.setArg(3, cosf(angle));
+	renderKern.setArg(4, sinf(angle));
 	renderKern.setArg(5, -4.0f/7);
 	renderKern.setArg(6, ti);
 	renderKern.setArg(7, obspointsbuf);

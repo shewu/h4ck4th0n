@@ -27,13 +27,13 @@ bool CTFGame::roundWallCollision(
 	}
 
 	if (ans) {
-		sounds.push_back(Sound(SOUND_BOING2, world_.getCollisionPoint()));
-	} else {
 		if (rn == 1 || rn == 2) {
 			sounds.push_back(Sound(SOUND_SPLAT2, world_.getCollisionPoint()));
 		} else {
 			sounds.push_back(Sound(SOUND_DING, world_.getCollisionPoint()));
 		}
+	} else {
+		sounds.push_back(Sound(SOUND_BOING2, world_.getCollisionPoint()));
 	}
 
 	return ans;

@@ -27,3 +27,6 @@ wall normal 25 25 25 -25
 wall normal 25 -25 -25 -25
 
 wall deadly 0 5 0 -5
+
+wall goal1 -5 5 -5 -5
+wall goal2 5 5 5 -5

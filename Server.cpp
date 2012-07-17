@@ -21,6 +21,7 @@
 #include "Hack.h"
 #include "Packet.h"
 #include "Socket.h"
+#include "Sound.h"
 
 using std::cin;
 using std::cout;
@@ -207,7 +208,7 @@ int main() {
 		game->getWorld().writeToPacket(&worldWritePacket);
 		for(auto iter = clients.begin();
 		        iter != clients.end(); ++iter) {
-		    SocketConnection *sc = *iter;
+		    SocketConnection* sc = *iter;
 		    int playerID = game->getObjectIDOf(sc);
 		    if (playerID != Game::kNoPlayerExists) {
 				worldWritePacket.write_int(game->getObjectIDOf(sc));
@@ -215,6 +216,16 @@ int main() {
 				worldWritePacket.backup(sizeof(int));
 			}
 		}
+
+		// Send the sounds to all clients
+		for (Sound sound : game->getSounds()) {
+			WritePacket wp(STC_SOUND, 9);
+			sound.writeToPacket(&wp);
+			for (SocketConnection* sc : clients) {
+				sc->send_packet(wp);
+			}
+		}
+		game->clearSounds();
 
 		// Sleep a little while before the
 		// next iteration.

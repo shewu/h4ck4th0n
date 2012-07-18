@@ -128,6 +128,8 @@ void UnholyGameViewController::_drawObjects() {
 }
 
 void UnholyGameViewController::_drawFloor(float alpha) {
+	// TODO fix this because it uses INTEGER ARITHMETIC
+
 	// checkerboard
 	unsigned int GridSizeX = world->getMaxX()/3;
 	unsigned int GridSizeY = world->getMaxY()/3;

@@ -1,32 +1,43 @@
 name "Vlad's map"
-mode TAG CTF
-dim 50 50
+mode CTF
+dim 60 120
+
 team 0 1-4
 team 1 1-4
 team 2 1-4
+team 3 1-1
+team 4 1-1
 
-spawn 0 -5 -5
-spawn 0 5 5
-spawn 0 15 15
-spawn 0 20 20
+wall normal -24 -15 -18 -15
+wall normal -24 15 -18 15
+wall normal -18 -15 -18 -3
+wall normal -18 15 -18 3
+wall normal -14 4 -14 -4
 
-spawn 1 15 15
-spawn 1 15 16
-spawn 1 15 17
-spawn 1 15 18
+wall deadly -8 3 -8 -3
+wall deadly 8 3 8 -3
 
-spawn 2 -15 -15
-spawn 2 -15 -16
-spawn 2 -15 -17
-spawn 2 -15 -18
+wall normal -7 5 -2 9
+wall normal 7 5 2 9
+wall normal -7 -5 -2 -9
+wall normal 7 -5 2 -9
 
-flag 2 15 25
-wall normal -25 -25 -25 25
-wall normal -25 25 25 25
-wall normal 25 25 25 -25
-wall normal 25 -25 -25 -25
+wall deadly 0 11 0 17
+wall deadly 0 -11 0 -17
 
-wall deadly 0 5 0 -5
+wall deadly 0 -30 0 -25
+wall deadly 0 30 0 25
 
-wall goal1 -5 5 -5 -5
-wall goal2 5 5 5 -5
+wall normal 24 -15 18 -15
+wall normal 24 15 18 15
+wall normal 18 -15 18 -3
+wall normal 18 15 18 3
+wall normal 14 4 14 -4
+
+wall goal1 -29 3 -29 -3
+wall goal2 29 3 29 -3
+
+spawn 1 -28 -4
+spawn 2 -3 -3
+spawn 3 25 28
+spawn 4 0 3

@@ -296,15 +296,28 @@ void PhysicsWorld::doSimulation(float dt) {
 
 				else {
 					// TODO deaths when there are collisions of two nondying objects
+					if (shouldDie.first && shouldDie.second) {
+						Vector2D vel = normal*(1/sqrt(normal*normal))*DEATH_RATE;
+						obj1.startShrinking(NULL, vel);
+						obj2.startShrinking(NULL, -vel);
+					} else if (shouldDie.first) {
+						obj2.velocity += obj1.velocity * (obj1.mass / obj2.mass);
+						obj1.startShrinking(NULL, Vector2D(0.0f, 0.0f));
+					} else if (shouldDie.second) {
+						obj1.velocity += obj2.velocity * (obj2.mass / obj1.mass);
+						obj2.startShrinking(NULL, Vector2D(0.0f, 0.0f));
+					} else {
 
-					float nv1 = obj1.velocity * normal;
-					float nv2 = obj2.velocity * normal;
-					obj1.velocity -=
-					                 (nv1/(normal*normal))*normal -
-					                 (((obj1.mass-obj2.mass)/(obj1.mass+obj2.mass)*nv1+2*obj2.mass/(obj1.mass+obj2.mass)*nv2)/(normal*normal))*normal;
-					obj2.velocity -=
-					                 (nv2/(normal*normal))*normal -
-					                 (((obj2.mass-obj1.mass)/(obj2.mass+obj1.mass)*nv2+2*obj1.mass/(obj2.mass+obj1.mass)*nv1)/(normal*normal))*normal;
+						float nv1 = obj1.velocity * normal;
+						float nv2 = obj2.velocity * normal;
+						obj1.velocity -=
+							(nv1/(normal*normal))*normal -
+							(((obj1.mass-obj2.mass)/(obj1.mass+obj2.mass)*nv1+2*obj2.mass/(obj1.mass+obj2.mass)*nv2)/(normal*normal))*normal;
+						obj2.velocity -=
+							(nv2/(normal*normal))*normal -
+							(((obj2.mass-obj1.mass)/(obj2.mass+obj1.mass)*nv2+2*obj1.mass/(obj2.mass+obj1.mass)*nv1)/(normal*normal))*normal;
+
+					}
 				}
 
 				for (auto i = movingRoundObjects.begin(); i != movingRoundObjects.end(); i++) {
@@ -317,9 +330,9 @@ void PhysicsWorld::doSimulation(float dt) {
 				for (auto i = rectangularWalls.begin(); i != rectangularWalls.end(); i++) {
 					RectangularWall& wall = *(i->second);
 					doRectangularWallCollision(
-						obj1, wall, collideRoundWithWall, collideEvents, e.time, dt);
+							obj1, wall, collideRoundWithWall, collideEvents, e.time, dt);
 					doRectangularWallCollision(
-						obj2, wall, collideRoundWithWall, collideEvents, e.time, dt);
+							obj2, wall, collideRoundWithWall, collideEvents, e.time, dt);
 				}
 				doRoundObjectDisappearing(obj1, collideDisappear, collideEvents, e.time, dt);
 				doRoundObjectDisappearing(obj2, collideDisappear, collideEvents, e.time, dt);

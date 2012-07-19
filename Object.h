@@ -31,7 +31,7 @@ class Object
 		 * Constructs an object with the given material.
 		 * @param material The material for the object being created.
 		 */
-		Object(MaterialPtr material) : material(material), refCount(0) {
+		explicit Object(MaterialPtr material) : material(material), refCount(0) {
 			id = (Object::nextId++);
 		}
 
@@ -133,205 +133,95 @@ class ObjectPtr {
 	template<class U> friend class ObjectPtr;
 };
 
-class RectangularObject : public Object
+class Wall : public Object
 {
-	private:
-		Vector2D p1, p2;
-
-		// Make object non-copyable by making this private.
-		RectangularObject(RectangularObject const&);
-		RectangularObject& operator=(RectangularObject const&);
+	protected:
+		char wallType;
 
 	public:
-		/**
-		 * Constructs a RectangularObject between the given two points
-		 * and with the given material.
-		 * @param a First endpoint of the wall.
-		 * @param b Second endpoint of the wall.
-		 * @param material The material for the object being created.
-		 */
-		RectangularObject(Vector2D a, Vector2D b, MaterialPtr material)
-			: Object(material), p1(a), p2(b) { }
-
-		explicit RectangularObject(ReadPacket *rp);
-
-		/**
-		 * @return the first endpoint of the object
-		 */
-		const Vector2D& getP1() const {
-			return p1;
+		Wall(MaterialPtr material, int wallType) :
+		    Object(material),
+		    wallType(wallType) {
 		}
 
-		/**
-		 * @return the second endpoint of the object
-		 */
-		const Vector2D& getP2() const {
-			return p2;
-		}
-
-		/**
-		 * Writes the object to a WritePacket
-		 * @param wp the WritePacket to write this object to
-		 */
-		virtual void writeToPacket(WritePacket *wp) const;
-
-		friend class PhysicsWorld;
-		friend class UnholyGameViewController;
-		friend class HolyGameViewController;
-		friend class GameViewController;
-};
-
-class RectangularWall : public RectangularObject
-{
-	private:
-		WallType wallType;
-
-		// Make object non-copyable by making this private.
-		RectangularWall(RectangularWall const&);
-		RectangularWall& operator=(RectangularWall const&);
-
-	public:
-		/**
-		 * Constructs a RectangularWall between the given two points
-		 * and with the given material.
-		 * @param a First endpoint of the wall.
-		 * @param b Second endpoint of the wall.
-		 * @param material The material for the object being created.
-		 */
-		RectangularWall(Vector2D a, Vector2D b, WallType wt = WT_NORMAL) :
-			RectangularObject(a, b, MaterialPtr(new Color(101, 67, 33))), wallType(wt) { }
-
-		explicit RectangularWall(ReadPacket *rp);
-
-		/**
-		 * @return the wall type
-		 */
-		WallType getWallType() const {
+		int getWallType() const {
 			return wallType;
 		}
 
-		/**
-		 * Writes the object to a WritePacket
-		 * @param wp the WritePacket to write this object to
-		 */
-		virtual void writeToPacket(WritePacket* wp) const;
+		Wall(ReadPacket* rp);
+		virtual void writeToPacket(WritePacket *wp) const;
+
+	friend class PhysicsWorld;
+	friend class UnholyGameViewController;
+	friend class HolyGameViewController;
+	friend class GameViewController;
+};
+
+class RectangularWall : public Wall
+{
+	protected:
+		Vector2D p1, p2;
+	
+	public:
+		RectangularWall(MaterialPtr material, int wallType, Vector2D p1, Vector2D p2) :
+		    Wall(material, wallType),
+		    p1(p1), p2(p2) {
+		}
+
+		RectangularWall(ReadPacket* rp);
+		virtual void writeToPacket(WritePacket *wp) const;
+
+	friend class PhysicsWorld;
+	friend class UnholyGameViewController;
+	friend class HolyGameViewController;
+	friend class GameViewController;
+};
+
+class RoundWall : public Wall
+{
+	private:
+		Vector2D center;
+		float radius, theta1, theta2;
+
+	public:
+		RoundWall(MaterialPtr material, int wallType,
+		          Vector2D center, float radius, float theta1, float theta2) :
+		    Wall(material, wallType),
+		    center(center),
+		    radius(radius),
+		    theta1(theta1),
+		    theta2(theta2) {
+		}
+
+		RoundWall(ReadPacket* rp);
+		virtual void writeToPacket(WritePacket *wp) const;
+
+	friend class PhysicsWorld;
+	friend class UnholyGameViewController;
+	friend class HolyGameViewController;
+	friend class GameViewController;
 };
 
 class RoundObject : public Object
 {
-	private:
-
-		// Make object non-copyable by making this private.
-		RoundObject(RoundObject const&);
-		RoundObject& operator=(RoundObject const&);
-
 	protected:
 		Vector2D center;
-		float radius;
-		float startAngle, endAngle;
-
+		float radius, heightRatio;
 
 	public:
-		/**
-		 * Constructs a RoundObject with the given material.
-		 * The object is represented by an arc which goes from startAngle
-		 * to endAngle. If endAngle > startAngle, it goes counter-clockwise from
-		 * startAngle to endAngle; otherwise, it goes clockwise.
-		 * @param material The material for the object being created.
-		 * @param center The center of the circle for the moving object.
-		 * @param radius The radius of the circle for the moving object.
-		 * @param startAngle The starting angle for the arc.
-		 * @param endAngle The ending angle for the arc.
-		 */
-		RoundObject(MaterialPtr material, Vector2D const& center, float radius,
-				float startAngle = 0.0, float endAngle = M_PI_2) :
-			Object(material), center(center), radius(radius), startAngle(startAngle), 
-			endAngle(endAngle) { }
-
-		explicit RoundObject(ReadPacket *rp);
-
-		/**
-		 * @return the center
-		 */
-		const Vector2D& getCenter() const {
-			return center;
+		RoundObject(MaterialPtr material,
+		            Vector2D center, float radius, float heightRatio) :
+		    Object(material),
+		    center(center), radius(radius), heightRatio(heightRatio) {
 		}
 
-		/**
-		 * @return the radius
-		 */
-		float getRadius() const {
-			return radius;
-		}
+		RoundObject(ReadPacket* rp);
+		virtual void writeToPacket(WritePacket *wp) const;
 
-		/**
-		 * @return the starting angle
-		 */
-		float getStartAngle() const {
-			return startAngle;
-		}
-
-		/**
-		 * @return the ending angle
-		 */
-		float getEndAngle() const {
-			return endAngle;
-		}
-
-		/**
-		 * Writes the object to a WritePacket
-		 * @param wp the WritePacket to write this object to
-		 */
-		virtual void writeToPacket(WritePacket* wp) const;
-
-		friend class PhysicsWorld;
-		friend class UnholyGameViewController;
-		friend class HolyGameViewController;
-		friend class GameViewController;
-
-};
-
-class RoundWall : public RoundObject
-{
-	private:
-		WallType wallType;
-
-		// Make object non-copyable by making this private.
-		RoundWall(RoundWall const&);
-		RoundWall& operator=(RoundWall const&);
-
-	public:
-		/**
-		 * Constructs a RoundWall with the given material.
-		 * The object is represented by an arc which goes from startAngle
-		 * to endAngle. If endAngle > startAngle, it goes counter-clockwise from
-		 * startAngle to endAngle; otherwise, it goes clockwise.
-		 * @param material The material for the object being created.
-		 * @param center The center of the circle for the moving object.
-		 * @param radius The radius of the circle for the moving object.
-		 * @param startAngle The starting angle for the arc.
-		 * @param endAngle The ending angle for the arc.
-		 * @param wt The wall type for this wall.
-		 */
-		RoundWall(MaterialPtr material, Vector2D center, float radius,
-				float startAngle = 0.0, float endAngle = M_PI_2,
-				WallType wt = WT_NORMAL) : 
-			RoundObject(material, center, radius, startAngle, endAngle), wallType(wt) { }
-
-		explicit RoundWall(ReadPacket *rp);
-
-		/**
-		 * @return the wall type
-		 */
-		WallType getWallType() const {
-			return wallType;
-		}
-
-		/**
-		 * Writes the object to a WritePacket
-		 * @param wp the WritePacket to write this object to
-		 */
-		virtual void writeToPacket(WritePacket* wp) const;
+	friend class PhysicsWorld;
+	friend class UnholyGameViewController;
+	friend class HolyGameViewController;
+	friend class GameViewController;
 };
 
 enum MovingObjectState {
@@ -354,7 +244,6 @@ class MovingRoundObject : public RoundObject
 		MovingObjectState state;
 
 		float mass;
-		float heightRatio;
 
 		// MOS_SPAWNING
 		float timeUntilSpawn;
@@ -380,10 +269,9 @@ class MovingRoundObject : public RoundObject
 				float heightRatio, float timeUntilSpawn, int regionNumber,
 				std::function<void()> const& onSpawnCallback,
 				std::function<void()> const& onDeathCallback) :
-			RoundObject(material, Vector2D(0.0,0.0), radius, 0.0f, (float)M_PI_2),
+			RoundObject(material, Vector2D(0.0,0.0), radius, heightRatio),
 			state(MOS_SPAWNING),
 			mass(mass),
-			heightRatio(heightRatio),
 			timeUntilSpawn(timeUntilSpawn),
 			regionNumber(regionNumber),
 			onSpawnCallback(onSpawnCallback),
@@ -492,10 +380,10 @@ class MovingRoundObject : public RoundObject
 		 */
 		virtual void writeToPacket(WritePacket* wp) const;
 
-		friend class PhysicsWorld;
-		friend class UnholyGameViewController;
-		friend class HolyGameViewController;
-		friend class GameViewController;
+	friend class PhysicsWorld;
+	friend class UnholyGameViewController;
+	friend class HolyGameViewController;
+	friend class GameViewController;
 };
 
 #endif

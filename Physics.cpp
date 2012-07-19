@@ -295,7 +295,6 @@ void PhysicsWorld::doSimulation(float dt) {
 				}
 
 				else {
-					// TODO deaths when there are collisions of two nondying objects
 					if (shouldDie.first && shouldDie.second) {
 						Vector2D vel = normal*(1/sqrt(normal*normal))*DEATH_RATE;
 						obj1.startShrinking(NULL, vel);

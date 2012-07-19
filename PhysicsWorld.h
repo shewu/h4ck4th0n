@@ -21,7 +21,9 @@ class PhysicsWorld : public World
 			roundRoundCollisionCallback = [](ObjectPtr<MovingRoundObject> a, ObjectPtr<MovingRoundObject> b) { return std::pair<bool,bool>(false,false); };
 			for (auto wallDesc : hbmap.getRectangularWalls()) {
 				RectangularWall* wall = new RectangularWall(
-					wallDesc.getPos1(), wallDesc.getPos2(), wallDesc.getWallType());
+					MaterialPtr(new Color(101, 67, 33)),
+					wallDesc.getWallType(),
+					wallDesc.getPos1(), wallDesc.getPos2());
 				rectangularWalls.insert(std::pair<int,RectangularWall*>(wall->getID(),wall));
 			}
 		}

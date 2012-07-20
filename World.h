@@ -19,6 +19,7 @@ class World
 	protected:
 		std::map<int, MovingRoundObject*> movingRoundObjects;
 		std::map<int, RectangularWall*> rectangularWalls;
+		std::map<int, RoundWall*> roundWalls;
         HBMap worldMap;
 
 	public:

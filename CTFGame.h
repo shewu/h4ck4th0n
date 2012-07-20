@@ -2,6 +2,7 @@
 #define CTFGAME_H
 
 #include "Game.h"
+#include "mapinfo/CTF.h"
 
 class CTFGame : public Game {
 
@@ -12,10 +13,9 @@ class CTFGame : public Game {
 	private:
 		
 		void doGameLogic();
-		void handleCollision(ObjectPtr<Object>, ObjectPtr<Object>);
 
         bool roundWallCollision(
-        	ObjectPtr<MovingRoundObject>, ObjectPtr<RectangularWall>);
+        	ObjectPtr<MovingRoundObject>, ObjectPtr<Wall>);
         std::pair<bool, bool> roundRoundCollision(
         	ObjectPtr<MovingRoundObject>, ObjectPtr<MovingRoundObject>);
         GamePlayer* onPlayerAdded();

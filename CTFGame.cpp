@@ -13,14 +13,14 @@ void CTFGame::doGameLogic() {
 }
 
 bool CTFGame::roundWallCollision(
-		ObjectPtr<MovingRoundObject> obj1, ObjectPtr<RectangularWall> wall) {
+		ObjectPtr<MovingRoundObject> obj1, ObjectPtr<Wall> wall) {
 	int rn = obj1->getRegionNumber();
 	bool ans;
-	if (wall->getWallType() == WT_DEADLY) {
+	if (wall->getWallType() == CTF_WT_DEADLY) {
 		ans = (rn == 1 || rn == 2);
-	} else if (wall->getWallType() == WT_GOAL1) {
+	} else if (wall->getWallType() == CTF_WT_GOAL1) {
 		ans = (rn == 4);
-	} else if (wall->getWallType() == WT_GOAL2) {
+	} else if (wall->getWallType() == CTF_WT_GOAL2) {
 		ans = (rn == 3);
 	} else {
 		ans = false;

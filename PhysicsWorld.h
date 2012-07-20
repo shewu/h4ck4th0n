@@ -10,14 +10,14 @@ class PhysicsWorld : public World
 {
 	public:
 		typedef std::function<bool(ObjectPtr<MovingRoundObject>,
-		                           ObjectPtr<RectangularWall>
+		                           ObjectPtr<Wall>
 		                  )> RoundWallCollisionCallback;
 		typedef std::function<std::pair<bool,bool>(ObjectPtr<MovingRoundObject>,
-		                                           ObjectPtr<RectangularWall>
+		                                           ObjectPtr<Wall>
 		                  )> RoundRoundCollisionCallback;
 
 		PhysicsWorld(HBMap const& hbmap) : World(hbmap) {
-			roundWallCollisionCallback = [](ObjectPtr<MovingRoundObject> a, ObjectPtr<RectangularWall> b) { return false; };
+			roundWallCollisionCallback = [](ObjectPtr<MovingRoundObject> a, ObjectPtr<Wall> b) { return false; };
 			roundRoundCollisionCallback = [](ObjectPtr<MovingRoundObject> a, ObjectPtr<MovingRoundObject> b) { return std::pair<bool,bool>(false,false); };
 			for (auto wallDesc : hbmap.getRectangularWalls()) {
 				RectangularWall* wall = new RectangularWall(

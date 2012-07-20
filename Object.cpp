@@ -28,6 +28,8 @@ void Object::writeToPacket(WritePacket* wp) const {
 
 void Wall::writeToPacket(WritePacket* wp) const {
 	Object::writeToPacket(wp);
+
+	assert(sizeof(wallType) == 1);
 	wp->write_char(wallType);
 }
 

@@ -364,7 +364,7 @@ void PhysicsWorld::doSimulation(float dt) {
 				collisionPoint = obj.center+normal*(1/sqrt(normal*normal))*obj.radius;
 				bool shouldDie = roundWallCollisionCallback(
 						ObjectPtr<MovingRoundObject>(&obj),
-						ObjectPtr<RectangularWall>(&wall)
+						ObjectPtr<Wall>(&wall)
 						);
 
 				if (shouldDie) {

@@ -6,6 +6,7 @@
 #include <set>
 
 #include "Hack.h"
+#include "MapInfo.h"
 
 class HBMap {
     public:
@@ -21,7 +22,9 @@ class HBMap {
 		 *
 		 * @throw ParseException when the parser encounters invalid syntax.
 		 */
-        HBMap(std::string const filename) {
+        HBMap(std::string const& filename, std::string const& gameType) {
+            this->gameType = gameType;
+
             parse(filename);
         }
 
@@ -159,14 +162,17 @@ class HBMap {
         const static unsigned MAX_TEAMS = 10;
 
     private:
-        void parse(std::string filename);
-        void parseHBMapName(std::string& s);
-        void parseModes(std::string& s);
-        void parseDimensions(std::string& s);
-        void parseTeam(std::string& s);
-        void parseSpawn(std::string& s);
-        void parseFlag(std::string& s);
-        void parseRectangularWall(std::string& s);
+        void parse(std::string const& filename);
+        void parseHBMapName(std::string const& s);
+        void parseModes(std::string const& s);
+        void parseDimensions(std::string const& s);
+        void parseTeam(std::string const& s);
+        void parseSpawn(std::string const& s);
+        void parseFlag(std::string const& s);
+        void parseRectangularWall(std::string const& s);
+        WallType parseWallType(std::string const& s);
+
+        std::string gameType;
 
         std::ifstream in;
 

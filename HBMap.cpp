@@ -8,18 +8,22 @@
 #include "Exceptions.h"
 #include "Object.h"
 
+using std::list;
+using std::map;
+using std::string;
+
 class StringTokenizer {
     public:
-        StringTokenizer(std::string& s, std::string delim = " \t") {
+        StringTokenizer(string const& s, string delim = " \t") {
             init(s, delim);
         }
         // Fetches and removes the next token. If no tokens remain before the
         // operation, then throws an exception.
-        std::string nextToken() {
+        string nextToken() {
             if (!hasMoreTokens()) {
                 throw std::out_of_range("StringTokenizer has no more tokens!");
             }
-            std::string ret = toks.front();
+            string ret = toks.front();
             toks.pop_front();
             return ret;
         }
@@ -27,23 +31,23 @@ class StringTokenizer {
             return toks.size() > 0;
         }
     private:
-        std::list<std::string> toks;
-        void init(std::string& s, std::string delim) {
+        list<string> toks;
+        void init(string const& s, string delim) {
             const char* d = delim.c_str();
             char* pch = strtok(const_cast<char*>(s.c_str()), d);
             while (pch) {
-                toks.push_back(std::string(pch));
+                toks.push_back(string(pch));
                 pch = strtok(NULL, d);
             }
         }
 };
 
-void HBMap::parse(std::string filename) {
+void HBMap::parse(string const& filename) {
     width = -1;
     height = -1;
     in.open(filename.c_str());
-    std::string cmd;
-    std::string s;
+    string cmd;
+    string s;
     while (!in.eof()) {
         in >> cmd;
         // we need this check because checking for in.eof() doesn't work the way
@@ -76,11 +80,11 @@ void HBMap::parse(std::string filename) {
     }
 }
 
-void HBMap::parseHBMapName(std::string& s) {
+void HBMap::parseHBMapName(string const& s) {
     mapName = s.substr(5, s.size());
 }
 
-GameMode parseGameMode(std::string str) {
+GameMode parseGameMode(string str) {
     for (int i = 0; i < NUM_GAMEMODES; ++i) {
         if (str.compare(modeStrings[i]) == 0) {
             return (GameMode)i;
@@ -89,14 +93,14 @@ GameMode parseGameMode(std::string str) {
     return GM_INVALID;
 }
 
-void HBMap::parseModes(std::string& s) {
+void HBMap::parseModes(string const& s) {
     StringTokenizer st(s);
     while (st.hasMoreTokens()) {
         modes.insert(parseGameMode(st.nextToken()));
     }
 }
 
-void HBMap::parseDimensions(std::string& s) {
+void HBMap::parseDimensions(string const& s) {
     StringTokenizer st(s);
     if (st.hasMoreTokens()) {
         width = atoi(st.nextToken().c_str());
@@ -109,7 +113,7 @@ void HBMap::parseDimensions(std::string& s) {
     }
 }
 
-void HBMap::parseTeam(std::string& s) {
+void HBMap::parseTeam(string const& s) {
     StringTokenizer st(s, " -\t");
     int teamNum = -1, minPlayers = -1, maxPlayers = -1;
     if (st.hasMoreTokens()) {
@@ -129,7 +133,7 @@ void HBMap::parseTeam(std::string& s) {
     teams.push_back(TeamDescriptor(teamNum, minPlayers, maxPlayers));
 }
 
-void HBMap::parseSpawn(std::string& s) {
+void HBMap::parseSpawn(string const& s) {
     StringTokenizer st(s);
     int id = -1, x = -1, y = -1;
     if (st.hasMoreTokens()) {
@@ -149,7 +153,7 @@ void HBMap::parseSpawn(std::string& s) {
     spawns[id].push_back(SpawnDescriptor(x, y, x+5, y+5));
 }
 
-void HBMap::parseFlag(std::string& s) {
+void HBMap::parseFlag(string const& s) {
     StringTokenizer st(s);
     int id = -1, x = -1, y = -1;
     if (st.hasMoreTokens()) {
@@ -169,21 +173,25 @@ void HBMap::parseFlag(std::string& s) {
 	flags[id].push_back(FlagDescriptor(id, Vector2D(x, y)));
 }
 
-WallType parseWallType(std::string& s) {
-    for (int i = 0; i < NUM_WALLTYPES; ++i) {
-        if (wallTypeStrings[i].compare(s) == 0) {
-            return (WallType)i;
-        }
-    }
-    return WT_INVALID;
+WallType HBMap::parseWallType(string const& s) {
+	auto wallTypeMapIter = wallTypeLookup.find(gameType);
+	if (wallTypeMapIter == wallTypeLookup.end()) {
+		throw ParseException("game type not found in wallTypeLookup");
+	}
+	map<string, char> const& wallTypeMap = wallTypeMapIter->second;
+	auto wallTypeIter = wallTypeMap.find(s);
+	if (wallTypeIter == wallTypeMap.end()) {
+		throw ParseException("wall type `" + s + "' not recognized");
+	}
+	return wallTypeIter->second;
 }
 
-void HBMap::parseRectangularWall(std::string& s) {
+void HBMap::parseRectangularWall(string const& s) {
 	int a = 0, b = 0, c = 0, d = 0;
     StringTokenizer st(s);
     WallType wallType;
     if (st.hasMoreTokens()) {
-		std::string tok = st.nextToken();
+		string tok = st.nextToken();
         wallType = parseWallType(tok);
     }
     if (st.hasMoreTokens()) {

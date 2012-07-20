@@ -25,8 +25,10 @@ class Game {
 		Game& operator=(Game const&);
 
 		// interface that needs to be implemented by inheriting Game class
+		// to clarify, "roundWallCollision" means a collision between a
+		// round object and a wall, not specifically a round wall
         virtual bool roundWallCollision(
-        	ObjectPtr<MovingRoundObject>, ObjectPtr<RectangularWall>) = 0;
+        	ObjectPtr<MovingRoundObject>, ObjectPtr<Wall>) = 0;
         virtual std::pair<bool, bool> roundRoundCollision(
         	ObjectPtr<MovingRoundObject>, ObjectPtr<MovingRoundObject>) = 0;
         virtual void doGameLogic() = 0;

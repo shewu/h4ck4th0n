@@ -136,7 +136,7 @@ class ObjectPtr {
 class Wall : public Object
 {
 	protected:
-		char wallType;
+		WallType wallType;
 
 	public:
 		Wall(MaterialPtr material, int wallType) :
@@ -144,7 +144,7 @@ class Wall : public Object
 		    wallType(wallType) {
 		}
 
-		int getWallType() const {
+		WallType getWallType() const {
 			return wallType;
 		}
 

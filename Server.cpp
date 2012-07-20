@@ -93,7 +93,8 @@ int main() {
 
 	WritePacket worldWritePacket(STC_WORLD_DATA);
 
-	Game* game = new CTFGame(HBMap("custom.hbm"));
+	// TODO make it possible to set this at runtime
+	Game* game = new CTFGame(HBMap("custom.hbm", "CTF"));
 	game->init();
 
 	// Main server loop

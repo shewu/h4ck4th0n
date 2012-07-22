@@ -109,6 +109,7 @@ MovingRoundObject::MovingRoundObject(ReadPacket* rp) : RoundObject(rp) {
 
 void MovingRoundObject::startShrinking(MovingRoundObject *parent, Vector2D const& velocity) {
 	this->parent = parent;
+	this->numChildren = 0;
 	this->state = MOS_SHRINKING;
 	this->velocity = velocity;
 	if(parent != NULL) {

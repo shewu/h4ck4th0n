@@ -177,6 +177,7 @@ int main() {
                         remove_client(sc);
                         printf("Player disconnected, currently %zu clients\n",
 											clients.size());
+						break; // Don't keep polling a deleted SocketConnection
                     }
 
 					// Give packet to game for processing

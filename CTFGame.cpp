@@ -81,7 +81,8 @@ GamePlayer* CTFGame::onPlayerAdded() {
 
 void CTFGame::onPlayerRemoved(GamePlayer* player) {
 	// remove the player's object from the game
-	if (!player->obj.empty() && player->obj->getState() == MOS_ALIVE) {
+	if (!player->obj.empty() &&
+	    (player->obj->getState() == MOS_ALIVE || player->obj->getState() == MOS_SPAWNING)) {
 		player->obj->instantKill();
 	}
 }

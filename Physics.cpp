@@ -640,7 +640,7 @@ void PhysicsWorld::doSimulation(float dt) {
 	// For simplicity, we do this on the boundary of a simulation interval.
 	// It won't screw up physics if an object spawns slightly "late",
 	// whereas things like collisions need to happen in order.
-	for (auto iter : movingRoundObjects) {
+	for (auto& iter : movingRoundObjects) {
 		MovingRoundObject& obj = *(iter.second);
 		if (obj.state != MOS_SPAWNING) {
 			continue;
@@ -664,7 +664,7 @@ void PhysicsWorld::doSimulation(float dt) {
 
 		// check that we aren't intersecting any other objects if we spawn here
 		bool okayToSpawn = true;
-		for (auto jter : movingRoundObjects) {
+		for (auto& jter : movingRoundObjects) {
 			MovingRoundObject& obj2 = *(jter.second);
 			if (objectsIntersect(obj, obj2)) {
 				okayToSpawn = false;
@@ -675,7 +675,7 @@ void PhysicsWorld::doSimulation(float dt) {
 		if (!okayToSpawn) {
 			continue;
 		}
-		for (auto jter : rectangularWalls) {
+		for (auto& jter : rectangularWalls) {
 			RectangularWall& wall = *(jter.second);
 			if (objectsIntersect(obj, wall)) {
 				okayToSpawn = false;

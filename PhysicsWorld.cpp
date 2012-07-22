@@ -56,14 +56,14 @@ void PhysicsWorld::removeDeadObjects() {
 
 void PhysicsWorld::writeToPacket(WritePacket *wp) const {
 	int size = 0;
-	for (auto pa : movingRoundObjects) {
+	for (auto& pa : movingRoundObjects) {
 		MovingRoundObject* obj = pa.second;
 		if (obj->state == MOS_ALIVE || obj->state == MOS_SHRINKING) {
 			size++;
 		}
 	}
 	wp->write_int(size);
-	for (auto pa : movingRoundObjects) {
+	for (auto& pa : movingRoundObjects) {
 		MovingRoundObject* obj = pa.second;
 		if (obj->state == MOS_ALIVE || obj->state == MOS_SHRINKING) {
 			obj->writeToPacket(wp);
@@ -71,7 +71,7 @@ void PhysicsWorld::writeToPacket(WritePacket *wp) const {
 	}
 
 	wp->write_int(rectangularWalls.size());
-	for (auto pa : rectangularWalls) {
+	for (auto& pa : rectangularWalls) {
 		RectangularWall* obj = pa.second;
 		obj->writeToPacket(wp);
 	}

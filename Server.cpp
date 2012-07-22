@@ -219,7 +219,7 @@ int main() {
 		}
 
 		// Send the sounds to all clients
-		for (Sound sound : game->getSounds()) {
+		for (Sound const& sound : game->getSounds()) {
 			WritePacket wp(STC_SOUND, 9);
 			sound.writeToPacket(&wp);
 			for (SocketConnection* sc : clients) {

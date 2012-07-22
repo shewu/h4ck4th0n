@@ -202,9 +202,10 @@ void PhysicsWorld::doRectangularWallCollision(MovingRoundObject const& obj,
 		mintime = time3;
 		type = ET_ROUND_WALL_LINE;
 	}
-	collide_event e(cur + mintime, type, obj.getID(), wall.getID());
+	float t = cur + mintime;
+	collide_event e(t, type, obj.getID(), wall.getID());
 	collideRoundWithWall[pair<int, int>(obj.getID(), wall.getID())] = e;
-	if (mintime < dt) {
+	if (t < dt) {
 		collideEvents.push(e);
 	}
 }
@@ -261,9 +262,10 @@ void PhysicsWorld::doRoundWallCollision(MovingRoundObject const& obj,
 		mintime = time3;
 		type = ET_ROUND_ROUNDWALL_LINE;
 	}
-	collide_event e(cur + mintime, type, obj.getID(), wall.getID());
+	float t = cur + mintime;
+	collide_event e(t, type, obj.getID(), wall.getID());
 	collideRoundWithRoundWall[pair<int, int>(obj.getID(), wall.getID())] = e;
-	if (mintime < dt) {
+	if (t < dt) {
 		collideEvents.push(e);
 	}
 }

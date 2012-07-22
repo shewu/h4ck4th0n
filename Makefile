@@ -19,7 +19,6 @@ HOLY_BALLS_TARGET=holyballs
 MULTI_BALLS_TARGET=multiballs
 
 SHARED_OBJECTS = Socket.o \
-	Vector.o \
 	Object.o \
 	World.o \
     HBMap.o \

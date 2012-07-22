@@ -308,7 +308,7 @@ void PhysicsWorld::bounceMovingRoundAndShrinkingRound(
 }
 
 void PhysicsWorld::bounceMovingRoundFromPoint(MovingRoundObject& obj, Vector2D const& p) {
-	Vector2D normal = obj.velocity - p;
+	Vector2D normal = obj.center - p;
 	float nv1 = obj.velocity * normal;
 	obj.velocity -= 2.0 * (nv1/(normal*normal)) * normal;
 }
@@ -472,6 +472,8 @@ void PhysicsWorld::doSimulation(float dt) {
 						if (obj.velocity * normal > 0) {
 							normal = -normal;
 						}
+					} else {
+						assert(false);
 					}
 
 					collisionPoint = obj.center+normal*(1/sqrt(normal*normal))*obj.radius;

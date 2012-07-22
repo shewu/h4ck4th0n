@@ -65,6 +65,8 @@ void remove_client(SocketConnection *sc) {
 }
 
 int main() {
+	srand((unsigned int) time(NULL));
+
     verify();
 
     srand((unsigned int)time(NULL));

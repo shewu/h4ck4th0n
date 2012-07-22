@@ -206,6 +206,9 @@ void PhysicsWorld::doRectangularWallCollision(MovingRoundObject const& obj,
 	collideRoundWithWall[pair<int, int>(obj.getID(), wall.getID())] = e;
 	if (mintime < dt) {
 		collideEvents.push(e);
+		if (wall.getID() == 5) {
+			printf("collide event for %d and %d\n", obj.getID(), wall.getID());
+		}
 	}
 }
 
@@ -308,7 +311,7 @@ void PhysicsWorld::bounceMovingRoundAndShrinkingRound(
 }
 
 void PhysicsWorld::bounceMovingRoundFromPoint(MovingRoundObject& obj, Vector2D const& p) {
-	Vector2D normal = obj.velocity - p;
+	Vector2D normal = obj.center - p;
 	float nv1 = obj.velocity * normal;
 	obj.velocity -= 2.0 * (nv1/(normal*normal)) * normal;
 }
@@ -455,6 +458,7 @@ void PhysicsWorld::doSimulation(float dt) {
 			case ET_ROUND_WALL_CORNER_2:
 			case ET_ROUND_WALL_LINE:
 				{
+					printf("collision with %d and %d\n", e.t1, e.t2);
 					collideRoundWithWall[pair<int, int>(e.t1, e.t2)] =
 						collide_event(INFINITY, ET_NONE, e.t1, e.t2);
 					MovingRoundObject& obj = *(movingRoundObjects[e.t1]);
@@ -472,6 +476,8 @@ void PhysicsWorld::doSimulation(float dt) {
 						if (obj.velocity * normal > 0) {
 							normal = -normal;
 						}
+					} else {
+						assert(false);
 					}
 
 					collisionPoint = obj.center+normal*(1/sqrt(normal*normal))*obj.radius;
@@ -484,12 +490,15 @@ void PhysicsWorld::doSimulation(float dt) {
 						obj.startShrinking(NULL, -normal*(1/sqrt(normal*normal))*DEATH_RATE);
 					} else {
 						if (e.type == ET_ROUND_WALL_CORNER_1) {
+							printf("corner 1\n");
 							bounceMovingRoundFromPoint(obj, wall.p1);
 						}
 						else if (e.type == ET_ROUND_WALL_CORNER_2) {
+							printf("corner 2\n");
 							bounceMovingRoundFromPoint(obj, wall.p2);
 						}
 						else if (e.type == ET_ROUND_WALL_LINE) {
+							printf("wall\n");
 							bounceMovingRoundFromWall(obj, wall.p1, wall.p2);
 						}
 					}

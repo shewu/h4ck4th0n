@@ -1,8 +1,17 @@
+#include "MultiGameViewController.h"
+
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <map>
 
-#include "MultiGameViewController.h"
+using std::cout;
+using std::endl;
+using std::ifstream;
+using std::map;
+using std::pair;
+using std::string;
+using std::vector;
 
 MultiGameViewController::MultiGameViewController() : GameViewController() {
 	_initGL();
@@ -74,95 +83,102 @@ void MultiGameViewController::_initGL() {
 
 void MultiGameViewController::render() {
 	glDisable(GL_DEPTH_TEST);
-	if (world.getMyObject() == NULL) {
+	if (world->getMyObject() == NULL) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		return;
 	}
 
-	float focusx = world.getMyObject()->center.x, focusy = world.getMyObject()->center.y;
+	map<int, MovingRoundObject*> const& roundObjects = world->getMovingRoundObjects();
+
+	float focusx = world->getMyObject()->center.x, focusy = world->getMyObject()->center.y;
 	if (focusx < world->getMinX() + 14) focusx += (14 - focusx + world->getMinX()) * (14 - focusx + world->getMinX()) / 28.0;
 	if (focusx > world->getMaxX() - 14) focusx -= (14 + focusx - world->getMaxX()) * (14 + focusx - world->getMaxX()) / 28.0;
 	if (focusy < world->getMinY() + 14) focusy += (14 - focusy + world->getMinY()) * (14 - focusy + world->getMinY()) / 28.0;
 	if (focusy > world->getMaxY() - 14) focusy -= (14 + focusy - world->getMaxY()) * (14 + focusy - world->getMaxY()) / 28.0;
 
-	float obspoints[4 * world.obstacles.size()];
-	unsigned char obscolor[4 * world.obstacles.size()];
+	map<int, RectangularWall*> const& rectangularWalls = world->getRectangularWalls();
+
+	float obspoints[4 * rectangularWalls.size()];
+	unsigned char obscolor[4 * rectangularWalls.size()];
 	unsigned ti, i2 = 0;
 	for (ti = 0; ; ti++) {
-		while (i2 != world.obstacles.size()) {
-			Vector2D diff = Vector2D(focusx, focusy) - world.obstacles[i2].p1;
-			Vector2D obsdir = world.obstacles[i2].p2 - world.obstacles[i2].p1;
+		while (i2 != rectangularWalls.size()) {
+			RectangularWall* wall = rectangularWalls.find(i2)->second;
+			Vector2D diff = Vector2D(focusx, focusy) - wall->p1;
+			Vector2D obsdir = wall->p2 - wall->p1;
 			float smallest;
-			if (diff * obsdir <= 0) smallest = diff * diff;
-			else if (diff * obsdir >= obsdir * obsdir) smallest = (diff - obsdir) * (diff - obsdir);
-			else smallest = diff * diff-(diff * obsdir)*(diff * obsdir)/(obsdir * obsdir);
-			if (smallest <= 56 * 56 * (1 + float(WIDTH) * float(WIDTH) / float(HEIGHT) / float(HEIGHT) / 4.0)) break;
+			if (diff*obsdir <= 0) smallest = diff*diff;
+			else if (diff*obsdir >= obsdir*obsdir) smallest = (diff-obsdir)*(diff-obsdir);
+			else smallest = diff*diff-(diff*obsdir)*(diff*obsdir)/(obsdir*obsdir);
+			if (smallest <= 56*56*(1+float(WIDTH)*float(WIDTH)/float(HEIGHT)/float(HEIGHT)/4.0)) break;
 			i2++;
 		}
-		if (i2 == world.obstacles.size()) break;
-		obspoints[4 * ti] = world.obstacles[i2].p1.x;
-		obspoints[4 * ti + 1] = world.obstacles[i2].p1.y;
-		obspoints[4 * ti + 2] = world.obstacles[i2].p2.x;
-		obspoints[4 * ti + 3] = world.obstacles[i2].p2.y;
-		obscolor[4 * ti] = world.obstacles[i2].color.getR();
-		obscolor[4 * ti + 1] = world.obstacles[i2].color.getG();
-		obscolor[4 * ti + 2] = world.obstacles[i2].color.getB();
-		obscolor[4 * ti + 3] = world.obstacles[i2].color.getA();
+		if (i2 == rectangularWalls.size()) break;
+		RectangularWall* wall = rectangularWalls.find(i2)->second;
+		obspoints[4*ti] = wall->p1.x;
+		obspoints[4*ti+1] = wall->p1.y;
+		obspoints[4*ti+2] = wall->p2.x;
+		obspoints[4*ti+3] = wall->p2.y;
+		obscolor[4*ti] = wall->getMaterial()->getR();
+		obscolor[4*ti+1] = wall->getMaterial()->getG();
+		obscolor[4*ti+2] = wall->getMaterial()->getB();
+		obscolor[4*ti+3] = wall->getMaterial()->getA();
 		i2++;
 	}
 	vector<cl::Buffer> obspointsbuf, obscolorbuf, objpointbuf, objsizebuf, objcolorbuf, lightposbuf, lightcolorbuf;
 	for (unsigned i = 0; i < devices.size(); i++) {
-		obspointsbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.obstacles.size()*sizeof(float), obspoints, NULL));
-		obscolorbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.obstacles.size()*sizeof(char), obscolor, NULL));
+		obspointsbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*rectangularWalls.size()*sizeof(float), obspoints, NULL));
+		obscolorbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*rectangularWalls.size()*sizeof(char), obscolor, NULL));
 	}
 
-	float objpoint[2 * world.objects.size()];
-	float objsize[2 * world.objects.size()];
-	unsigned char objcolor[4 * world.objects.size()];
-	map<int, Object>::iterator it = world.objects.begin();
+	float objpoint[2*roundObjects.size()];
+	float objsize[2*roundObjects.size()];
+	unsigned char objcolor[4*roundObjects.size()];
+	auto it = roundObjects.begin();
 	int si;
 	for (si = 0; ; si++) {
-		while (it != world.objects.end() && (focusx-it->second.p.x)*(focusx-it->second.p.x)+(focusy-it->second.p.y)*(focusx-it->second.p.y) > (56*sqrt(1+float(WIDTH)*float(WIDTH)/float(HEIGHT)/float(HEIGHT)/4.0)+it->second.rad)*(56*sqrt(1+float(WIDTH)*float(WIDTH)/float(HEIGHT)/float(HEIGHT)/4.0)+it->second.rad)) it++;
-		if (it == world.objects.end()) break;
-		objpoint[2*si] = it->second.p.x;
-		objpoint[2*si+1] = it->second.p.y;
-		objsize[2*si] = it->second.rad;
-		objsize[2*si+1] = it->second.hrat;
-		objcolor[4*si] = it->second.color.getR();
-		objcolor[4*si+1] = it->second.color.getG();
-		objcolor[4*si+2] = it->second.color.getB();
-		objcolor[4*si+3] = it->second.color.getA();
+		while (it != roundObjects.end() && (focusx-it->second->center.x)*(focusx-it->second->center.x)+(focusy-it->second->center.y)*(focusx-it->second->center.y) > (56*sqrt(1+float(WIDTH)*float(WIDTH)/float(HEIGHT)/float(HEIGHT)/4.0)+it->second->radius)*(56*sqrt(1+float(WIDTH)*float(WIDTH)/float(HEIGHT)/float(HEIGHT)/4.0)+it->second->radius)) it++;
+		if (it == roundObjects.end()) break;
+		objpoint[2*si] = it->second->center.x;
+		objpoint[2*si+1] = it->second->center.y;
+		objsize[2*si] = it->second->radius;
+		objsize[2*si+1] = it->second->heightRatio;
+		MaterialPtr color = it->second->getMaterial();
+		objcolor[4*si] = color->getR();
+		objcolor[4*si+1] = color->getG();
+		objcolor[4*si+2] = color->getB();
+		objcolor[4*si+3] = color->getA();
 		it++;
 	}
 	for(unsigned i = 0; i < devices.size(); i++) {
-		objpointbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 2*world.objects.size()*sizeof(float), objpoint, NULL));
-		objsizebuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 2*world.objects.size()*sizeof(float), objsize, NULL));
-		objcolorbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.objects.size()*sizeof(char), objcolor, NULL));
+		objpointbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 2*roundObjects.size()*sizeof(float), objpoint, NULL));
+		objsizebuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 2*roundObjects.size()*sizeof(float), objsize, NULL));
+		objcolorbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*roundObjects.size()*sizeof(char), objcolor, NULL));
 	}
 
-	float lightpos[3*world.lights.size()];
-	unsigned char lightcolor[4*world.lights.size()];
-	for (unsigned i = 0; i < world.lights.size(); i++) {
-		lightpos[3*i] = world.lights[i].getPosition().x;
-		lightpos[3*i+1] = world.lights[i].getPosition().y;
-		lightpos[3*i+2] = world.lights[i].getPosition().z;
-		lightcolor[4*i] = world.lights[i].getColor().getR();
-		lightcolor[4*i+1] = world.lights[i].getColor().getG();
-		lightcolor[4*i+2] = world.lights[i].getColor().getB();
-		lightcolor[4*i+3] = world.lights[i].getColor().getA();
+	float lightpos[3*world->getLights().size()];
+	unsigned char lightcolor[4*world->getLights().size()];
+	for (unsigned i = 0; i < world->getLights().size(); i++) {
+		lightpos[3*i] = world->getLights()[i].getPosition().x;
+		lightpos[3*i+1] = world->getLights()[i].getPosition().y;
+		lightpos[3*i+2] = world->getLights()[i].getPosition().z;
+		lightcolor[4*i] = world->getLights()[i].getColor().getR();
+		lightcolor[4*i+1] = world->getLights()[i].getColor().getG();
+		lightcolor[4*i+2] = world->getLights()[i].getColor().getB();
+		lightcolor[4*i+3] = world->getLights()[i].getColor().getA();
 	}
 	for (unsigned i = 0; i < devices.size(); i++) {
-		lightposbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 3*world.lights.size()*sizeof(float), lightpos, NULL));
-		lightcolorbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world.lights.size()*sizeof(char), lightcolor, NULL));
+		lightposbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 3*world->getLights().size()*sizeof(float), lightpos, NULL));
+		lightcolorbuf.push_back(cl::Buffer(deviceContexts[i], CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*world->getLights().size()*sizeof(char), lightcolor, NULL));
 	}
 
 	for (unsigned i = 0; i < devices.size(); i++) {
 		cl::Kernel renderKern(devicePrograms[i], "render", NULL);
-		renderKern.setArg(0, focusx-7*cos(angle));
-		renderKern.setArg(1, focusy-7*sin(angle));
+		renderKern.setArg(0, focusx-7*cosf(angle));
+		renderKern.setArg(1, focusy-7*sinf(angle));
 		renderKern.setArg(2, 4.0f);
-		renderKern.setArg(3, cos(angle));
-		renderKern.setArg(4, sin(angle));
+		renderKern.setArg(3, cosf(angle));
+		renderKern.setArg(4, sinf(angle));
 		renderKern.setArg(5, -4.0f/7);
 		renderKern.setArg(6, ti);
 		renderKern.setArg(7, obspointsbuf[i]);
@@ -171,7 +187,7 @@ void MultiGameViewController::render() {
 		renderKern.setArg(10, objpointbuf[i]);
 		renderKern.setArg(11, objsizebuf[i]);
 		renderKern.setArg(12, objcolorbuf[i]);
-		renderKern.setArg(13, (int)world.lights.size());
+		renderKern.setArg(13, (int)world->getLights().size());
 		renderKern.setArg(14, lightposbuf[i]);
 		renderKern.setArg(15, lightcolorbuf[i]);
 		renderKern.setArg(16, images[i]);

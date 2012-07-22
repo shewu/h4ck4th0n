@@ -11,11 +11,11 @@
 class MultiGameViewController : public GameViewController {
 	private:
 		void _initGL();
-		vector<cl::Context> deviceContexts;
-		vector<cl::Program> devicePrograms;
-		vector<cl::Device> devices;
-		vector<cl::Image2D> images;
-		vector<cl::CommandQueue> cqs;
+		std::vector<cl::Context> deviceContexts;
+		std::vector<cl::Program> devicePrograms;
+		std::vector<cl::Device> devices;
+		std::vector<cl::Image2D> images;
+		std::vector<cl::CommandQueue> cqs;
 		GLuint texture;
 		int* pixels;
 

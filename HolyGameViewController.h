@@ -5,7 +5,6 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "CL/cl.hpp"
-#include <vector>
 
 #include "GameViewController.h"
 

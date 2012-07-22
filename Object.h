@@ -154,6 +154,7 @@ class Wall : public Object
 	friend class PhysicsWorld;
 	friend class UnholyGameViewController;
 	friend class HolyGameViewController;
+	friend class MultiGameViewController;
 	friend class GameViewController;
 };
 
@@ -174,6 +175,7 @@ class RectangularWall : public Wall
 	friend class PhysicsWorld;
 	friend class UnholyGameViewController;
 	friend class HolyGameViewController;
+	friend class MultiGameViewController;
 	friend class GameViewController;
 };
 
@@ -199,6 +201,7 @@ class RoundWall : public Wall
 	friend class PhysicsWorld;
 	friend class UnholyGameViewController;
 	friend class HolyGameViewController;
+	friend class MultiGameViewController;
 	friend class GameViewController;
 };
 
@@ -221,6 +224,7 @@ class RoundObject : public Object
 	friend class PhysicsWorld;
 	friend class UnholyGameViewController;
 	friend class HolyGameViewController;
+	friend class MultiGameViewController;
 	friend class GameViewController;
 };
 
@@ -383,6 +387,7 @@ class MovingRoundObject : public RoundObject
 	friend class PhysicsWorld;
 	friend class UnholyGameViewController;
 	friend class HolyGameViewController;
+	friend class MultiGameViewController;
 	friend class GameViewController;
 };
 

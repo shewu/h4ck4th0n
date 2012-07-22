@@ -90,9 +90,9 @@ void HolyGameViewController::render() {
 	
 	float obspoints[4*rectangularWalls.size()];
 	unsigned char obscolor[4*rectangularWalls.size()];
-	int ti, i2 = 0;
+	unsigned ti, i2 = 0;
 	for (ti = 0; ; ti++) {
-		while ((unsigned)i2 != rectangularWalls.size()) {
+		while (i2 != rectangularWalls.size()) {
 			RectangularWall* wall = rectangularWalls.find(i2)->second;
 			Vector2D diff = Vector2D(focusx, focusy) - wall->p1;
 			Vector2D obsdir = wall->p2 - wall->p1;
@@ -103,7 +103,7 @@ void HolyGameViewController::render() {
 			if (smallest <= 56*56*(1+float(WIDTH)*float(WIDTH)/float(HEIGHT)/float(HEIGHT)/4.0)) break;
 			i2++;
 		}
-		if ((unsigned)i2 == rectangularWalls.size()) break;
+		if (i2 == rectangularWalls.size()) break;
 		RectangularWall* wall = rectangularWalls.find(i2)->second;
 		obspoints[4*ti] = wall->p1.x;
 		obspoints[4*ti+1] = wall->p1.y;

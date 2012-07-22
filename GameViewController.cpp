@@ -94,7 +94,6 @@ void GameViewController::process() {
 			char c = (char) s.type;
 		    float v1 = s.pos.x;
 		    float v2 = s.pos.y;
-		    printf("hi %d %f %f\n", (int)c, v1, v2);
 
 			int src = -1;
 			for (int s = 0; s < ALSRCS; s++) {

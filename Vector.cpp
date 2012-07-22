@@ -76,6 +76,10 @@ float Vector2D::lengthSquared() const {
 	return x*x + y*y;
 }
 
+float Vector2D::getAngle() const {
+	return atan2(y, x);
+}
+
 Vector3D Vector3D::operator+(const Vector3D& v) const
 {
   return Vector3D(x+v.x, y+v.y, z+v.z);

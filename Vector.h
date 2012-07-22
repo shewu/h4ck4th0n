@@ -21,6 +21,7 @@ class Vector2D
 		Vector2D getNormalVector() const;
 		Vector2D getRotation(const float) const;
 		float lengthSquared() const;
+		float getAngle() const;
 };
 
 Vector2D operator*(const float, const Vector2D);

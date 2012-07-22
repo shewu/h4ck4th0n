@@ -73,7 +73,10 @@ class PhysicsWorld : public World
 			ET_ROUND_DISAPPEAR,
 			ET_ROUND_WALL_CORNER_1,
 			ET_ROUND_WALL_CORNER_2,
-			ET_ROUND_WALL_LINE
+			ET_ROUND_WALL_LINE,
+			ET_ROUND_ROUNDWALL_CORNER_1,
+			ET_ROUND_ROUNDWALL_CORNER_2,
+			ET_ROUND_ROUNDWALL_LINE
 		};
 
 		struct collide_event
@@ -117,6 +120,11 @@ class PhysicsWorld : public World
 				std::map<std::pair<int, int>, collide_event>& collideRoundWithWall,
 				std::priority_queue<collide_event>& collideEvents,
 				float cur, float dt);
+		static void doRoundWallCollision(MovingRoundObject const& obj,
+				RoundWall const& wall,
+				std::map<std::pair<int, int>, collide_event>& collideRoundWithRoundWall,
+				std::priority_queue<collide_event>& collideEvents,
+				float cur, float dt);
 		static void doRoundObjectDisappearing(MovingRoundObject const& obj,
 				std::map<int, collide_event>& collideDisappear,
 				std::priority_queue<collide_event>& collideEvents,
@@ -125,6 +133,7 @@ class PhysicsWorld : public World
 				MovingRoundObject& obj2, bool shouldDie);
 		static void bounceMovingRoundFromPoint(MovingRoundObject& obj, Vector2D const& p);
 		static void bounceMovingRoundFromWall(MovingRoundObject& obj, Vector2D const& p1, Vector2D const& p2);
+		static void bounceMovingRoundFromArc(MovingRoundObject& obj, Vector2D const& center, float radius);
 		static void updateRoundObjectsForward(std::map<int, MovingRoundObject*>& objects, float dt);
 };
 

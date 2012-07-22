@@ -66,7 +66,7 @@ void initVideo() {
 	WIDTH = ALIGN(WIDTH);
 	HEIGHT = ALIGN(HEIGHT);
 
-	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_DOUBLEBUF | SDL_OPENGL);
 	//SDL_ShowCursor(false);
 	//SDL_WM_GrabInput(SDL_GRAB_ON);
 
@@ -156,4 +156,3 @@ int main(int argc, char* argv[]) {
 
 	return 0;
 }
-

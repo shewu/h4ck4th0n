@@ -16,7 +16,8 @@ struct GamePlayer {
 
 class Game {
     private:
-        std::map<SocketConnection*, GamePlayer*> players;
+    	// map from playerID to GamePlayer*
+        std::map<int, GamePlayer*> players;
 
         void applyForcesFromInput(float dt);
 
@@ -48,16 +49,16 @@ class Game {
 
         void init();
 
-		bool addPlayer(SocketConnection*);
-		void removePlayer(SocketConnection*);
+		bool addPlayer(int playerID, WritePacket& initInfoWP);
+		void removePlayer(int playerID);
 
-		void processPacket(SocketConnection* sc, ReadPacket* rp);
+		void processPacket(int playerID, ReadPacket* rp);
 		void update(float dt);
 
 		/**
 		 * @return object id, or kNoObjectExists or kNoPlayerExists
 		 */
-		int getObjectIDOf(SocketConnection*);
+		int getObjectIDOf(int playerID);
         static const int kNoObjectExists = -1;
         static const int kNoPlayerExists = -2;
 
@@ -65,14 +66,16 @@ class Game {
 			return world_;
 		}
 
-        void send_sounds_to(SocketConnection* c);
-
 		std::vector<Sound> const& getSounds() const {
 			return sounds;
 		}
 
 		void clearSounds() {
 			sounds.clear();
+		}
+
+		HBMap const& getMap() {
+			return world_.getMap();
 		}
 };
 

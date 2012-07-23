@@ -49,7 +49,7 @@ GameViewController::GameViewController() {
 		SDL_Delay(200);
 		sock->recv_all();
 		while ((rp = sc->receive_packet()) != NULL) {
-			if (rp->message_type == STC_INITIAL_ANGLE) {
+			if (rp->message_type == STC_INIT_INFO) {
 				done = true;
 				break;
 			}

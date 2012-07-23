@@ -200,11 +200,12 @@ float ReadPacket::read_float() {
 // Make sure buf is large enough
 
 void WritePacket::_increase_buf_size() {
-    char *buf2 = new char[max_size * 2];
+	int new_max_size = (max_size > 0 ? max_size * 2 : 1);
+    char *buf2 = new char[new_max_size];
     memcpy(buf2, buf, size);
     delete[] buf;
     buf = buf2;
-    max_size *= 2;
+    max_size = new_max_size;
 }
 
 // Getters for WritePacket

@@ -13,32 +13,45 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <fstream>
 #include <iostream>
 #include <set>
 
 #include "CTFGame.h"
 #include "Game.h"
 #include "Hack.h"
+#include "Logging.h"
 #include "Packet.h"
 #include "Socket.h"
 #include "Sound.h"
 
 using std::cin;
 using std::cout;
+using std::fstream;
 using std::set;
 
 #define MYPORT "55555"
 
 #define TIMESTEP_MICROSECONDS 10000
 
-/* Every connecting client is randomly assigned
-   a unique client ID number. The SocketConnection
-   corresponding to that client, along with the
-   ID number, is stored in the Client struct.
-*/
+struct Client {
+	static int next_id;
+	Client(SocketConnection* sc) {
+		this->sc = sc;
+		playerID = next_id++;
+	}
+
+	SocketConnection* sc;
+	int playerID;
+
+	bool operator<(Client const& cl) const {
+		return playerID < cl.playerID;
+	}
+};
+int Client::next_id = 0;
 
 // A map from the ID numbers to the Client structs
-set<SocketConnection*> clients;
+set<Client> clients;
 
 // Global variable keeping track of time
 timeval tim;
@@ -59,17 +72,26 @@ void verify() {
 }
 
 // Remove a client from the game
-void remove_client(SocketConnection *sc) {
-    s->closeConnection(sc);
-    clients.erase(sc);
+void remove_client(Client const& cl) {
+    s->closeConnection(cl.sc);
+    clients.erase(cl);
 }
 
 int main() {
-	srand((unsigned int) time(NULL));
-
     verify();
 
-    srand((unsigned int)time(NULL));
+    fstream f;
+    f.open("logs/log", fstream::out | fstream::binary);
+    if (f.fail()) {
+    	fprintf(stderr, "failed to open log, aborting\n");
+    	return 0;
+	}
+
+	// since we log the random seed and use it for playback purposes, the
+	// Server should not use randomness outside of Game
+	unsigned int randomSeed = time(NULL);
+	logRandomSeed(f, randomSeed);
+	srand(randomSeed);
 
 	// Initialize tim
     gettimeofday(&tim, NULL);
@@ -110,10 +132,7 @@ int main() {
         if(poll(&fds, 1, 0)) { //do we have input from stdin
             char c = fgetc(stdin);
             if(c == 'q') {
-                // kill server
-                // should probably also deal with any clients
-                close(sockfd);
-                exit(0);
+                break;
             }
         }
 
@@ -128,7 +147,7 @@ int main() {
         if(sc != NULL) {
             printf("Connection made\n");
 
-            clients.insert(sc);
+            clients.insert(Client(sc));
 
             printf("Client added to clients map\n");
         }
@@ -139,7 +158,7 @@ int main() {
             auto next_it = it;
             ++next_it;
 
-            SocketConnection* sc = *it;
+            Client const& cl = *it;
 
 			// First, we see when the last time we received
 			// a packet from them is. If it was too long ago,
@@ -147,36 +166,44 @@ int main() {
 			// and server requires that the client send a message
 			// at least once every TIMEOUT seconds to demonstrate
 			// that it is still present.
-            if(sc->lastTimeReceived < time(NULL) - TIMEOUT) {
+            if(cl.sc->lastTimeReceived < time(NULL) - TIMEOUT) {
 				WritePacket wp(STC_DISCONNECT, 0);
-				sc->send_packet(wp);
+				cl.sc->send_packet(wp);
 
-                game->removePlayer(sc);
-                remove_client(sc);
+				logRemovePlayer(f, cl.playerID);
+                game->removePlayer(cl.playerID);
+                remove_client(cl);
                 printf("Client timed out, currently %zu clients\n",
                         clients.size());
             }
 
 			// If the client is still here, then we read any packets
-			// that we have from it. Most packet types are dealt
+			// that we have from it. Most packet types* are dealt
 			// with by game. The only packets we have to handle here
 			// are the CTS_CONNECT and CTS_DISCONNECT messages.
+			//
+			// * the CTS_USER_STATE type
             else {
                 ReadPacket* rp;
-                while((rp = sc->receive_packet()) != NULL) {
+                while((rp = cl.sc->receive_packet()) != NULL) {
                     // Connect
                     if(rp->message_type == CTS_CONNECT) {
                         printf("Received connect message\n");
 
-                        if(game->addPlayer(sc))
+						WritePacket wp(STC_INIT_INFO, 4);
+						logAddPlayer(f, cl.playerID);
+                        if(game->addPlayer(cl.playerID, wp)) {
+                        	cl.sc->send_packet(wp);
                             printf("Player added to game; currently %zu clients\n",
                                      clients.size());
+						}
                     }
 
                     // Disconnect
                     else if(rp->message_type == CTS_DISCONNECT) {
-                        game->removePlayer(sc);
-                        remove_client(sc);
+                    	logRemovePlayer(f, cl.playerID);
+                        game->removePlayer(cl.playerID);
+                        remove_client(cl);
                         printf("Player disconnected, currently %zu clients\n",
 											clients.size());
 						break; // Don't keep polling a deleted SocketConnection
@@ -185,8 +212,9 @@ int main() {
 					// Give packet to game for processing
 					// if the packet is of any other type.
                     else if (rp->message_type == CTS_USER_STATE &&
-                             rp->packet_number >= sc->largestPacketNum) {
-                        game->processPacket(sc, rp);
+                             rp->packet_number >= cl.sc->largestPacketNum) {
+                        logProcessPacket(f, cl.playerID, rp);
+                        game->processPacket(cl.playerID, rp);
                     }
 
                     delete rp;
@@ -205,6 +233,7 @@ int main() {
 
 		// Update game state, e.g., do physics
 		// computations
+		logDoSimulation(f, dt);
         game->update(dt);
 
 		// Send the world state to all clients
@@ -212,11 +241,11 @@ int main() {
 		game->getWorld().writeToPacket(&worldWritePacket);
 		for(auto iter = clients.begin();
 		        iter != clients.end(); ++iter) {
-		    SocketConnection* sc = *iter;
-		    int playerID = game->getObjectIDOf(sc);
-		    if (playerID != Game::kNoPlayerExists) {
-				worldWritePacket.write_int(game->getObjectIDOf(sc));
-				sc->send_packet(worldWritePacket);
+		    Client const& cl = *iter;
+		    int objectID = game->getObjectIDOf(cl.playerID);
+		    if (objectID != Game::kNoPlayerExists) {
+				worldWritePacket.write_int(objectID);
+				cl.sc->send_packet(worldWritePacket);
 				worldWritePacket.backup(sizeof(int));
 			}
 		}
@@ -225,8 +254,8 @@ int main() {
 		for (Sound const& sound : game->getSounds()) {
 			WritePacket wp(STC_SOUND, 9);
 			sound.writeToPacket(&wp);
-			for (SocketConnection* sc : clients) {
-				sc->send_packet(wp);
+			for (Client const& cl : clients) {
+				cl.sc->send_packet(wp);
 			}
 		}
 		game->clearSounds();
@@ -235,4 +264,11 @@ int main() {
 		// next iteration.
         usleep(TIMESTEP_MICROSECONDS);
     }
+
+	// kill server
+	// should probably also deal with any clients
+	close(sockfd);
+
+	logDone(f);
+	f.close();
 }

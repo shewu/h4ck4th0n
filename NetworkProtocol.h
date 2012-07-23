@@ -34,7 +34,7 @@
  */
 
 #define STC_DISCONNECT 0
-#define STC_INITIAL_ANGLE 1
+#define STC_INIT_INFO 1
 #define STC_WORLD_DATA 2
 #define STC_SOUND 4
 

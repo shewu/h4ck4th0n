@@ -25,8 +25,8 @@ void Game::init() {
 	onInit();
 }
 
-bool Game::addPlayer(SocketConnection* sc) {
-	if (players.find(sc) != players.end()) {
+bool Game::addPlayer(int playerID, WritePacket& initInfoWP) {
+	if (players.find(playerID) != players.end()) {
 		return false;
 	}
 
@@ -35,20 +35,17 @@ bool Game::addPlayer(SocketConnection* sc) {
 		return false;
 	}
 
-	players.insert(make_pair(sc, gp));
+	players.insert(make_pair(playerID, gp));
 
 	// dumb handshake
-	WritePacket wp(STC_INITIAL_ANGLE, 4);
-	wp.write_float(gp->input.getTheta());
-	world_.getMap().writeToPacket(wp);
-
-	sc->send_packet(wp);
+	initInfoWP.write_float(gp->input.getTheta());
+	world_.getMap().writeToPacket(initInfoWP);
 
 	return true;
 }
 
-void Game::removePlayer(SocketConnection* sc) {
-	auto iter = players.find(sc);
+void Game::removePlayer(int playerID) {
+	auto iter = players.find(playerID);
 	if (iter == players.end()) {
 		return;
 	}
@@ -60,8 +57,8 @@ void Game::removePlayer(SocketConnection* sc) {
 	players.erase(iter);
 }
 
-int Game::getObjectIDOf(SocketConnection* sc) {
-	auto iter = players.find(sc);
+int Game::getObjectIDOf(int playerID) {
+	auto iter = players.find(playerID);
 	if (iter == players.end()) {
 		return kNoPlayerExists;
 	}
@@ -84,8 +81,8 @@ void Game::applyForcesFromInput(float dt) {
 	}
 }
 
-void Game::processPacket(SocketConnection* sc, ReadPacket* rp) {
-	auto iter = players.find(sc);
+void Game::processPacket(int playerID, ReadPacket* rp) {
+	auto iter = players.find(playerID);
 	if (iter == players.end()) {
 		return;
 	}

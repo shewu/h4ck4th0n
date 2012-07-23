@@ -13,6 +13,7 @@ UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW
 HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW
 #HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -L/opt/AMDAPP/lib/x86_64 -O2 -g
 
+PLAYBACKSERVER_TARGET=playback
 SERVER_TARGET=server
 UNHOLY_BALLS_TARGET=unholyballs
 HOLY_BALLS_TARGET=holyballs
@@ -37,7 +38,8 @@ CLIENT_OBJECTS = $(SHARED_OBJECTS) \
 	MirroringWorld.o \
 	UserInput.o
 
-SERVER_OBJECTS+=$(SHARED_OBJECTS) Server.o Game.o Physics.o PhysicsWorld.o Forces.o CTFGame.o UserInput.o
+SERVER_OBJECTS+=$(SHARED_OBJECTS) Server.o Game.o Physics.o PhysicsWorld.o Forces.o CTFGame.o UserInput.o Logging.o
+PLAYBACKSERVER_OBJECTS+=$(SHARED_OBJECTS) PlaybackServer.o Game.o Physics.o PhysicsWorld.o Forces.o CTFGame.o UserInput.o
 UNHOLY_BALLS_OBJECTS+=$(CLIENT_OBJECTS) Unholyclient.o UnholyGameViewController.o
 HOLY_BALLS_OBJECTS+=$(CLIENT_OBJECTS) Holyclient.o HolyGameViewController.o
 MULTI_BALLS_OBJECTS+=$(CLIENT_OBJECTS) Multiclient.o MultiGameViewController.o
@@ -50,6 +52,9 @@ all: executables
 
 $(SERVER_TARGET): $(SERVER_OBJECTS)
 	$(LD) -o $(SERVER_TARGET) $(SERVER_OBJECTS) $(SERVER_LDFLAGS)
+
+$(PLAYBACKSERVER_TARGET): $(PLAYBACKSERVER_OBJECTS)
+	$(LD) -o $(PLAYBACKSERVER_TARGET) $(PLAYBACKSERVER_OBJECTS) $(SERVER_LDFLAGS)
 
 $(UNHOLY_BALLS_TARGET): $(UNHOLY_BALLS_OBJECTS)
 	$(LD) -o $(UNHOLY_BALLS_TARGET) $(UNHOLY_BALLS_OBJECTS) $(UNHOLY_LDFLAGS)

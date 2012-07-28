@@ -21,6 +21,7 @@ class CTFGame : public Game {
         GamePlayer* onPlayerAdded();
         void onPlayerRemoved(GamePlayer*);
         void onInit();
+        std::string getScore(GamePlayer*);
 
 		void createFlag(int regionNum);
 		void createNewPlayer(int teamNum, GamePlayer* gp);

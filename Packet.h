@@ -41,6 +41,7 @@ class WritePacket {
         void write_string(std::string const& s);
 
         void reset();
+        void reset(int);
         void backup(int);
 
         char getMessageType() const;

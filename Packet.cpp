@@ -28,6 +28,10 @@ void WritePacket::reset() {
 	size = 0;
 }
 
+void WritePacket::reset(int pos) {
+	size = pos;
+}
+
 // Constructor
 // The argument 's' is an initial guess
 // for the size of the packet, but it

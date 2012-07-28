@@ -71,6 +71,15 @@ int Game::getObjectIDOf(int playerID) {
 	}
 }
 
+std::string Game::getScoreByPlayerID(int playerID) {
+	auto iter = players.find(playerID);
+	if (iter == players.end()) {
+		return "";
+	}
+	GamePlayer* player = iter->second;
+	return getScore(player);
+}
+
 void Game::applyForcesFromInput(float dt) {
 	for (auto iter = players.begin(); iter != players.end(); ++iter) {
 		GamePlayer* player = iter->second;

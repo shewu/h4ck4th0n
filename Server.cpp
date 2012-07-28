@@ -239,14 +239,16 @@ int main() {
 		// Send the world state to all clients
 		worldWritePacket.reset();
 		game->getWorld().writeToPacket(&worldWritePacket);
+		int currentPos = worldWritePacket.getSize();
 		for(auto iter = clients.begin();
 		        iter != clients.end(); ++iter) {
 		    Client const& cl = *iter;
 		    int objectID = game->getObjectIDOf(cl.playerID);
 		    if (objectID != Game::kNoPlayerExists) {
 				worldWritePacket.write_int(objectID);
+				worldWritePacket.write_string(game->getScoreByPlayerID(cl.playerID));
 				cl.sc->send_packet(worldWritePacket);
-				worldWritePacket.backup(sizeof(int));
+				worldWritePacket.reset(currentPos);
 			}
 		}
 

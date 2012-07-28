@@ -1,6 +1,7 @@
 #include "CTFGame.h"
 
 using std::pair;
+using std::string;
 
 // Four region types
 // 1 is red team
@@ -97,4 +98,9 @@ void CTFGame::createNewPlayer(int teamNum, GamePlayer* gp) {
 	obj->setSpawnCallback([obj, gp](){ gp->obj = obj; });
 
 	obj->setDeathCallback(std::bind(&CTFGame::createNewPlayer, this, teamNum, gp));
+}
+
+string CTFGame::getScore(GamePlayer* player) {
+	// TODO scoring
+	return "";
 }

@@ -36,6 +36,7 @@ class Game {
         virtual GamePlayer* onPlayerAdded() = 0;
         virtual void onPlayerRemoved(GamePlayer*) = 0;
         virtual void onInit() = 0;
+        virtual std::string getScore(GamePlayer*) = 0;
 
     protected:
         PhysicsWorld world_;
@@ -55,12 +56,13 @@ class Game {
 		void processPacket(int playerID, ReadPacket* rp);
 		void update(float dt);
 
+        static const int kNoObjectExists = -1;
+        static const int kNoPlayerExists = -2;
 		/**
 		 * @return object id, or kNoObjectExists or kNoPlayerExists
 		 */
 		int getObjectIDOf(int playerID);
-        static const int kNoObjectExists = -1;
-        static const int kNoPlayerExists = -2;
+		std::string getScoreByPlayerID(int playerID);
 
 		PhysicsWorld const& getWorld() const {
 			return world_;

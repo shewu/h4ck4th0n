@@ -309,20 +309,7 @@ void PhysicsWorld::bounceMovingRoundAndShrinkingRound(
 	}
 }
 
-void PhysicsWorld::bounceMovingRoundFromPoint(MovingRoundObject& obj, Vector2D const& p) {
-	Vector2D normal = obj.center - p;
-	float nv1 = obj.velocity * normal;
-	obj.velocity -= 2.0 * (nv1/(normal*normal)) * normal;
-}
-
-void PhysicsWorld::bounceMovingRoundFromWall(MovingRoundObject& obj, Vector2D const& p1, Vector2D const& p2) {
-	Vector2D normal = (p2 - p1).getNormalVector();
-	float nv1 = obj.velocity * normal;
-	obj.velocity -= 2.0 * (nv1/(normal*normal)) * normal;
-}
-
-void PhysicsWorld::bounceMovingRoundFromArc(MovingRoundObject& obj, Vector2D const& center, float radius) {
-	Vector2D normal = obj.center - center;
+void PhysicsWorld::bounceMovingRoundObjectByNormal(MovingRoundObject& obj, Vector2D const& normal) {
 	float nv1 = obj.velocity * normal;
 	obj.velocity -= 2.0 * (nv1/(normal*normal)) * normal;
 }
@@ -487,15 +474,7 @@ void PhysicsWorld::doSimulation(float dt) {
 					if (shouldDie) {
 						obj.startShrinking(NULL, -normal*(1/sqrt(normal*normal))*DEATH_RATE);
 					} else {
-						if (e.type == ET_ROUND_WALL_CORNER_1) {
-							bounceMovingRoundFromPoint(obj, wall.p1);
-						}
-						else if (e.type == ET_ROUND_WALL_CORNER_2) {
-							bounceMovingRoundFromPoint(obj, wall.p2);
-						}
-						else if (e.type == ET_ROUND_WALL_LINE) {
-							bounceMovingRoundFromWall(obj, wall.p1, wall.p2);
-						}
+						bounceMovingRoundObjectByNormal(obj, normal);
 					}
 
 					for (auto i = movingRoundObjects.begin(); i != movingRoundObjects.end(); i++) {
@@ -553,15 +532,7 @@ void PhysicsWorld::doSimulation(float dt) {
 					if (shouldDie) {
 						obj.startShrinking(NULL, -normal*(1/sqrt(normal*normal))*DEATH_RATE);
 					} else {
-						if (e.type == ET_ROUND_WALL_CORNER_1) {
-							bounceMovingRoundFromPoint(obj, wall.center + wall.radius * Vector2D(cosf(wall.theta1), sinf(wall.theta1)));
-						}
-						else if (e.type == ET_ROUND_WALL_CORNER_2) {
-							bounceMovingRoundFromPoint(obj, wall.center + wall.radius * Vector2D(cosf(wall.theta2), sinf(wall.theta2)));
-						}
-						else if (e.type == ET_ROUND_WALL_LINE) {
-							bounceMovingRoundFromArc(obj, wall.center, wall.radius);
-						}
+						bounceMovingRoundObjectByNormal(obj, normal);
 					}
 
 					for (auto i = movingRoundObjects.begin(); i != movingRoundObjects.end(); i++) {

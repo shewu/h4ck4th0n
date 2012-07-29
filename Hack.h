@@ -157,7 +157,7 @@ class TeamDescriptor {
  */
 class WallDescriptor {
 	public:
-		WallDescriptor(WallTypeData wallTypeData_, Vector2D pos1_) : _wallTypeData(wallTypeData_), _pos1(pos1_) { }
+		WallDescriptor(WallTypeData wallTypeData_) : _wallTypeData(wallTypeData_) { }
 		WallType getWallType() const {
 			return _wallTypeData.wallType;
 		}
@@ -168,7 +168,6 @@ class WallDescriptor {
 
 	protected:
 		WallTypeData _wallTypeData;
-		Vector2D _pos1;
 };
 
 /**
@@ -176,7 +175,7 @@ class WallDescriptor {
  */
 class RectangularWallDescriptor : public WallDescriptor {
 	public:
-		RectangularWallDescriptor(WallTypeData wallTypeData_, Vector2D pos1_, Vector2D pos2_) : WallDescriptor(wallTypeData_, pos1_), _pos2(pos2_) { }
+		RectangularWallDescriptor(WallTypeData wallTypeData_, Vector2D pos1_, Vector2D pos2_) : WallDescriptor(wallTypeData_), _pos1(pos1_), _pos2(pos2_) { }
 		Vector2D getPos1() const {
 			return this->_pos1;
 		}
@@ -185,6 +184,7 @@ class RectangularWallDescriptor : public WallDescriptor {
 		}
 
 	private:
+		Vector2D _pos1;
 		Vector2D _pos2;
 };
 
@@ -193,10 +193,25 @@ class RectangularWallDescriptor : public WallDescriptor {
  */
 class RoundWallDescriptor : public WallDescriptor {
 	public:
-		RoundWallDescriptor(WallTypeData wallTypeData_, Vector2D pos1_) : WallDescriptor(wallTypeData_, pos1_) { }
-		Vector2D getPos() const {
-			return this->_pos1;
+		RoundWallDescriptor(WallTypeData wallTypeData_, Vector2D center_, float radius_, float theta1_, float theta2_) : WallDescriptor(wallTypeData_), _center(center_), _radius(radius_), _theta1(theta2_), _theta2(theta2_) { }
+		Vector2D getCenter() const {
+			return this->_center;
 		}
+		float getRadius() const {
+			return this->_radius;
+		}
+		float getTheta1() const {
+			return this->_theta1;
+		}
+		float getTheta2() const {
+			return this->_theta2;
+		}
+
+	private:
+		Vector2D _center;
+		float _radius;
+		float _theta1;
+		float _theta2;
 };
 
 inline float random_uniform_float(float l, float h) {

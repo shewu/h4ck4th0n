@@ -4,6 +4,7 @@
 #include "World.h"
 
 #include <functional>
+#include <utility>
 #include <vector>
 
 class PhysicsWorld : public World
@@ -19,12 +20,20 @@ class PhysicsWorld : public World
 		PhysicsWorld(HBMap const& hbmap) : World(hbmap) {
 			roundWallCollisionCallback = [](ObjectPtr<MovingRoundObject> a, ObjectPtr<Wall> b) { return false; };
 			roundRoundCollisionCallback = [](ObjectPtr<MovingRoundObject> a, ObjectPtr<MovingRoundObject> b) { return std::pair<bool,bool>(false,false); };
-			for (auto& wallDesc : hbmap.getRectangularWalls()) {
+			for (auto const& wallDesc : hbmap.getRectangularWalls()) {
 				RectangularWall* wall = new RectangularWall(
 					wallDesc.getMaterial(),
 					wallDesc.getWallType(),
 					wallDesc.getPos1(), wallDesc.getPos2());
-				rectangularWalls.insert(std::pair<int,RectangularWall*>(wall->getID(),wall));
+				rectangularWalls.insert(std::make_pair(wall->getID(),wall));
+			}
+			for (auto const& wallDesc : hbmap.getRoundWalls()) {
+				RoundWall* wall = new RoundWall(
+					wallDesc.getMaterial(),
+					wallDesc.getWallType(),
+					wallDesc.getCenter(), wallDesc.getRadius(),
+					wallDesc.getTheta1(), wallDesc.getTheta2());
+				roundWalls.insert(std::make_pair(wall->getID(), wall));
 			}
 		}
 

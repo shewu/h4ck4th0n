@@ -73,6 +73,8 @@ void HBMap::parse(string const& filename) {
             parseSpawn(s);
         } else if (cmd.compare("wall") == 0) {
             parseRectangularWall(s);
+        } else if (cmd.compare("roundwall") == 0) {
+            parseRoundWall(s);
         }
         cmd = "";
     }
@@ -191,3 +193,32 @@ void HBMap::parseRectangularWall(string const& s) {
 	rectangularWalls.push_back(RectangularWallDescriptor(wallTypeData, Vector2D(a, b), Vector2D(c, d)));
 }
 
+void HBMap::parseRoundWall(string const& s) {
+	float a = 0, b = 0, c = 0, d = 0, e = 0;
+    StringTokenizer st(s);
+    WallTypeData wallTypeData;
+    if (st.hasMoreTokens()) {
+		string tok = st.nextToken();
+        wallTypeData = parseWallType(tok);
+    }
+    if (st.hasMoreTokens()) {
+        a = atoi(st.nextToken().c_str());
+    }
+    if (st.hasMoreTokens()) {
+        b = atoi(st.nextToken().c_str());
+    }
+    if (st.hasMoreTokens()) {
+        c = atoi(st.nextToken().c_str());
+    }
+    if (st.hasMoreTokens()) {
+        d = atoi(st.nextToken().c_str());
+    }
+    if (st.hasMoreTokens()) {
+        e = atoi(st.nextToken().c_str());
+    }
+    if (st.hasMoreTokens()) {
+        throw ParseException("parseWall fail");
+    }
+
+	roundWalls.push_back(RoundWallDescriptor(wallTypeData, Vector2D(a, b), c, d * M_PI / 180.0, e * M_PI / 180.0));
+}

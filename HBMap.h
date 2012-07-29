@@ -153,6 +153,7 @@ class HBMap {
         void parseTeam(std::string const& s);
         void parseSpawn(std::string const& s);
         void parseRectangularWall(std::string const& s);
+        void parseRoundWall(std::string const& s);
         WallTypeData parseWallType(std::string const& s);
 
         std::string gameType;

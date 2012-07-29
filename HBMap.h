@@ -57,7 +57,6 @@ class HBMap {
 			rectangularWalls = map.getRectangularWalls();
 			roundWalls = map.getRoundWalls();
 			for (int i = 0; i < (int) teams.size(); ++i) {
-				flags[i] = map.getFlagsForTeam(i);
 				spawns[i] = map.getSpawnsForTeam(i);
 			}
 		}
@@ -124,21 +123,6 @@ class HBMap {
         }
 
 		/**
-		 * Gets the flags for a given team. If an invalid team number is
-		 * requested, returns the spawns for the first team.
-		 *
-		 * @param team the team number for which to get flags.
-		 *
-		 * @return the flags for team.
-		 */
-        const std::vector<FlagDescriptor>& getFlagsForTeam(unsigned team) const {
-            if (team >= teams.size()) {
-                return flags[0];
-            }
-            return flags[team];
-        }
-
-		/**
 		 * Gets the rectangular walls for the map.
 		 *
 		 * @return a list of rectangular walls.
@@ -168,7 +152,6 @@ class HBMap {
         void parseDimensions(std::string const& s);
         void parseTeam(std::string const& s);
         void parseSpawn(std::string const& s);
-        void parseFlag(std::string const& s);
         void parseRectangularWall(std::string const& s);
         WallTypeData parseWallType(std::string const& s);
 
@@ -183,7 +166,6 @@ class HBMap {
 		std::vector<TeamDescriptor> teams;
 		std::vector<RectangularWallDescriptor> rectangularWalls;
 		std::vector<RoundWallDescriptor> roundWalls;
-		std::vector<FlagDescriptor> flags[HBMap::MAX_TEAMS];
         std::vector<SpawnDescriptor> spawns[HBMap::MAX_TEAMS];
 
         Color getColorForTeam(int team) {

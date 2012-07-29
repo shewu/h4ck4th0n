@@ -71,8 +71,6 @@ void HBMap::parse(string const& filename) {
             parseTeam(s);
         } else if (cmd.compare("spawn") == 0) {
             parseSpawn(s);
-        } else if (cmd.compare("flag") == 0) {
-            parseFlag(s);
         } else if (cmd.compare("wall") == 0) {
             parseRectangularWall(s);
         }
@@ -151,26 +149,6 @@ void HBMap::parseSpawn(string const& s) {
     }
 
     spawns[id].push_back(SpawnDescriptor(x, y, x+5, y+5));
-}
-
-void HBMap::parseFlag(string const& s) {
-    StringTokenizer st(s);
-    int id = -1, x = -1, y = -1;
-    if (st.hasMoreTokens()) {
-        id = atoi(st.nextToken().c_str());
-    }
-    if (st.hasMoreTokens()) {
-        x = atoi(st.nextToken().c_str());
-    }
-    if (st.hasMoreTokens()) {
-        y = atoi(st.nextToken().c_str());
-    }
-
-    if (id < 0 || id >= (int) teams.size() || st.hasMoreTokens()) {
-        throw ParseException("parseFlag fail");
-    }
-
-	flags[id].push_back(FlagDescriptor(id, Vector2D(x, y)));
 }
 
 WallTypeData HBMap::parseWallType(string const& s) {

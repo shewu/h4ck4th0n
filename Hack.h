@@ -152,38 +152,6 @@ class TeamDescriptor {
 		}
 };
 
-// TODO kill this
-/**
- * An immutable class that describes a Flag. Used by HBMap.
- */
-class FlagDescriptor {
-	public:
-		FlagDescriptor(int team_, Vector2D pos_) : _team(team_), _pos(pos_) { }
-		~FlagDescriptor() { }
-
-		/**
-		 * Returns the position of the flag.
-		 *
-		 * @return the position.
-		 */
-		const Vector2D getPos() const {
-			return _pos;
-		}
-
-		/**
-		 * Returns the team to which the flag belongs.
-		 *
-		 * @return the team number.
-		 */
-		const int getTeam() const {
-			return _team;
-		}
-
-	private:
-		int _team;
-		Vector2D _pos;
-};
-
 /**
  * An immutable class that describes a Wall. Uesd by HBMap.
  */

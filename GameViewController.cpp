@@ -104,7 +104,7 @@ void GameViewController::process() {
 					break;
 				}
 			}
-			if (c >= 0 && c < 3 && src >= 0) {
+			if (c >= 0 && c < NUM_SOUND_TYPES && src >= 0) {
 				ALfloat alsrcpos[] = { v1, v2, 0 };
 				ALfloat alsrcvel[] = { 0, 0, 0 };
 

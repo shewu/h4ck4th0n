@@ -12,11 +12,11 @@ using std::priority_queue;
 using std::vector;
 
 // geometry helper methods
-namespace {
+namespace  {
 	void intersectRayWithCircle(Vector2D p, Vector2D v, Vector2D center, float radius,
 	                            float& time1, float& theta1, float& time2, float& theta2) {
-		float a = v.x * v.y;
-		float b = v.x * (p.y - center.y) + v.y * (p.x - center.x);
+		float a = v.x * v.x + v.y * v.y;
+		float b = 2.0 * (v.x * (p.x - center.x) + v.y * (p.y - center.y));
 		float c = (p.x - center.x) * (p.x - center.x) +
 		          (p.y - center.y) * (p.y - center.y) - radius * radius;
 		float d = b*b - 4.0f*a*c;
@@ -30,15 +30,15 @@ namespace {
 		time2 = (-b + d) / (2.0 * a);
 
 		if (time1 < 0.0) {
-			theta1 = (p + time1*v - center).getAngle();
-		} else {
 			time1 = INFINITY;
+		} else {
+			theta1 = (p + time1*v - center).getAngle();
 		}
 
 		if (time2 < 0.0) {
-			theta2 = (p + time2*v - center).getAngle();
-		} else {
 			time2 = INFINITY;
+		} else {
+			theta2 = (p + time2*v - center).getAngle();
 		}
 	}
 	
@@ -262,6 +262,10 @@ void PhysicsWorld::doRoundWallCollision(MovingRoundObject const& obj,
 		mintime = time3;
 		type = ET_ROUND_ROUNDWALL_LINE;
 	}
+
+	if (obj.velocity.lengthSquared() >= 1.0e-4) {
+	}
+
 	float t = cur + mintime;
 	collide_event e(t, type, obj.getID(), wall.getID());
 	collideRoundWithRoundWall[pair<int, int>(obj.getID(), wall.getID())] = e;
@@ -488,9 +492,7 @@ void PhysicsWorld::doSimulation(float dt) {
 						}
 					}
 					for (auto i = roundWalls.begin(); i != roundWalls.end(); i++) {
-						if (i->first != e.t2) {
-							doRoundWallCollision(obj, *(i->second), collideRoundWithRoundWall, collideEvents, e.time, dt);
-						}
+						doRoundWallCollision(obj, *(i->second), collideRoundWithRoundWall, collideEvents, e.time, dt);
 					}
 					doRoundObjectDisappearing(obj, collideDisappear, collideEvents, e.time, dt);
 
@@ -541,14 +543,10 @@ void PhysicsWorld::doSimulation(float dt) {
 						}
 					}
 					for (auto i = rectangularWalls.begin(); i != rectangularWalls.end(); i++) {
-						if (i->first != e.t2) {
-							doRectangularWallCollision(obj, *(i->second), collideRoundWithWall, collideEvents, e.time, dt);
-						}
+						doRectangularWallCollision(obj, *(i->second), collideRoundWithWall, collideEvents, e.time, dt);
 					}
 					for (auto i = roundWalls.begin(); i != roundWalls.end(); i++) {
-						if (i->first != e.t2) {
-							doRoundWallCollision(obj, *(i->second), collideRoundWithRoundWall, collideEvents, e.time, dt);
-						}
+						doRoundWallCollision(obj, *(i->second), collideRoundWithRoundWall, collideEvents, e.time, dt);
 					}
 					doRoundObjectDisappearing(obj, collideDisappear, collideEvents, e.time, dt);
 

@@ -71,8 +71,13 @@ class Vector2D
 			return x*x + y*y;
 		}
 
+		// returns value in [0, 2pi)
 		float getAngle() const {
-			return atan2(y, x);
+			float theta = atan2(y, x);
+			if (theta < 0.0) {
+				return theta + M_PI * 2.0;
+			}
+			return theta;
 		}
 };
 

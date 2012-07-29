@@ -77,8 +77,11 @@ void remove_client(Client const& cl) {
     clients.erase(cl);
 }
 
+	void intersectRayWithCircle(Vector2D p, Vector2D v, Vector2D center, float radius,
+	                            float& time1, float& theta1, float& time2, float& theta2);
+
 int main() {
-    verify();
+	verify();
 
     fstream f;
     f.open("logs/log", fstream::out | fstream::binary);

@@ -65,7 +65,7 @@ $(HOLY_BALLS_TARGET): $(HOLY_BALLS_OBJECTS)
 $(MULTI_BALLS_TARGET): $(MULTI_BALLS_OBJECTS)
 	$(LD) -o $(MULTI_BALLS_TARGET) $(MULTI_BALLS_OBJECTS) $(HOLY_LDFLAGS)
 
-%.o: %.cpp *.h
+%.o: %.cpp *.h mapinfo/*.h
 	$(CC) -c $(CCFLAGS) $<
 
 Unholyclient.o: Client.cpp *.h

@@ -173,12 +173,12 @@ void HBMap::parseFlag(string const& s) {
 	flags[id].push_back(FlagDescriptor(id, Vector2D(x, y)));
 }
 
-WallType HBMap::parseWallType(string const& s) {
-	auto wallTypeMapIter = wallTypeLookup.find(gameType);
-	if (wallTypeMapIter == wallTypeLookup.end()) {
-		throw ParseException("game type not found in wallTypeLookup");
+WallTypeData HBMap::parseWallType(string const& s) {
+	auto wallTypeMapIter = wallTypeDataLookup.find(gameType);
+	if (wallTypeMapIter == wallTypeDataLookup.end()) {
+		throw ParseException("game type not found in wallTypeDataLookup");
 	}
-	map<string, char> const& wallTypeMap = wallTypeMapIter->second;
+	map<string, WallTypeData> const& wallTypeMap = wallTypeMapIter->second;
 	auto wallTypeIter = wallTypeMap.find(s);
 	if (wallTypeIter == wallTypeMap.end()) {
 		throw ParseException("wall type `" + s + "' not recognized");
@@ -189,10 +189,10 @@ WallType HBMap::parseWallType(string const& s) {
 void HBMap::parseRectangularWall(string const& s) {
 	int a = 0, b = 0, c = 0, d = 0;
     StringTokenizer st(s);
-    WallType wallType;
+    WallTypeData wallTypeData;
     if (st.hasMoreTokens()) {
 		string tok = st.nextToken();
-        wallType = parseWallType(tok);
+        wallTypeData = parseWallType(tok);
     }
     if (st.hasMoreTokens()) {
         a = atoi(st.nextToken().c_str());
@@ -210,6 +210,6 @@ void HBMap::parseRectangularWall(string const& s) {
         throw ParseException("parseWall fail");
     }
 
-	rectangularWalls.push_back(RectangularWallDescriptor(wallType, Vector2D(a, b), Vector2D(c, d)));
+	rectangularWalls.push_back(RectangularWallDescriptor(wallTypeData, Vector2D(a, b), Vector2D(c, d)));
 }
 

@@ -170,7 +170,7 @@ class HBMap {
         void parseSpawn(std::string const& s);
         void parseFlag(std::string const& s);
         void parseRectangularWall(std::string const& s);
-        WallType parseWallType(std::string const& s);
+        WallTypeData parseWallType(std::string const& s);
 
         std::string gameType;
 

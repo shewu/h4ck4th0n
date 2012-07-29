@@ -9,6 +9,7 @@
 #include "Packet.h"
 #include "Vector.h"
 #include "Material.h"
+#include "WallType.h"
 
 #ifdef DEBUG
 #define P(x) printf x
@@ -89,6 +90,7 @@ class SpawnDescriptor {
 		}
 };
 
+// TODO probably kill this
 class TeamDescriptor {
     private:
         unsigned teamNumber;
@@ -150,6 +152,7 @@ class TeamDescriptor {
 		}
 };
 
+// TODO kill this
 /**
  * An immutable class that describes a Flag. Used by HBMap.
  */
@@ -186,13 +189,17 @@ class FlagDescriptor {
  */
 class WallDescriptor {
 	public:
-		WallDescriptor(WallType wallType_, Vector2D pos1_) : _wallType(wallType_), _pos1(pos1_) { }
+		WallDescriptor(WallTypeData wallTypeData_, Vector2D pos1_) : _wallTypeData(wallTypeData_), _pos1(pos1_) { }
 		WallType getWallType() const {
-			return _wallType;
+			return _wallTypeData.wallType;
+		}
+
+		MaterialPtr getMaterial() const {
+			return _wallTypeData.material;
 		}
 
 	protected:
-		WallType _wallType;
+		WallTypeData _wallTypeData;
 		Vector2D _pos1;
 };
 
@@ -201,7 +208,7 @@ class WallDescriptor {
  */
 class RectangularWallDescriptor : public WallDescriptor {
 	public:
-		RectangularWallDescriptor(WallType wallType_, Vector2D pos1_, Vector2D pos2_) : WallDescriptor(wallType_, pos1_), _pos2(pos2_) { }
+		RectangularWallDescriptor(WallTypeData wallTypeData_, Vector2D pos1_, Vector2D pos2_) : WallDescriptor(wallTypeData_, pos1_), _pos2(pos2_) { }
 		Vector2D getPos1() const {
 			return this->_pos1;
 		}
@@ -218,7 +225,7 @@ class RectangularWallDescriptor : public WallDescriptor {
  */
 class RoundWallDescriptor : public WallDescriptor {
 	public:
-		RoundWallDescriptor(WallType wallType_, Vector2D pos1_) : WallDescriptor(wallType_, pos1_) { }
+		RoundWallDescriptor(WallTypeData wallTypeData_, Vector2D pos1_) : WallDescriptor(wallTypeData_, pos1_) { }
 		Vector2D getPos() const {
 			return this->_pos1;
 		}

@@ -92,6 +92,10 @@ class World
 		std::map<int, RectangularWall*> const& getRectangularWalls() const {
 			return rectangularWalls;
 		}
+
+		std::map<int, RoundWall*> const& getRoundWalls() const {
+			return roundWalls;
+		}
 };
 
 enum ObjectType {

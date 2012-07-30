@@ -17,7 +17,7 @@ void UnholyGameViewController::_initGL() {
 	glLoadIdentity();
 	gluPerspective(60.0, ((float) WIDTH) / ((float) HEIGHT), 1.0, 100.0);
 	glMatrixMode(GL_MODELVIEW);
-	quad = gluNewQuadric();
+	_quad = gluNewQuadric();
 	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 
 	GLfloat light_ambient[] = { 0.6, 0.6, 0.6, 1.0 };
@@ -110,6 +110,19 @@ void UnholyGameViewController::_drawWalls() {
 		glVertex3f(wall->p1.x, wall->p1.y, 1);
 	}
 	glEnd();
+
+	glEnable(GL_NORMALIZE);
+	for (auto& iter : world->getRoundWalls()) {
+		RoundWall* wall = iter.second;
+		glPushMatrix();
+		glTranslatef(wall->center.x, wall->center.y, 0);
+		glScalef(wall->radius, wall->radius, wall->radius);
+		MaterialPtr color = wall->getMaterial();
+		glColor3f(color->getR()/255.0, color->getG()/255.0, color->getB()/255.0);
+		gluPartialDisk(_quad, 0.9, 1.0, 50, 50, wall->theta1, wall->theta2-wall->theta1);
+		glPopMatrix();
+	}
+	glDisable(GL_NORMALIZE);
 }
 
 void UnholyGameViewController::_drawObjects() {
@@ -121,7 +134,7 @@ void UnholyGameViewController::_drawObjects() {
 		glScalef(obj->radius, obj->radius, obj->heightRatio*obj->radius);
 		MaterialPtr color = obj->getMaterial();
 		glColor3f(color->getR()/255.0, color->getG()/255.0, color->getB()/255.0);
-		gluSphere(quad, 1.0, 50, 50);
+		gluSphere(_quad, 1.0, 50, 50);
 		glPopMatrix();
 	}
 	glDisable(GL_NORMALIZE);

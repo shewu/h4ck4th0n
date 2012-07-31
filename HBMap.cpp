@@ -217,7 +217,7 @@ void HBMap::parseRoundWall(string const& s) {
         e = atoi(st.nextToken().c_str());
     }
     if (st.hasMoreTokens()) {
-        throw ParseException("parseWall fail");
+        throw ParseException("parseRoundWall fail");
     }
 
 	roundWalls.push_back(RoundWallDescriptor(wallTypeData, Vector2D(a, b), c, d * M_PI / 180.0, e * M_PI / 180.0));

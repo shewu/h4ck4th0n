@@ -75,4 +75,10 @@ void PhysicsWorld::writeToPacket(WritePacket *wp) const {
 		RectangularWall* obj = pa.second;
 		obj->writeToPacket(wp);
 	}
+
+	wp->write_int(roundWalls.size());
+	for (auto& pa : roundWalls) {
+		RoundWall* obj = pa.second;
+		obj->writeToPacket(wp);
+	}
 }

@@ -1,27 +1,27 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <cmath>
 #include <stdint.h>
 
-#define FRICTION 0.3
-#define KEYPRESS_ACCELERATION 6.0f
-#define DEATH_RATE .05
-#define MAX_DEPTH 200
-#define EPS .000001
-#define MAX_EVENTS 10
-#define SPAWN_TIME 3
-#define SPAWN_TRY .1
-#define SPAWN_PROB .1
-#define MAX_CLIENTS 32
+const float FRICTION = 0.3;
+const float KEYPRESS_ACCELERATION = 6.0f;
+const float DEATH_RATE = 0.05;
+const float EPS = 0.000001;
+const unsigned MAX_EVENTS = 10;
+const float SPAWN_TIME = 3;
+const float SPAWN_TRY = 0.1;
+const float SPAWN_PROB = 0.1;
+const unsigned MAX_CLIENTS = 32;
 
-#define PROTMAGIC 0xee76f6a8
-#define MAXPACKET 10240
-#define MAXQUEUE 10000
-#define TIMEOUT 5
+const int PROTMAGIC = 0xee76f6a8;
+const unsigned MAXPACKET = 10240;
+const unsigned MAXQUEUE = 10000;
+const unsigned TIMEOUT = 5;
 
-#define ALSRCS 32
+const unsigned ALSRCS = 32;
 
-#define AA 1
+const unsigned AA = 1;
 
 typedef enum {
 	kHBNoView,
@@ -30,6 +30,7 @@ typedef enum {
 	kHBGameView
 } HBViewMode;
 
+const float CYL_ANGLE_DELTA = M_PI/360.;
 const float FOUR_BY_THREE = 1.33333f;
 const float SIXTEEN_BY_TEN = 1.6f;
 const float SIXTEEN_BY_NINE = 1.777777f;

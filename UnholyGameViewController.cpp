@@ -1,5 +1,6 @@
 #include "UnholyGameViewController.h"
 
+#include <iostream>
 #include <cmath>
 
 UnholyGameViewController::UnholyGameViewController() : GameViewController() {
@@ -118,8 +119,11 @@ void UnholyGameViewController::_drawWalls() {
 		glTranslatef(wall->center.x, wall->center.y, 0);
 		glScalef(wall->radius, wall->radius, wall->radius);
 		MaterialPtr color = wall->getMaterial();
-		glColor3f(color->getR()/255.0, color->getG()/255.0, color->getB()/255.0);
-		gluPartialDisk(_quad, 0.9, 1.0, 50, 50, wall->theta1, wall->theta2-wall->theta1);
+		//glColor3f(color->getR()/255.0, color->getG()/255.0, color->getB()/255.0);
+		glColor3f(0.5,0.5,0.5);
+		gluQuadricDrawStyle(_quad, GLU_FILL);
+		gluCylinder(_quad, 1.0, 1.0, 1.0, 50, 50);
+		//gluPartialDisk(_quad, 0, 1.0, 50, 50, wall->theta1*180./M_PI, wall->theta2*180./M_PI-wall->theta1*180./M_PI);
 		glPopMatrix();
 	}
 	glDisable(GL_NORMALIZE);

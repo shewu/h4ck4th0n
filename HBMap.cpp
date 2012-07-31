@@ -206,7 +206,8 @@ void HBMap::parseRectangularWall(string const& s) {
 }
 
 void HBMap::parseRoundWall(string const& s) {
-	float a = 0, b = 0, c = 0, d = 0, e = 0;
+	float a = 0, b = 0, c = 0;
+	int d = 0, e = 0;
 	bool okay = false;
     StringTokenizer st(s);
     WallTypeData wallTypeData;
@@ -235,7 +236,17 @@ void HBMap::parseRoundWall(string const& s) {
         throw ParseException("parseWall fail");
     }
 
-	roundWalls.push_back(RoundWallDescriptor(wallTypeData, Vector2D(a, b), c, d * M_PI / 180.0, e * M_PI / 180.0));
+    d %= 360;
+    if (d < 0) {
+    	d += 360;
+	}
+
+	e %= 360;
+	if (e < 0) {
+		e += 360;
+	}
+
+	roundWalls.push_back(RoundWallDescriptor(wallTypeData, Vector2D(a, b), c, (float)d * M_PI / 180.0, (float)e * M_PI / 180.0));
 }
 
 void HBMap::parseFloor(string const& s) {

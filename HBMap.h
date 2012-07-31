@@ -142,6 +142,15 @@ class HBMap {
 		}
 
 		/**
+		 * Gets the floors for the map.
+		 *
+		 * @return a vector of floors.
+		 */
+		 const std::vector<Floor>& getFloors() const {
+		 	 return floors;
+		 }
+
+		/**
 		 * The maximum number of teams allowed in maps.
 		 */
         const static unsigned MAX_TEAMS = 10;
@@ -155,6 +164,7 @@ class HBMap {
         void parseSpawn(std::string const& s);
         void parseRectangularWall(std::string const& s);
         void parseRoundWall(std::string const& s);
+        void parseFloor(std::string const& s);
         WallTypeData parseWallType(std::string const& s);
 
         std::string gameType;
@@ -169,6 +179,7 @@ class HBMap {
 		std::vector<RectangularWallDescriptor> rectangularWalls;
 		std::vector<RoundWallDescriptor> roundWalls;
         std::vector<SpawnDescriptor> spawns[HBMap::MAX_TEAMS];
+        std::vector<Floor> floors;
 
         Color getColorForTeam(int team) {
             int colorFrac = int(255*float(team)/teams.size());

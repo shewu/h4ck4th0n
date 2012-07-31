@@ -190,6 +190,31 @@ class RoundWallDescriptor : public WallDescriptor {
 		float _theta2;
 };
 
+class Floor {
+	public:
+		Floor(float minX, float minY, float maxX, float maxY, float frictionCoeff) :
+			_minX(minX), _minY(minY), _maxX(maxX), _maxY(maxY),
+			_frictionCoeff(frictionCoeff) { }
+
+		/**
+		 * Returns true if the point resides in the region covered by this floor, and
+		 * false otherwise. In the case that it returns true, it puts the friction coefficient
+		 * of the floor at that point in the 'coeff' argument. In the false case, coeff can be
+		 * anything.
+		 */
+		bool getFrictionCoeff(Vector2D p, float& coeff) const {
+			if (p.x >= _minX && p.x <= _maxX && p.y >= _minY && p.y <= _maxY) {
+				coeff = _frictionCoeff;
+				return true;
+			}
+			return false;
+		}
+
+	private:
+		float _minX, _minY, _maxX, _maxY;
+		float _frictionCoeff;
+};
+
 
 
 #endif

@@ -6,6 +6,7 @@
 #include <set>
 
 #include "Hack.h"
+#include "MapElements.h"
 #include "MapInfo.h"
 
 class HBMap {

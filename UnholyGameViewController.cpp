@@ -1,7 +1,8 @@
 #include "UnholyGameViewController.h"
 
-#include <iostream>
+#include <algorithm>
 #include <cmath>
+#include <iostream>
 
 UnholyGameViewController::UnholyGameViewController() : GameViewController() {
 	_initGL();
@@ -110,23 +111,29 @@ void UnholyGameViewController::_drawWalls() {
 		glVertex3f(wall->p2.x, wall->p2.y, 1);
 		glVertex3f(wall->p1.x, wall->p1.y, 1);
 	}
-	glEnd();
 
-	glEnable(GL_NORMALIZE);
 	for (auto& iter : world->getRoundWalls()) {
 		RoundWall* wall = iter.second;
-		glPushMatrix();
-		glTranslatef(wall->center.x, wall->center.y, 0);
-		glScalef(wall->radius, wall->radius, wall->radius);
 		MaterialPtr color = wall->getMaterial();
 		//glColor3f(color->getR()/255.0, color->getG()/255.0, color->getB()/255.0);
 		glColor3f(0.5,0.5,0.5);
-		gluQuadricDrawStyle(_quad, GLU_FILL);
-		gluCylinder(_quad, 1.0, 1.0, 1.0, 50, 50);
-		//gluPartialDisk(_quad, 0, 1.0, 50, 50, wall->theta1*180./M_PI, wall->theta2*180./M_PI-wall->theta1*180./M_PI);
-		glPopMatrix();
+		std::cout << wall->theta1 << " " << wall->theta2 << "\n";
+		float th1 = std::min(wall->theta1, wall->theta2);
+		float th2 = std::max(wall->theta1, wall->theta2);
+		//std::cout << th1 << " " << th2 << "\n";
+		for (float t = th1; t < th2; t += CYL_ANGLE_DELTA) {
+			std::cout << t << "\n";
+			glVertex3f(wall->center.x+wall->radius*cos(t), 
+						wall->center.y+wall->radius*sin(t), 0);
+			glVertex3f(wall->center.x+wall->radius*cos(t+CYL_ANGLE_DELTA), 
+						wall->center.y+wall->radius*sin(t+CYL_ANGLE_DELTA), 0);
+			glVertex3f(wall->center.x+wall->radius*cos(t+CYL_ANGLE_DELTA), 
+						wall->center.y+wall->radius*sin(t+CYL_ANGLE_DELTA), 1);
+			glVertex3f(wall->center.x+wall->radius*cos(t), 
+						wall->center.y+wall->radius*sin(t), 1);
+		}
 	}
-	glDisable(GL_NORMALIZE);
+	glEnd();
 }
 
 void UnholyGameViewController::_drawObjects() {

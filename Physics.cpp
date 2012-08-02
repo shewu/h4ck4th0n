@@ -175,10 +175,16 @@ void PhysicsWorld::doRectangularWallCollision(MovingRoundObject const& obj,
 		return;
 	}
 
-	float time1 = collideCircles(obj.center - wall.p1, obj.velocity,
-	                             obj.radius, 0);
-	float time2 = collideCircles(obj.center - wall.p2, obj.velocity,
-	                             obj.radius, 0);
+	float time1 = INFINITY;
+	float time2 = INFINITY;
+	if ((wall.p1 - obj.center) * obj.velocity > 0.0) {
+		time1 = collideCircles(obj.center - wall.p1, obj.velocity,
+									 obj.radius, 0);
+	}
+	if ((wall.p2 - obj.center) * obj.velocity > 0.0) {
+		time2 = collideCircles(obj.center - wall.p2, obj.velocity,
+									 obj.radius, 0);
+	}
 
 	float time3;
 	Vector2D dir = wall.p2 - wall.p1;
@@ -234,11 +240,17 @@ void PhysicsWorld::doRoundWallCollision(MovingRoundObject const& obj,
 	}
 
 	Vector2D p1 = wall.center + wall.radius * Vector2D(cosf(wall.theta1), sinf(wall.theta1));
-	float time1 = collideCircles(obj.center - p1, obj.velocity,
-	                             obj.radius, 0);
 	Vector2D p2 = wall.center + wall.radius * Vector2D(cosf(wall.theta2), sinf(wall.theta2));
-	float time2 = collideCircles(obj.center - p2, obj.velocity,
-	                             obj.radius, 0);
+	float time1 = INFINITY;
+	float time2 = INFINITY;
+	if ((p1 - obj.center) * obj.velocity > 0.0) {
+		float time1 = collideCircles(obj.center - p1, obj.velocity,
+									 obj.radius, 0);
+	}
+	if ((p2 - obj.center) * obj.velocity > 0.0) {
+		float time2 = collideCircles(obj.center - p2, obj.velocity,
+									 obj.radius, 0);
+	}
 
 	float time3 = INFINITY;
 

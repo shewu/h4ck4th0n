@@ -169,7 +169,7 @@ class RectangularWallDescriptor : public WallDescriptor {
  */
 class RoundWallDescriptor : public WallDescriptor {
 	public:
-		RoundWallDescriptor(WallTypeData wallTypeData_, Vector2D center_, float radius_, float theta1_, float theta2_) : WallDescriptor(wallTypeData_), _center(center_), _radius(radius_), _theta1(theta2_), _theta2(theta2_) { }
+		RoundWallDescriptor(WallTypeData wallTypeData_, Vector2D center_, float radius_, float theta1_, float theta2_) : WallDescriptor(wallTypeData_), _center(center_), _radius(radius_), _theta1(theta1_), _theta2(theta2_) { }
 		Vector2D getCenter() const {
 			return this->_center;
 		}

@@ -30,7 +30,7 @@ typedef enum {
 	kHBGameView
 } HBViewMode;
 
-const float CYL_ANGLE_DELTA = M_PI/360.;
+const float CYL_ANGLE_DELTA = M_PI/90.;
 const float FOUR_BY_THREE = 1.33333f;
 const float SIXTEEN_BY_TEN = 1.6f;
 const float SIXTEEN_BY_NINE = 1.777777f;

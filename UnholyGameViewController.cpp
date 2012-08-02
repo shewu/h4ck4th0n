@@ -115,15 +115,10 @@ void UnholyGameViewController::_drawWalls() {
 	for (auto& iter : world->getRoundWalls()) {
 		RoundWall* wall = iter.second;
 		MaterialPtr color = wall->getMaterial();
-		//glColor3f(color->getR()/255.0, color->getG()/255.0, color->getB()/255.0);
-		glColor3f(0.5,0.5,0.5);
-		//FIXME why is theta1 == theta2??
-		if (wall->theta1 != wall->theta2) std::cout << wall->theta1 << " " << wall->theta2 << "\n";
+		glColor3f(color->getR()/255.0, color->getG()/255.0, color->getB()/255.0);
 		float th1 = std::min(wall->theta1, wall->theta2);
 		float th2 = std::max(wall->theta1, wall->theta2);
-		//std::cout << th1 << " " << th2 << "\n";
 		for (float t = th1; t < th2; t += CYL_ANGLE_DELTA) {
-			std::cout << t << "\n";
 			glVertex3f(wall->center.x+wall->radius*cos(t), 
 						wall->center.y+wall->radius*sin(t), 0);
 			glVertex3f(wall->center.x+wall->radius*cos(t+CYL_ANGLE_DELTA), 

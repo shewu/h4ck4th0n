@@ -241,11 +241,11 @@ void PhysicsWorld::doRoundWallCollision(MovingRoundObject const& obj,
 	float time1 = INFINITY;
 	float time2 = INFINITY;
 	if ((p1 - obj.center) * obj.velocity > 0.0) {
-		float time1 = collideCircles(obj.center - p1, obj.velocity,
+		time1 = collideCircles(obj.center - p1, obj.velocity,
 									 obj.radius, 0);
 	}
 	if ((p2 - obj.center) * obj.velocity > 0.0) {
-		float time2 = collideCircles(obj.center - p2, obj.velocity,
+		time2 = collideCircles(obj.center - p2, obj.velocity,
 									 obj.radius, 0);
 	}
 

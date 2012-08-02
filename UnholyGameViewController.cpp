@@ -117,6 +117,7 @@ void UnholyGameViewController::_drawWalls() {
 		MaterialPtr color = wall->getMaterial();
 		//glColor3f(color->getR()/255.0, color->getG()/255.0, color->getB()/255.0);
 		glColor3f(0.5,0.5,0.5);
+		//FIXME why is theta1 == theta2??
 		std::cout << wall->theta1 << " " << wall->theta2 << "\n";
 		float th1 = std::min(wall->theta1, wall->theta2);
 		float th2 = std::max(wall->theta1, wall->theta2);

@@ -17,6 +17,13 @@ namespace  {
 	void intersectRayWithCircle(Vector2D p, Vector2D v, Vector2D center, float radius,
 	                            float& time1, float& theta1, float& time2, float& theta2) {
 		float a = v.x * v.x + v.y * v.y;
+		if (a == 0.0) {
+			time1 = INFINITY;
+			time2 = INFINITY;
+			theta1 = 0.0;
+			theta2 = 0.0;
+			return;
+		}
 		float b = 2.0 * (v.x * (p.x - center.x) + v.y * (p.y - center.y));
 		float c = (p.x - center.x) * (p.x - center.x) +
 		          (p.y - center.y) * (p.y - center.y) - radius * radius;
@@ -24,6 +31,8 @@ namespace  {
 		if (d < 0.0) {
 			time1 = INFINITY;
 			time2 = INFINITY;
+			theta1 = 0.0;
+			theta2 = 0.0;
 			return;
 		}
 		d = sqrt(d);
@@ -32,12 +41,14 @@ namespace  {
 
 		if (time1 < 0.0) {
 			time1 = INFINITY;
+			theta1 = 0.0;
 		} else {
 			theta1 = (p + time1*v - center).getAngle();
 		}
 
 		if (time2 < 0.0) {
 			time2 = INFINITY;
+			theta2 = 0.0;
 		} else {
 			theta2 = (p + time2*v - center).getAngle();
 		}
@@ -233,15 +244,15 @@ void PhysicsWorld::doRoundWallCollision(MovingRoundObject const& obj,
 
 	float t1, t2, theta1, theta2;
 
-	intersectRayWithCircle(obj.center, obj.velocity, wall.center, wall.radius + obj.radius, t1, theta1, t2, theta2);
-	if (t1 < time3 && isAngleInRange(wall.theta1, wall.theta2, theta1)) {
-		time3 = t1;
-	}
-	if (t2 < time3 && isAngleInRange(wall.theta1, wall.theta2, theta2)) {
-		time3 = t2;
-	}
-
-	if (obj.radius < wall.radius) {
+	if ((obj.center - wall.center).lengthSquared() > wall.radius * wall.radius && obj.velocity * (wall.center - obj.center) > 0) {
+		intersectRayWithCircle(obj.center, obj.velocity, wall.center, wall.radius + obj.radius, t1, theta1, t2, theta2);
+		if (t1 < time3 && isAngleInRange(wall.theta1, wall.theta2, theta1)) {
+			time3 = t1;
+		}
+		if (t2 < time3 && isAngleInRange(wall.theta1, wall.theta2, theta2)) {
+			time3 = t2;
+		}
+	} else if ((obj.center - wall.center).lengthSquared() < wall.radius * wall.radius && obj.velocity * (wall.center - obj.center) < 0) {
 		intersectRayWithCircle(obj.center, obj.velocity, wall.center, wall.radius - obj.radius, t1, theta1, t2, theta2);
 		if (t1 < time3 && isAngleInRange(wall.theta1, wall.theta2, theta1)) {
 			time3 = t1;

@@ -8,8 +8,9 @@
 #include <memory>
 
 #include "Material.h"
-#include "Hack.h"
 #include "Packet.h"
+#include "Vector.h"
+#include "WallType.h"
 
 class Object
 {

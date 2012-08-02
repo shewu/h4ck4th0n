@@ -5,9 +5,20 @@
 #include <vector>
 #include <set>
 
-#include "Hack.h"
 #include "MapElements.h"
 #include "MapInfo.h"
+
+enum GameMode {
+    GM_INVALID = -1,
+    GM_TAG,
+    GM_CTF,
+    
+    NUM_GAMEMODES // always the last mode
+};
+
+const std::string modeStrings[] = {
+    "TAG", "CTF"
+};
 
 class HBMap {
     public:

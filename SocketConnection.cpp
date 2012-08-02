@@ -10,7 +10,6 @@
 #include <algorithm>
 
 #include "Packet.h"
-#include "Hack.h"
 
 using std::max;
 

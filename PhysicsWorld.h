@@ -4,6 +4,7 @@
 #include "World.h"
 
 #include <functional>
+#include <queue>
 #include <utility>
 #include <vector>
 

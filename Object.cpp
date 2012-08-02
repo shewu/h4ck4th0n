@@ -1,6 +1,5 @@
 #include "Object.h"
 
-#include "Hack.h"
 #include "Packet.h"
 
 const float MovingRoundObject::kPlayerRadius = 1.0f;

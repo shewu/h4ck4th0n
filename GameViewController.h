@@ -2,14 +2,16 @@
 #define GAMEVIEWCONTROLLER_H
 
 #include "HBViewController.h"
-#include "Hack.h"
-#include "Menu.h"
-#include "Packet.h"
-#include "MirroringWorld.h"
-#include "AL/alut.h"
-#include "Sound.h"
 
 #include <memory>
+
+#include "AL/alut.h"
+
+#include "Menu.h"
+#include "MirroringWorld.h"
+#include "Packet.h"
+#include "Socket.h"
+#include "Sound.h"
 
 extern SDL_Surface* screen;
 extern char* ipaddy;

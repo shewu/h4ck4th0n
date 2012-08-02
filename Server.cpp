@@ -19,7 +19,6 @@
 
 #include "CTFGame.h"
 #include "Game.h"
-#include "Hack.h"
 #include "Logging.h"
 #include "Packet.h"
 #include "Socket.h"

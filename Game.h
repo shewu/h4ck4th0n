@@ -5,7 +5,6 @@
 #include "Socket.h"
 #include "World.h"
 #include "PhysicsWorld.h"
-#include "Hack.h"
 #include "UserInput.h"
 #include "Sound.h"
 

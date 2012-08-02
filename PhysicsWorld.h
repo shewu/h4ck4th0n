@@ -143,7 +143,7 @@ class PhysicsWorld : public World
 				float cur, float dt);
 		static void bounceMovingRoundAndShrinkingRound(MovingRoundObject& obj1,
 				MovingRoundObject& obj2, bool shouldDie);
-		static void bounceMovingRoundObjectByNormal(MovingRoundObject& obj, Vector2D const& normal);
+		static void bounceMovingRoundObjectByNormal(MovingRoundObject& obj, Vector2D const& normal, float bouncinessCoefficient);
 		static void updateRoundObjectsForward(std::map<int, MovingRoundObject*>& objects, float dt);
 };
 

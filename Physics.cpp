@@ -83,8 +83,6 @@ bool PhysicsWorld::objectsIntersect(MovingRoundObject const& obj, RectangularWal
 	return false;
 }
 
-// TODO bouncy wall support
-
 /**
  * Computes the time when two circle objects will intersect.
  * @param diff Center of B relative to A.
@@ -333,9 +331,10 @@ void PhysicsWorld::bounceMovingRoundAndShrinkingRound(
 	}
 }
 
-void PhysicsWorld::bounceMovingRoundObjectByNormal(MovingRoundObject& obj, Vector2D const& normal) {
+void PhysicsWorld::bounceMovingRoundObjectByNormal(MovingRoundObject& obj, Vector2D const& normal, float bouncinessCoefficient) {
 	float nv1 = obj.velocity * normal;
 	obj.velocity -= 2.0 * (nv1/(normal*normal)) * normal;
+	obj.velocity *= bouncinessCoefficient;
 }
 
 void PhysicsWorld::updateRoundObjectsForward(map<int, MovingRoundObject*>& objects, float dt) {
@@ -498,7 +497,7 @@ void PhysicsWorld::doSimulation(float dt) {
 					if (shouldDie) {
 						obj.startShrinking(NULL, -normal*(1/sqrt(normal*normal))*DEATH_RATE);
 					} else {
-						bounceMovingRoundObjectByNormal(obj, normal);
+						bounceMovingRoundObjectByNormal(obj, normal, wall.bouncinessCoefficient);
 					}
 
 					for (auto i = movingRoundObjects.begin(); i != movingRoundObjects.end(); i++) {
@@ -554,7 +553,7 @@ void PhysicsWorld::doSimulation(float dt) {
 					if (shouldDie) {
 						obj.startShrinking(NULL, -normal*(1/sqrt(normal*normal))*DEATH_RATE);
 					} else {
-						bounceMovingRoundObjectByNormal(obj, normal);
+						bounceMovingRoundObjectByNormal(obj, normal, wall.bouncinessCoefficient);
 					}
 
 					for (auto i = movingRoundObjects.begin(); i != movingRoundObjects.end(); i++) {

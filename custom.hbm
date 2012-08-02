@@ -42,7 +42,7 @@ wall normal 14 4 14 -4
 wall goal1 -29 3 -29 -3
 wall goal2 29 3 29 -3
 
-roundwall normal 0 -30 5 90 270
+roundwall normal 0 -30 5 90 270 bounciness=4.0
 roundwall deadly 0 30 5 90 270
 
 floor -30 -60 30 0 0.1

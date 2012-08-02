@@ -20,6 +20,8 @@ const std::string modeStrings[] = {
     "TAG", "CTF"
 };
 
+// TODO removed traces of the outdated teams concepts
+
 class HBMap {
     public:
 		/**
@@ -68,7 +70,7 @@ class HBMap {
 			teams = map.getTeamDescriptors();
 			rectangularWalls = map.getRectangularWalls();
 			roundWalls = map.getRoundWalls();
-			for (int i = 0; i < (int) teams.size(); ++i) {
+			for (int i = 0; i <= MAX_SPAWN_REGION_NUMBER; ++i) {
 				spawns[i] = map.getSpawnsForTeam(i);
 			}
 		}
@@ -128,9 +130,11 @@ class HBMap {
 		 * @return the spawns for team.
 		 */
         const std::vector<SpawnDescriptor>& getSpawnsForTeam(unsigned team) const {
+        	/*
             if (team >= teams.size()) {
                 return spawns[0];
             }
+            */
             return spawns[team];
         }
 
@@ -166,6 +170,11 @@ class HBMap {
 		 */
         const static unsigned MAX_TEAMS = 10;
 
+        /**
+         * The maximum spawn region number.
+         */
+        const static unsigned MAX_SPAWN_REGION_NUMBER = 10;
+
     private:
         void parse(std::string const& filename);
         void parseHBMapName(std::string const& s);
@@ -189,7 +198,7 @@ class HBMap {
 		std::vector<TeamDescriptor> teams;
 		std::vector<RectangularWallDescriptor> rectangularWalls;
 		std::vector<RoundWallDescriptor> roundWalls;
-        std::vector<SpawnDescriptor> spawns[HBMap::MAX_TEAMS];
+        std::vector<SpawnDescriptor> spawns[HBMap::MAX_SPAWN_REGION_NUMBER + 1];
         std::vector<Floor> floors;
 
         Color getColorForTeam(int team) {

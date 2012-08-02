@@ -84,7 +84,6 @@ bool PhysicsWorld::objectsIntersect(MovingRoundObject const& obj, RectangularWal
 }
 
 // TODO bouncy wall support
-// TODO round wall support
 
 /**
  * Computes the time when two circle objects will intersect.

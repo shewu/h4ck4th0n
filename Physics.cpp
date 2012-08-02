@@ -264,9 +264,6 @@ void PhysicsWorld::doRoundWallCollision(MovingRoundObject const& obj,
 		type = ET_ROUND_ROUNDWALL_LINE;
 	}
 
-	if (obj.velocity.lengthSquared() >= 1.0e-4) {
-	}
-
 	float t = cur + mintime;
 	collide_event e(t, type, obj.getID(), wall.getID());
 	collideRoundWithRoundWall[pair<int, int>(obj.getID(), wall.getID())] = e;

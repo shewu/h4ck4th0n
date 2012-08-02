@@ -30,7 +30,7 @@ wall normal 7 -5 2 -9
 wall deadly 0 11 0 17
 wall deadly 0 -11 0 -17
 
-wall deadly 0 -30 0 -25
+wall normal 0 -30 0 -25
 wall deadly 0 30 0 25
 
 wall normal 24 -15 18 -15

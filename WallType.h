@@ -3,13 +3,15 @@
 
 #include "Material.h"
 
+typedef char WallType;
+
 struct WallTypeData {
 	WallTypeData() { }
-	WallTypeData(char wallType, MaterialPtr material) :
+	WallTypeData(WallType wallType, MaterialPtr material) :
 		wallType(wallType),
 		material(material) { }
 
-	char wallType;
+	WallType wallType;
 	MaterialPtr material;
 };
 

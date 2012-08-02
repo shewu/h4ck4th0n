@@ -38,8 +38,8 @@ CLIENT_OBJECTS = $(SHARED_OBJECTS) \
 	MirroringWorld.o \
 	UserInput.o
 
-SERVER_OBJECTS+=$(SHARED_OBJECTS) Server.o Game.o Physics.o PhysicsWorld.o Forces.o CTFGame.o UserInput.o Logging.o
-PLAYBACKSERVER_OBJECTS+=$(SHARED_OBJECTS) PlaybackServer.o Game.o Physics.o PhysicsWorld.o Forces.o CTFGame.o UserInput.o
+SERVER_OBJECTS+=$(SHARED_OBJECTS) Server.o Game.o Physics.o PhysicsWorld.o PhysicsForces.o CTFGame.o UserInput.o Logging.o
+PLAYBACKSERVER_OBJECTS+=$(SHARED_OBJECTS) PlaybackServer.o Game.o Physics.o PhysicsWorld.o PhysicsForces.o CTFGame.o UserInput.o
 UNHOLY_BALLS_OBJECTS+=$(CLIENT_OBJECTS) Unholyclient.o UnholyGameViewController.o
 HOLY_BALLS_OBJECTS+=$(CLIENT_OBJECTS) Holyclient.o HolyGameViewController.o
 MULTI_BALLS_OBJECTS+=$(CLIENT_OBJECTS) Multiclient.o MultiGameViewController.o

@@ -133,7 +133,10 @@ class TeamDescriptor {
  */
 class WallDescriptor {
 	public:
-		WallDescriptor(WallTypeData wallTypeData_) : _wallTypeData(wallTypeData_) { }
+		WallDescriptor(WallTypeData wallTypeData_, float bouncinessCoefficient_) : 
+			_wallTypeData(wallTypeData_),
+			_bouncinessCoefficient(bouncinessCoefficient_) { }
+
 		WallType getWallType() const {
 			return _wallTypeData.wallType;
 		}
@@ -142,8 +145,15 @@ class WallDescriptor {
 			return _wallTypeData.material;
 		}
 
+		float getBouncinessCoefficient() const {
+			return _bouncinessCoefficient;
+		}
+
+		constexpr static float kDefaultBouncinessCoefficient = 1.0;
+
 	protected:
 		WallTypeData _wallTypeData;
+		float _bouncinessCoefficient;
 };
 
 /**
@@ -151,7 +161,7 @@ class WallDescriptor {
  */
 class RectangularWallDescriptor : public WallDescriptor {
 	public:
-		RectangularWallDescriptor(WallTypeData wallTypeData_, Vector2D pos1_, Vector2D pos2_) : WallDescriptor(wallTypeData_), _pos1(pos1_), _pos2(pos2_) { }
+		RectangularWallDescriptor(WallTypeData wallTypeData_, Vector2D pos1_, Vector2D pos2_, float bouncinessCoefficient_) : WallDescriptor(wallTypeData_, bouncinessCoefficient_), _pos1(pos1_), _pos2(pos2_) { }
 		Vector2D getPos1() const {
 			return this->_pos1;
 		}
@@ -169,7 +179,7 @@ class RectangularWallDescriptor : public WallDescriptor {
  */
 class RoundWallDescriptor : public WallDescriptor {
 	public:
-		RoundWallDescriptor(WallTypeData wallTypeData_, Vector2D center_, float radius_, float theta1_, float theta2_) : WallDescriptor(wallTypeData_), _center(center_), _radius(radius_), _theta1(theta1_), _theta2(theta2_) { }
+		RoundWallDescriptor(WallTypeData wallTypeData_, Vector2D center_, float radius_, float theta1_, float theta2_, float bouncinessCoefficient_) : WallDescriptor(wallTypeData_, bouncinessCoefficient_), _center(center_), _radius(radius_), _theta1(theta1_), _theta2(theta2_) { }
 		Vector2D getCenter() const {
 			return this->_center;
 		}

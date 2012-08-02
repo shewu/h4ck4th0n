@@ -138,11 +138,13 @@ class Wall : public Object
 {
 	protected:
 		WallType wallType;
+		float bouncinessCoefficient;
 
 	public:
-		Wall(MaterialPtr material, int wallType) :
+		Wall(MaterialPtr material, int wallType, float bouncinessCoefficient) :
 		    Object(material),
-		    wallType(wallType) {
+		    wallType(wallType),
+		    bouncinessCoefficient(bouncinessCoefficient) {
 		}
 
 		WallType getWallType() const {
@@ -165,8 +167,8 @@ class RectangularWall : public Wall
 		Vector2D p1, p2;
 	
 	public:
-		RectangularWall(MaterialPtr material, int wallType, Vector2D p1, Vector2D p2) :
-		    Wall(material, wallType),
+		RectangularWall(MaterialPtr material, int wallType, float bouncinessCoefficient, Vector2D p1, Vector2D p2) :
+		    Wall(material, wallType, bouncinessCoefficient),
 		    p1(p1), p2(p2) {
 		}
 
@@ -187,9 +189,10 @@ class RoundWall : public Wall
 		float radius, theta1, theta2;
 
 	public:
-		RoundWall(MaterialPtr material, int wallType,
+		// TODO these should just accept Descriptors as arguments
+		RoundWall(MaterialPtr material, int wallType, float bouncinessCoefficient,
 		          Vector2D center, float radius, float theta1, float theta2) :
-		    Wall(material, wallType),
+		    Wall(material, wallType, bouncinessCoefficient),
 		    center(center),
 		    radius(radius),
 		    theta1(theta1),

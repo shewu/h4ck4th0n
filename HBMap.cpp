@@ -228,7 +228,13 @@ void HBMap::parseRectangularWall(string const& s) {
 	int b = string2int(tl.args[2]);
 	int c = string2int(tl.args[3]);
 	int d = string2int(tl.args[4]);
-	rectangularWalls.push_back(RectangularWallDescriptor(wallTypeData, Vector2D(a,b), Vector2D(c,d)));
+
+	float bc = WallDescriptor::kDefaultBouncinessCoefficient;
+	if (tl.attributes["bounciness"] != "") {
+		bc = string2float(tl.attributes["bounciness"]);
+	}
+
+	rectangularWalls.push_back(RectangularWallDescriptor(wallTypeData, Vector2D(a,b), Vector2D(c,d), bc));
 }
 
 void HBMap::parseRoundWall(string const& s) {
@@ -242,7 +248,6 @@ void HBMap::parseRoundWall(string const& s) {
 	int c = string2int(tl.args[3]);
 	int d = string2int(tl.args[4]);
 	int e = string2int(tl.args[5]);
-	rectangularWalls.push_back(RectangularWallDescriptor(wallTypeData, Vector2D(a,b), Vector2D(c,d)));
 
 	d %= 360;
 	if (d < 0) {
@@ -254,7 +259,12 @@ void HBMap::parseRoundWall(string const& s) {
 		e += 360;
 	}
 
-	roundWalls.push_back(RoundWallDescriptor(wallTypeData, Vector2D(a, b), c, float(d) * M_PI / 180., float(e) * M_PI / 180.));
+	float bc = WallDescriptor::kDefaultBouncinessCoefficient;
+	if (tl.attributes["bounciness"] != "") {
+		bc = string2float(tl.attributes["bounciness"]);
+	}
+
+	roundWalls.push_back(RoundWallDescriptor(wallTypeData, Vector2D(a, b), c, float(d) * M_PI / 180., float(e) * M_PI / 180., bc));
 }
 
 void HBMap::parseFloor(string const& s) {

@@ -25,6 +25,7 @@ class PhysicsWorld : public World
 				RectangularWall* wall = new RectangularWall(
 					wallDesc.getMaterial(),
 					wallDesc.getWallType(),
+					wallDesc.getBouncinessCoefficient(),
 					wallDesc.getPos1(), wallDesc.getPos2());
 				rectangularWalls.insert(std::make_pair(wall->getID(),wall));
 			}
@@ -32,6 +33,7 @@ class PhysicsWorld : public World
 				RoundWall* wall = new RoundWall(
 					wallDesc.getMaterial(),
 					wallDesc.getWallType(),
+					wallDesc.getBouncinessCoefficient(),
 					wallDesc.getCenter(), wallDesc.getRadius(),
 					wallDesc.getTheta1(), wallDesc.getTheta2());
 				roundWalls.insert(std::make_pair(wall->getID(), wall));

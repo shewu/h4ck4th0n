@@ -34,6 +34,7 @@ class GameViewController : public HBViewController {
 		int count;
 		int oldTime;
 		menu* mainmenu;
+		menu* _resmenu;
 
 		ALfloat pos[3], vel[3], ori[6];
 

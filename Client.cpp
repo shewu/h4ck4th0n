@@ -21,7 +21,9 @@ using namespace std;
 
 int WIDTH = 640;
 int HEIGHT = 480;
+#ifdef UNHOLY
 bool NORAPE = true;
+#endif
 
 SDL_Surface* screen;
 char* ipaddy = (char *)"127.0.0.1";

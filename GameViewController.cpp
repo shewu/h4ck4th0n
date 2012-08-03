@@ -57,12 +57,12 @@ GameViewController::GameViewController() {
 		}
 	}
 	if (!done) {
-		std::cout << "Failed to connect" << std::endl;
+		std::cerr << "Failed to connect" << std::endl;
 		leave();
 	}
 
 	if (done) {
-		std::cout << "Connected to server" << std::endl;
+		std::cerr << "Connected to server" << std::endl;
 
 		angle = rp->read_float();
 		HBMap hbmap(rp);
@@ -125,8 +125,6 @@ void GameViewController::process() {
 			world->readFromPacket(rp);
 			delete rp;
 		}
-#ifndef __APPLE__
-#endif
 	}
 
 	SDL_Event event;
@@ -169,7 +167,6 @@ void GameViewController::process() {
 	ui.writeToPacket(&wp);
 	sc->send_packet(wp);
 
-#ifndef __APPLE__
 	Vector2D center(0.0f, 0.0f);
 	Vector2D velocity(0.0f, 0.0f);
 	if (world->getMyObject() != NULL) {
@@ -182,7 +179,6 @@ void GameViewController::process() {
 	alListenerfv(AL_POSITION, alpos);
 	alListenerfv(AL_VELOCITY, alvel);
 	alListenerfv(AL_ORIENTATION, alori);
-#endif
 	if (((++count)%100) == 0) {
 		int time = SDL_GetTicks();
 		float fps = 100000./(time - oldTime);
@@ -222,14 +218,14 @@ void GameViewController::_disconnect() {
 void GameViewController::_initMenus() {
 	mainmenu = new menu();
 	mainmenu->add_menuitem(new actionmenuitem([this](){return leave();}, (char *)"Leave Game"));
-#ifndef __APPLE__
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
-#endif
 	mainmenu->add_menuitem(new actionmenuitem([this](){return quit();}, (char *)"Quit"));
+
+	// first, determine which set of resolutions we should use. 
+	//mainmenu->add_menuitem(new slidermenuitem((char *)"Resolution",));
 }
 
 void GameViewController::_initSound() {
-#ifndef __APPLE__
 	ALCdevice* dev = alcOpenDevice(NULL);
 	ALCcontext* con = alcCreateContext(dev, NULL);
 	alcMakeContextCurrent(con);
@@ -243,6 +239,4 @@ void GameViewController::_initSound() {
 		albuf[i] = alutCreateBufferFromFile(("sounds/" + kSoundFilenames[i] + ".wav").data());
 	} 
 	alGenSources(ALSRCS, alsrcs);
-#endif
 }
-

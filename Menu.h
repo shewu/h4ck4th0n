@@ -149,13 +149,9 @@ class togglemenuitem : public menuitem {
 
 class slidermenuitem : public menuitem {
 	public:
-		slidermenuitem(char *name1, char** states1, int len1, int curstate1, const std::function<void(int)>& act) {
+		slidermenuitem(char *name1, char** states1, int len1, int curstate1, const std::function<void(int)>& act):
+		states(states1), len(len1), curstate(curstate1), action(act) {
 			name = name1;
-			states = states1;
-			len = len1;
-			curstate = curstate1;
-			newcurstate = curstate1;
-			action = act;
 		}
 		virtual ~slidermenuitem();
 		virtual void key_input_non_active(int key);

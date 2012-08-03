@@ -10,6 +10,7 @@
 #include <netdb.h>
 
 #include "UserInput.h"
+#include "Util.h"
 
 #define MAX_SOUND_LATENESS 100
 
@@ -80,6 +81,7 @@ GameViewController::~GameViewController() {
 	SDL_ShowCursor(true);
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	delete sc;
+	delete _resmenu;
 	delete mainmenu;
 }
 
@@ -222,7 +224,12 @@ void GameViewController::_initMenus() {
 	mainmenu->add_menuitem(new actionmenuitem([this](){return quit();}, (char *)"Quit"));
 
 	// first, determine which set of resolutions we should use. 
-	//mainmenu->add_menuitem(new slidermenuitem((char *)"Resolution",));
+	float ratio = float(SDL_GetVideoInfo()->current_w) / SDL_GetVideoInfo()->current_h;
+	uint16_t** resArray = getResolutionArray(ratio);
+
+	_resmenu = new menu();
+
+	mainmenu->add_menuitem(new submenuitem(_resmenu, (char *)"Resolution"));
 }
 
 void GameViewController::_initSound() {

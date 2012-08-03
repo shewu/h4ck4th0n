@@ -15,12 +15,15 @@
 #endif
 #endif
 #include "Constants.h"
+#include "Util.h"
 
 using namespace std;
 
 int WIDTH = 640;
 int HEIGHT = 480;
+#ifdef UNHOLY
 bool NORAPE = true;
+#endif
 
 SDL_Surface* screen;
 char* ipaddy = (char *)"127.0.0.1";
@@ -40,22 +43,8 @@ void initVideo() {
 	// detect aspect ratio
 	float ratio = float(SDL_GetVideoInfo()->current_w) / SDL_GetVideoInfo()->current_h;
 
-	float d16x9 = abs(ratio - SIXTEEN_BY_NINE);
-	float d16x10 = abs(ratio - SIXTEEN_BY_TEN);
-	float d4x3 = abs(ratio - FOUR_BY_THREE);
-
-	uint16_t** arr = NULL;
+	uint16_t** arr = getResolutionArray(ratio);
 	if (WIDTH == -1 || HEIGHT == -1) {
-		if (d16x9 < d16x10 && d16x9 < d4x3) {
-			arr = reinterpret_cast<uint16_t **>(const_cast<uint16_t(*)[2]>(sixteenbynine));
-		}
-		else if (d16x10 < d16x9 && d16x10 < d4x3) {
-			arr = reinterpret_cast<uint16_t **>(const_cast<uint16_t(*)[2]>(sixteenbyten));
-		}
-		else if (d4x3 < d16x10 && d4x3 < d16x9) {
-			arr = reinterpret_cast<uint16_t **>(const_cast<uint16_t(*)[2]>(fourbythree));
-		}
-
 		if (arr) {
 			WIDTH = arr[0][0];
 			HEIGHT = arr[0][1];

@@ -42,7 +42,8 @@ const uint16_t fourbythree[][2] = {
 	{1280, 960},
 	{1400, 1050},
 	{1600, 1200},
-	{2048, 1536}
+	{2048, 1536},
+	{0, 0} // sentinel value
 };
 const uint16_t sixteenbyten[][2] = {
 	{800, 500},
@@ -52,7 +53,8 @@ const uint16_t sixteenbyten[][2] = {
 	{1680, 1050},
 	{1920, 1200},
 	{2560, 1600},
-	{3840, 2400}
+	{3840, 2400},
+	{0, 0} // sentinel value
 };
 const uint16_t sixteenbynine[][2] = {
 	{854, 480},
@@ -61,7 +63,8 @@ const uint16_t sixteenbynine[][2] = {
 	{1366, 768},
 	{1600, 900},
 	{1920, 1080},
-	{2560, 1440}
+	{2560, 1440},
+	{0, 0} // sentinel value
 };
 
 #define ALIGNMENT 0x10

@@ -19,10 +19,14 @@ extern int WIDTH;
 extern int HEIGHT;
 
 class GameViewController : public HBViewController {
-	private:
-		void _disconnect();
-		void _initMenus();
-		void _initSound();
+	public:
+		GameViewController();
+		~GameViewController();
+		HBViewMode didFinishView();
+		void process();
+		void render() {}
+		bool quit();
+		bool leave();
 
 	protected:
 		unsigned int albuf[NUM_SOUND_TYPES], alsrcs[ALSRCS];
@@ -38,14 +42,13 @@ class GameViewController : public HBViewController {
 
 		ALfloat pos[3], vel[3], ori[6];
 
-	public:
-		GameViewController();
-		~GameViewController();
-		HBViewMode didFinishView();
-		void process();
-		void render() {}
-		bool quit();
-		bool leave();
+	private:
+		uint16_t** _resArray;
+		unsigned _resArrayIndex;
+
+		void _disconnect();
+		void _initMenus();
+		void _initSound();
 };
 
 class leavefunc {

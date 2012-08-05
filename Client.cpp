@@ -43,7 +43,9 @@ void initVideo() {
 	// detect aspect ratio
 	float ratio = float(SDL_GetVideoInfo()->current_w) / SDL_GetVideoInfo()->current_h;
 
-	uint16_t** arr = getResolutionArray(ratio);
+	uint16_t** arr;
+	getResolutionArray(ratio, &arr);
+	std::cout << arr << "\n";
 	if (WIDTH == -1 || HEIGHT == -1) {
 		if (arr) {
 			WIDTH = arr[0][0];

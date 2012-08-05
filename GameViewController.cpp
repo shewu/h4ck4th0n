@@ -1,13 +1,15 @@
 #include "GameViewController.h"
 
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-#include <cmath>
 #include <SDL/SDL.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
+
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <cstdlib>
+#include <cmath>
 
 #include "UserInput.h"
 #include "Util.h"
@@ -15,6 +17,7 @@
 #define MAX_SOUND_LATENESS 100
 
 static HBViewMode sFinishedView = kHBNoView;
+static unsigned sVideoModeFlags = SDL_OPENGL;
 
 HBViewMode GameViewController::didFinishView() {
 	return sFinishedView;
@@ -34,7 +37,7 @@ GameViewController::GameViewController() {
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_DGRAM;
 	
-	printf("IP Address = %s\n", ipaddy);
+	std::cout << "IP Address = " << ipaddy << "\n";
 	getaddrinfo(ipaddy, "55555", &hints, &res);
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	sock = new Socket(sockfd);
@@ -202,12 +205,9 @@ bool GameViewController::leave() {
 	return (sFinishedView = kHBServerConnectView) != kHBNoView;
 }
 
-static void action_toggle_fullscreen(bool b) {
-	if(b) {
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
-	} else {
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
-	}
+static void actionToggleFullscreen(bool b) {
+	sVideoModeFlags = (b) ? SDL_OPENGL | SDL_FULLSCREEN : SDL_OPENGL;
+	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, sVideoModeFlags);
 }
 
 void GameViewController::_disconnect() {
@@ -220,16 +220,26 @@ void GameViewController::_disconnect() {
 void GameViewController::_initMenus() {
 	mainmenu = new menu();
 	mainmenu->add_menuitem(new actionmenuitem([this](){return leave();}, (char *)"Leave Game"));
-	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
-	mainmenu->add_menuitem(new actionmenuitem([this](){return quit();}, (char *)"Quit"));
+	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, actionToggleFullscreen));
 
 	// first, determine which set of resolutions we should use. 
 	float ratio = float(SDL_GetVideoInfo()->current_w) / SDL_GetVideoInfo()->current_h;
-	uint16_t** resArray = getResolutionArray(ratio);
+	getResolutionArray(ratio, &_resArray);
+	std::cout << _resArray << "\n";
+	//std::cout << _resArray[0][0] << " " << _resArray[0][1] << "\n";
 
-	_resmenu = new menu();
+	//_resmenu = new menu();
+	//for (_resArrayIndex = 0; _resArray[_resArrayIndex][0] != 0; ++_resArrayIndex) {
+	//	std::ostringstream resStream;
+	//	resStream << _resArray[_resArrayIndex][0] << " x " << _resArray[_resArrayIndex][1];
+	//	//FIXME there is a memory issue when getting the address for
+	//	//the screen res arrays
+	//	std::cout << resStream.str() << "\n";
+	//	_resmenu->add_menuitem(new actionmenuitem([this](){SDL_SetVideoMode(_resArray[_resArrayIndex][0], _resArray[_resArrayIndex][1], 24, sVideoModeFlags);return 0;}, (char *)resStream.str().c_str()));
+	//}
 
-	mainmenu->add_menuitem(new submenuitem(_resmenu, (char *)"Resolution"));
+	//mainmenu->add_menuitem(new submenuitem(_resmenu, (char *)"Resolution"));
+	mainmenu->add_menuitem(new actionmenuitem([this](){return quit();}, (char *)"Quit"));
 }
 
 void GameViewController::_initSound() {

@@ -118,13 +118,13 @@ string ReadPacket::read_string() {
 }
 
 void WritePacket::write_string(string const& s) {
-	assert(s.length() < (1 << 15));
+	assert(s.size() < (1 << 15));
 
-    write_short((short)s.length());
-    while(size + (int)s.length() > size)
+    write_short((short)s.size());
+    while(size + (int)s.size() > max_size)
         _increase_buf_size();
-    memcpy((void *)(buf + size), (void *)s.data(), s.length());
-    size += s.length();
+    memcpy((void *)(buf + size), (void *)s.data(), s.size());
+    size += s.size();
 }
 
 // Read and write floats

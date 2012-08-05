@@ -1,7 +1,10 @@
 #include "CTFGame.h"
 
+#include <sstream>
+
 using std::pair;
 using std::string;
+using std::stringstream;
 
 // Four region types
 // 1 is red team
@@ -115,6 +118,7 @@ void CTFGame::createNewPlayer(int teamNum, GamePlayer* gp) {
 }
 
 string CTFGame::getScore(GamePlayer* player) {
-	// TODO scoring
-	return "";
+	stringstream ss;
+	ss << "Red: " << score[0] << " Blue: " << score[1];
+	return ss.str();
 }

@@ -10,7 +10,6 @@ using std::string;
 // 4 is blue team flag
 
 void CTFGame::doGameLogic() {
-	// TODO compute scores and stuff
 }
 
 bool CTFGame::roundWallCollision(
@@ -21,8 +20,10 @@ bool CTFGame::roundWallCollision(
 		ans = (rn == 1 || rn == 2);
 	} else if (wall->getWallType() == CTF_WT_GOAL1) {
 		ans = (rn == 4);
+		score[0]++;
 	} else if (wall->getWallType() == CTF_WT_GOAL2) {
 		ans = (rn == 3);
+		score[1]++;
 	} else {
 		ans = false;
 	}
@@ -74,8 +75,19 @@ GamePlayer* CTFGame::onPlayerAdded() {
 	GamePlayer* gp = new GamePlayer();
 
 	// TODO better team selection
-	int teamNum = (rand() % 2) + 1;
+	int teamNum;
+	if (numplayers[0] < numplayers[1]) {
+		teamNum = 1;
+	} else if (numplayers[0] > numplayers[1]) {
+		teamNum = 2;
+	} else {
+		teamNum = (rand() % 2) + 1;
+	}
+
+	teamLookup[gp] = teamNum;
+
 	createNewPlayer(teamNum, gp);
+	numplayers[teamNum-1]++;
 
 	return gp;
 }
@@ -86,6 +98,8 @@ void CTFGame::onPlayerRemoved(GamePlayer* player) {
 	    (player->obj->getState() == MOS_ALIVE || player->obj->getState() == MOS_SPAWNING)) {
 		player->obj->instantKill();
 	}
+	numplayers[teamLookup[player]-1]--;
+	teamLookup.erase(player);
 }
 
 void CTFGame::createFlag(int regionNum) {

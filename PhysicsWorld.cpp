@@ -11,7 +11,7 @@ ObjectPtr<MovingRoundObject> PhysicsWorld::addFlagObject(
 	std::function<void()> const& onSpawnCallback,
 	std::function<void()> const& onDeathCallback) {
 	MovingRoundObject *obj = new MovingRoundObject(
-			Object::materialsByTeamNumber[regionNumber], // TODO fix this, this will work for now but materials should not in general come from here
+			Object::materialsByTeamNumber[regionNumber], // TODO fix this, this will work for now but materials should not in general come from here (honestly, we should probably remove this function completely)
 			MovingRoundObject::kFlagRadius,
 			MovingRoundObject::kFlagMass,
 			MovingRoundObject::kFlagHeightRatio,

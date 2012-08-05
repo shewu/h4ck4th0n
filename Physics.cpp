@@ -333,8 +333,7 @@ void PhysicsWorld::bounceMovingRoundAndShrinkingRound(
 
 void PhysicsWorld::bounceMovingRoundObjectByNormal(MovingRoundObject& obj, Vector2D const& normal, float bouncinessCoefficient) {
 	float nv1 = obj.velocity * normal;
-	obj.velocity -= 2.0 * (nv1/(normal*normal)) * normal;
-	obj.velocity *= bouncinessCoefficient;
+	obj.velocity -= (1.0 + bouncinessCoefficient) * (nv1/(normal*normal)) * normal;
 }
 
 void PhysicsWorld::updateRoundObjectsForward(map<int, MovingRoundObject*>& objects, float dt) {
@@ -379,7 +378,9 @@ void PhysicsWorld::doSimulation(float dt) {
 
 		if ((e.type == ET_ROUND_ROUND     && collideRoundWithRound[pair<int, int>(e.t1, e.t2)] != e) ||
 				(e.type == ET_ROUND_DISAPPEAR && collideDisappear[e.t1] != e) ||
-				((e.type == ET_ROUND_WALL_CORNER_1 || e.type == ET_ROUND_WALL_CORNER_2 || e.type == ET_ROUND_WALL_LINE) && collideRoundWithWall[pair<int, int>(e.t1, e.t2)] != e)) {
+				((e.type == ET_ROUND_WALL_CORNER_1 || e.type == ET_ROUND_WALL_CORNER_2 || e.type == ET_ROUND_WALL_LINE) && collideRoundWithWall[pair<int, int>(e.t1, e.t2)] != e) ||
+				((e.type == ET_ROUND_ROUNDWALL_CORNER_1 || e.type == ET_ROUND_ROUNDWALL_CORNER_2 || e.type == ET_ROUND_ROUNDWALL_LINE) && collideRoundWithRoundWall[pair<int, int>(e.t1, e.t2)] != e)
+		) {
 			continue;
 		}
 

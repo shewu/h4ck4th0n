@@ -333,8 +333,7 @@ void PhysicsWorld::bounceMovingRoundAndShrinkingRound(
 
 void PhysicsWorld::bounceMovingRoundObjectByNormal(MovingRoundObject& obj, Vector2D const& normal, float bouncinessCoefficient) {
 	float nv1 = obj.velocity * normal;
-	obj.velocity -= 2.0 * (nv1/(normal*normal)) * normal;
-	obj.velocity *= bouncinessCoefficient;
+	obj.velocity -= (1.0 + bouncinessCoefficient) * (nv1/(normal*normal)) * normal;
 }
 
 void PhysicsWorld::updateRoundObjectsForward(map<int, MovingRoundObject*>& objects, float dt) {

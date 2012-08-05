@@ -221,7 +221,6 @@ void GameViewController::_initMenus() {
 	mainmenu = new menu();
 	mainmenu->add_menuitem(new actionmenuitem([this](){return leave();}, (char *)"Leave Game"));
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
-	mainmenu->add_menuitem(new actionmenuitem([this](){return quit();}, (char *)"Quit"));
 
 	// first, determine which set of resolutions we should use. 
 	float ratio = float(SDL_GetVideoInfo()->current_w) / SDL_GetVideoInfo()->current_h;
@@ -230,6 +229,8 @@ void GameViewController::_initMenus() {
 	_resmenu = new menu();
 
 	mainmenu->add_menuitem(new submenuitem(_resmenu, (char *)"Resolution"));
+
+	mainmenu->add_menuitem(new actionmenuitem([this](){return quit();}, (char *)"Quit"));
 }
 
 void GameViewController::_initSound() {

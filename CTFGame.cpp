@@ -77,7 +77,6 @@ void CTFGame::onInit() {
 GamePlayer* CTFGame::onPlayerAdded() {
 	GamePlayer* gp = new GamePlayer();
 
-	// TODO better team selection
 	int teamNum;
 	if (numplayers[0] < numplayers[1]) {
 		teamNum = 1;

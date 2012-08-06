@@ -19,6 +19,9 @@
 static HBViewMode sFinishedView = kHBNoView;
 static unsigned sVideoModeFlags = SDL_OPENGL;
 
+extern int WIDTH;
+extern int HEIGHT;
+
 HBViewMode GameViewController::didFinishView() {
 	return sFinishedView;
 }
@@ -223,22 +226,28 @@ void GameViewController::_initMenus() {
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, actionToggleFullscreen));
 
 	// first, determine which set of resolutions we should use. 
-	float ratio = float(SDL_GetVideoInfo()->current_w) / SDL_GetVideoInfo()->current_h;
-	getResolutionArray(ratio, &_resArray);
-	std::cout << _resArray << "\n";
-	//std::cout << _resArray[0][0] << " " << _resArray[0][1] << "\n";
+	const float ratio = float(SDL_GetVideoInfo()->current_w) / SDL_GetVideoInfo()->current_h;
+	const float d5x4 = fabs(ratio - FIVE_BY_FOUR);
+	const float d4x3 = fabs(ratio - FOUR_BY_THREE);
+	const float d16x10 = fabs(ratio - SIXTEEN_BY_TEN);
+	const float d16x9 = fabs(ratio - SIXTEEN_BY_NINE);
+	const int arg = argMin({d5x4, d4x3, d16x10, d16x9});
 
-	//_resmenu = new menu();
-	//for (_resArrayIndex = 0; _resArray[_resArrayIndex][0] != 0; ++_resArrayIndex) {
-	//	std::ostringstream resStream;
-	//	resStream << _resArray[_resArrayIndex][0] << " x " << _resArray[_resArrayIndex][1];
-	//	//FIXME there is a memory issue when getting the address for
-	//	//the screen res arrays
-	//	std::cout << resStream.str() << "\n";
-	//	_resmenu->add_menuitem(new actionmenuitem([this](){SDL_SetVideoMode(_resArray[_resArrayIndex][0], _resArray[_resArrayIndex][1], 24, sVideoModeFlags);return 0;}, (char *)resStream.str().c_str()));
-	//}
-
-	//mainmenu->add_menuitem(new submenuitem(_resmenu, (char *)"Resolution"));
+	_resmenu = new menu();
+	for (auto p : RESOLUTIONS[arg]) {
+		std::ostringstream resStream;
+		resStream << p.first << " x " << p.second;
+		_resmenu->add_menuitem(new actionmenuitem(
+			[p]() {
+				WIDTH = p.first;
+				HEIGHT = p.second;
+				SDL_SetVideoMode(p.first, p.second, 24, sVideoModeFlags);
+				return 0;
+			},
+			(char *)(resStream.str().c_str())
+		));
+	}
+	mainmenu->add_menuitem(new submenuitem(_resmenu, (char *)"Resolution"));
 	mainmenu->add_menuitem(new actionmenuitem([this](){return quit();}, (char *)"Quit"));
 }
 

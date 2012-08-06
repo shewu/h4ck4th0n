@@ -10,19 +10,19 @@
 extern bool NORAPE;
 
 class UnholyGameViewController : public GameViewController {
-	private:
-		GLUquadric* _quad;
-		void _initGL();
-		void _drawWalls();
-		void _drawObjects();
-		void _drawFloor(float);
-
 	public:
 		UnholyGameViewController();
 		~UnholyGameViewController();
 
 		void process();
 		void render();
+
+	private:
+		GLUquadric* _quad;
+		void _initGL();
+		void _drawWalls();
+		void _drawObjects();
+		void _drawFloor(float);
 };
 
 #endif

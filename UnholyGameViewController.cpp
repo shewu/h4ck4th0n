@@ -17,7 +17,7 @@ void UnholyGameViewController::process() {
 void UnholyGameViewController::_initGL() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, ((float) WIDTH) / ((float) HEIGHT), 1.0, 100.0);
+	gluPerspective(60.0, float(WIDTH) / HEIGHT, 1.0, 100.0);
 	glMatrixMode(GL_MODELVIEW);
 	_quad = gluNewQuadric();
 	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
@@ -54,7 +54,7 @@ void UnholyGameViewController::render() {
 	glEnable(GL_MULTISAMPLE_ARB);
 
 	glLoadIdentity();
-	
+
 	float focusx = 0.0f;
 	float focusy = 0.0f;
 	if (world->getMyObject() != NULL) {
@@ -148,7 +148,7 @@ void UnholyGameViewController::_drawObjects() {
 }
 
 void UnholyGameViewController::_drawFloor(float alpha) {
-	// TODO fix this because it uses INTEGER ARITHMETIC
+	// FIXME fix this because it uses INTEGER ARITHMETIC
 
 	// checkerboard
 	unsigned int GridSizeX = world->getMaxX()/3;

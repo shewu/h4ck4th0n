@@ -43,9 +43,6 @@ class GameViewController : public HBViewController {
 		ALfloat pos[3], vel[3], ori[6];
 
 	private:
-		uint16_t** _resArray;
-		unsigned _resArrayIndex;
-
 		void _disconnect();
 		void _initMenus();
 		void _initSound();

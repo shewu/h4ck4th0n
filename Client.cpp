@@ -40,20 +40,17 @@ void initVideo() {
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 	}
 #endif
-	// detect aspect ratio
-	float ratio = float(SDL_GetVideoInfo()->current_w) / SDL_GetVideoInfo()->current_h;
 
-	uint16_t** arr;
-	getResolutionArray(ratio, &arr);
-	std::cout << arr << "\n";
+	// detect aspect ratio
+	const float ratio = float(SDL_GetVideoInfo()->current_w) / SDL_GetVideoInfo()->current_h;
+	const float d5x4 = fabs(ratio - FIVE_BY_FOUR);
+	const float d4x3 = fabs(ratio - FOUR_BY_THREE);
+	const float d16x10 = fabs(ratio - SIXTEEN_BY_TEN);
+	const float d16x9 = fabs(ratio - SIXTEEN_BY_NINE);
 	if (WIDTH == -1 || HEIGHT == -1) {
-		if (arr) {
-			WIDTH = arr[0][0];
-			HEIGHT = arr[0][1];
-		} else {
-			WIDTH = 640;
-			HEIGHT = 480;
-		}
+		int arg = argMin({d5x4, d4x3, d16x10, d16x9});
+		WIDTH = RESOLUTIONS[arg].front().first;
+		HEIGHT = RESOLUTIONS[arg].back().second;
 	}
 
 	WIDTH = ALIGN(WIDTH);

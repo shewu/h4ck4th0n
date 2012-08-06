@@ -1,6 +1,6 @@
 Holy Balls: The Game
 A free and open source capture-the-flag game.
-Version 0.4, now with gameplay and a menu *and* Mac OS X support!
+Version 1.0, now with gameplay *and* some semblance of object oriented code!
 
 TODO
 ====
@@ -47,17 +47,13 @@ Run
 ===
 Linux
 -----
--h
-	to display help message
+-h				to display help message
 
--i [ip]
-	to connect to specified server; default is 127.0.0.1
+-i [ip]			to connect to specified server; default is 127.0.0.1
 
--d [width] [height]
-	to play at specified resolution; default is 640x480
+-d [w] [h]		to play at specified resolution; default is 640x480
 
--f
-	to play in fullscreen; will not work if specified resolution is greater than screen resolution
+-f				to play in fullscreen; will not work if specified resolution is greater than screen resolution
 
 Playing
 =======
@@ -74,21 +70,3 @@ Credits
 	- bounce sound from user dreamoron
 	- ding sound from user acclivity
 	- splat sound from user benhillyard
-
-Map Editor
-==========
-Requirements
-------------
-* Hardware
-	- Anything that runs a JVM, really
-* Software
-	- Something with a recent-ish JVM
-
-Controls
---------
-* WASD: Move cursor
-* P: Write to file "output" on disk
-* K: Toggle Sticky Wall mode
-* X: Toggle Delete mode
-* Space: Toggle Edit mode
-

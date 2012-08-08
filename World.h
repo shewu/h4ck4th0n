@@ -19,7 +19,7 @@ class World
 		std::map<int, MovingRoundObject*> movingRoundObjects;
 		std::map<int, RectangularWall*> rectangularWalls;
 		std::map<int, RoundWall*> roundWalls;
-        HBMap worldMap;
+		HBMap worldMap;
 
 	public:
 		/**
@@ -27,61 +27,61 @@ class World
 		 */
 		World();
 
-        /**
-         * Default constructor for World given a map name from which to load
-         * the world.
-         *
-         * @param mapName the map file name. Defaults to "custom.hbm".
-         */
+		/**
+		 * Default constructor for World given a map name from which to load
+		 * the world.
+		 *
+		 * @param mapName the map file name. Defaults to "custom.hbm".
+		 */
 		World(HBMap const&);
 
 		HBMap const& getMap() const {
 			return worldMap;
 		}
 
-        /**
-         * Returns the minimum x coordinate of the world.
-         *
-         * @return the minimum x coordinate.
-         */
-        float getMinX() const {
-            return worldMap.getWidth()/-2.0f;
-        }
+		/**
+		 * Returns the minimum x coordinate of the world.
+		 *
+		 * @return the minimum x coordinate.
+		 */
+		float getMinX() const {
+			return worldMap.getWidth()/-2.0f;
+		}
 
-        /**
-         * Returns the maximum x coordinate of the world.
-         *
-         * @return the maximum x coordinate.
-         */
-        float getMaxX() const {
-            return worldMap.getWidth()/2.0f;
-        }
+		/**
+		 * Returns the maximum x coordinate of the world.
+		 *
+		 * @return the maximum x coordinate.
+		 */
+		float getMaxX() const {
+			return worldMap.getWidth()/2.0f;
+		}
 
-        /**
-         * Returns the minimum y coordinate of the world.
-         *
-         * @return the minimum y coordinate.
-         */
-        float getMinY() const {
-            return worldMap.getHeight()/-2.0f;
-        }
+		/**
+		 * Returns the minimum y coordinate of the world.
+		 *
+		 * @return the minimum y coordinate.
+		 */
+		float getMinY() const {
+			return worldMap.getHeight()/-2.0f;
+		}
 
-        /**
-         * Returns the maximum y coordinate of the world.
-         *
-         * @return the maximum y coordinate.
-         */
-        float getMaxY() const {
-            return worldMap.getHeight()/2.0f;
-        }
+		/**
+		 * Returns the maximum y coordinate of the world.
+		 *
+		 * @return the maximum y coordinate.
+		 */
+		float getMaxY() const {
+			return worldMap.getHeight()/2.0f;
+		}
 
 		/**
 		 * Returns the lights in the world.
 		 *
 		 * @return the lights.
 		 */
-        std::vector<Light> const& getLights() const {
-        	return lights;
+		std::vector<Light> const& getLights() const {
+			return lights;
 		}
 
 		std::map<int, MovingRoundObject*> const& getMovingRoundObjects() const {

@@ -11,7 +11,7 @@
 using namespace std;
 
 World::World(HBMap const& hbmap) : worldMap(hbmap) {
-    //rectangularWalls = worldMap.getRectangularWalls();
+	//rectangularWalls = worldMap.getRectangularWalls();
 
 	Light l(Vector3D(0,0,10), Color(255,255,255));
 	lights.push_back(l);

@@ -7,6 +7,7 @@
 
 #include "MapElements.h"
 #include "MapInfo.h"
+#include "Util.h"
 
 enum GameMode {
 	GM_INVALID = -1,
@@ -19,8 +20,6 @@ enum GameMode {
 const std::string modeStrings[] = {
 	"TAG", "CTF"
 };
-
-// TODO removed traces of the outdated teams concepts
 
 class HBMap {
 	public:
@@ -67,11 +66,10 @@ class HBMap {
 			height = map.getHeight();
 
 			modes = map.getGameModes();
-			teams = map.getTeamDescriptors();
 			rectangularWalls = map.getRectangularWalls();
 			roundWalls = map.getRoundWalls();
-			for (int i = 0; i <= MAX_SPAWN_REGION_NUMBER; ++i) {
-				spawns[i] = map.getSpawnsForTeam(i);
+			for (int i = 0; i <= kMaxSpawnRegionNumber; ++i) {
+				spawns[i] = map.getSpawnByNumber(i);
 			}
 		}
 
@@ -112,16 +110,6 @@ class HBMap {
 		}
 
 		/**
-		 * Gets the team list and properties of the map.
-		 *
-		 * @return the team list containing TeamDescriptor objects in no particular
-		 * order.
-		 */
-		const std::vector<TeamDescriptor> getTeamDescriptors() const {
-			return teams;
-		}
-
-		/**
 		 * Gets the spawns for a given team. If an invalid team number is
 		 * requested, returns the spawns for the first team.
 		 *
@@ -129,13 +117,12 @@ class HBMap {
 		 *
 		 * @return the spawns for team.
 		 */
-		const std::vector<SpawnDescriptor>& getSpawnsForTeam(unsigned team) const {
-			/*
-			if (team >= teams.size()) {
+		const std::vector<SpawnDescriptor>& getSpawnByNumber(unsigned regionNumber) const {
+			if (regionNumber < 0 || regionNumber > kMaxSpawnRegionNumber) {
+				P(("region number %d out of range\n", regionNumer));
 				return spawns[0];
 			}
-			*/
-			return spawns[team];
+			return spawns[regionNumber];
 		}
 
 		/**
@@ -166,21 +153,15 @@ class HBMap {
 		 }
 
 		/**
-		 * The maximum number of teams allowed in maps.
-		 */
-		const static unsigned MAX_TEAMS = 10;
-
-		/**
 		 * The maximum spawn region number.
 		 */
-		const static unsigned MAX_SPAWN_REGION_NUMBER = 10;
+		const static unsigned kMaxSpawnRegionNumber = 10;
 
 	private:
 		void parse(std::string const& filename);
 		void parseHBMapName(std::string const& s);
 		void parseModes(std::string const& s);
 		void parseDimensions(std::string const& s);
-		void parseTeam(std::string const& s);
 		void parseSpawn(std::string const& s);
 		void parseRectangularWall(std::string const& s);
 		void parseRoundWall(std::string const& s);
@@ -195,16 +176,10 @@ class HBMap {
 		unsigned width, height;
 
 		std::set<GameMode> modes;
-		std::vector<TeamDescriptor> teams;
 		std::vector<RectangularWallDescriptor> rectangularWalls;
 		std::vector<RoundWallDescriptor> roundWalls;
-		std::vector<SpawnDescriptor> spawns[HBMap::MAX_SPAWN_REGION_NUMBER + 1];
+		std::vector<SpawnDescriptor> spawns[HBMap::kMaxSpawnRegionNumber + 1];
 		std::vector<Floor> floors;
-
-		Color getColorForTeam(int team) {
-			int colorFrac = int(255*float(team)/teams.size());
-			return Color(colorFrac, 0, 255-colorFrac);
-		}
 };
 
 #endif

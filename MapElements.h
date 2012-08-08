@@ -66,68 +66,6 @@ class SpawnDescriptor {
 		}
 };
 
-// TODO probably kill this
-class TeamDescriptor {
-    private:
-        unsigned teamNumber;
-        unsigned minPlayers;
-        unsigned maxPlayers;
-
-        std::vector<SpawnDescriptor> spawns;
-
-    public:
-        /**
-         * Empty team constructor. Does nothing.
-         */
-        TeamDescriptor() { }
-
-        /**
-         * Constructs a team given the team number, minimum number of players,
-         * and maximum number of players.
-         *
-         * @param a the team number.
-         * @param b the minimum number of players.
-         * @param c the maximum number of players.
-         */
-        TeamDescriptor(unsigned a, unsigned b, unsigned c) :
-            teamNumber(a), minPlayers(b), maxPlayers(c) { }
-
-        /**
-         * Gets the team number for this team.
-         *
-         * @return the team number.
-         */
-        const unsigned getTeamNumber() const {
-            return teamNumber;
-        }
-
-        /**
-         * Gets the minimum number of players for this team.
-         *
-         * @return the minimum number of players.
-         */
-        const unsigned getMinPlayers() const {
-            return minPlayers;
-        }
-
-        /**
-         * Gets the maximum number of players for this team.
-         *
-         * @return the maximum number of players.
-         */
-        const unsigned getMaxPlayers() const {
-            return maxPlayers;
-        }
-
-        /**
-         * Gets the spawn descriptors for this team.
-         * @return the spawn descriptors.
-         */
-        const std::vector<SpawnDescriptor>& getSpawnDescriptors() const {
-        	return spawns;
-		}
-};
-
 /**
  * An immutable class that describes a Wall. Uesd by HBMap.
  */

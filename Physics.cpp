@@ -649,7 +649,7 @@ void PhysicsWorld::doSimulation(float dt) {
 		}
 
 		vector<SpawnDescriptor> const& possibleSpawns =
-			worldMap.getSpawnsForTeam(obj.regionNumber);
+			worldMap.getSpawnByNumber(obj.regionNumber);
 		int which = rand() % possibleSpawns.size();
 		SpawnDescriptor const& spawn = possibleSpawns[which];
 		obj.center.x = random_uniform_float(spawn.getMinX(), spawn.getMaxX());

@@ -117,8 +117,6 @@ void HBMap::parse(string const& filename) {
 			parseModes(s);
 		} else if (cmd == "dim") {
 			parseDimensions(s);
-		} else if (cmd == "team") {
-			parseTeam(s);
 		} else if (cmd == "spawn") {
 			parseSpawn(s);
 		} else if (cmd == "wall") {
@@ -161,37 +159,6 @@ void HBMap::parseDimensions(string const& s) {
 	}
 	width = (unsigned) string2int(tl.args[0]);
 	height = (unsigned) string2int(tl.args[1]);
-}
-
-// TODO kill this or find a use for it
-// concept of map needing to know about teams has basically been obsoleted
-// - may still want to enforce limit on # of players?
-// - idea of assigning team to every object is gone, that kind of thing is handled by Game
-//   if it wants to use teams.
-// - assigning team to spawn regions is replaced by 'region numbers' which are interpretted
-//   by Game
-void HBMap::parseTeam(string const& s) {
-	/*
-	StringTokenizer st(s, " -\t");
-	int teamNum = -1, minPlayers = -1, maxPlayers = -1;
-	bool okay = false;
-	if (st.hasMoreTokens()) {
-		teamNum = atoi(st.nextToken().c_str());
-	}
-	if (st.hasMoreTokens()) {
-		minPlayers = atoi(st.nextToken().c_str());
-	}
-	if (st.hasMoreTokens()) {
-		maxPlayers = atoi(st.nextToken().c_str());
-		okay = true;
-	}
-
-	if (!okay || teamNum < 0 || minPlayers < 0 || maxPlayers < 0 || st.hasMoreTokens()) {
-		throw ParseException("parseTeam fail");
-	}
-
-	teams.push_back(TeamDescriptor(teamNum, minPlayers, maxPlayers));
-	*/
 }
 
 void HBMap::parseSpawn(string const& s) {

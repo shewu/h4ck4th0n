@@ -71,6 +71,10 @@ class Vector2D
 			return x*x + y*y;
 		}
 
+		float length() const {
+			return sqrt(x*x + y*y);
+		}
+
 		// returns value in [0, 2pi)
 		float getAngle() const {
 			float theta = atan2(y, x);

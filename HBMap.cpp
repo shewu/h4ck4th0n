@@ -163,13 +163,54 @@ void HBMap::parseDimensions(string const& s) {
 
 void HBMap::parseSpawn(string const& s) {
 	TokenizedLine tl(s);
-	if (tl.args.size() != 3) {
-		throw ParseException("failure parsing spawn: 3 arguments expected\n");
+	if (tl.args.size() < 2) {
+		throw ParseException("failure parsing spawn: type and index must be specified\n");
 	}
-	int id = string2int(tl.args[0]);
-	int x = string2int(tl.args[1]);
-	int y = string2int(tl.args[2]);
-	spawns[id].push_back(SpawnDescriptor(x, y, x+5, y+5));
+	int index = string2int(tl.args[0]);
+	string const& type = tl.args[1];
+	if (index < 0 || index > kMaxSpawnRegionNumber) {
+		throw ParseException("failure parsing spawn: region number out of bounds");
+	}
+	Vector2D a, b, c;
+	if (type == "point") {
+		if (tl.args.size() != 4) {
+			throw ParseException("failure parsing spawn: failure parsing point");
+		}
+		a.x = string2float(tl.args[2]);
+		a.y = string2float(tl.args[3]);
+		spawns[index].addComponent(new SpawnComponentPoint(a));
+	} else if (type == "line") {
+		if (tl.args.size() != 6) {
+			throw ParseException("failure parsing spawn: failure parsing line");
+		}
+		a.x = string2float(tl.args[2]);
+		a.y = string2float(tl.args[3]);
+		b.x = string2float(tl.args[4]);
+		b.y = string2float(tl.args[5]);
+		spawns[index].addComponent(new SpawnComponentLine(a, b));
+	} else if (type == "rectangle") {
+		if (tl.args.size() != 6) {
+			throw ParseException("failure parsing spawn: failure parsing rectangle");
+		}
+		a.x = string2float(tl.args[2]);
+		a.y = string2float(tl.args[3]);
+		b.x = string2float(tl.args[4]);
+		b.y = string2float(tl.args[5]);
+		spawns[index].addComponent(new SpawnComponentRectangle(a, b));
+	} else if (type == "triangle") {
+		if (tl.args.size() != 4) {
+			throw ParseException("failure parsing spawn: failure parsing triangle");
+		}
+		a.x = string2float(tl.args[2]);
+		a.y = string2float(tl.args[3]);
+		b.x = string2float(tl.args[4]);
+		b.y = string2float(tl.args[5]);
+		c.x = string2float(tl.args[6]);
+		c.y = string2float(tl.args[7]);
+		spawns[index].addComponent(new SpawnComponentTriangle(a, b, c));
+	} else {
+		throw ParseException("failure parsing spawn: urecognized spawn type " + type);
+	}
 }
 
 WallTypeData HBMap::parseWallType(string const& s) {

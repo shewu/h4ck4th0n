@@ -20,7 +20,6 @@ class Material
 		 */
 		static Material* readFromPacket(ReadPacket *rp);
 
-		// shewu will fix this mess
         virtual const unsigned char getR() const = 0;
         virtual const unsigned char getB() const = 0;
         virtual const unsigned char getG() const = 0;

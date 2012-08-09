@@ -117,7 +117,7 @@ class HBMap {
 		 *
 		 * @return the spawns for team.
 		 */
-		const std::vector<SpawnDescriptor>& getSpawnByNumber(unsigned regionNumber) const {
+		const SpawnDescriptor& getSpawnByNumber(unsigned regionNumber) const {
 			if (regionNumber < 0 || regionNumber > kMaxSpawnRegionNumber) {
 				P(("region number %d out of range\n", regionNumer));
 				return spawns[0];
@@ -178,7 +178,7 @@ class HBMap {
 		std::set<GameMode> modes;
 		std::vector<RectangularWallDescriptor> rectangularWalls;
 		std::vector<RoundWallDescriptor> roundWalls;
-		std::vector<SpawnDescriptor> spawns[HBMap::kMaxSpawnRegionNumber + 1];
+		SpawnDescriptor spawns[HBMap::kMaxSpawnRegionNumber + 1];
 		std::vector<Floor> floors;
 };
 

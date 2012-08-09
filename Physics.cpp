@@ -648,12 +648,9 @@ void PhysicsWorld::doSimulation(float dt) {
 			continue;
 		}
 
-		vector<SpawnDescriptor> const& possibleSpawns =
+		SpawnDescriptor const& spawnDesc =
 			worldMap.getSpawnByNumber(obj.regionNumber);
-		int which = rand() % possibleSpawns.size();
-		SpawnDescriptor const& spawn = possibleSpawns[which];
-		obj.center.x = random_uniform_float(spawn.getMinX(), spawn.getMaxX());
-		obj.center.y = random_uniform_float(spawn.getMinY(), spawn.getMaxY());
+		obj.center = spawnDesc.getRandomPoint();
 
 		// check that we aren't intersecting any other objects if we spawn here
 		bool okayToSpawn = true;

@@ -25,7 +25,8 @@ SHARED_OBJECTS = Socket.o \
     HBMap.o \
 	Packet.o \
 	SocketConnection.o \
-	Material.o
+	Material.o \
+	MapElements.o
 
 CLIENT_OBJECTS = $(SHARED_OBJECTS) \
     Menu.o \

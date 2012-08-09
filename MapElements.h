@@ -7,63 +7,68 @@
 #include "Vector.h"
 #include "WallType.h"
 
-class SpawnDescriptor {
-	private:
-		float minX, maxX, minY, maxY;
-
+class SpawnComponent {
 	public:
-		/**
-		 * Creates a SpawnDescriptor whose rectangle has vertices (x1,y1)
-		 * and (x2,y2).
-		 * @param x1 The first coordinate of one of the corners of the rectangle.
-		 * @param y1 The second coordinate of one of the corners of the rectangle.
-		 * @param x2 The first coordinate of one of corners of the rectangle.
-		 * @param y2 The second coordinate of one of the corners of the rectangle.
-		 */
-		SpawnDescriptor(float x1, float y1, float x2, float y2) {
-			if(x1 < x2) {
-				minX = x1;
-				maxX = x2;
-			} else {
-				minX = x2;
-				maxX = x1;
-			}
-			if(y1 < y2) {
-				minY = y1;
-				maxY = y2;
-			} else {
-				minY = y2;
-				maxY = y1;
-			}
+		virtual float getArea() const = 0;
+		virtual Vector2D getRandomPoint() const = 0;
+};
+
+class SpawnDescriptor {
+	public:
+		SpawnDescriptor() { }
+
+		void addComponent(SpawnComponent* sc) {
+			_components.push_back(sc);
 		}
 
-		/**
-		 * @returns the minimum X-coordinate of the SpawnDescriptor's rectangle.
-		 */
-		const float getMinX() const {
-			return minX;
-		}
+		Vector2D getRandomPoint() const;
 
-		/**
-		 * @returns the maximum X-coordinate of the SpawnDescriptor's rectangle.
-		 */
-		const float getMaxX() const {
-			return maxX;
-		}
+	private:
+		std::vector<SpawnComponent*> _components;
+};
 
-		/**
-		 * @returns the minimum Y-coordinate of the SpawnDescriptor's rectangle.
-		 */
-		const float getMinY() const {
-			return minY;
-		}
+class SpawnComponentPoint : public SpawnComponent {
+	public:
+		SpawnComponentPoint(Vector2D const& point) : _point(point) { }
+		float getArea() const;
+		Vector2D getRandomPoint() const;
 
-		/**
-		 * @returns the maximum Y-coordinate of the SpawnDescriptor's rectangle.
-		 */
-		const float getMaxY() const {
-			return maxY;
-		}
+	private:
+		Vector2D _point;
+};
+
+class SpawnComponentLine : public SpawnComponent {
+	public:
+		SpawnComponentLine(Vector2D const& point1, Vector2D const& point2) : _point1(point1), _point2(point2) { }
+		float getArea() const;
+		Vector2D getRandomPoint() const;
+
+	private:
+		Vector2D _point1;
+		Vector2D _point2;
+};
+
+class SpawnComponentRectangle : public SpawnComponent {
+	public:
+		SpawnComponentRectangle(Vector2D const& point1, Vector2D const& point2) : _point1(point1), _point2(point2) { }
+		float getArea() const;
+		Vector2D getRandomPoint() const;
+
+	private:
+		Vector2D _point1;
+		Vector2D _point2;
+};
+
+class SpawnComponentTriangle : public SpawnComponent {
+	public:
+		SpawnComponentTriangle(Vector2D const& point1, Vector2D const& point2, Vector2D const& point3) : _point1(point1), _point2(point2), _point3(point3) { }
+		float getArea() const;
+		Vector2D getRandomPoint() const;
+
+	private:
+		Vector2D _point1;
+		Vector2D _point2;
+		Vector2D _point3;
 };
 
 /**

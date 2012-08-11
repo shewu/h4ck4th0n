@@ -4,9 +4,6 @@
 
 using std::string;
 
-//menuitem
-//(these guys shouldn't actually be called, since
-//any instance of menuitem should be of a subclass)
 menuitem::~menuitem() { }
 bool menuitem::activate() { return false; }
 bool menuitem::key_input(int key) { return false; }
@@ -52,10 +49,8 @@ inputmenuitem::~inputmenuitem() {
 	delete [] input;
 }
 
-char * inputmenuitem::get_input() {
-	char *ans = new char[len+1];
-	strcpy(ans, input);
-	return ans;
+string inputmenuitem::get_input() {
+	return string(input, len);
 }
 
 bool inputmenuitem::activate() {
@@ -63,7 +58,7 @@ bool inputmenuitem::activate() {
 	return true;
 }
 
-/* i see we handle characters here -- we need to handle dots for IP addresses */
+/* I see we handle characters here -- we need to handle dots for IP addresses */
 bool inputmenuitem::key_input(int key) {
 	if(key == MENU_KEY_BACKSPACE) {
 		if(len > 0)
@@ -126,7 +121,7 @@ void slidermenuitem::key_input_non_active(int key) {
 		}
 	}
 	else if(key == MENU_KEY_RIGHT) {
-		if(newcurstate < len - 1) {
+		if(newcurstate < states.size() - 1) {
 			newcurstate++;
 			//if(action != NULL) action(curstate);
 		}

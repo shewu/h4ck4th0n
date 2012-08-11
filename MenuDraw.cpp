@@ -30,6 +30,8 @@
 
 #define menu_alpha 200
 
+using std::string;
+
 void menu::drawMenu() {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -82,7 +84,7 @@ void menu::draw() {
 #define unselected_g		140
 #define unselected_b		214
 
-void draw_button(bool selected, char const* text, float x, float y, float width, float height, GLubyte alpha) {
+void draw_button(bool selected, string const& text, float x, float y, float width, float height, GLubyte alpha) {
 	if(selected)
 		glColor4ub(selected_r,selected_g,selected_b,alpha);
 	else
@@ -138,7 +140,7 @@ void inputmenuitem::drawAsActive(unsigned char alpha) {
 
 	glColor4ub(0,0,0,255); //Make text opaque
 
-	if(text != NULL) {
+	if(text != "") {
 		textquad tq(input_left + input_title_left,
 				input_top + input_title_top,
 				0.0f,
@@ -157,10 +159,10 @@ void inputmenuitem::drawAsActive(unsigned char alpha) {
 				input_top + input_textfield_top + font_size + 0.02f,
 				0.0f,
 				0.05f, 0.0f, 0.0f);
-		draw_str(tq, input);
+		draw_str(tq, std::string(input, len));
 	}
 
-	if(displayError && invalidInputError != NULL) {
+	if(displayError && invalidInputError != "") {
 		glColor4ub(255,0,0,255);
 		textquad tq(input_left + input_textfield_left + 0.02f,
 				input_top + input_textfield_top + input_textfield_height + 0.02f,
@@ -175,7 +177,7 @@ void inputmenuitem::drawAsActive(unsigned char alpha) {
 }	
 
 void togglemenuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
-	draw_button(selected, name.c_str(), x, y, width, height, alpha);
+	draw_button(selected, name, x, y, width, height, alpha);
 	textquad tq(x + width - toggle_dist_from_back,
 			y + (height - font_size) * 0.5f,
 			0.0f,
@@ -184,10 +186,10 @@ void togglemenuitem::draw(bool selected, float x, float y, float width, float he
 			0.0f, 0.05f, 0.0f, 0.0f);
 	if(state) {
 		glColor4ub(0,255,0,alpha);
-		draw_str(tq, (char*)"ON");
+		draw_str(tq, "ON");
 	} else {
 		glColor4ub(255,0,0,alpha);
-		draw_str(tq, (char*)"OFF");
+		draw_str(tq, "OFF");
 	}
 }
 
@@ -209,8 +211,8 @@ void slidermenuitem::draw(bool selected, float x, float y, float width, float he
 	glBegin(GL_LINES);
 	glVertex3f(x + slider_left  * width, y + slider_line_height * height, 0.0f);
 	glVertex3f(x + slider_right * width, y + slider_line_height * height, 0.0f);
-	for(int i = 0; i < len; i++) {
-		float tickx = x + width*(slider_right*(float)i + slider_left*(float)(len-1-i)) / (float)(len-1);
+	for(int i = 0; i < states.size(); i++) {
+		float tickx = x + width*(slider_right*(float)i + slider_left*(float)(states.size()-1-i)) / (float)(states.size()-1);
 		glVertex3f(tickx, y + slider_tick_top * height, 0.0f);
 		glVertex3f(tickx, y + slider_tick_bottom * height, 0.0f);
 	}
@@ -220,7 +222,7 @@ void slidermenuitem::draw(bool selected, float x, float y, float width, float he
 		glColor4ub(selected_r,selected_g,selected_b,alpha);
 	else
 		glColor4ub(unselected_r,unselected_g,unselected_b,alpha);
-	float rectx1 = x + width * ((slider_right * (float)curstate + slider_left * (float)(len-1-curstate))/(float)(len-1) - 0.5f * slider_slide_width);
+	float rectx1 = x + width * ((slider_right * (float)curstate + slider_left * (float)(states.size()-1-curstate))/(float)(states.size()-1) - 0.5f * slider_slide_width);
 	float recty1 = y + height * (slider_line_height - 0.5f*slider_slide_height);
 	float recty2 = y + height * (slider_line_height + 0.5f*slider_slide_height);
 	glBegin(GL_QUADS);
@@ -230,7 +232,7 @@ void slidermenuitem::draw(bool selected, float x, float y, float width, float he
 	glVertex3f(rectx1 + slider_slide_width * width, recty1, 0.0f);
 	if(curstate != newcurstate) {
 		glColor4ub(selected_r,selected_g,selected_b,50);
-		rectx1 = x + width * ((slider_right * (float)newcurstate + slider_left * (float)(len-1-newcurstate))/(float)(len-1) - 0.5f * slider_slide_width);
+		rectx1 = x + width * ((slider_right * (float)newcurstate + slider_left * (float)(states.size()-1-newcurstate))/(float)(states.size()-1) - 0.5f * slider_slide_width);
 		glVertex3f(rectx1, recty1, 0.0f);
 		glVertex3f(rectx1, recty2, 0.0f);
 		glVertex3f(rectx1 + slider_slide_width * width, recty2, 0.0f);
@@ -239,18 +241,15 @@ void slidermenuitem::draw(bool selected, float x, float y, float width, float he
 	glEnd();
 
 	glColor4ub(0,0,0,255);
-	for(int i = 0; i < len; i++) {
-		//printf("\n\ni = %d\n", i);
-		float tickx = x + width*(slider_right*(float)i + slider_left*(float)(len-1-i)) / (float)(len-1);
+	for(int i = 0; i < states.size(); i++) {
+		float tickx = x + width*(slider_right*(float)i + slider_left*(float)(states.size()-1-i)) / (float)(states.size()-1);
 		textquad tq(tickx, y+slider_text_top*height, 0.0f,
 				tickx, y+slider_text_bottom*height, 0.0f,
 				(slider_text_bottom-slider_text_top)*height, 0.0f, 0.0f);
-		//printf("meh\n");
-		//printf("%s\n", states[i]);
 		draw_str_center(tq, states[i]);
 	}
 	textquad tq(    slider_text_name_left * width, y+slider_text_name_top*height, 0.0f,
 			slider_text_name_left * width, y+slider_text_name_bottom*height, 0.0f,
 			(slider_text_name_bottom-slider_text_name_top)*height, 0.0f, 0.0f);
-	draw_str(tq, name.c_str());
+	draw_str(tq, name);
 }

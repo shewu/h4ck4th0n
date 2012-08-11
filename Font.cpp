@@ -7,6 +7,8 @@
 #define fontmap_width 1024
 #define fontmap_height 1024
 
+using std::string;
+
 float character_x1[256];
 float character_x2[256];
 float character_y1[256];
@@ -62,12 +64,12 @@ void init_font() {
 	fclose(fontdata);
 }
 
-void draw_str(textquad tq, char const* text) {
+void draw_str(textquad tq, string const& text) {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, font_texture);
 
 	glBegin(GL_QUADS);
-	for(int i = 0; text[i] != '\0'; i++) {
+	for(int i = 0; i < text.size(); i++) {
 		float x1 = character_x1[(int)text[i]];
 		float x2 = character_x2[(int)text[i]];
 		float y1 = character_y1[(int)text[i]];
@@ -83,9 +85,9 @@ void draw_str(textquad tq, char const* text) {
 	glDisable(GL_TEXTURE_2D);
 }
 
-void draw_str_center(textquad tq, char const* text) {
+void draw_str_center(textquad tq, string const& text) {
 	float width = 0.0f;
-	for(int i = 0; text[i] != '\0'; i++) {
+	for(int i = 0; i < text.size(); i++) {
 		width += character_x2[(int)text[i]] - character_x1[(int)text[i]];
 	}
 	tq.inc(-width * 8.0f);

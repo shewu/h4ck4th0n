@@ -31,7 +31,6 @@ class menuitem {
 		virtual void onDeselect();
 	protected:
 		std::string name;
-
 };
 
 // The menu "owns" its menuitems and will free them on destruction
@@ -95,19 +94,14 @@ class inputmenuitem : public menuitem {
 	public:
 		inputmenuitem(  int maxInputLen, 
 				const std::function<bool(char*)>& inputValidator,
-				char *initInput,
-				char *iie,
-				char *t,
-				char *nam) {
+				std::string const& initInput,
+				std::string const& iie,
+				std::string const& t,
+				std::string const& nam) {
 				maxlen = maxInputLen;
 			input = new char[maxlen+1];
-			if(initInput == NULL) {
-				len = 0;
-				input[0] = '\0';
-			} else {
-				strcpy(input, initInput);
-				len = strlen(input);
-			}
+			strcpy(input, initInput.c_str());
+			len = strlen(input);
 
 			vali = inputValidator;
 			invalidInputError = iie;
@@ -121,12 +115,14 @@ class inputmenuitem : public menuitem {
 		virtual bool key_input(int key);
 		virtual void drawAsActive(unsigned char alpha);
 		virtual bool shouldMenuBeDrawn();
-		char *get_input();
+		std::string get_input();
 	private:
-		char *input, *text;
+		char *input;
+		
+		std::string text;
 		int maxlen, len;
 
-		char *invalidInputError;
+		std::string invalidInputError;
 		bool displayError;
 		std::function<bool(char*)> vali;
 };
@@ -150,8 +146,8 @@ class togglemenuitem : public menuitem {
 
 class slidermenuitem : public menuitem {
 	public:
-		slidermenuitem(char *name1, char** states1, int len1, int curstate1, const std::function<void(int)>& act):
-		states(states1), len(len1), curstate(curstate1), action(act) {
+		slidermenuitem(char *name1, std::vector<std::string> states, int curstate1, const std::function<void(int)>& act):
+		states(states), curstate(curstate1), action(act) {
 			name = name1;
 		}
 		virtual ~slidermenuitem();
@@ -161,8 +157,8 @@ class slidermenuitem : public menuitem {
 		virtual void draw(bool,float,float,float,float,unsigned char);
 		virtual void onDeselect();
 	private:
-		char** states;
-		int curstate, len, newcurstate;
+		std::vector<std::string> states;
+		int curstate, newcurstate;
 		std::function<void(int)> action;
 };
 

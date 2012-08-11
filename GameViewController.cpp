@@ -1,5 +1,6 @@
 #include "GameViewController.h"
 
+#include <GL/gl.h>
 #include <SDL/SDL.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -242,6 +243,7 @@ void GameViewController::_initMenus() {
 				WIDTH = p.first;
 				HEIGHT = p.second;
 				SDL_SetVideoMode(p.first, p.second, 24, sVideoModeFlags);
+				glViewport(0, 0, p.first, p.second);
 				return 0;
 			},
 			(char *)(resStream.str().c_str())

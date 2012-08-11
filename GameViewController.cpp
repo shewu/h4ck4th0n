@@ -141,23 +141,23 @@ void GameViewController::process() {
 		switch(event.type) {
 			case SDL_KEYUP:
 				if(event.key.keysym.sym == SDLK_ESCAPE) {
-					if (mainmenu->is_active()) {
+					if (mainmenu->isActive()) {
 						SDL_ShowCursor(false);
 						SDL_WM_GrabInput(SDL_GRAB_ON);
-						mainmenu->set_active(false);
+						mainmenu->setActive(false);
 					} else {
 						SDL_ShowCursor(true);
 						SDL_WM_GrabInput(SDL_GRAB_OFF);
-						mainmenu->set_active(true);
+						mainmenu->setActive(true);
 					}
 				}
-				mainmenu->key_input(event.key.keysym.sym);
+				mainmenu->keyInput(event.key.keysym.sym);
 				break;
 			case SDL_QUIT:
 				quit();
 				break;
 			case SDL_MOUSEMOTION:
-				if (mainmenu->is_active()) break;
+				if (mainmenu->isActive()) break;
 				angle -= event.motion.xrel/400.0;
 
 				while (angle >= 2*M_PI) angle -= 2*M_PI;
@@ -222,9 +222,9 @@ void GameViewController::_disconnect() {
 }
 
 void GameViewController::_initMenus() {
-	mainmenu = new menu();
-	mainmenu->add_menuitem(new actionmenuitem([this](){return leave();}, (char *)"Leave Game"));
-	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, actionToggleFullscreen));
+	mainmenu = new Menu();
+	mainmenu->addMenuItem(new ActionMenuItem([this](){return leave();}, (char *)"Leave Game"));
+	mainmenu->addMenuItem(new ToggleMenuItem((char*)"Fullscreen", false, actionToggleFullscreen));
 
 	// first, determine which set of resolutions we should use. 
 	const float ratio = float(SDL_GetVideoInfo()->current_w) / SDL_GetVideoInfo()->current_h;
@@ -234,11 +234,11 @@ void GameViewController::_initMenus() {
 	const float d16x9 = fabs(ratio - SIXTEEN_BY_NINE);
 	const int arg = argMin({d5x4, d4x3, d16x10, d16x9});
 
-	_resmenu = new menu();
+	_resmenu = new Menu();
 	for (auto p : RESOLUTIONS[arg]) {
 		std::ostringstream resStream;
 		resStream << p.first << " x " << p.second;
-		_resmenu->add_menuitem(new actionmenuitem(
+		_resmenu->addMenuItem(new ActionMenuItem(
 			[p]() {
 				WIDTH = p.first;
 				HEIGHT = p.second;
@@ -249,8 +249,8 @@ void GameViewController::_initMenus() {
 			(char *)(resStream.str().c_str())
 		));
 	}
-	mainmenu->add_menuitem(new submenuitem(_resmenu, (char *)"Resolution"));
-	mainmenu->add_menuitem(new actionmenuitem([this](){return quit();}, (char *)"Quit"));
+	mainmenu->addMenuItem(new SubMenuItem(_resmenu, (char *)"Resolution"));
+	mainmenu->addMenuItem(new ActionMenuItem([this](){return quit();}, (char *)"Quit"));
 }
 
 void GameViewController::_initSound() {

@@ -32,7 +32,7 @@
 
 using std::string;
 
-void menu::drawMenu() {
+void Menu::drawMenu() {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
@@ -52,8 +52,8 @@ void menu::drawMenu() {
 	glPopMatrix();
 }
 
-void menu::draw() {
-	if(!is_item_active || menuitems[current_index]->shouldMenuBeDrawn()) {
+void Menu::draw() {
+	if(!is_item_active || menuItems[current_index]->shouldMenuBeDrawn()) {
 		glColor4ub(167,155,155,transparent?menu_alpha:255);
 		glBegin(GL_QUADS);
 		glVertex3f(0.0f, 0.0f, 0.0f);
@@ -62,8 +62,8 @@ void menu::draw() {
 		glVertex3f(1.0f, 0.0f, 0.0f);
 		glEnd();
 
-		for(int i = 0; i < (int)menuitems.size(); i++) {
-			menuitems[i]->draw(i == current_index, 
+		for(int i = 0; i < (int)menuItems.size(); i++) {
+			menuItems[i]->draw(i == current_index, 
 				button_left,
 				button_top + i * (button_height + button_separation),
 				button_width,
@@ -74,7 +74,7 @@ void menu::draw() {
 	}
 
 	if(is_item_active)
-		menuitems[current_index]->drawAsActive(transparent?menu_alpha:255);
+		menuItems[current_index]->drawAsActive(transparent?menu_alpha:255);
 }
 
 #define selected_r 		40
@@ -102,13 +102,13 @@ void draw_button(bool selected, string const& text, float x, float y, float widt
 	draw_str(tq, text);
 }
 
-void menuitem::drawAsActive(unsigned char alpha) {}
+void MenuItem::drawAsActive(unsigned char alpha) {}
 
-void menuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
+void MenuItem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
 	draw_button(selected, name.c_str(), x, y, width, height, alpha);
 }
 
-void submenuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
+void SubMenuItem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
 	draw_button(selected, name.c_str(), x, y, width, height, alpha);
 	glBegin(GL_TRIANGLES);
 	glVertex3f(x + 0.01f, y + 0.03f, 0.0f);
@@ -117,11 +117,11 @@ void submenuitem::draw(bool selected, float x, float y, float width, float heigh
 	glEnd();
 }
 
-void submenuitem::drawAsActive(unsigned char alpha) {
+void SubMenuItem::drawAsActive(unsigned char alpha) {
 	m->draw();
 }
 
-void inputmenuitem::drawAsActive(unsigned char alpha) {
+void InputMenuItem::drawAsActive(unsigned char alpha) {
 	glBegin(GL_QUADS);
 	glColor4ub(75,75,75,alpha);
 	glVertex3f(input_left, input_top, 0.0f);
@@ -176,7 +176,7 @@ void inputmenuitem::drawAsActive(unsigned char alpha) {
 
 }	
 
-void togglemenuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
+void ToggleMenuItem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
 	draw_button(selected, name, x, y, width, height, alpha);
 	textquad tq(x + width - toggle_dist_from_back,
 			y + (height - font_size) * 0.5f,
@@ -206,7 +206,7 @@ void togglemenuitem::draw(bool selected, float x, float y, float width, float he
 #define slider_text_name_bottom	0.4f
 #define slider_text_name_left	button_left + 0.02f
 
-void slidermenuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
+void SliderMenuItem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
 	glColor4ub(0,0,0,alpha);
 	glBegin(GL_LINES);
 	glVertex3f(x + slider_left  * width, y + slider_line_height * height, 0.0f);

@@ -91,7 +91,7 @@ void UnholyGameViewController::render() {
 
 	glFlush();
 
-	if (mainmenu->is_active()) {
+	if (mainmenu->isActive()) {
 		glDisable(GL_LIGHTING);
 		mainmenu->drawMenu();
 		glEnable(GL_LIGHTING);

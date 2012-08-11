@@ -16,11 +16,12 @@
 #define MENU_KEY_A		SDLK_a
 #define MENU_KEY_0		SDLK_0
 
-class menuitem {
+class MenuItem {
 	public:
-		virtual ~menuitem();
+		~MenuItem();
 
-		//Return whether or not the menuitem is still active
+	private:
+		//Return whether or not the MenuItem is still active
 		virtual bool activate();
 		virtual bool key_input(int key);
 		virtual void key_input_non_active(int key);
@@ -29,19 +30,23 @@ class menuitem {
 		virtual bool shouldMenuBeDrawn();
 		virtual void onSelect();
 		virtual void onDeselect();
+
 	protected:
 		std::string name;
+	
+	friend class Menu;
 };
 
-// The menu "owns" its menuitems and will free them on destruction
-class menu {
+// The menu "owns" its MenuItems and will free them on destruction
+class Menu {
 	public:
-		menu();
-		virtual ~menu();
-		void add_menuitem(menuitem *a);
-		void key_input(int key);
-		bool is_active();
-		void set_active(bool);
+		Menu();
+		virtual ~Menu();
+
+		void addMenuItem(MenuItem *a);
+		void keyInput(int key);
+		bool isActive();
+		void setActive(bool);
 		void draw();
 		void drawMenu();
 
@@ -49,7 +54,7 @@ class menu {
 		void setAppearanceFull();
 		void setAppearanceMiddle();
 	private:
-		std::vector<menuitem*> menuitems;
+		std::vector<MenuItem*> menuItems;
 		int current_index;
 		bool is_item_active;
 		bool is_menu_active;
@@ -58,41 +63,42 @@ class menu {
 		float x1, x2, y1, y2;
 };
 
-// The submenuitem "owns" its menu and will free it on destruction
-class submenuitem : public menuitem {
+// The subMenuItem "owns" its menu and will free it on destruction
+class SubMenuItem : public MenuItem {
 	public:
-		virtual ~submenuitem();
-		submenuitem(menu *m, char *name);
+		virtual ~SubMenuItem();
+		SubMenuItem(Menu *m, char *name);
 
+	private:
 		virtual bool activate();
 		virtual bool key_input(int key);
 		virtual void drawAsActive(unsigned char alpha);
 		virtual bool shouldMenuBeDrawn();
 		virtual void draw(bool,float,float,float,float,unsigned char);
 
-	private:
-		menu *m;
+		Menu *m;
 		bool isActive;
 };
 
-class actionmenuitem : public menuitem {
+class ActionMenuItem : public MenuItem {
 	public:
-		virtual ~actionmenuitem();
-		actionmenuitem(const std::function<bool()>& init1, char *name1) {
+		virtual ~ActionMenuItem();
+		ActionMenuItem(const std::function<bool()>& init1, char *name1) {
 			init = init1;
 			name = name1;
 		}
 
+	private:
+
 		virtual bool activate();
 		virtual bool shouldMenuBeDrawn();
 
-	private:
 		std::function<bool()> init;
 };
 
-class inputmenuitem : public menuitem {
+class InputMenuItem : public MenuItem {
 	public:
-		inputmenuitem(  int maxInputLen, 
+		InputMenuItem(  int maxInputLen, 
 				const std::function<bool(char*)>& inputValidator,
 				std::string const& initInput,
 				std::string const& iie,
@@ -110,13 +116,15 @@ class inputmenuitem : public menuitem {
 			text = t;
 			name = nam;
 		}
-		virtual ~inputmenuitem();
+		virtual ~InputMenuItem();
+
+	private:
 		virtual bool activate();
 		virtual bool key_input(int key);
 		virtual void drawAsActive(unsigned char alpha);
 		virtual bool shouldMenuBeDrawn();
 		std::string get_input();
-	private:
+
 		char *input;
 		
 		std::string text;
@@ -127,36 +135,40 @@ class inputmenuitem : public menuitem {
 		std::function<bool(char*)> vali;
 };
 
-class togglemenuitem : public menuitem {
+class ToggleMenuItem : public MenuItem {
 	public:
-		togglemenuitem(char *name1, bool state1, const std::function<void(bool)>& act) {
+		ToggleMenuItem(char *name1, bool state1, const std::function<void(bool)>& act) {
 			name = name1;
 			state = state1;
 			action = act;
 		}
-		virtual ~togglemenuitem();
+		virtual ~ToggleMenuItem();
+
+	private:
 		virtual bool activate();
 		bool get_state();
 		virtual void draw(bool selected, float x1, float y1, float width, float height, unsigned char alpha);
-	private:
+
 		bool state;
 		std::function<void(bool)> action;
 
 };
 
-class slidermenuitem : public menuitem {
+class SliderMenuItem : public MenuItem {
 	public:
-		slidermenuitem(char *name1, std::vector<std::string> states, int curstate1, const std::function<void(int)>& act):
+		SliderMenuItem(char *name1, std::vector<std::string> states, int curstate1, const std::function<void(int)>& act):
 		states(states), curstate(curstate1), action(act) {
 			name = name1;
 		}
-		virtual ~slidermenuitem();
+		virtual ~SliderMenuItem();
+
+	private:
 		virtual void key_input_non_active(int key);
 		bool get_state();
 		virtual bool activate();
 		virtual void draw(bool,float,float,float,float,unsigned char);
 		virtual void onDeselect();
-	private:
+
 		std::vector<std::string> states;
 		int curstate, newcurstate;
 		std::function<void(int)> action;

@@ -35,12 +35,12 @@ ServerConnectViewController::ServerConnectViewController() {
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	finishedView = kHBNoView;
 
-	serverConnectMenu = new menu();
-	serverConnectMenu->add_menuitem(new inputmenuitem(20, menuGetIP, (char *)"", (char *)"Must not be empty", (char *)"Enter Server IP Address", (char *)"Connect to server"));
-	serverConnectMenu->add_menuitem(new actionmenuitem(goBack, (char *)"Back"));
-	serverConnectMenu->add_menuitem(new actionmenuitem([this](){return quit();}, (char *)"Quit"));
+	serverConnectMenu = new Menu();
+	serverConnectMenu->addMenuItem(new InputMenuItem(20, menuGetIP, (char *)"", (char *)"Must not be empty", (char *)"Enter Server IP Address", (char *)"Connect to server"));
+	serverConnectMenu->addMenuItem(new ActionMenuItem(goBack, (char *)"Back"));
+	serverConnectMenu->addMenuItem(new ActionMenuItem([this](){return quit();}, (char *)"Quit"));
 
-	serverConnectMenu->set_active(true);
+	serverConnectMenu->setActive(true);
 }
 
 ServerConnectViewController::~ServerConnectViewController() {
@@ -57,7 +57,7 @@ void ServerConnectViewController::process() {
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 			case SDL_KEYUP:
-				serverConnectMenu->key_input(event.key.keysym.sym);
+				serverConnectMenu->keyInput(event.key.keysym.sym);
 				break;
 		}
 	}

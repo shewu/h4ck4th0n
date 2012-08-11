@@ -37,8 +37,8 @@ class GameViewController : public HBViewController {
 		int latestPacket;
 		int count;
 		int oldTime;
-		menu* mainmenu;
-		menu* _resmenu;
+		Menu* mainmenu;
+		Menu* _resmenu;
 
 		ALfloat pos[3], vel[3], ori[6];
 

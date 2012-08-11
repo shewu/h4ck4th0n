@@ -7,7 +7,7 @@
 
 class ServerConnectViewController : public HBViewController {
 	private:
-		menu* serverConnectMenu;
+		Menu* serverConnectMenu;
 
 	public:
 		ServerConnectViewController();

@@ -4,62 +4,62 @@
 
 using std::string;
 
-menuitem::~menuitem() { }
-bool menuitem::activate() { return false; }
-bool menuitem::key_input(int key) { return false; }
-void menuitem::key_input_non_active(int key) { }
-bool menuitem::shouldMenuBeDrawn() { return false; }
-void menuitem::onSelect() { }
-void menuitem::onDeselect() { }
+MenuItem::~MenuItem() { }
+bool MenuItem::activate() { return false; }
+bool MenuItem::key_input(int key) { return false; }
+void MenuItem::key_input_non_active(int key) { }
+bool MenuItem::shouldMenuBeDrawn() { return false; }
+void MenuItem::onSelect() { }
+void MenuItem::onDeselect() { }
 
-//submenuitem
-submenuitem::~submenuitem() { }
+//SubMenuItem
+SubMenuItem::~SubMenuItem() { }
 
-submenuitem::submenuitem(menu *m, char *name) {
+SubMenuItem::SubMenuItem(Menu *m, char *name) {
 	this->m = m;
 	this->name = string(name);
 	isActive = false;
 }
 
-bool submenuitem::activate() {
+bool SubMenuItem::activate() {
 	isActive = true;
-	m->set_active(true);
+	m->setActive(true);
 	return true;
 }
 
-bool submenuitem::key_input(int key) {
+bool SubMenuItem::key_input(int key) {
 	if(isActive)
-		m->key_input(key);
-	return (isActive = m->is_active());
+		m->keyInput(key);
+	return (isActive = m->isActive());
 }
 
-bool submenuitem::shouldMenuBeDrawn() {return false;}
+bool SubMenuItem::shouldMenuBeDrawn() {return false;}
 
-//actionmenuitem
-actionmenuitem::~actionmenuitem() { }
+//ActionMenuItem
+ActionMenuItem::~ActionMenuItem() { }
 
-bool actionmenuitem::activate() {
+bool ActionMenuItem::activate() {
 	return init();
 }
 
-bool actionmenuitem::shouldMenuBeDrawn() {return true;}
+bool ActionMenuItem::shouldMenuBeDrawn() {return true;}
 
-//inputmenuitem
-inputmenuitem::~inputmenuitem() {
+//InputMenuItem
+InputMenuItem::~InputMenuItem() {
 	delete [] input;
 }
 
-string inputmenuitem::get_input() {
+string InputMenuItem::get_input() {
 	return string(input, len);
 }
 
-bool inputmenuitem::activate() {
+bool InputMenuItem::activate() {
 	displayError = false;
 	return true;
 }
 
 /* I see we handle characters here -- we need to handle dots for IP addresses */
-bool inputmenuitem::key_input(int key) {
+bool InputMenuItem::key_input(int key) {
 	if(key == MENU_KEY_BACKSPACE) {
 		if(len > 0)
 			input[--len] = '\0';
@@ -87,33 +87,33 @@ bool inputmenuitem::key_input(int key) {
 	return true;
 }
 
-bool inputmenuitem::shouldMenuBeDrawn() {
+bool InputMenuItem::shouldMenuBeDrawn() {
 	return true;
 }
 
-//togglemenuitem
-togglemenuitem::~togglemenuitem() {
+//ToggleMenuItem
+ToggleMenuItem::~ToggleMenuItem() {
 }
 
-bool togglemenuitem::activate() {
+bool ToggleMenuItem::activate() {
 	state = !state;
 	action(state);
 	return false;
 }
 
-bool togglemenuitem::get_state() {
+bool ToggleMenuItem::get_state() {
 	return state;
 }
 
-//slidermenuitem
-slidermenuitem::~slidermenuitem() {
+//SliderMenuItem
+SliderMenuItem::~SliderMenuItem() {
 }
 
-bool slidermenuitem::get_state() {
+bool SliderMenuItem::get_state() {
 	return curstate;
 }
 
-void slidermenuitem::key_input_non_active(int key) {
+void SliderMenuItem::key_input_non_active(int key) {
 	if(key == MENU_KEY_LEFT) {
 		if(newcurstate > 0) {
 			newcurstate--;
@@ -128,12 +128,12 @@ void slidermenuitem::key_input_non_active(int key) {
 	}
 }
 
-bool slidermenuitem::activate() {
+bool SliderMenuItem::activate() {
 	curstate = newcurstate;
 	action(curstate);
 	return false;
 }
 
-void slidermenuitem::onDeselect() {
+void SliderMenuItem::onDeselect() {
 	newcurstate = curstate;
 }

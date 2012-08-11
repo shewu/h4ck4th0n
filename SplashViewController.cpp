@@ -23,11 +23,11 @@ SplashViewController::SplashViewController() {
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 	finishedView = kHBNoView;
 
-	splashMenu = new menu();
-	splashMenu->add_menuitem(new actionmenuitem(menuConnectToServer, (char *)"Play Game"));
-	splashMenu->add_menuitem(new actionmenuitem([this](){return quit();}, (char *)"Quit"));
+	splashMenu = new Menu();
+	splashMenu->addMenuItem(new ActionMenuItem(menuConnectToServer, (char *)"Play Game"));
+	splashMenu->addMenuItem(new ActionMenuItem([this](){return quit();}, (char *)"Quit"));
 
-	splashMenu->set_active(true);
+	splashMenu->setActive(true);
 }
 
 SplashViewController::~SplashViewController() {
@@ -44,7 +44,7 @@ void SplashViewController::process() {
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 			case SDL_KEYUP:
-				splashMenu->key_input(event.key.keysym.sym);
+				splashMenu->keyInput(event.key.keysym.sym);
 				break;
 		}
 	}

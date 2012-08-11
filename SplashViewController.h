@@ -7,7 +7,7 @@
 
 class SplashViewController : public HBViewController {
 	private:
-		menu* splashMenu;
+		Menu* splashMenu;
 
 	public:
 		SplashViewController();

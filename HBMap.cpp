@@ -74,11 +74,7 @@ namespace {
 
 	float string2angle(string const& s) {
 		int angleDegrees = string2int(s);
-		angleDegrees %= 360;
-		if (angleDegrees < 0) {
-			angleDegrees += 360;
-		}
-		return (float) angleDegrees * M_PI / 180.0f;
+		return (float) modHandleNegative(angleDegrees, 360) * M_PI / 180.0f;
 	}
 
 	struct TokenizedLine {

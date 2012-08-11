@@ -82,7 +82,7 @@ void menu::draw() {
 #define unselected_g		140
 #define unselected_b		214
 
-void draw_button(bool selected, char *text, float x, float y, float width, float height, GLubyte alpha) {
+void draw_button(bool selected, char const* text, float x, float y, float width, float height, GLubyte alpha) {
 	if(selected)
 		glColor4ub(selected_r,selected_g,selected_b,alpha);
 	else
@@ -103,11 +103,11 @@ void draw_button(bool selected, char *text, float x, float y, float width, float
 void menuitem::drawAsActive(unsigned char alpha) {}
 
 void menuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
-	draw_button(selected, name, x, y, width, height, alpha);
+	draw_button(selected, name.c_str(), x, y, width, height, alpha);
 }
 
 void submenuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
-	draw_button(selected, name, x, y, width, height, alpha);
+	draw_button(selected, name.c_str(), x, y, width, height, alpha);
 	glBegin(GL_TRIANGLES);
 	glVertex3f(x + 0.01f, y + 0.03f, 0.0f);
 	glVertex3f(x + 0.01f, y + 0.12f, 0.0f);
@@ -175,7 +175,7 @@ void inputmenuitem::drawAsActive(unsigned char alpha) {
 }	
 
 void togglemenuitem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
-	draw_button(selected, name, x, y, width, height, alpha);
+	draw_button(selected, name.c_str(), x, y, width, height, alpha);
 	textquad tq(x + width - toggle_dist_from_back,
 			y + (height - font_size) * 0.5f,
 			0.0f,
@@ -252,5 +252,5 @@ void slidermenuitem::draw(bool selected, float x, float y, float width, float he
 	textquad tq(    slider_text_name_left * width, y+slider_text_name_top*height, 0.0f,
 			slider_text_name_left * width, y+slider_text_name_bottom*height, 0.0f,
 			(slider_text_name_bottom-slider_text_name_top)*height, 0.0f, 0.0f);
-	draw_str(tq, name);
+	draw_str(tq, name.c_str());
 }

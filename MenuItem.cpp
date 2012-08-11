@@ -2,6 +2,8 @@
 
 #include "Menu.h"
 
+using std::string;
+
 //menuitem
 //(these guys shouldn't actually be called, since
 //any instance of menuitem should be of a subclass)
@@ -18,7 +20,7 @@ submenuitem::~submenuitem() { }
 
 submenuitem::submenuitem(menu *m, char *name) {
 	this->m = m;
-	this->name = name;
+	this->name = string(name);
 	isActive = false;
 }
 

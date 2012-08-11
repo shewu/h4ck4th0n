@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <functional>
+#include <string>
 #include <SDL/SDL.h>
 
 #define MENU_KEY_LEFT		SDLK_LEFT
@@ -29,7 +30,7 @@ class menuitem {
 		virtual void onSelect();
 		virtual void onDeselect();
 	protected:
-		char *name;
+		std::string name;
 
 };
 

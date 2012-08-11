@@ -8,8 +8,8 @@ struct textquad {
 
 };
 
-void draw_str(textquad tq, char *text);
-void draw_str_center(textquad tq, char *text);
+void draw_str(textquad tq, char const* text);
+void draw_str_center(textquad tq, char const* text);
 
 void init_font();
 

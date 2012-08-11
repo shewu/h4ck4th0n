@@ -62,7 +62,7 @@ void init_font() {
 	fclose(fontdata);
 }
 
-void draw_str(textquad tq, char *text) {
+void draw_str(textquad tq, char const* text) {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, font_texture);
 
@@ -83,7 +83,7 @@ void draw_str(textquad tq, char *text) {
 	glDisable(GL_TEXTURE_2D);
 }
 
-void draw_str_center(textquad tq, char *text) {
+void draw_str_center(textquad tq, char const* text) {
 	float width = 0.0f;
 	for(int i = 0; text[i] != '\0'; i++) {
 		width += character_x2[(int)text[i]] - character_x1[(int)text[i]];

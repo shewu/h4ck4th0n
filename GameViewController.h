@@ -24,7 +24,6 @@ class GameViewController : public HBViewController {
 		~GameViewController();
 		HBViewMode didFinishView();
 		void process();
-		void render() {}
 		bool quit();
 		bool leave();
 
@@ -46,18 +45,6 @@ class GameViewController : public HBViewController {
 		void _disconnect();
 		void _initMenus();
 		void _initSound();
-};
-
-class leavefunc {
-	public:
-		GameViewController* _gvc;
-		leavefunc() {}
-		leavefunc(GameViewController* gvc) {
-			_gvc = gvc;
-		}
-		bool operator()() {
-			return _gvc->leave();
-		}
 };
 
 #endif

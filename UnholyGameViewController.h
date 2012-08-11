@@ -22,7 +22,7 @@ class UnholyGameViewController : public GameViewController {
 		void _initGL();
 		void _drawWalls();
 		void _drawObjects();
-		void _drawFloor(float);
+		void _drawFloor(const float);
 };
 
 #endif

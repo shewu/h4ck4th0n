@@ -147,31 +147,28 @@ void UnholyGameViewController::_drawObjects() {
 	glDisable(GL_NORMALIZE);
 }
 
-void UnholyGameViewController::_drawFloor(float alpha) {
-	// FIXME fix this because it uses INTEGER ARITHMETIC
-
-	// checkerboard
-	unsigned int GridSizeX = world->getMaxX()/3;
-	unsigned int GridSizeY = world->getMaxY()/3;
-	unsigned int SizeX = 6;
-	unsigned int SizeY = 6;
+void UnholyGameViewController::_drawFloor(const float alpha_) {
+	const float size = 6.0f;
+	const float lenX = world->getMaxX() - world->getMinX();
+	const float lenY = world->getMaxY() - world->getMinY();
+	assert(lenX > 0.f);
+	assert(lenY > 0.f);
 
 	glEnable(GL_NORMALIZE);
 	glBegin(GL_QUADS);
-	for (unsigned x = 0; x < GridSizeX; ++x) {
-		for (unsigned y = 0; y < GridSizeY; ++y) {
-			if ((x+y) % 2 == 1) {//modulo 2
-				glColor4f(1.0f,1.0f,1.0f, alpha); //white
+	for (float x = 0; x < lenX; x += std::min(size, lenX - x)) {
+		for (float y = 0; y < lenY; y += std::min(size, lenY - y)) {
+			if (int((x+y)/size) % 2 == 1) {
+				glColor4f(1.f,1.f,1.f,alpha_);
 			} else {
-				glColor4f(0.0f,0.0f,0.0f, alpha); //black
+				glColor4f(0.f,0.f,0.f,alpha_);
 			}
 
-			glNormal3f(                  0,                  0, 1);
-			glVertex3f(    x*SizeX + world->getMinX(),    y*SizeY + world->getMinY(), 0);
-			glVertex3f((x+1)*SizeX + world->getMinX(),    y*SizeY + world->getMinY(), 0);
-			glVertex3f((x+1)*SizeX + world->getMinX(),(y+1)*SizeY + world->getMinY(), 0);
-			glVertex3f(    x*SizeX + world->getMinX(),(y+1)*SizeY + world->getMinY(), 0);
-
+			glNormal3f(0, 0, 1);
+			glVertex3f(x + world->getMinX(), y + world->getMinY(), 0);
+			glVertex3f(x + size + world->getMinX(), y + world->getMinY(), 0);
+			glVertex3f(x + size + world->getMinX(), y + size + world->getMinY(), 0);
+			glVertex3f(x + world->getMinX(), y + size + world->getMinY(), 0);
 		}
 	}
 	glEnd();

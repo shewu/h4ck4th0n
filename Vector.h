@@ -83,6 +83,10 @@ class Vector2D
 			}
 			return theta;
 		}
+
+		static Vector2D getUnitVector(float theta) {
+			return Vector2D(cosf(theta), sinf(theta));
+		}
 };
 
 inline Vector2D operator*(const float s, const Vector2D& v) {

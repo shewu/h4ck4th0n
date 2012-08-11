@@ -55,7 +55,7 @@ namespace  {
 	}
 	
 	bool isAngleInRange(float theta1, float theta2, float theta) {
-		return (theta2 < theta1) ^ (theta < theta1) ^ (theta < theta2);
+		return (theta2 <= theta1) ^ (theta < theta1) ^ (theta < theta2);
 	}
 } // anonymous namespace
 

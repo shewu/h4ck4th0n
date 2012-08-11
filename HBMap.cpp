@@ -72,6 +72,15 @@ namespace {
 		return ans;
 	}
 
+	float string2angle(string const& s) {
+		int angleDegrees = string2int(s);
+		angleDegrees %= 360;
+		if (angleDegrees < 0) {
+			angleDegrees += 360;
+		}
+		return (float) angleDegrees * M_PI / 180.0f;
+	}
+
 	struct TokenizedLine {
 		vector<string> args;
 		map<string, string> attributes;
@@ -198,7 +207,7 @@ void HBMap::parseSpawn(string const& s) {
 		b.y = string2float(tl.args[5]);
 		spawns[index].addComponent(new SpawnComponentRectangle(a, b));
 	} else if (type == "triangle") {
-		if (tl.args.size() != 4) {
+		if (tl.args.size() != 8) {
 			throw ParseException("failure parsing spawn: failure parsing triangle");
 		}
 		a.x = string2float(tl.args[2]);
@@ -208,6 +217,20 @@ void HBMap::parseSpawn(string const& s) {
 		c.x = string2float(tl.args[6]);
 		c.y = string2float(tl.args[7]);
 		spawns[index].addComponent(new SpawnComponentTriangle(a, b, c));
+	} else if (type == "slice" || type == "sector") {
+		if (tl.args.size() != 7) {
+			throw ParseException("failure parsing spawns: failure parsing arc slice");
+		}
+		a.x = string2float(tl.args[2]);
+		a.y = string2float(tl.args[3]);
+		float radius = string2float(tl.args[4]);
+		float theta1 = string2angle(tl.args[5]);
+		float theta2 = string2angle(tl.args[6]);
+		if (type == "arcslice") {
+			spawns[index].addComponent(new SpawnComponentSlice(a, radius, theta1, theta2));
+		} else {
+			spawns[index].addComponent(new SpawnComponentSector(a, radius, theta1, theta2));
+		}
 	} else {
 		throw ParseException("failure parsing spawn: urecognized spawn type " + type);
 	}
@@ -254,25 +277,15 @@ void HBMap::parseRoundWall(string const& s) {
 	int a = string2int(tl.args[1]);
 	int b = string2int(tl.args[2]);
 	int c = string2int(tl.args[3]);
-	int d = string2int(tl.args[4]);
-	int e = string2int(tl.args[5]);
-
-	d %= 360;
-	if (d < 0) {
-		d += 360;
-	}
-
-	e %= 360;
-	if (e < 0) {
-		e += 360;
-	}
+	float d = string2angle(tl.args[4]);
+	float e = string2angle(tl.args[5]);
 
 	float bc = WallDescriptor::kDefaultBouncinessCoefficient;
 	if (tl.attributes["bounciness"] != "") {
 		bc = string2float(tl.attributes["bounciness"]);
 	}
 
-	roundWalls.push_back(RoundWallDescriptor(wallTypeData, Vector2D(a, b), c, float(d) * M_PI / 180., float(e) * M_PI / 180., bc));
+	roundWalls.push_back(RoundWallDescriptor(wallTypeData, Vector2D(a, b), c, d, e, bc));
 }
 
 void HBMap::parseFloor(string const& s) {

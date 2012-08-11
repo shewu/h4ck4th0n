@@ -71,6 +71,54 @@ class SpawnComponentTriangle : public SpawnComponent {
 		Vector2D _point3;
 };
 
+/*        Slice:
+
+             theta2
+              o              
+       -----oooooooooo       
+     ---------oooooooooo     
+   -------------oooooooooo   
+  ----------------ooooooooo  
+ -------------------oooooooo 
+ ---------------------oooooo 
+------------------------ooooo
+ -------------------------oo   theta1
+ --------------------------- 
+  -------------------------  
+   -----------------------   
+     -------------------     
+       ---------------       
+              -              
+ */
+
+class SpawnComponentSlice : public SpawnComponent {
+	public:
+		SpawnComponentSlice(Vector2D center, float radius, float theta1, float theta2) :
+			_center(center), _radius(radius), _theta1(theta1), _theta2(theta2) { }
+		float getArea() const;
+		Vector2D getRandomPoint() const;
+
+	private:
+		Vector2D _center;
+		float _radius;
+		float _theta1;
+		float _theta2;
+};
+
+class SpawnComponentSector : public SpawnComponent {
+	public:
+		SpawnComponentSector(Vector2D center, float radius, float theta1, float theta2) :
+			_center(center), _radius(radius), _theta1(theta1), _theta2(theta2) { }
+		float getArea() const;
+		Vector2D getRandomPoint() const;
+
+	private:
+		Vector2D _center;
+		float _radius;
+		float _theta1;
+		float _theta2;
+};
+
 /**
  * An immutable class that describes a Wall. Uesd by HBMap.
  */

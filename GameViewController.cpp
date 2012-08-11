@@ -42,7 +42,7 @@ GameViewController::GameViewController() {
 	hints.ai_socktype = SOCK_DGRAM;
 	
 	std::cout << "IP Address = " << ipaddy << "\n";
-	getaddrinfo(ipaddy, "55555", &hints, &res);
+	getaddrinfo(ipaddy.c_str(), "55555", &hints, &res);
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 	sock = new Socket(sockfd);
 

@@ -26,7 +26,9 @@ bool NORAPE = true;
 #endif
 
 SDL_Surface* screen;
-char* ipaddy = (char *)"127.0.0.1";
+
+// FIXME should this really be a global variable?
+string ipaddy = "127.0.0.1";
 
 void initVideo() {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {

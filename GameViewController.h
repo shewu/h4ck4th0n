@@ -14,7 +14,7 @@
 #include "Sound.h"
 
 extern SDL_Surface* screen;
-extern char* ipaddy;
+extern std::string ipaddy;
 extern int WIDTH;
 extern int HEIGHT;
 

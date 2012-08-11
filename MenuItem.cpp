@@ -6,8 +6,8 @@ using std::string;
 
 MenuItem::~MenuItem() { }
 bool MenuItem::activate() { return false; }
-bool MenuItem::key_input(int key) { return false; }
-void MenuItem::key_input_non_active(int key) { }
+bool MenuItem::keyInput(int key) { return false; }
+void MenuItem::keyInputNonActive(int key) { }
 bool MenuItem::shouldMenuBeDrawn() { return false; }
 void MenuItem::onSelect() { }
 void MenuItem::onDeselect() { }
@@ -27,7 +27,7 @@ bool SubMenuItem::activate() {
 	return true;
 }
 
-bool SubMenuItem::key_input(int key) {
+bool SubMenuItem::keyInput(int key) {
 	if(isActive)
 		m->keyInput(key);
 	return (isActive = m->isActive());
@@ -49,7 +49,7 @@ InputMenuItem::~InputMenuItem() {
 	delete [] input;
 }
 
-string InputMenuItem::get_input() {
+string InputMenuItem::getInput() {
 	return string(input, len);
 }
 
@@ -59,7 +59,7 @@ bool InputMenuItem::activate() {
 }
 
 /* I see we handle characters here -- we need to handle dots for IP addresses */
-bool InputMenuItem::key_input(int key) {
+bool InputMenuItem::keyInput(int key) {
 	if(key == MENU_KEY_BACKSPACE) {
 		if(len > 0)
 			input[--len] = '\0';
@@ -101,7 +101,7 @@ bool ToggleMenuItem::activate() {
 	return false;
 }
 
-bool ToggleMenuItem::get_state() {
+bool ToggleMenuItem::getState() {
 	return state;
 }
 
@@ -109,11 +109,11 @@ bool ToggleMenuItem::get_state() {
 SliderMenuItem::~SliderMenuItem() {
 }
 
-bool SliderMenuItem::get_state() {
+bool SliderMenuItem::getState() {
 	return curstate;
 }
 
-void SliderMenuItem::key_input_non_active(int key) {
+void SliderMenuItem::keyInputNonActive(int key) {
 	if(key == MENU_KEY_LEFT) {
 		if(newcurstate > 0) {
 			newcurstate--;

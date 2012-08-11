@@ -42,7 +42,7 @@ void Menu::keyInput(int key) {
 		return;
 
 	if(is_item_active) {
-		if(!menuItems[current_index]->key_input(key))
+		if(!menuItems[current_index]->keyInput(key))
 			is_item_active = false;
 		return;
 	}
@@ -72,6 +72,6 @@ void Menu::keyInput(int key) {
 		is_menu_active = false;
 	}
 	else {
-		menuItems[current_index]->key_input_non_active(key);
+		menuItems[current_index]->keyInputNonActive(key);
 	}
 }

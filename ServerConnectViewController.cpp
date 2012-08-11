@@ -7,14 +7,15 @@
 
 #include "ServerConnectViewController.h"
 
-extern char* ipaddy;
+using std::string;
+
+extern string ipaddy;
 static HBViewMode finishedView = kHBNoView;
 
-static bool menuGetIP(char* a) {
-	// note: strcmp returns 0 if equal
-	ipaddy = a;
-	printf("Entered IP = %s\n", a);
-	if (strcmp(a, "")) {
+static bool menuGetIP(string const& ip) {
+	ipaddy = ip;
+	printf("Entered IP = %s\n", ipaddy.c_str());
+	if (ip == "") {
 		return (finishedView = kHBGameView) != kHBNoView;
 	} else {
 		return false;

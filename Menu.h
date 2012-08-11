@@ -23,8 +23,8 @@ class MenuItem {
 	private:
 		//Return whether or not the MenuItem is still active
 		virtual bool activate();
-		virtual bool key_input(int key);
-		virtual void key_input_non_active(int key);
+		virtual bool keyInput(int key);
+		virtual void keyInputNonActive(int key);
 		virtual void draw(bool selected, float x1, float y1, float width, float height, unsigned char alpha);
 		virtual void drawAsActive(unsigned char alpha);
 		virtual bool shouldMenuBeDrawn();
@@ -66,15 +66,15 @@ class Menu {
 // The subMenuItem "owns" its menu and will free it on destruction
 class SubMenuItem : public MenuItem {
 	public:
-		virtual ~SubMenuItem();
+		~SubMenuItem();
 		SubMenuItem(Menu *m, char *name);
 
 	private:
-		virtual bool activate();
-		virtual bool key_input(int key);
-		virtual void drawAsActive(unsigned char alpha);
-		virtual bool shouldMenuBeDrawn();
-		virtual void draw(bool,float,float,float,float,unsigned char);
+		bool activate();
+		bool keyInput(int key);
+		void drawAsActive(unsigned char alpha);
+		bool shouldMenuBeDrawn();
+		void draw(bool,float,float,float,float,unsigned char);
 
 		Menu *m;
 		bool isActive;
@@ -82,16 +82,15 @@ class SubMenuItem : public MenuItem {
 
 class ActionMenuItem : public MenuItem {
 	public:
-		virtual ~ActionMenuItem();
+		~ActionMenuItem();
 		ActionMenuItem(const std::function<bool()>& init1, char *name1) {
 			init = init1;
 			name = name1;
 		}
 
 	private:
-
-		virtual bool activate();
-		virtual bool shouldMenuBeDrawn();
+		bool activate();
+		bool shouldMenuBeDrawn();
 
 		std::function<bool()> init;
 };
@@ -99,7 +98,7 @@ class ActionMenuItem : public MenuItem {
 class InputMenuItem : public MenuItem {
 	public:
 		InputMenuItem(  int maxInputLen, 
-				const std::function<bool(char*)>& inputValidator,
+				const std::function<bool(std::string const&)>& inputValidator,
 				std::string const& initInput,
 				std::string const& iie,
 				std::string const& t,
@@ -116,14 +115,15 @@ class InputMenuItem : public MenuItem {
 			text = t;
 			name = nam;
 		}
-		virtual ~InputMenuItem();
+		~InputMenuItem();
+
+		std::string getInput();
 
 	private:
-		virtual bool activate();
-		virtual bool key_input(int key);
-		virtual void drawAsActive(unsigned char alpha);
-		virtual bool shouldMenuBeDrawn();
-		std::string get_input();
+		bool activate();
+		bool keyInput(int key);
+		void drawAsActive(unsigned char alpha);
+		bool shouldMenuBeDrawn();
 
 		char *input;
 		
@@ -132,7 +132,7 @@ class InputMenuItem : public MenuItem {
 
 		std::string invalidInputError;
 		bool displayError;
-		std::function<bool(char*)> vali;
+		std::function<bool(std::string const&)> vali;
 };
 
 class ToggleMenuItem : public MenuItem {
@@ -142,12 +142,13 @@ class ToggleMenuItem : public MenuItem {
 			state = state1;
 			action = act;
 		}
-		virtual ~ToggleMenuItem();
+		~ToggleMenuItem();
+
+		bool getState();
 
 	private:
-		virtual bool activate();
-		bool get_state();
-		virtual void draw(bool selected, float x1, float y1, float width, float height, unsigned char alpha);
+		bool activate();
+		void draw(bool selected, float x1, float y1, float width, float height, unsigned char alpha);
 
 		bool state;
 		std::function<void(bool)> action;
@@ -160,14 +161,15 @@ class SliderMenuItem : public MenuItem {
 		states(states), curstate(curstate1), action(act) {
 			name = name1;
 		}
-		virtual ~SliderMenuItem();
+		~SliderMenuItem();
+
+		bool getState();
 
 	private:
-		virtual void key_input_non_active(int key);
-		bool get_state();
-		virtual bool activate();
-		virtual void draw(bool,float,float,float,float,unsigned char);
-		virtual void onDeselect();
+		void keyInputNonActive(int key);
+		bool activate();
+		void draw(bool,float,float,float,float,unsigned char);
+		void onDeselect();
 
 		std::vector<std::string> states;
 		int curstate, newcurstate;

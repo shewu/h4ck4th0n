@@ -15,7 +15,7 @@ static HBViewMode finishedView = kHBNoView;
 static bool menuGetIP(string const& ip) {
 	ipaddy = ip;
 	printf("Entered IP = %s\n", ipaddy.c_str());
-	if (ip == "") {
+	if (ip != "") {
 		return (finishedView = kHBGameView) != kHBNoView;
 	} else {
 		return false;

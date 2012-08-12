@@ -262,6 +262,9 @@ void HBMap::parseRectangularWall(string const& s) {
 	float bc = WallDescriptor::kDefaultBouncinessCoefficient;
 	if (tl.attributes["bounciness"] != "") {
 		bc = string2float(tl.attributes["bounciness"]);
+		if (bc < 0.0f || bc > 1.0f) {
+			throw ParseException("failure parsing rectangular wall: invalid bounciness: " + tl.attributes["bounciness"]);
+		}
 	}
 
 	rectangularWalls.push_back(RectangularWallDescriptor(wallTypeData, Vector2D(a,b), Vector2D(c,d), bc));
@@ -270,7 +273,7 @@ void HBMap::parseRectangularWall(string const& s) {
 void HBMap::parseRoundWall(string const& s) {
 	TokenizedLine tl(s);
 	if (tl.args.size() != 6) {
-		throw ParseException("failure parsing rectangular wall: 6 arguments expected\n");
+		throw ParseException("failure parsing round wall: 6 arguments expected\n");
 	}
 	WallTypeData wallTypeData = parseWallType(tl.args[0]);
 	int a = string2int(tl.args[1]);
@@ -282,6 +285,9 @@ void HBMap::parseRoundWall(string const& s) {
 	float bc = WallDescriptor::kDefaultBouncinessCoefficient;
 	if (tl.attributes["bounciness"] != "") {
 		bc = string2float(tl.attributes["bounciness"]);
+		if (bc < 0.0f || bc > 1.0f) {
+			throw ParseException("failure parsing round wall: invalid bounciness: " + tl.attributes["bounciness"]);
+		}
 	}
 
 	roundWalls.push_back(RoundWallDescriptor(wallTypeData, Vector2D(a, b), c, d, e, bc));
@@ -290,7 +296,7 @@ void HBMap::parseRoundWall(string const& s) {
 void HBMap::parseFloor(string const& s) {
 	TokenizedLine tl(s);
 	if (tl.args.size() != 5) {
-		throw ParseException("failure parsing rectangular wall: 5 arguments expected\n");
+		throw ParseException("failure parsing floor: 5 arguments expected\n");
 	}
 	int a = string2int(tl.args[0]);
 	int b = string2int(tl.args[1]);

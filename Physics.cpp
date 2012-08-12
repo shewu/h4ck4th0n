@@ -205,6 +205,9 @@ void PhysicsWorld::doRectangularWallCollision(MovingRoundObject const& obj,
 		if (newpos * dir < 0 || newpos * dir > dir*dir) {
 			time3 = INFINITY;
 		}
+		if (normal * obj.velocity >= 0.0) {
+			time3 = INFINITY;
+		}
 	}
 
 	EventType type;

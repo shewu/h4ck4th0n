@@ -229,7 +229,7 @@ void MultiGameViewController::render() {
 
 	glFlush();
 
-	if (mainmenu->is_active()) {
+	if (mainmenu->isActive()) {
 		mainmenu->drawMenu();
 	}
 }

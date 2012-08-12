@@ -39,6 +39,8 @@ wall goal2 29 3 29 -3
 roundwall normal 0 -30 5 90 270
 roundwall deadly 0 30 5 90 270
 
+roundwall normal 25 55 3 0 360
+
 floor -30 -60 30 0 0.1
 
 spawn 1 rectangle -4 -1 -3 1

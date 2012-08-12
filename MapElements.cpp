@@ -64,22 +64,12 @@ Vector2D SpawnComponentTriangle::getRandomPoint() const {
 // Arc slice
 
 float SpawnComponentSlice::getArea() const {
-	float theta;
-	if (_theta2 <= _theta1) {
-		theta = _theta2 - _theta1 + 2.0 * M_PI;
-	} else {
-		theta = _theta2 - _theta1;
-	}
+	float theta = _theta2 - _theta1;
 	return 0.5f * (theta - sinf(theta)) * _radius * _radius;
 }
 
 Vector2D SpawnComponentSlice::getRandomPoint() const {
-	float theta;
-	if (_theta2 <= _theta1) {
-		theta = _theta2 - _theta1 + 2.0 * M_PI;
-	} else {
-		theta = _theta2 - _theta1;
-	}
+	float theta = _theta2 - _theta1;
 	float x, y;
 	float sinThetaOver2 = sinf(theta / 2.0f);
 	float cosThetaOver2 = cosf(theta / 2.0f);
@@ -97,22 +87,12 @@ Vector2D SpawnComponentSlice::getRandomPoint() const {
 // Sector
 
 float SpawnComponentSector::getArea() const {
-	float theta;
-	if (_theta2 <= _theta1) {
-		theta = _theta2 - _theta1 + 2.0 * M_PI;
-	} else {
-		theta = _theta2 - _theta1;
-	}
+	float theta = _theta2 - _theta1;
 	return 0.5f * theta * _radius * _radius;
 }
 
 Vector2D SpawnComponentSector::getRandomPoint() const {
-	float theta;
-	if (_theta2 <= _theta1) {
-		theta = random_uniform_float(_theta1, _theta2 + 2.0f * M_PI);
-	} else {
-		theta = random_uniform_float(_theta1, _theta2);
-	}
+	float theta = random_uniform_float(_theta1, _theta2);
 	float r = sqrt(random_uniform_float(0.0f, 1.0f));
 	return _center + (r * _radius * Vector2D::getUnitVector(theta));
 }

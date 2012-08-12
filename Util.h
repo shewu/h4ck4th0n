@@ -11,6 +11,8 @@
 #define P(x)
 #endif
 
+#define TWO_PI (2.0 * M_PI);
+
 // Returns a mod m as an integer in [0, m)
 inline int modHandleNegative(int a, int m) {
 	a %= m;

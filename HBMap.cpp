@@ -74,7 +74,10 @@ namespace {
 
 	float string2angle(string const& s) {
 		int angleDegrees = string2int(s);
-		return (float) modHandleNegative(angleDegrees, 360) * M_PI / 180.0f;
+		if (angleDegrees <= -360 || angleDegrees > 360) {
+			throw ParseException("failure to parse angle: " + s + " should be in (-360, 360]");
+		}
+		return ((float) angleDegrees) * M_PI / 180.0f;
 	}
 
 	struct TokenizedLine {

@@ -6,3 +6,4 @@ server
 .DS_Store
 Makefile-overrides
 logs/*
+bin/

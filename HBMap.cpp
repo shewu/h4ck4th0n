@@ -1,3 +1,5 @@
+#include "HBMap.h"
+
 #include <list>
 #include <cstring>
 #include <cstdlib>
@@ -6,9 +8,9 @@
 #include <utility>
 #include <sstream>
 
-#include "HBMap.h"
 #include "Exceptions.h"
 #include "Object.h"
+#include "MapInfo.h"
 
 using std::list;
 using std::make_pair;

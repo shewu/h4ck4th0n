@@ -6,7 +6,6 @@
 #include <set>
 
 #include "MapElements.h"
-#include "MapInfo.h"
 #include "Util.h"
 
 enum GameMode {

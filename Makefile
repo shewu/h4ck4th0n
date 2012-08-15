@@ -5,12 +5,14 @@ OBJ_DIR = bin/objs
 OUT_DIR = bin
 DEP_DIR = bin/deps
 
-CCFLAGS = -Wall -MD -MP
+CCSTD = c++0x
+
+CCFLAGS = -Wall -MD -MP --std=$(CCSTD)
 
 ifeq ($(DEBUG), 1)
-	CCFLAGS += --std=c++11 -O0 -g -DDEBUG -Werror
+	CCFLAGS += -O0 -g -DDEBUG -Werror
 else
-	CCFLAGS += --std=c++11 -O2 -w
+	CCFLAGS += -O2 -w
 endif
 
 UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW

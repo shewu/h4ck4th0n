@@ -35,6 +35,7 @@ inline int argMin(std::initializer_list<T_> args_) {
 	for (auto obj : args_) {
 		if (obj < minVal) {
 			minInd = ctr;
+			minVal = obj;
 		}
 		++ctr;
 	}

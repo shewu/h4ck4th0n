@@ -2,6 +2,7 @@
 #define MAPELEMENTS_H
 
 #include <map>
+#include <memory>
 #include <vector>
 
 #include "Vector.h"
@@ -17,14 +18,14 @@ class SpawnDescriptor {
 	public:
 		SpawnDescriptor() { }
 
-		void addComponent(SpawnComponent* sc) {
+		void addComponent(std::shared_ptr<SpawnComponent> sc) {
 			_components.push_back(sc);
 		}
 
 		Vector2D getRandomPoint() const;
 
 	private:
-		std::vector<SpawnComponent*> _components;
+		std::vector<std::shared_ptr<SpawnComponent>> _components;
 };
 
 class SpawnComponentPoint : public SpawnComponent {
@@ -215,7 +216,5 @@ class Floor {
 		float _minX, _minY, _maxX, _maxY;
 		float _frictionCoeff;
 };
-
-
 
 #endif

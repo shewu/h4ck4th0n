@@ -5,6 +5,8 @@
 #include "assert.h"
 #include "Util.h"
 
+using std::shared_ptr;
+
 // SpawnComponentPoint
 
 float SpawnComponentPoint::getArea() const {
@@ -103,19 +105,19 @@ Vector2D SpawnDescriptor::getRandomPoint() const {
 	assert(_components.size() > 0);
 
 	float totalArea = 0.0;
-	for (SpawnComponent* sc : _components) {
+	for (shared_ptr<SpawnComponent> const& sc : _components) {
 		totalArea += sc->getArea();
 	}
 
 	float r = random_uniform_float(0.0, totalArea);
-	SpawnComponent* sc = _components[_components.size() - 1];
-	for (SpawnComponent* sc2 : _components) {
-		r -= sc2->getArea();
+	int index = -1;
+	for (shared_ptr<SpawnComponent> const& sc : _components) {
+		index++;
+		r -= sc->getArea();
 		if (r < 0) {
-			sc = sc2;
 			break;
 		}
 	}
 
-	return sc->getRandomPoint();
+	return _components[index]->getRandomPoint();
 }

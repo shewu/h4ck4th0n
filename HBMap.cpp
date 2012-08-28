@@ -14,6 +14,7 @@
 
 using std::list;
 using std::make_pair;
+using std::make_shared;
 using std::map;
 using std::string;
 using std::stringstream;
@@ -188,7 +189,7 @@ void HBMap::parseSpawn(string const& s) {
 		}
 		a.x = string2float(tl.args[2]);
 		a.y = string2float(tl.args[3]);
-		spawns[index].addComponent(new SpawnComponentPoint(a));
+		spawns[index].addComponent(make_shared<SpawnComponentPoint>(SpawnComponentPoint(a)));
 	} else if (type == "line") {
 		if (tl.args.size() != 6) {
 			throw ParseException("failure parsing spawn: failure parsing line");
@@ -197,7 +198,7 @@ void HBMap::parseSpawn(string const& s) {
 		a.y = string2float(tl.args[3]);
 		b.x = string2float(tl.args[4]);
 		b.y = string2float(tl.args[5]);
-		spawns[index].addComponent(new SpawnComponentLine(a, b));
+		spawns[index].addComponent(make_shared<SpawnComponentLine>(a, b));
 	} else if (type == "rectangle") {
 		if (tl.args.size() != 6) {
 			throw ParseException("failure parsing spawn: failure parsing rectangle");
@@ -206,7 +207,7 @@ void HBMap::parseSpawn(string const& s) {
 		a.y = string2float(tl.args[3]);
 		b.x = string2float(tl.args[4]);
 		b.y = string2float(tl.args[5]);
-		spawns[index].addComponent(new SpawnComponentRectangle(a, b));
+		spawns[index].addComponent(make_shared<SpawnComponentRectangle>(a, b));
 	} else if (type == "triangle") {
 		if (tl.args.size() != 8) {
 			throw ParseException("failure parsing spawn: failure parsing triangle");
@@ -217,7 +218,7 @@ void HBMap::parseSpawn(string const& s) {
 		b.y = string2float(tl.args[5]);
 		c.x = string2float(tl.args[6]);
 		c.y = string2float(tl.args[7]);
-		spawns[index].addComponent(new SpawnComponentTriangle(a, b, c));
+		spawns[index].addComponent(make_shared<SpawnComponentTriangle>(a, b, c));
 	} else if (type == "slice" || type == "sector") {
 		if (tl.args.size() != 7) {
 			throw ParseException("failure parsing spawns: failure parsing arc slice");
@@ -228,9 +229,9 @@ void HBMap::parseSpawn(string const& s) {
 		float theta1 = string2angle(tl.args[5]);
 		float theta2 = string2angle(tl.args[6]);
 		if (type == "arcslice") {
-			spawns[index].addComponent(new SpawnComponentSlice(a, radius, theta1, theta2));
+			spawns[index].addComponent(make_shared<SpawnComponentSlice>(a, radius, theta1, theta2));
 		} else {
-			spawns[index].addComponent(new SpawnComponentSector(a, radius, theta1, theta2));
+			spawns[index].addComponent(make_shared<SpawnComponentSector>(a, radius, theta1, theta2));
 		}
 	} else {
 		throw ParseException("failure parsing spawn: urecognized spawn type " + type);

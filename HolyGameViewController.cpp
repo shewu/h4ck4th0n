@@ -87,13 +87,15 @@ void HolyGameViewController::render() {
 	if (focusy > world->getMaxY()-14) focusy -= (14+focusy-world->getMaxY())*(14+focusy-world->getMaxY())/28.0;
 
 	map<int, RectangularWall*> const& rectangularWalls = world->getRectangularWalls();
+	map<int, RoundWall*> const& roundWalls = world->getRoundWalls();
 	
-	float obspoints[4*rectangularWalls.size()];
-	unsigned char obscolor[4*rectangularWalls.size()];
-	unsigned ti, i2 = 0;
+	float obspoints[4*rectangularWalls.size() + 5*roundWalls.size()];
+	unsigned char obscolor[4*rectangularWalls.size() + 4*roundWalls.size()];
+	unsigned ti;
+	auto i2 = rectangularWalls.begin();
 	for (ti = 0; ; ti++) {
-		while (i2 != rectangularWalls.size()) {
-			RectangularWall* wall = rectangularWalls.find(i2)->second;
+		while (i2 != rectangularWalls.end()) {
+			RectangularWall* wall = i2->second;
 			Vector2D diff = Vector2D(focusx, focusy) - wall->p1;
 			Vector2D obsdir = wall->p2 - wall->p1;
 			float smallest;
@@ -101,10 +103,10 @@ void HolyGameViewController::render() {
 			else if (diff*obsdir >= obsdir*obsdir) smallest = (diff-obsdir)*(diff-obsdir);
 			else smallest = diff*diff-(diff*obsdir)*(diff*obsdir)/(obsdir*obsdir);
 			if (smallest <= 56*56*(1+float(WIDTH)*float(WIDTH)/float(HEIGHT)/float(HEIGHT)/4.0)) break;
-			i2++;
+			++i2;
 		}
-		if (i2 == rectangularWalls.size()) break;
-		RectangularWall* wall = rectangularWalls.find(i2)->second;
+		if (i2 == rectangularWalls.end()) break;
+		RectangularWall* wall = i2->second;
 		obspoints[4*ti] = wall->p1.x;
 		obspoints[4*ti+1] = wall->p1.y;
 		obspoints[4*ti+2] = wall->p2.x;
@@ -113,10 +115,31 @@ void HolyGameViewController::render() {
 		obscolor[4*ti+1] = wall->getMaterial()->getG();
 		obscolor[4*ti+2] = wall->getMaterial()->getB();
 		obscolor[4*ti+3] = wall->getMaterial()->getA();
-		i2++;
+		++i2;
 	}
-	cl::Buffer obspointsbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*rectangularWalls.size()*sizeof(float), obspoints, NULL);
-	cl::Buffer obscolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*rectangularWalls.size()*sizeof(char), obscolor, NULL);
+	unsigned wi = 0;
+	auto i3 = roundWalls.begin();
+	for (wi = 0; ; wi++) {
+		while (i3 != roundWalls.end()) {
+			RoundWall* wall = i3->second;
+			break;
+		}
+		if (i3 == roundWalls.end()) break;
+		RoundWall* wall = i3->second;
+		obspoints[4*ti+5*wi] = wall->center.x;
+		obspoints[4*ti+5*wi+1] = wall->center.y;
+		obspoints[4*ti+5*wi+2] = wall->radius;
+		obspoints[4*ti+5*wi+3] = wall->theta1;
+		obspoints[4*ti+5*wi+4] = wall->theta2;
+		obscolor[4*ti+4*wi] = wall->getMaterial()->getR();
+		obscolor[4*ti+4*wi+1] = wall->getMaterial()->getG();
+		obscolor[4*ti+4*wi+2] = wall->getMaterial()->getB();
+		obscolor[4*ti+4*wi+3] = wall->getMaterial()->getR();
+		++i3;
+	}
+
+	cl::Buffer obspointsbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, (4*rectangularWalls.size() + 5*roundWalls.size())*sizeof(float), obspoints, NULL);
+	cl::Buffer obscolorbuf(context, CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 4*(rectangularWalls.size()+roundWalls.size())*sizeof(char), obscolor, NULL);
 	
 	float objpoint[2*roundObjects.size()];
 	float objsize[2*roundObjects.size()];
@@ -164,22 +187,23 @@ void HolyGameViewController::render() {
 	renderKern.setArg(4, sinf(angle));
 	renderKern.setArg(5, -4.0f/7);
 	renderKern.setArg(6, ti);
-	renderKern.setArg(7, obspointsbuf);
-	renderKern.setArg(8, obscolorbuf);
-	renderKern.setArg(9, si);
-	renderKern.setArg(10, objpointbuf);
-	renderKern.setArg(11, objsizebuf);
-	renderKern.setArg(12, objcolorbuf);
-	renderKern.setArg(13, (int)world->getLights().size());
-	renderKern.setArg(14, lightposbuf);
-	renderKern.setArg(15, lightcolorbuf);
-	renderKern.setArg(16, igl);
-	renderKern.setArg(17, WIDTH);
-	renderKern.setArg(18, HEIGHT);
-	renderKern.setArg(19, world->getMinX());
-	renderKern.setArg(20, world->getMaxX());
-	renderKern.setArg(21, world->getMinY());
-	renderKern.setArg(22, world->getMaxY());
+	renderKern.setArg(7, wi);
+	renderKern.setArg(8, obspointsbuf);
+	renderKern.setArg(9, obscolorbuf);
+	renderKern.setArg(10, si);
+	renderKern.setArg(11, objpointbuf);
+	renderKern.setArg(12, objsizebuf);
+	renderKern.setArg(13, objcolorbuf);
+	renderKern.setArg(14, (int)world->getLights().size());
+	renderKern.setArg(15, lightposbuf);
+	renderKern.setArg(16, lightcolorbuf);
+	renderKern.setArg(17, igl);
+	renderKern.setArg(18, WIDTH);
+	renderKern.setArg(19, HEIGHT);
+	renderKern.setArg(20, world->getMinX());
+	renderKern.setArg(21, world->getMaxX());
+	renderKern.setArg(22, world->getMinY());
+	renderKern.setArg(23, world->getMaxY());
 	cq.enqueueNDRangeKernel(renderKern, cl::NullRange, cl::NDRange((WIDTH+15)/16*16, (HEIGHT+15)/16*16), cl::NDRange(16, 16));
 	cq.enqueueReleaseGLObjects(&bs);
 	cq.finish();

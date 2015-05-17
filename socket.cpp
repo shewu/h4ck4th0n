@@ -55,7 +55,7 @@ void Socket::recv_all() {
 	while(true) {
 		sockaddr addr;
 		socklen_t addrlen = sizeof(struct sockaddr);
-		int len = recvfrom(socket, buf, MAXPACKET, MSG_DONTWAIT, &addr, &addrlen);
+		ssize_t len = recvfrom(socket, buf, MAXPACKET, MSG_DONTWAIT, &addr, &addrlen);
 		if(len < 8)
 			break;
 		int magic;

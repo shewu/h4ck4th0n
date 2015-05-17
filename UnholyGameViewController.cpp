@@ -1,4 +1,5 @@
 #include <cmath>
+#include <OpenGL/OpenGL.h>
 
 #include "UnholyGameViewController.h"
 

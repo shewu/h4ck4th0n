@@ -24,7 +24,7 @@ WritePacket::~WritePacket() {
 // The argument 's' is an initial guess
 // for the size of the packet, but it
 // does not have to be correct.
-ReadPacket::ReadPacket(char type, int s, int n) {
+ReadPacket::ReadPacket(char type, long s, int n) {
     size = s;
     buf = new char[size];
     message_type = type;

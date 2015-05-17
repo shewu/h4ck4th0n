@@ -84,10 +84,10 @@ class SocketConnection {
 		                 int my_id, int their_id);
 		void send_packet(WritePacket&);
 		ReadPacket* receive_packet();
-		void recv_data(char *buf, int length);
+		void recv_data(char *buf, long length);
 		~SocketConnection();
 
-		int lastTimeReceived;
+		time_t lastTimeReceived;
 
 		struct sockaddr *get_addr() {
 			return this->addr;

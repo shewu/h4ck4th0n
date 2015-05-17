@@ -1,9 +1,14 @@
 #ifndef __UNHOLYGAMEVIEWCONTROLLER_H__
 #define __UNHOLYGAMEVIEWCONTROLLER_H__
 
+#ifndef __APPLE__
 #include <GL/glx.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#else
+#include <OpenGL/OpenGL.h>
+#include <OpenGL/glu.h>
+#endif
 
 #include "GameViewController.h"
 

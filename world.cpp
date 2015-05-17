@@ -133,11 +133,11 @@ int World::spawn(int spawnl, int player, int flag) {
 }
 
 void World::sendObjects(SocketConnection* sc, int obj) {
-    WritePacket wp(STC_WORLD_DATA, 12 + 35 * objects.size());
+    WritePacket wp(STC_WORLD_DATA, 12 + 35 * (int)objects.size());
 
     wp.write_int(obj);
 
-    wp.write_int(objects.size());
+    wp.write_int((int)objects.size());
     for(map<int, Object>::iterator it = objects.begin(); it != objects.end(); ++it) {
         it->second.write_data(&wp);
     }

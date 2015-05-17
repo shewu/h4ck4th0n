@@ -22,7 +22,7 @@
 
 #include <sys/poll.h>
 
-using namespace std;
+//using namespace std;
 
 #define MYPORT "55555"
 
@@ -35,7 +35,7 @@ using namespace std;
 */
 
 // A map from the ID numbers to the Client structs
-map<int, Client> clients;
+std::map<int, Client> clients;
 
 // Global variable keeping track of time
 timeval tim;
@@ -48,16 +48,7 @@ Game game;
 // instances as clients connect
 Socket *s;
 
-void verify() {
-    if(FRICTION < 0.0f) {
-        cout << "Your friction is negative and will cause the game to fail\n";
-		cout << "Continue anyway? (y/n) ";
-		char c;
-		cin >> c;
-		if(!(c == 'y' || c == 'Y'))
-			exit(-1);
-    }
-}
+_Static_assert(FRICTION >= 0.0f, "Your friction is negative and will cause the game to do Weird Things");
 
 // Remove a client from the game
 void remove_client(Client cl) {
@@ -66,9 +57,7 @@ void remove_client(Client cl) {
 }
 
 int main() {
-    verify();
-
-    srand((unsigned int)time(NULL));
+    srand((unsigned)time(NULL));
 
 	// Initialize tim
     gettimeofday(&tim, NULL);
@@ -84,9 +73,11 @@ int main() {
     getaddrinfo(NULL, MYPORT, &hints, &res);
 
     int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    std::cout << "using socket fd: " << sockfd << "\n";
     int opt = 1;
     setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt));
-    bind(sockfd, res->ai_addr, res->ai_addrlen);
+    const int bindResult = bind(sockfd, res->ai_addr, res->ai_addrlen);
+    std::cout << "socket bind result: " << bindResult << "\n";
     s = new Socket(sockfd);
     s->listen_for_client();
 
@@ -135,9 +126,9 @@ int main() {
 
 		// Loop through all clients, and see if there are
 		// any messages to be received.
-        for(map<int, Client>::iterator it = clients.begin();
+        for(std::map<int, Client>::iterator it = clients.begin();
                 it != clients.end();) {
-            map<int, Client>::iterator next_it = it;
+            std::map<int, Client>::iterator next_it = it;
             ++next_it;
 
             Client cl = it->second;

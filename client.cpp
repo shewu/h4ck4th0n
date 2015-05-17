@@ -1,7 +1,9 @@
 #include <iostream>
 #include <cstdlib>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 #include <unistd.h>
+#include <cmath>
 
 #include "SplashViewController.h"
 #include "ServerConnectViewController.h"
@@ -22,18 +24,11 @@ int WIDTH = 640;
 int HEIGHT = 480;
 bool NORAPE = true;
 
-SDL_Surface* screen;
+SDL_Window* screen;
+SDL_GLContext glContext;
 char* ipaddy = (char *)"127.0.0.1";
 
-static float abs(float f) {
-	if (f < 0) {
-		return -f;
-	} else {
-		return f;
-	}
-}
-
-void initVideo() {
+static void initVideo() {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		printf("Something went wrong!\n");
 		exit(-1);
@@ -46,11 +41,11 @@ void initVideo() {
 	}
 #endif
 	// detect aspect ratio
-	float ratio = (float)SDL_GetVideoInfo()->current_w / SDL_GetVideoInfo()->current_h;
+    const float ratio = 1.333333; //(float)SDL_GetVideoInfo()->current_w / SDL_GetVideoInfo()->current_h;
 	
-	float d16x9 = abs(ratio - SIXTEEN_BY_NINE);
-	float d16x10 = abs(ratio - SIXTEEN_BY_TEN);
-	float d4x3 = abs(ratio - FOUR_BY_THREE);
+	const float d16x9 = abs(ratio - SIXTEEN_BY_NINE);
+	const float d16x10 = abs(ratio - SIXTEEN_BY_TEN);
+	const float d4x3 = abs(ratio - FOUR_BY_THREE);
 	
 	if (WIDTH == -1 || HEIGHT == -1) {
 		if (d16x9 < d16x10 && d16x9 < d4x3) {
@@ -74,7 +69,8 @@ void initVideo() {
 	WIDTH = ALIGN(WIDTH);
 	HEIGHT = ALIGN(HEIGHT);
 	
-	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+    screen = SDL_CreateWindow("Holy Balls", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_OPENGL);
+    glContext = SDL_GL_CreateContext(screen);
 	//SDL_ShowCursor(false);
 	//SDL_WM_GrabInput(SDL_GRAB_ON);
 	
@@ -85,7 +81,7 @@ void initVideo() {
 }
 
 int main(int argc, char* argv[]) {
-	srand(time(NULL));
+	srand((unsigned)time(NULL));
 	// process args
 	for (int i = 1; i < argc; ++i) {
 		if (!strcmp(argv[i], "-h")) {
@@ -121,7 +117,7 @@ int main(int argc, char* argv[]) {
 				while ((viewToDisplay = svc->didFinishView()) == kHBNoView) {
 					svc->process();
 					svc->render();
-					SDL_GL_SwapBuffers();
+                    SDL_GL_SwapWindow(screen);
 				}
 				delete svc;
 				break;
@@ -132,7 +128,7 @@ int main(int argc, char* argv[]) {
 				while ((viewToDisplay = scvc->didFinishView()) == kHBNoView) {
 					scvc->process();
 					scvc->render();
-					SDL_GL_SwapBuffers();
+                    SDL_GL_SwapWindow(screen);
 				}
 				delete scvc;
 				break;
@@ -151,12 +147,13 @@ int main(int argc, char* argv[]) {
 				while ((viewToDisplay = gvc->didFinishView()) == kHBNoView) {
 					gvc->process();
 					gvc->render();
-					SDL_GL_SwapBuffers();
+                    SDL_GL_SwapWindow(screen);
 				}
 				delete gvc;
 				break;
 			}
 			default: {
+                SDL_GL_DeleteContext(glContext);
 				break;
 			}
 		}

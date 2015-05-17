@@ -1,10 +1,15 @@
 #ifndef __MULTIGAMEVIEWCONTROLLER_H__
 #define __MULTIGAMEVIEWCONTROLLER_H__
 
+#ifndef __APPLE__
 #include <GL/glx.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "CL/cl.hpp"
+#else
+#include <OpenGL/OpenGL.h>
+#include <OpenGL/glu.h>
+#endif
 
 #include "GameViewController.h"
 

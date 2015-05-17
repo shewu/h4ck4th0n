@@ -2,7 +2,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <cmath>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -23,7 +23,7 @@ GameViewController::GameViewController() {
 	_initMenus();
 	_initSound();
 	SDL_ShowCursor(false);
-	SDL_WM_GrabInput(SDL_GRAB_ON);
+    SDL_SetWindowGrab(screen, SDL_TRUE);
 	cout << "Starting client\n";
 
 	addrinfo hints, *res;
@@ -35,12 +35,13 @@ GameViewController::GameViewController() {
 	printf("IP Address = %s\n", ipaddy);
 	getaddrinfo(ipaddy, "55555", &hints, &res);
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    cout << "socket fd: " << sockfd << "\n";
 	sock = new Socket(sockfd);
 
 	sc = sock->connect(res->ai_addr, res->ai_addrlen);
 
 	bool done = false;
-	ReadPacket* rp;
+	ReadPacket* rp = nullptr;
 	for (int i = 0; i < 10 && !done; i++) {
 		WritePacket wp(CTS_CONNECT, 0); 
         sc->send_packet(wp);
@@ -48,6 +49,7 @@ GameViewController::GameViewController() {
 		SDL_Delay(200);
 		sock->recv_all();
 		while ((rp = sc->receive_packet()) != NULL) {
+            cout << "got something from server\n";
 			if (rp->message_type == STC_INITIAL_ANGLE) {
 				done = true;
 				break;
@@ -63,8 +65,10 @@ GameViewController::GameViewController() {
 	if (done) {
 		cout << "Connected to server" << endl;
 
-		angle = rp->read_float();
-		delete rp;
+        if (rp) {
+            angle = rp->read_float();
+            delete rp;
+        }
 
 		myId = -1;
 	}
@@ -77,7 +81,7 @@ GameViewController::GameViewController() {
 GameViewController::~GameViewController() {
 	sFinishedView = kHBNoView;
 	SDL_ShowCursor(true);
-	SDL_WM_GrabInput(SDL_GRAB_OFF);
+    SDL_SetWindowGrab(screen, SDL_FALSE);
 	delete sc;
 	delete mainmenu;
 }
@@ -90,8 +94,8 @@ void GameViewController::process() {
 			break;
 		if (rp->message_type == STC_SOUND && rp->packet_number >= latestPacket - MAX_SOUND_LATENESS) {
 			char c = rp->read_char();
-		    int v1 = rp->read_float();
-		    int v2 = rp->read_float();
+		    float v1 = rp->read_float();
+		    float v2 = rp->read_float();
 
 			int src = -1;
 			for (int s = 0; s < ALSRCS; s++) {
@@ -134,11 +138,11 @@ void GameViewController::process() {
 				if(event.key.keysym.sym == SDLK_ESCAPE) {
 					if (mainmenu->is_active()) {
 						SDL_ShowCursor(false);
-						SDL_WM_GrabInput(SDL_GRAB_ON);
+                        SDL_SetWindowGrab(screen, SDL_TRUE);
 						mainmenu->set_active(false);
 					} else {
 						SDL_ShowCursor(true);
-						SDL_WM_GrabInput(SDL_GRAB_OFF);
+                        SDL_SetWindowGrab(screen, SDL_FALSE);
 						mainmenu->set_active(true);
 					}
 				}
@@ -157,7 +161,7 @@ void GameViewController::process() {
 		}
 	}
 
-	Uint8* keystate = SDL_GetKeyState(NULL);
+	const Uint8* keystate = SDL_GetKeyboardState(nullptr);
 	WritePacket wp(CTS_USER_STATE);
 	wp.write_float(angle);
 	char keystate_byte = 0;
@@ -200,10 +204,10 @@ bool GameViewController::leave() {
 }
 
 static voidtype action_toggle_fullscreen(bool b) {
-	if(b) {
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL | SDL_FULLSCREEN);
+	if (b) {
+        screen = SDL_CreateWindow("Holy Balls", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
 	} else {
-		screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_OPENGL);
+        screen = SDL_CreateWindow("Holy Balls", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_OPENGL);
 	}
 	return voidtype();
 }

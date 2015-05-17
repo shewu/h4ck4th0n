@@ -50,7 +50,7 @@ void menu::key_input(int key) {
 	if(key == MENU_KEY_UP) {
 		menuitems[current_index]->onDeselect();
 		if(current_index == 0)
-			current_index = menuitems.size() - 1;
+			current_index = (int)menuitems.size() - 1U;
 		else
 			current_index--;
 		menuitems[current_index]->onSelect();

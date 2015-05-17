@@ -2,7 +2,7 @@
 #define __MENU_H__
 
 #include <vector>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 using namespace std;
 
 #define MENU_KEY_LEFT		SDLK_LEFT
@@ -182,7 +182,7 @@ class inputmenuitem : public menuitem {
 		char *get_input();
 	private:
 		char *input, *text;
-		int maxlen, len;
+		size_t maxlen, len;
 
 		char *invalidInputError;
 		bool displayError;

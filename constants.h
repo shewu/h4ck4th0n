@@ -34,7 +34,7 @@ const float FOUR_BY_THREE = 1.33333f;
 const float SIXTEEN_BY_TEN = 1.6f;
 const float SIXTEEN_BY_NINE = 1.777777f;
 
-const uint16_t short fourbythree[][2] = {
+const uint16_t fourbythree[][2] = {
 	{640, 480},
 	{800, 600},
 	{1024, 768},
@@ -43,7 +43,7 @@ const uint16_t short fourbythree[][2] = {
 	{1600, 1200},
 	{2048, 1536}
 };
-const uint16_t short sixteenbyten[][2] = {
+const uint16_t sixteenbyten[][2] = {
 	{800, 500},
 	{1024, 640},
 	{1280, 800},
@@ -53,14 +53,15 @@ const uint16_t short sixteenbyten[][2] = {
 	{2560, 1600},
 	{3840, 2400}
 };
-const uint16_t short sixteenbynine[][2] = {
+const uint16_t sixteenbynine[][2] = {
 	{854, 480},
 	{1024, 576},
 	{1280, 720},
 	{1366, 768},
 	{1600, 900},
 	{1920, 1080},
-	{2560, 1440}
+	{2560, 1440},
+    {3840, 2160}
 };
 
 #define ALIGNMENT 0x10

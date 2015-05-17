@@ -1,9 +1,11 @@
 #include <cstring>
 #include <cstdio>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #ifndef __APPLE__
 #include <GL/glew.h>
 #include <GL/glu.h>
+#else
+#include <OpenGL/glu.h>
 #endif
 
 #include "SplashViewController.h"
@@ -21,7 +23,7 @@ static bool menuConnectToServer(voidtype) {
 	return true;
 }
 SplashViewController::SplashViewController() {
-	SDL_WM_GrabInput(SDL_GRAB_OFF);
+    SDL_SetWindowGrab(screen, SDL_FALSE);
 	finishedView = kHBNoView;
 
 	splashMenu = new menu();

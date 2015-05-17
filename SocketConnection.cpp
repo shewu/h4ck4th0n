@@ -1,7 +1,9 @@
 #include "socket.h"
 #include "packet.h"
 #include "hack.h"
+#include "mac.h"
 
+#include <iostream>
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
@@ -41,7 +43,7 @@ ReadPacket* SocketConnection::receive_packet() {
 	return rp;
 }
 
-void SocketConnection::recv_data(char *buf, int length) {
+void SocketConnection::recv_data(char *buf, long length) {
     if (length < 5) {
     	return;
     }

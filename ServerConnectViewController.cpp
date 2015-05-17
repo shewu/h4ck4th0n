@@ -3,6 +3,8 @@
 #ifndef __APPLE__
 #include <GL/glew.h>
 #include <GL/glu.h>
+#else
+#include <OpenGL/glu.h>
 #endif
 
 #include "ServerConnectViewController.h"
@@ -33,11 +35,11 @@ static bool goBack(voidtype) {
 }
 
 ServerConnectViewController::ServerConnectViewController() {
-	SDL_WM_GrabInput(SDL_GRAB_OFF);
+    SDL_SetWindowGrab(screen, SDL_FALSE);
 	finishedView = kHBNoView;
 
 	serverConnectMenu = new menu();
-	serverConnectMenu->add_menuitem(new inputmenuitem(20, menuGetIP, (char *)"", (char *)"Must not be empty", (char *)"Enter Server IP Address", (char *)"Stuff"));
+	serverConnectMenu->add_menuitem(new inputmenuitem(20, menuGetIP, (char *)"", (char *)"Must not be empty", (char *)"Enter Server IP Address", (char *)"Connect to server"));
 	serverConnectMenu->add_menuitem(new actionmenuitem(goBack, (char *)"Back"));
 	serverConnectMenu->add_menuitem(new actionmenuitem(quitfunc(this), (char *)"Quit"));
 

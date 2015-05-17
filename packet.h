@@ -49,13 +49,13 @@ class WritePacket {
 
 class ReadPacket {
     public:
-        int size;
+        long size;
         char *buf;
         char message_type;
         int index;
-        int packet_number;
+        long packet_number;
 
-        ReadPacket(char message_type, int size, int packet_number);
+        ReadPacket(char message_type, long size, int packet_number);
         virtual ~ReadPacket();
 
         char read_char();

@@ -4,6 +4,8 @@
 #ifndef __APPLE__
 #include <AL/alut.h>
 #include <AL/al.h>
+#else
+#include <OpenAL/al.h>
 #endif
 
 #include "HBViewController.h"
@@ -11,7 +13,6 @@
 #include "menu.h"
 #include "packet.h"
 
-extern SDL_Surface* screen;
 extern char* ipaddy;
 extern int WIDTH;
 extern int HEIGHT;
@@ -29,7 +30,7 @@ class GameViewController : public HBViewController {
 		World world;
 		float angle;
 		int myId;
-		int latestPacket;
+		long latestPacket;
 		int count;
 		int oldTime;
 		menu* mainmenu;

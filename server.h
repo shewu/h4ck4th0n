@@ -7,7 +7,7 @@
 class Client {
 	public:
 		SocketConnection* sc;
-		int latestPacket;
+		long latestPacket;
 		int id;
 };
 

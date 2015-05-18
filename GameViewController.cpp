@@ -166,10 +166,10 @@ void GameViewController::process() {
 	wp.write_float(angle);
 	char keystate_byte = 0;
 	if(!mainmenu->is_active()) {
-		if (keystate[SDLK_a]) keystate_byte ^= 1;
-		if (keystate[SDLK_d]) keystate_byte ^= 2;
-		if (keystate[SDLK_w]) keystate_byte ^= 4;
-		if (keystate[SDLK_s]) keystate_byte ^= 8;
+		if (keystate[SDL_SCANCODE_A]) keystate_byte ^= 1;
+		if (keystate[SDL_SCANCODE_D]) keystate_byte ^= 2;
+		if (keystate[SDL_SCANCODE_W]) keystate_byte ^= 4;
+		if (keystate[SDL_SCANCODE_S]) keystate_byte ^= 8;
 	}
 	wp.write_char(keystate_byte);
 	sc->send_packet(wp);

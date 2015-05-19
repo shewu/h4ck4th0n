@@ -6,6 +6,7 @@
 #include <AL/al.h>
 #else
 #include <OpenAL/al.h>
+#include <OpenAL/alc.h>
 #endif
 
 #include "HBViewController.h"

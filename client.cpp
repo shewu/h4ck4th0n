@@ -22,11 +22,21 @@ using namespace std;
 
 int WIDTH = 640;
 int HEIGHT = 480;
-bool NORAPE = true;
+bool NOAA = false;
 
 SDL_Window* screen;
 SDL_GLContext glContext;
 char* ipaddy = (char *)"127.0.0.1";
+
+static float getAspectRatio() {
+    SDL_DisplayMode current;
+    int retCode = SDL_GetCurrentDisplayMode(0, &current);
+    if (retCode) {
+        return 1.33333f;
+    }
+    
+    return float(current.w) / current.h;
+}
 
 static void initVideo() {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -35,13 +45,13 @@ static void initVideo() {
 	}
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 #ifdef UNHOLY
-	if (!NORAPE) {
+	if (!NOAA) {
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 	}
 #endif
 	// detect aspect ratio
-    const float ratio = 1.333333; //(float)SDL_GetVideoInfo()->current_w / SDL_GetVideoInfo()->current_h;
+    const float ratio = getAspectRatio();
 	
 	const float d16x9 = abs(ratio - SIXTEEN_BY_NINE);
 	const float d16x10 = abs(ratio - SIXTEEN_BY_TEN);
@@ -71,8 +81,6 @@ static void initVideo() {
 	
     screen = SDL_CreateWindow("Holy Balls", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_OPENGL);
     glContext = SDL_GL_CreateContext(screen);
-	//SDL_ShowCursor(false);
-	//SDL_WM_GrabInput(SDL_GRAB_ON);
 	
 	glViewport(0, 0, WIDTH, HEIGHT);
 	
@@ -86,12 +94,13 @@ int main(int argc, char* argv[]) {
 	for (int i = 1; i < argc; ++i) {
 		if (!strcmp(argv[i], "-h")) {
 			printf("Usage:\n"
-					"-h to show this message\n"
+                   "-h to show this message\n"
+                   "-d <width> <height> to set the screen resolution\n"
 #ifdef UNHOLY
-					"-norape to avoid antialiasing\n"
+                   "-noaa to avoid antialiasing\n"
 #endif
 					);
-			exit(0);
+			exit(-1);
 		} else if (!strcmp(argv[i], "-d")) {
 			WIDTH = ALIGN(atoi(argv[i+1]));
 			HEIGHT = ALIGN(atoi(argv[i+2]));
@@ -100,8 +109,8 @@ int main(int argc, char* argv[]) {
 			ipaddy = argv[i+1];
 		}
 #ifdef UNHOLY
-		else if (!strcmp(argv[i], "-norape")) {
-			NORAPE = true;
+		else if (!strcmp(argv[i], "-noaa")) {
+			NOAA = true;
 		}
 #endif
 	}

@@ -24,6 +24,7 @@ GameViewController::GameViewController() {
 	_initSound();
 	SDL_ShowCursor(false);
     SDL_SetWindowGrab(screen, SDL_TRUE);
+    SDL_SetRelativeMouseMode(SDL_TRUE);
 	cout << "Starting client\n";
 
 	addrinfo hints, *res;
@@ -127,8 +128,6 @@ void GameViewController::process() {
 		}
 		latestPacket = rp->packet_number;
 		delete rp;
-#ifndef __APPLE__
-#endif
 	}
 	
 	SDL_Event event;
@@ -174,14 +173,12 @@ void GameViewController::process() {
 	wp.write_char(keystate_byte);
 	sc->send_packet(wp);
 	
-#ifndef __APPLE__
 	ALfloat alpos[] = { world.objects[myId].p.x, world.objects[myId].p.y, 0 };
 	ALfloat alvel[] = { world.objects[myId].v.x, world.objects[myId].v.y, 0 };
 	ALfloat alori[] = { 0.0, cos(angle), sin(angle), 0.0, 1.0, 0.0 };
 	alListenerfv(AL_POSITION, alpos);
 	alListenerfv(AL_VELOCITY, alvel);
 	alListenerfv(AL_ORIENTATION, alori);
-#endif
 	if (((++count)%100) == 0) {
 		int time = SDL_GetTicks();
 		float fps = 100000./(time - oldTime);
@@ -205,9 +202,9 @@ bool GameViewController::leave() {
 
 static voidtype action_toggle_fullscreen(bool b) {
 	if (b) {
-        screen = SDL_CreateWindow("Holy Balls", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
+        SDL_SetWindowFullscreen(screen, SDL_WINDOW_FULLSCREEN);
 	} else {
-        screen = SDL_CreateWindow("Holy Balls", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_OPENGL);
+        SDL_SetWindowFullscreen(screen, 0);
 	}
 	return voidtype();
 }
@@ -222,9 +219,7 @@ void GameViewController::_disconnect() {
 void GameViewController::_initMenus() {
 	mainmenu = new menu();
 	mainmenu->add_menuitem(new actionmenuitem(leavefunc(this), (char *)"Leave Game"));
-#ifndef __APPLE__
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
-#endif
 	mainmenu->add_menuitem(new actionmenuitem(quitfunc(this), (char *)"Quit"));
 }
 

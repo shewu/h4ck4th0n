@@ -5,11 +5,11 @@
 #include <GL/glx.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include "CL/cl.hpp"
 #else
 #include <OpenGL/OpenGL.h>
 #include <OpenGL/glu.h>
 #endif
+#include "CL/cl.hpp"
 
 #include "GameViewController.h"
 

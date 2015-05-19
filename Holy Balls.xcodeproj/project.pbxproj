@@ -34,6 +34,44 @@
 		A8A8DFAD1B07E72E00D701AC /* server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF691B07298B00D701AC /* server.cpp */; };
 		A8A8DFAF1B07E73B00D701AC /* simulate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF6D1B07298B00D701AC /* simulate.cpp */; };
 		A8A8DFB01B07E76400D701AC /* vec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF751B07298B00D701AC /* vec.cpp */; };
+		A8A8DFBF1B092A2200D701AC /* ServerConnectViewController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF6B1B07298B00D701AC /* ServerConnectViewController.cpp */; };
+		A8A8DFC01B092A6D00D701AC /* socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF6E1B07298B00D701AC /* socket.cpp */; };
+		A8A8DFC11B092A7500D701AC /* vec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF751B07298B00D701AC /* vec.cpp */; };
+		A8A8DFC21B092A7C00D701AC /* object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF641B07298B00D701AC /* object.cpp */; };
+		A8A8DFC31B092A9800D701AC /* client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF4D1B07298B00D701AC /* client.cpp */; };
+		A8A8DFC41B092A9800D701AC /* font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF4F1B07298B00D701AC /* font.cpp */; };
+		A8A8DFC51B092A9800D701AC /* GameViewController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF531B07298B00D701AC /* GameViewController.cpp */; };
+		A8A8DFC61B092A9800D701AC /* HolyGameViewController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF581B07298B00D701AC /* HolyGameViewController.cpp */; };
+		A8A8DFC71B092A9800D701AC /* menu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF5B1B07298B00D701AC /* menu.cpp */; };
+		A8A8DFC81B092A9800D701AC /* menudraw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF5D1B07298B00D701AC /* menudraw.cpp */; };
+		A8A8DFC91B092A9800D701AC /* menuitem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF5F1B07298B00D701AC /* menuitem.cpp */; };
+		A8A8DFCA1B092A9800D701AC /* SplashViewController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF711B07298B00D701AC /* SplashViewController.cpp */; };
+		A8A8DFCB1B092AB300D701AC /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF761B07298B00D701AC /* world.cpp */; };
+		A8A8DFCC1B092AB300D701AC /* packet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF651B07298B00D701AC /* packet.cpp */; };
+		A8A8DFCD1B092AB300D701AC /* SocketConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF701B07298B00D701AC /* SocketConnection.cpp */; };
+		A8A8DFCE1B09AE5F00D701AC /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8A8DF941B072DBC00D701AC /* OpenAL.framework */; };
+		A8A8DFD01B09AE6400D701AC /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8A8DFCF1B09AE6400D701AC /* OpenCL.framework */; };
+		A8A8DFD11B09AE6F00D701AC /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8A8DF8E1B072A9100D701AC /* SDL2.framework */; };
+		A8A8DFD21B09AE7900D701AC /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8A8DF901B072B6800D701AC /* OpenGL.framework */; };
+		A8A8DFDE1B0A9C1F00D701AC /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8A8DFCF1B09AE6400D701AC /* OpenCL.framework */; };
+		A8A8DFDF1B0A9C1F00D701AC /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8A8DF941B072DBC00D701AC /* OpenAL.framework */; };
+		A8A8DFE01B0A9C1F00D701AC /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8A8DF901B072B6800D701AC /* OpenGL.framework */; };
+		A8A8DFE11B0A9C1F00D701AC /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8A8DF8E1B072A9100D701AC /* SDL2.framework */; };
+		A8A8DFE21B0A9C4800D701AC /* client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF4D1B07298B00D701AC /* client.cpp */; settings = {COMPILER_FLAGS = "-DMULTI"; }; };
+		A8A8DFE31B0A9C4800D701AC /* font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF4F1B07298B00D701AC /* font.cpp */; };
+		A8A8DFE41B0A9C4800D701AC /* GameViewController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF531B07298B00D701AC /* GameViewController.cpp */; };
+		A8A8DFE51B0A9C4800D701AC /* menu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF5B1B07298B00D701AC /* menu.cpp */; };
+		A8A8DFE61B0A9C4800D701AC /* menudraw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF5D1B07298B00D701AC /* menudraw.cpp */; };
+		A8A8DFE71B0A9C4800D701AC /* menuitem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF5F1B07298B00D701AC /* menuitem.cpp */; };
+		A8A8DFE81B0A9C4800D701AC /* MultiGameViewController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF601B07298B00D701AC /* MultiGameViewController.cpp */; };
+		A8A8DFE91B0A9C4800D701AC /* ServerConnectViewController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF6B1B07298B00D701AC /* ServerConnectViewController.cpp */; };
+		A8A8DFEA1B0A9C4800D701AC /* SplashViewController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF711B07298B00D701AC /* SplashViewController.cpp */; };
+		A8A8DFEB1B0A9C4800D701AC /* socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF6E1B07298B00D701AC /* socket.cpp */; };
+		A8A8DFEC1B0A9C4800D701AC /* vec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF751B07298B00D701AC /* vec.cpp */; };
+		A8A8DFED1B0A9C4800D701AC /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF761B07298B00D701AC /* world.cpp */; };
+		A8A8DFEE1B0A9C4800D701AC /* object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF641B07298B00D701AC /* object.cpp */; };
+		A8A8DFEF1B0A9C4800D701AC /* packet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF651B07298B00D701AC /* packet.cpp */; };
+		A8A8DFF01B0A9C4800D701AC /* SocketConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8A8DF701B07298B00D701AC /* SocketConnection.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,6 +85,24 @@
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 		A8A8DF981B07E6A400D701AC /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		A8A8DFB61B09282500D701AC /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		A8A8DFD51B0A9C0300D701AC /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -107,6 +163,9 @@
 		A8A8DF921B072B7500D701AC /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		A8A8DF941B072DBC00D701AC /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		A8A8DF9A1B07E6A400D701AC /* hbserver */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = hbserver; sourceTree = BUILT_PRODUCTS_DIR; };
+		A8A8DFB81B09282500D701AC /* holyballs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = holyballs; sourceTree = BUILT_PRODUCTS_DIR; };
+		A8A8DFCF1B09AE6400D701AC /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = System/Library/Frameworks/OpenCL.framework; sourceTree = SDKROOT; };
+		A8A8DFD71B0A9C0300D701AC /* multiballs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = multiballs; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,12 +186,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A8A8DFB51B09282500D701AC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A8A8DFD01B09AE6400D701AC /* OpenCL.framework in Frameworks */,
+				A8A8DFCE1B09AE5F00D701AC /* OpenAL.framework in Frameworks */,
+				A8A8DFD11B09AE6F00D701AC /* SDL2.framework in Frameworks */,
+				A8A8DFD21B09AE7900D701AC /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A8A8DFD41B0A9C0300D701AC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A8A8DFDE1B0A9C1F00D701AC /* OpenCL.framework in Frameworks */,
+				A8A8DFDF1B0A9C1F00D701AC /* OpenAL.framework in Frameworks */,
+				A8A8DFE01B0A9C1F00D701AC /* OpenGL.framework in Frameworks */,
+				A8A8DFE11B0A9C1F00D701AC /* SDL2.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		A8A8DF391B07291B00D701AC = {
 			isa = PBXGroup;
 			children = (
+				A8A8DFCF1B09AE6400D701AC /* OpenCL.framework */,
 				A8A8DF941B072DBC00D701AC /* OpenAL.framework */,
 				A8A8DF921B072B7500D701AC /* GLUT.framework */,
 				A8A8DF901B072B6800D701AC /* OpenGL.framework */,
@@ -147,6 +229,8 @@
 			children = (
 				A8A8DF421B07291B00D701AC /* unholyballs */,
 				A8A8DF9A1B07E6A400D701AC /* hbserver */,
+				A8A8DFB81B09282500D701AC /* holyballs */,
+				A8A8DFD71B0A9C0300D701AC /* multiballs */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -154,6 +238,7 @@
 		A8A8DF441B07291B00D701AC /* Holy Balls */ = {
 			isa = PBXGroup;
 			children = (
+				A8A8DF561B07298B00D701AC /* HackTest.cpp */,
 				A8A8DFB31B08909100D701AC /* Client */,
 				A8A8DFB21B08900A00D701AC /* Server */,
 				A8A8DFB11B088FA100D701AC /* Common */,
@@ -201,7 +286,6 @@
 				A8A8DF501B07298B00D701AC /* font.h */,
 				A8A8DF531B07298B00D701AC /* GameViewController.cpp */,
 				A8A8DF541B07298B00D701AC /* GameViewController.h */,
-				A8A8DF561B07298B00D701AC /* HackTest.cpp */,
 				A8A8DF571B07298B00D701AC /* HBViewController.h */,
 				A8A8DF581B07298B00D701AC /* HolyGameViewController.cpp */,
 				A8A8DF591B07298B00D701AC /* HolyGameViewController.h */,
@@ -262,6 +346,40 @@
 			productReference = A8A8DF9A1B07E6A400D701AC /* hbserver */;
 			productType = "com.apple.product-type.tool";
 		};
+		A8A8DFB71B09282500D701AC /* holyballs */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A8A8DFBC1B09282500D701AC /* Build configuration list for PBXNativeTarget "holyballs" */;
+			buildPhases = (
+				A8A8DFB41B09282500D701AC /* Sources */,
+				A8A8DFB51B09282500D701AC /* Frameworks */,
+				A8A8DFB61B09282500D701AC /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = holyballs;
+			productName = holyballs;
+			productReference = A8A8DFB81B09282500D701AC /* holyballs */;
+			productType = "com.apple.product-type.tool";
+		};
+		A8A8DFD61B0A9C0300D701AC /* multiballs */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A8A8DFDB1B0A9C0300D701AC /* Build configuration list for PBXNativeTarget "multiballs" */;
+			buildPhases = (
+				A8A8DFD31B0A9C0300D701AC /* Sources */,
+				A8A8DFD41B0A9C0300D701AC /* Frameworks */,
+				A8A8DFD51B0A9C0300D701AC /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = multiballs;
+			productName = multiballs;
+			productReference = A8A8DFD71B0A9C0300D701AC /* multiballs */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -275,6 +393,12 @@
 						CreatedOnToolsVersion = 6.3.1;
 					};
 					A8A8DF991B07E6A400D701AC = {
+						CreatedOnToolsVersion = 6.3.1;
+					};
+					A8A8DFB71B09282500D701AC = {
+						CreatedOnToolsVersion = 6.3.1;
+					};
+					A8A8DFD61B0A9C0300D701AC = {
 						CreatedOnToolsVersion = 6.3.1;
 					};
 				};
@@ -293,6 +417,8 @@
 			targets = (
 				A8A8DF411B07291B00D701AC /* unholyballs */,
 				A8A8DF991B07E6A400D701AC /* hbserver */,
+				A8A8DFB71B09282500D701AC /* holyballs */,
+				A8A8DFD61B0A9C0300D701AC /* multiballs */,
 			);
 		};
 /* End PBXProject section */
@@ -333,6 +459,50 @@
 				A8A8DFA81B07E6E200D701AC /* object.cpp in Sources */,
 				A8A8DFA61B07E6D100D701AC /* socket.cpp in Sources */,
 				A8A8DFA21B07E6B600D701AC /* game.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A8A8DFB41B09282500D701AC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A8A8DFCB1B092AB300D701AC /* world.cpp in Sources */,
+				A8A8DFCC1B092AB300D701AC /* packet.cpp in Sources */,
+				A8A8DFCD1B092AB300D701AC /* SocketConnection.cpp in Sources */,
+				A8A8DFC31B092A9800D701AC /* client.cpp in Sources */,
+				A8A8DFC41B092A9800D701AC /* font.cpp in Sources */,
+				A8A8DFC51B092A9800D701AC /* GameViewController.cpp in Sources */,
+				A8A8DFC61B092A9800D701AC /* HolyGameViewController.cpp in Sources */,
+				A8A8DFC71B092A9800D701AC /* menu.cpp in Sources */,
+				A8A8DFC81B092A9800D701AC /* menudraw.cpp in Sources */,
+				A8A8DFC91B092A9800D701AC /* menuitem.cpp in Sources */,
+				A8A8DFCA1B092A9800D701AC /* SplashViewController.cpp in Sources */,
+				A8A8DFC21B092A7C00D701AC /* object.cpp in Sources */,
+				A8A8DFC11B092A7500D701AC /* vec.cpp in Sources */,
+				A8A8DFC01B092A6D00D701AC /* socket.cpp in Sources */,
+				A8A8DFBF1B092A2200D701AC /* ServerConnectViewController.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A8A8DFD31B0A9C0300D701AC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A8A8DFE21B0A9C4800D701AC /* client.cpp in Sources */,
+				A8A8DFE31B0A9C4800D701AC /* font.cpp in Sources */,
+				A8A8DFE41B0A9C4800D701AC /* GameViewController.cpp in Sources */,
+				A8A8DFE51B0A9C4800D701AC /* menu.cpp in Sources */,
+				A8A8DFE61B0A9C4800D701AC /* menudraw.cpp in Sources */,
+				A8A8DFE71B0A9C4800D701AC /* menuitem.cpp in Sources */,
+				A8A8DFE81B0A9C4800D701AC /* MultiGameViewController.cpp in Sources */,
+				A8A8DFE91B0A9C4800D701AC /* ServerConnectViewController.cpp in Sources */,
+				A8A8DFEA1B0A9C4800D701AC /* SplashViewController.cpp in Sources */,
+				A8A8DFEB1B0A9C4800D701AC /* socket.cpp in Sources */,
+				A8A8DFEC1B0A9C4800D701AC /* vec.cpp in Sources */,
+				A8A8DFED1B0A9C4800D701AC /* world.cpp in Sources */,
+				A8A8DFEE1B0A9C4800D701AC /* object.cpp in Sources */,
+				A8A8DFEF1B0A9C4800D701AC /* packet.cpp in Sources */,
+				A8A8DFF01B0A9C4800D701AC /* SocketConnection.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -456,6 +626,58 @@
 			};
 			name = Release;
 		};
+		A8A8DFBD1B09282500D701AC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A8A8DFBE1B09282500D701AC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		A8A8DFDC1B0A9C0300D701AC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A8A8DFDD1B0A9C0300D701AC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -482,6 +704,22 @@
 			buildConfigurations = (
 				A8A8DF9F1B07E6A500D701AC /* Debug */,
 				A8A8DFA01B07E6A500D701AC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		A8A8DFBC1B09282500D701AC /* Build configuration list for PBXNativeTarget "holyballs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A8A8DFBD1B09282500D701AC /* Debug */,
+				A8A8DFBE1B09282500D701AC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		A8A8DFDB1B0A9C0300D701AC /* Build configuration list for PBXNativeTarget "multiballs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A8A8DFDC1B0A9C0300D701AC /* Debug */,
+				A8A8DFDD1B0A9C0300D701AC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};

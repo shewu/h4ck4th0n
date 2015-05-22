@@ -105,7 +105,7 @@ void UnholyGameViewController::_drawWalls() {
 
 void UnholyGameViewController::_drawObjects() {
 	glEnable(GL_NORMALIZE);
-    for (pair<int, Object>& object_pair : world.objects) {
+    for (auto& object_pair : world.objects) {
         glPushMatrix();
         glTranslatef(object_pair.second.p.x, object_pair.second.p.y, 0);
         glScalef(object_pair.second.rad, object_pair.second.rad, object_pair.second.hrat*object_pair.second.rad);

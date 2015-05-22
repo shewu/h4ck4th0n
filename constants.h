@@ -2,6 +2,8 @@
 #define CONSTANTS_H
 
 #include <stdint.h>
+#include <vector>
+#include <utility>
 
 #define FRICTION 0.3
 #define KEYPRESS_ACCELERATION 6.0f
@@ -21,8 +23,6 @@
 
 #define ALSRCS 32
 
-#define AA 1
-
 typedef enum {
 	kHBNoView,
 	kHBMainMenuView,
@@ -30,38 +30,43 @@ typedef enum {
 	kHBGameView
 } HBViewMode;
 
-const float FOUR_BY_THREE = 1.33333f;
-const float SIXTEEN_BY_TEN = 1.6f;
-const float SIXTEEN_BY_NINE = 1.777777f;
+const float kHBAspectRatioFiveByFour = 1.25f;
+const float kHBAspectRatioFourByThree = 1.33333f;
+const float kHBAspectRatioSixteenByTen = 1.6f;
+const float kHBAspectRatioSixteenByNine = 1.777777f;
 
-const uint16_t fourbythree[][2] = {
-	{640, 480},
-	{800, 600},
-	{1024, 768},
-	{1280, 960},
-	{1400, 1050},
-	{1600, 1200},
-	{2048, 1536}
+// who still uses a 17" or 19" square screen?
+const std::vector<std::pair<int, int> > five_by_four = {
+    std::make_pair(1280, 1024),
 };
-const uint16_t sixteenbyten[][2] = {
-	{800, 500},
-	{1024, 640},
-	{1280, 800},
-	{1440, 900},
-	{1680, 1050},
-	{1920, 1200},
-	{2560, 1600},
-	{3840, 2400}
+
+// who has a square screen???
+const std::vector<std::pair<int, int> > four_by_three = {
+    std::make_pair(640, 480),  // simple windowed mode
+    std::make_pair(800, 600),
+    std::make_pair(1024, 768),
+    std::make_pair(1280, 960),
+    std::make_pair(1400, 1050),
+    std::make_pair(1600, 1200),
+    std::make_pair(2048, 1536),
 };
-const uint16_t sixteenbynine[][2] = {
-	{854, 480},
-	{1024, 576},
-	{1280, 720},
-	{1366, 768},
-	{1600, 900},
-	{1920, 1080},
-	{2560, 1440},
-    {3840, 2160}
+
+const std::vector<std::pair<int, int> > sixteen_by_ten = {
+    std::make_pair(1280, 800),
+    std::make_pair(1440, 900),
+    std::make_pair(1680, 1050),
+    std::make_pair(1920, 1200),
+    std::make_pair(2560, 1600),
+    std::make_pair(3840, 2400),  // sweet jesus i'd love to have an IBM T221
+};
+
+const std::vector<std::pair<int, int> > sixteen_by_nine = {
+    std::make_pair(1280, 720),
+    std::make_pair(1366, 768),
+    std::make_pair(1600, 900),
+    std::make_pair(1920, 1080),
+    std::make_pair(2560, 1440),
+    std::make_pair(3840, 2160),  // TODO buy a 4K display
 };
 
 #define ALIGNMENT 0x10

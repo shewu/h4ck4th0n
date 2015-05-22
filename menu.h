@@ -1,6 +1,7 @@
 #ifndef __MENU_H__
 #define __MENU_H__
 
+#include <string>
 #include <vector>
 #include <SDL2/SDL.h>
 using namespace std;
@@ -24,9 +25,7 @@ template<class R, class I> class funcobj {
 
 template<class R, class I, class A> class funcobjwrapper : public funcobj<R, I> {
 	public:
-	funcobjwrapper(A internal) {
-		_internal = internal;
-	}
+    funcobjwrapper(A internal) : _internal(internal) {}
 
 	R operator()(I i) {
 		return _internal(i);
@@ -88,8 +87,8 @@ class menuitem {
 		virtual void onSelect();
 		virtual void onDeselect();
 	protected:
-		char *name;
-		
+    menuitem (const std::string& name_) : _name(name_) {}
+    std::string _name;
 };
 
 // The menu "owns" its menuitems and will free them on destruction
@@ -121,7 +120,7 @@ class menu {
 class submenuitem : public menuitem {
 	public:
 		virtual ~submenuitem();
-		submenuitem(menu *m, char *name);
+    submenuitem(menu *m, std::string&& name);
 
 		virtual bool activate();
 		virtual bool key_input(int key);
@@ -137,10 +136,7 @@ class submenuitem : public menuitem {
 class actionmenuitem : public menuitem {
 	public:
 		virtual ~actionmenuitem();
-		template <class A> actionmenuitem(A init1, char *name1) {
-			init = wrappedfuncobj<bool, voidtype>(init1);
-			name = name1;
-		}
+    template <class A> actionmenuitem(A init1, std::string&& name_) : init(wrappedfuncobj<bool, voidtype>(init1)), menuitem(name_) {}
 
 		virtual bool activate();
 		virtual bool shouldMenuBeDrawn();
@@ -156,8 +152,7 @@ class inputmenuitem : public menuitem {
 				char *initInput,
 				char *iie,
 				char *t,
-				char *nam) {
-				maxlen = maxInputLen;
+                                         std::string&& name_) : maxlen(maxInputLen), vali(wrappedfuncobj<bool, char*>(inputValidator)), invalidInputError(iie), displayError(false), text(t), menuitem(name_) {
 			input = new char[maxlen+1];
 			if(initInput == NULL) {
 				len = 0;
@@ -166,13 +161,6 @@ class inputmenuitem : public menuitem {
 				strcpy(input, initInput);
 				len = strlen(input);
 			}
-	
-			vali = wrappedfuncobj<bool, char*>(inputValidator);
-			invalidInputError = iie;
-			displayError = false;
-
-			text = t;
-			name = nam;
 		}
 		virtual ~inputmenuitem();
 		virtual bool activate();
@@ -191,11 +179,7 @@ class inputmenuitem : public menuitem {
 
 class togglemenuitem : public menuitem {
 	public:
-		template <class A> togglemenuitem(char *name1, bool state1, A act) {
-			name = name1;
-			state = state1;
-			action = wrappedfuncobj<voidtype, bool>(act);
-		}
+    template <class A> togglemenuitem(std::string&& input_, bool state1, A act) : state(state1), action(wrappedfuncobj<voidtype, bool>(act)), menuitem(input_) {}
 		virtual ~togglemenuitem();
 		virtual bool activate();
 		bool get_state();
@@ -208,8 +192,7 @@ class togglemenuitem : public menuitem {
 
 class slidermenuitem : public menuitem {
 	public:
-		template <class A> slidermenuitem(char *name1, char** states1, int len1, int curstate1, A act) {
-			name = name1;
+    template <class A> slidermenuitem(std::string&& name1, char** states1, int len1, int curstate1, A act) : menuitem(name1) {
 			states = states1;
 			len = len1;
 			curstate = curstate1;

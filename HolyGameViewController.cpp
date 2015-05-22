@@ -32,6 +32,8 @@ void HolyGameViewController::_initGL() {
 #else
         CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE,
         (cl_context_properties)kCGLShareGroup,
+        NULL,
+        NULL,
 #endif
 		0
 	};

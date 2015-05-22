@@ -39,9 +39,9 @@ ServerConnectViewController::ServerConnectViewController() {
 	finishedView = kHBNoView;
 
 	serverConnectMenu = new menu();
-	serverConnectMenu->add_menuitem(new inputmenuitem(20, menuGetIP, (char *)"", (char *)"Must not be empty", (char *)"Enter Server IP Address", (char *)"Connect to server"));
-	serverConnectMenu->add_menuitem(new actionmenuitem(goBack, (char *)"Back"));
-	serverConnectMenu->add_menuitem(new actionmenuitem(quitfunc(this), (char *)"Quit"));
+	serverConnectMenu->add_menuitem(new inputmenuitem(20, menuGetIP, (char *)"", (char *)"Must not be empty", (char *)"Enter Server IP Address", "Connect to server"));
+	serverConnectMenu->add_menuitem(new actionmenuitem(goBack, "Back"));
+	serverConnectMenu->add_menuitem(new actionmenuitem(quitfunc(this), "Quit"));
 
 	serverConnectMenu->set_active(true);
 }

@@ -30,6 +30,7 @@ class HolyGameViewController : public GameViewController {
 
 		void process();
 		void render();
+        bool change_resolution (int width, int height);
 };
 
 #endif

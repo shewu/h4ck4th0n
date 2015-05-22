@@ -15,11 +15,7 @@ void menuitem::onDeselect() { }
 //submenuitem
 submenuitem::~submenuitem() { }
 
-submenuitem::submenuitem(menu *m, char *name) {
-	this->m = m;
-	this->name = name;
-	isActive = false;
-}
+submenuitem::submenuitem(menu *m, std::string&& name_) : m(m), isActive(false), menuitem(name_) {}
 
 bool submenuitem::activate() {
 	isActive = true;

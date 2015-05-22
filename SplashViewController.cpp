@@ -27,8 +27,8 @@ SplashViewController::SplashViewController() {
 	finishedView = kHBNoView;
 
 	splashMenu = new menu();
-	splashMenu->add_menuitem(new actionmenuitem(menuConnectToServer, (char *)"Play Game"));
-	splashMenu->add_menuitem(new actionmenuitem(quitfunc(this), (char *)"Quit"));
+	splashMenu->add_menuitem(new actionmenuitem(menuConnectToServer, "Play Game"));
+	splashMenu->add_menuitem(new actionmenuitem(quitfunc(this), "Quit"));
 
 	splashMenu->set_active(true);
 }

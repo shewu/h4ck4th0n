@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <cstdlib>
 #include <cmath>
 #include <SDL2/SDL.h>
@@ -220,7 +221,25 @@ void GameViewController::_initMenus() {
 	mainmenu = new menu();
 	mainmenu->add_menuitem(new actionmenuitem(leavefunc(this), (char *)"Leave Game"));
 	mainmenu->add_menuitem(new togglemenuitem((char*)"Fullscreen", false, action_toggle_fullscreen));
-	mainmenu->add_menuitem(new actionmenuitem(quitfunc(this), (char *)"Quit"));
+
+    std::vector<std::pair<int, int> > all_resolutions;
+    all_resolutions.insert(all_resolutions.end(), four_by_three.begin(), four_by_three.end());
+    all_resolutions.insert(all_resolutions.end(), five_by_four.begin(), five_by_four.end());
+    all_resolutions.insert(all_resolutions.end(), sixteen_by_ten.begin(), sixteen_by_ten.end());
+    all_resolutions.insert(all_resolutions.end(), sixteen_by_nine.begin(), sixteen_by_nine.end());
+    std::sort(all_resolutions.begin(), all_resolutions.end(), [](std::pair<int, int>& a, std::pair<int, int>& b) {
+        return a.first < b.first || (a.first == b.first && a.second < b.second);
+    });
+    menu *resolution_menu = new menu;
+    for (std::pair<int, int>& res : all_resolutions) {
+        std::ostringstream stringStream;
+        stringStream << res.first << " x " << res.second;
+        std::cout << "adding resolution " << res.first << " " << res.second << "\n";
+        resolution_menu->add_menuitem(new actionmenuitem(change_resolution_func(this, res.first, res.second), const_cast<char *>(stringStream.str().c_str())));
+    }
+    mainmenu->add_menuitem(new submenuitem(resolution_menu, (char *)"Change Resolution"));
+
+    mainmenu->add_menuitem(new actionmenuitem(quitfunc(this), (char *)"Quit"));
 }
 
 void GameViewController::_initSound() {
@@ -241,3 +260,10 @@ void GameViewController::_initSound() {
 #endif
 }
 
+bool GameViewController::change_resolution (int width, int height) {
+    WIDTH = width;
+    HEIGHT = height;
+    _initGL();
+    render();
+    return true;
+}

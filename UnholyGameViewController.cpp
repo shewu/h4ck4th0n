@@ -1,5 +1,4 @@
 #include <cmath>
-#include <OpenGL/OpenGL.h>
 
 #include "UnholyGameViewController.h"
 
@@ -93,29 +92,27 @@ void UnholyGameViewController::render() {
 }
 
 void UnholyGameViewController::_drawWalls() {
-	// obstaclesUnholyGameViewController* gvc;
-	//glUseProgram(0);
 	glBegin(GL_QUADS);
-	for (vector<Obstacle>::iterator i = world.obstacles.begin(); i != world.obstacles.end(); i++) {
-		glColor3f(i->color.r/255.0, i->color.g/255.0, i->color.b/255.0);
-		glVertex3f(i->p1.x, i->p1.y, 0);
-		glVertex3f(i->p2.x, i->p2.y, 0);
-		glVertex3f(i->p2.x, i->p2.y, 1);
-		glVertex3f(i->p1.x, i->p1.y, 1);
+    for (Obstacle& obstacle : world.obstacles) {
+		glColor3f(obstacle.color.r/255.0, obstacle.color.g/255.0, obstacle.color.b/255.0);
+		glVertex3f(obstacle.p1.x, obstacle.p1.y, 0);
+		glVertex3f(obstacle.p2.x, obstacle.p2.y, 0);
+		glVertex3f(obstacle.p2.x, obstacle.p2.y, 1);
+		glVertex3f(obstacle.p1.x, obstacle.p1.y, 1);
 	}
 	glEnd();
 }
 
 void UnholyGameViewController::_drawObjects() {
 	glEnable(GL_NORMALIZE);
-	for (map<int, Object>::iterator i = world.objects.begin(); i != world.objects.end(); i++) {
-		glPushMatrix();
-		glTranslatef(i->second.p.x, i->second.p.y, 0);
-		glScalef(i->second.rad, i->second.rad, i->second.hrat*i->second.rad);
-		glColor3f(i->second.color.r/255.0, i->second.color.g/255.0, i->second.color.b/255.0);
-		gluSphere(quad, 1.0, 50, 50);
-		glPopMatrix();
-	}
+    for (pair<int, Object>& object_pair : world.objects) {
+        glPushMatrix();
+        glTranslatef(object_pair.second.p.x, object_pair.second.p.y, 0);
+        glScalef(object_pair.second.rad, object_pair.second.rad, object_pair.second.hrat*object_pair.second.rad);
+        glColor3f(object_pair.second.color.r/255.0, object_pair.second.color.g/255.0, object_pair.second.color.b/255.0);
+        gluSphere(quad, 1.0, 50, 50);
+        glPopMatrix();
+    }
 	glDisable(GL_NORMALIZE);
 }
 
@@ -147,4 +144,3 @@ void UnholyGameViewController::_drawFloor(float alpha) {
 	glEnd();
 	glDisable(GL_NORMALIZE);
 }
-

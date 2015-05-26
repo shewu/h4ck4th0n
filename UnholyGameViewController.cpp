@@ -99,8 +99,6 @@ void UnholyGameViewController::render() {
 }
 
 void UnholyGameViewController::_drawWalls() {
-	// obstaclesUnholyGameViewController* gvc;
-	//glUseProgram(0);
 	glBegin(GL_QUADS);
 	for (auto& iter : world->getRectangularWalls()) {
 		RectangularWall* wall = iter.second;
@@ -174,4 +172,3 @@ void UnholyGameViewController::_drawFloor(const float alpha_) {
 	glEnd();
 	glDisable(GL_NORMALIZE);
 }
-

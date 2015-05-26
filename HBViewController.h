@@ -7,6 +7,9 @@
 #define HB_VIEW_CONTROLLER
 
 #include "Constants.h"
+#include <SDL2/SDL.h>
+
+extern SDL_Window* screen;
 
 class HBViewController {
 	public:

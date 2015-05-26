@@ -2,8 +2,6 @@
 
 #include <hack.h>
 #include <HBMap.h>
-//#include "hack.h"
-//#include "HBMap.h"
 
 #define TEST_EQ(d, x, y) \
 	do { \
@@ -21,7 +19,6 @@ using namespace std;
 
 void Vector2DTest();
 void Vector3DTest();
-void MapTest();
 
 int main()
 {
@@ -78,10 +75,5 @@ void Vector3DTest()
 	TEST_EQ("dot operator*", i*j, 0);
 	TEST_EQ("scalar multiply operator*", j*1.5, Vector3D(0,1.5,0));
 	return;
-}
-
-void MapTest() {
-    HBMap custom("custom.hbm");
-    TEST_TRUE("read good map", true);
 }
 

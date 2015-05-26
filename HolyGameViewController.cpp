@@ -26,14 +26,25 @@ void HolyGameViewController::process() {
 void HolyGameViewController::_initGL() {
 	vector<cl::Platform> platforms;
 	cl::Platform::get(&platforms);
+#ifdef __APPLE__
+    CGLContextObj kCGLContext = CGLGetCurrentContext();
+    CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
+#endif
 	cl_context_properties props[7] = {
 		CL_CONTEXT_PLATFORM, 
-		(cl_context_properties)(platforms[0])(), 
-		CL_GLX_DISPLAY_KHR, 
+		(cl_context_properties)(platforms[0])(),
+#ifndef __APPLE__
+		CL_GLX_DISPLAY_KHR,
 		(intptr_t)glXGetCurrentDisplay(), 
 		CL_GL_CONTEXT_KHR, 
-		(intptr_t)glXGetCurrentContext(), 
-		0 
+		(intptr_t)glXGetCurrentContext(),
+#else
+        CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE,
+        (cl_context_properties)kCGLShareGroup,
+        NULL,
+        NULL,
+#endif
+		0
 	};
 	context = cl::Context(CL_DEVICE_TYPE_GPU, props, NULL, NULL, NULL);
 	devices = context.getInfo<CL_CONTEXT_DEVICES>();
@@ -60,7 +71,7 @@ void HolyGameViewController::_initGL() {
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, WIDTH, HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-	igl = cl::Image2DGL(context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, texture, NULL);
+	igl = cl::ImageGL(context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, texture, NULL);
 	bs.push_back(igl);
 	cq = cl::CommandQueue(context, devices[0], 0, NULL);
 	glDisable(GL_TEXTURE_2D);

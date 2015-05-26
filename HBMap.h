@@ -117,8 +117,8 @@ class HBMap {
 		 * @return the spawns for team.
 		 */
 		const SpawnDescriptor& getSpawnByNumber(unsigned regionNumber) const {
-			if (regionNumber < 0 || regionNumber > kMaxSpawnRegionNumber) {
-				P(("region number %d out of range\n", regionNumer));
+			if (regionNumber > kMaxSpawnRegionNumber) {
+				P(("region number %d out of range\n", regionNumber));
 				return spawns[0];
 			}
 			return spawns[regionNumber];

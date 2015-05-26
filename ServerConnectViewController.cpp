@@ -3,6 +3,8 @@
 #ifndef __APPLE__
 #include <GL/glew.h>
 #include <GL/glu.h>
+#else
+#include <OpenGL/glu.h>
 #endif
 
 #include "ServerConnectViewController.h"
@@ -33,7 +35,7 @@ static bool goBack() {
 }
 
 ServerConnectViewController::ServerConnectViewController() {
-	SDL_WM_GrabInput(SDL_GRAB_OFF);
+    SDL_SetWindowGrab(screen, SDL_FALSE);
 	finishedView = kHBNoView;
 
 	serverConnectMenu = new Menu();

@@ -59,17 +59,6 @@ timeval tim;
 // instances as clients connect
 Socket *s;
 
-void verify() {
-    if(FRICTION < 0.0f) {
-        cout << "Your friction is negative and will cause the game to fail\n";
-		cout << "Continue anyway? (y/n) ";
-		char c;
-		cin >> c;
-		if(!(c == 'y' || c == 'Y'))
-			exit(-1);
-    }
-}
-
 // Remove a client from the game
 void remove_client(Client const& cl) {
     s->closeConnection(cl.sc);
@@ -80,8 +69,7 @@ void remove_client(Client const& cl) {
 	                            float& time1, float& theta1, float& time2, float& theta2);
 
 int main() {
-	verify();
-
+    assert(FRICTION >= 0.0f);
     fstream f;
     f.open("logs/log", fstream::out | fstream::binary);
     if (f.fail()) {
@@ -91,7 +79,7 @@ int main() {
 
 	// since we log the random seed and use it for playback purposes, the
 	// Server should not use randomness outside of Game
-	unsigned int randomSeed = time(NULL);
+	unsigned int randomSeed = (unsigned int)time(nullptr);
 	logRandomSeed(f, randomSeed);
 	srand(randomSeed);
 
@@ -109,9 +97,11 @@ int main() {
     getaddrinfo(NULL, MYPORT, &hints, &res);
 
     int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    std::cout << "using socket fd: " << sockfd << "\n";
     int opt = 1;
     setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt));
-    bind(sockfd, res->ai_addr, res->ai_addrlen);
+    const int bindResult = bind(sockfd, res->ai_addr, res->ai_addrlen);
+    std::cout << "socket bind result: " << bindResult << "\n";
     s = new Socket(sockfd);
     s->listen_for_client();
 

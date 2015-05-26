@@ -59,12 +59,12 @@ float castRay(
 
 __kernel void 
 render(
-		float x, 
-		float y, 
-		float z, 
-		float xdir, 
-		float ydir, 
-		float zdir, 
+		float xx,
+		float yy,
+		float zz,
+		float xdirr,
+		float ydirr,
+		float zdirr,
 		int obstacles, 
 		__constant float* obspoints, 
 		__constant unsigned char* obscolor, 
@@ -83,12 +83,13 @@ render(
 		float minY,
 		float maxY
 	) {
-	float nxdir = xdir+((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*ydir);
-	float nydir = ydir-((get_global_id(0)-(WIDTH-1)/2.0)/((float)HEIGHT-1)*xdir);
-	xdir = nxdir;
-	ydir = nydir;
-	zdir += (get_global_id(1)-(HEIGHT-1)/2.0)/((float)HEIGHT-1);
-
+    float4 pcolor = (float4)(0, 0, 0, 0);
+    for (int xaa = 0; xaa < AA; xaa++) for (int yaa = 0; yaa < AA; yaa++) {
+    float x = xx, y = yy, z = zz;
+        float xdir = xdirr + ((AA * get_global_id(0) + xaa - (AA * WIDTH - 1) / 2.0) / ((float) AA * HEIGHT - 1) * ydirr);
+        float ydir = ydirr - ((AA * get_global_id(0) + xaa - (AA * WIDTH - 1) / 2.0) / ((float) AA * HEIGHT - 1) * xdirr);
+        float zdir = zdirr + (AA * (get_global_id(1)) + yaa - (AA * HEIGHT - 1) / 2.0) / ((float) AA * HEIGHT - 1);
+	
 	float4 tcolor = (float4)(0, 0, 0, 0);
 	float mult = 1;
 	for (int s = 0; s < 6; s++) {
@@ -97,7 +98,7 @@ render(
 		float when = castRay(x, y, z, xdir, ydir, zdir, obstacles, obspoints, objects, objpoint, objsize, &obstacle, &object, 100);
 
 		float4 color = (float4)(0, .5, 1, 1);
-		float4 ccolor;
+		float4 ccolor = (float4)(0, 0, 0, 0);
 		float4 normal;
 		float4 dir = normalize((float4)(xdir, ydir, zdir, 0));
 		bool hit = false;
@@ -128,7 +129,7 @@ render(
 		}
 		when *= (1-EPS);
 		if (hit) {
-			color = ccolor*.2;
+			color = ccolor*((float4).2);
 			for (int i = 0; i < lights; i++) {
 				float4 lightdir = (float4)(lightpos[3*i]-x-xdir*when, lightpos[3*i+1]-y-ydir*when, lightpos[3*i+2]-z-zdir*when, 0);
 				float w = castRay(x+xdir*when, y+ydir*when, z+zdir*when, lightdir.x, lightdir.y, lightdir.z, obstacles, obspoints, objects, objpoint, objsize, &obstacle, &object, 1);
@@ -136,7 +137,7 @@ render(
 
 				lightdir = normalize(lightdir);
 				if (dot(lightdir, normal) <= 0) continue;
-				color += .6*dot(lightdir, normal)*ccolor*(float4)(lightcolor[4*i]/255.0, lightcolor[4*i+1]/255.0, lightcolor[4*i+2]/255.0, lightcolor[4*i+3]/255.0);
+				color += ((float4).6)*dot(lightdir, normal)*ccolor*(float4)(lightcolor[4*i]/255.0, lightcolor[4*i+1]/255.0, lightcolor[4*i+2]/255.0, lightcolor[4*i+3]/255.0);
 			}
 		}
 
@@ -147,7 +148,7 @@ render(
 			float smallest = dot(diffv, diffv);
 			if (xdiff*xdir+ydiff*ydir+zdiff*zdir <= 0) smallest = xdiff*xdiff+ydiff*ydiff+zdiff*zdiff;
 			if (xdiff*xdir+ydiff*ydir+zdiff*zdir >= when*(xdir*xdir+ydir*ydir+zdir*zdir)) smallest = (xdiff-when*xdir)*(xdiff-when*xdir)+(ydiff-when*ydir)*(ydiff-when*ydir)+(zdiff-when*zdir)*(zdiff-when*zdir);
-			color += (float4)(lightcolor[4*i]/255.0, lightcolor[4*i+1]/255.0, lightcolor[4*i+2]/255.0, lightcolor[4*i+3]/255.0)*exp(-smallest/8.0)*3;
+			color += (float4)(lightcolor[4*i]/255.0, lightcolor[4*i+1]/255.0, lightcolor[4*i+2]/255.0, lightcolor[4*i+3]/255.0)*((float4)exp(-smallest/8.0)*3);
 		}
 
 		tcolor += color*mult;
@@ -161,6 +162,7 @@ render(
 		ydir = nextdir.y;
 		zdir = nextdir.z;
 	}
-
-	write_imagef(im, (int2)(get_global_id(0), get_global_id(1)), tcolor);
+    pcolor += tcolor;
+    }
+    write_imagef(im, (int2)(get_global_id(0), get_global_id(1)), pcolor/(AA * AA));
 }

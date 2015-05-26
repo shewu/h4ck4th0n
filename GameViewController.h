@@ -1,11 +1,20 @@
-#ifndef GAMEVIEWCONTROLLER_H
-#define GAMEVIEWCONTROLLER_H
+#ifndef __GAMEVIEWCONTROLLER_H__
+#define __GAMEVIEWCONTROLLER_H__
+
+#ifndef __APPLE__
+#include <AL/alut.h>
+#include <AL/al.h>
+#include <GL/gl.h>
+#else
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+#include <OpenGL/glu.h>
+#endif
+#include <SDL2/SDL.h>
 
 #include "HBViewController.h"
 
 #include <memory>
-
-#include "AL/alut.h"
 
 #include "Menu.h"
 #include "MirroringWorld.h"
@@ -13,7 +22,6 @@
 #include "Socket.h"
 #include "Sound.h"
 
-extern SDL_Surface* screen;
 extern std::string ipaddy;
 extern int WIDTH;
 extern int HEIGHT;
@@ -40,11 +48,13 @@ class GameViewController : public HBViewController {
 		Menu* _resmenu;
 
 		ALfloat pos[3], vel[3], ori[6];
+    
+        virtual void _initGL() = 0;
 
 	private:
 		void _disconnect();
 		void _initMenus();
-		void _initSound();
+        void _initSound();
 };
 
 #endif

@@ -59,7 +59,7 @@ class WritePacket {
 // TODO make stuff private
 class ReadPacket {
     public:
-        ReadPacket(char message_type, int size, int packet_number);
+        ReadPacket(char message_type, long size, int packet_number);
         virtual ~ReadPacket();
 
         bool hasBytesLeft() {
@@ -72,7 +72,7 @@ class ReadPacket {
         float read_float();
         std::string read_string();
 
-        int size;
+        long size;
         char *buf;
         char message_type;
         int index;

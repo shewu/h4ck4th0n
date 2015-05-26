@@ -1,6 +1,6 @@
 Holy Balls: The Game
 A free and open source capture-the-flag game.
-Version 0.4, now with gameplay and a menu *and* Mac OS X support!
+Version 1.0, now with gameplay *and* some semblance of object oriented code!
 
 TODO
 ====
@@ -16,10 +16,11 @@ Requirements
 		+ unholyballs requires at least a modern integrated graphics chipset (OpenGL 2.0 support)
 		+ holyballs require at least an ATi Mobility Radeon HD 4670 to run at 640x480 at 60fps
 	- Software
-		+ SDL
-	    + OpenAL
-	    + OpenGL and GLEW
+		+ SDL2 is required for both versions
+	    + OpenAL is required for both versions
+	    + OpenGL and GLEW is required for both versions
 	    + OpenCL is required only for holyballs
+* The Mac version works on a Mac running Mac OS X 10.10 Yosemite or higher. Earlier versions have not been tested.
 
 Building
 =======
@@ -41,6 +42,9 @@ Building
 
 	- make all
 		will build all four binaries
+* Mac
+    - Open `Holy Balls.xcodeproj` and build `hbserver` and one of the clients.
+    - Copy the sound filles, font files, and optionally the OpenCL sources (required for holyballs and multiballs) into your build directory.
 
 Run
 ===
@@ -69,12 +73,3 @@ Credits
 	- bounce sound from user dreamoron
 	- ding sound from user acclivity
 	- splat sound from user benhillyard
-
-Style Guide
-===========
-* Indentation: tabs, not spaces
-* Variable naming conventions: camelCase
-* Class and file naming conventions: CamelCase
-* Open curly brace on the same line as clause or function signature
-* File extensions for C++ code are cpp for implementations and h for headers
-* Include guards match the following pattern: [A-Z]+(_[A-Z]+)*_H

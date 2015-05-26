@@ -3,6 +3,7 @@
 #include <netdb.h>
 #include <sys/socket.h>
 
+#include <iostream>
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
@@ -10,6 +11,7 @@
 #include <algorithm>
 
 #include "Packet.h"
+#include "mac.h"
 
 using std::max;
 
@@ -49,7 +51,7 @@ ReadPacket* SocketConnection::receive_packet() {
 	return rp;
 }
 
-void SocketConnection::recv_data(char *buf, int length) {
+void SocketConnection::recv_data(char *buf, long length) {
     if (length < 5) {
     	return;
     }

@@ -1,7 +1,5 @@
 #include "GameViewController.h"
 
-#include <GL/gl.h>
-#include <SDL/SDL.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -18,7 +16,6 @@
 #define MAX_SOUND_LATENESS 100
 
 static HBViewMode sFinishedView = kHBNoView;
-static unsigned sVideoModeFlags = SDL_OPENGL;
 
 extern int WIDTH;
 extern int HEIGHT;
@@ -32,8 +29,9 @@ GameViewController::GameViewController() {
 	_initMenus();
 	_initSound();
 	SDL_ShowCursor(false);
-	SDL_WM_GrabInput(SDL_GRAB_ON);
-	std::cout << "Starting client\n";
+    SDL_SetWindowGrab(screen, SDL_TRUE);
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+    std::cout << "Starting client\n";
 
 	addrinfo hints, *res;
 
@@ -44,12 +42,13 @@ GameViewController::GameViewController() {
 	std::cout << "IP Address = " << ipaddy << "\n";
 	getaddrinfo(ipaddy.c_str(), "55555", &hints, &res);
 	int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    std::cout << "socket fd: " << sockfd << "\n";
 	sock = new Socket(sockfd);
 
 	sc = sock->connect(res->ai_addr, res->ai_addrlen);
 
 	bool done = false;
-	ReadPacket* rp;
+	ReadPacket* rp = nullptr;
 	for (int i = 0; i < 10 && !done; i++) {
 		WritePacket wp(CTS_CONNECT, 0); 
         sc->send_packet(wp);
@@ -86,7 +85,7 @@ GameViewController::GameViewController() {
 GameViewController::~GameViewController() {
 	sFinishedView = kHBNoView;
 	SDL_ShowCursor(true);
-	SDL_WM_GrabInput(SDL_GRAB_OFF);
+    SDL_SetWindowGrab(screen, SDL_FALSE);
 	delete sc;
 	delete _resmenu;
 	delete mainmenu;
@@ -143,11 +142,11 @@ void GameViewController::process() {
 				if(event.key.keysym.sym == SDLK_ESCAPE) {
 					if (mainmenu->isActive()) {
 						SDL_ShowCursor(false);
-						SDL_WM_GrabInput(SDL_GRAB_ON);
+                        SDL_SetWindowGrab(screen, SDL_TRUE);
 						mainmenu->setActive(false);
 					} else {
 						SDL_ShowCursor(true);
-						SDL_WM_GrabInput(SDL_GRAB_OFF);
+                        SDL_SetWindowGrab(screen, SDL_FALSE);
 						mainmenu->setActive(true);
 					}
 				}
@@ -166,11 +165,11 @@ void GameViewController::process() {
 		}
 	}
 
-	Uint8* keystate = SDL_GetKeyState(NULL);
-	UserInput ui(!!keystate[SDLK_a],
-	             !!keystate[SDLK_d],
-	             !!keystate[SDLK_w],
-	             !!keystate[SDLK_s],
+    const Uint8* keystate = SDL_GetKeyboardState(nullptr);
+	UserInput ui(!!keystate[SDL_SCANCODE_A],
+	             !!keystate[SDL_SCANCODE_D],
+	             !!keystate[SDL_SCANCODE_W],
+	             !!keystate[SDL_SCANCODE_S],
 	             angle);
 	WritePacket wp(CTS_USER_STATE);
 	ui.writeToPacket(&wp);
@@ -210,8 +209,11 @@ bool GameViewController::leave() {
 }
 
 static void actionToggleFullscreen(bool b) {
-	sVideoModeFlags = (b) ? SDL_OPENGL | SDL_FULLSCREEN : SDL_OPENGL;
-	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, sVideoModeFlags);
+    if (b) {
+        SDL_SetWindowFullscreen(screen, SDL_WINDOW_FULLSCREEN);
+    } else {
+        SDL_SetWindowFullscreen(screen, 0);
+    }
 }
 
 void GameViewController::_disconnect() {
@@ -221,13 +223,23 @@ void GameViewController::_disconnect() {
 	}
 }
 
+static float getAspectRatio() {
+    SDL_DisplayMode current;
+    int retCode = SDL_GetCurrentDisplayMode(0, &current);
+    if (retCode) {
+        return 0;
+    }
+    
+    return float(current.w) / current.h;
+}
+
 void GameViewController::_initMenus() {
 	mainmenu = new Menu();
 	mainmenu->addMenuItem(new ActionMenuItem([this](){return leave();}, (char *)"Leave Game"));
 	mainmenu->addMenuItem(new ToggleMenuItem((char*)"Fullscreen", false, actionToggleFullscreen));
 
 	// first, determine which set of resolutions we should use. 
-	const float ratio = float(SDL_GetVideoInfo()->current_w) / SDL_GetVideoInfo()->current_h;
+	const float ratio = getAspectRatio();
 	const float d5x4 = fabs(ratio - FIVE_BY_FOUR);
 	const float d4x3 = fabs(ratio - FOUR_BY_THREE);
 	const float d16x10 = fabs(ratio - SIXTEEN_BY_TEN);
@@ -242,7 +254,7 @@ void GameViewController::_initMenus() {
 			[p]() {
 				WIDTH = p.first;
 				HEIGHT = p.second;
-				SDL_SetVideoMode(p.first, p.second, 24, sVideoModeFlags);
+                SDL_SetWindowSize(screen, p.first, p.second);
 				glViewport(0, 0, p.first, p.second);
 				return 0;
 			},
@@ -250,10 +262,10 @@ void GameViewController::_initMenus() {
 		));
 	}
 	mainmenu->addMenuItem(new SubMenuItem(_resmenu, (char *)"Resolution"));
-	mainmenu->addMenuItem(new ActionMenuItem([this](){return quit();}, (char *)"Quit"));
 }
 
 void GameViewController::_initSound() {
+#ifndef __APPLE__
 	ALCdevice* dev = alcOpenDevice(NULL);
 	ALCcontext* con = alcCreateContext(dev, NULL);
 	alcMakeContextCurrent(con);
@@ -267,4 +279,5 @@ void GameViewController::_initSound() {
 		albuf[i] = alutCreateBufferFromFile(("sounds/" + kSoundFilenames[i] + ".wav").data());
 	} 
 	alGenSources(ALSRCS, alsrcs);
+#endif
 }

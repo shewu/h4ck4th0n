@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>81344852-D6D0-416B-BC34-6B5CD326EAFB</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Holy Balls</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>027D71CEBCA7CB1870F9C29D3F82C14C3829A375</key>
+		<string>https://github.com/shewu/h4ck4th0n</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Holy Balls.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>027D71CEBCA7CB1870F9C29D3F82C14C3829A375</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/shewu/h4ck4th0n</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>027D71CEBCA7CB1870F9C29D3F82C14C3829A375</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>027D71CEBCA7CB1870F9C29D3F82C14C3829A375</string>
+			<key>IDESourceControlWCCName</key>
+			<string>h4ck4th0n</string>
+		</dict>
+	</array>
+</dict>
+</plist>

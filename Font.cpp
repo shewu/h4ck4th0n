@@ -1,4 +1,8 @@
+#ifndef __APPLE__
 #include <GL/gl.h>
+#else
+#include <OpenGL/glu.h>
+#endif
 #include <cstdio>
 #include <cstdlib>
 #include "Font.h"

@@ -102,26 +102,42 @@ class Socket
 };
 
 class SocketConnection {
-	public:
-        int socket;
+	private:
+        int num_sent;
+		std::queue<ReadPacket*> read_packets;
+
+		int socket;
 		struct sockaddr *addr;
 		socklen_t addrlen;
 		int my_id, their_id;
 
+
+	public:
 		SocketConnection(int socket, struct sockaddr *addr, socklen_t addrlen,
 		                 int my_id, int their_id);
 		void send_packet(WritePacket const&);
 		ReadPacket* receive_packet();
-		void recv_data(char *buf, int length);
+		void recv_data(char *buf, long length);
 		~SocketConnection();
 
 		int lastTimeReceived;
 		int largestPacketNum;
 
-    private:
-        int num_sent;
-		std::queue<ReadPacket*> read_packets;
+		struct sockaddr *get_addr() {
+			return this->addr;
+		}
 
+		socklen_t get_addrlen() {
+			return this->addrlen;
+		}
+
+		int get_my_id() {
+			return this->my_id;
+		}
+
+		int get_their_id() {
+			return this->their_id;
+		}
 };
 
 #endif

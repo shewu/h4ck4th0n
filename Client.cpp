@@ -1,7 +1,9 @@
 #include <iostream>
 #include <cstdlib>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 #include <unistd.h>
+#include <cmath>
 
 #include "SplashViewController.h"
 #include "ServerConnectViewController.h"
@@ -22,29 +24,39 @@ using namespace std;
 int WIDTH = 640;
 int HEIGHT = 480;
 #ifdef UNHOLY
-bool NORAPE = true;
+bool NOAA = false;
 #endif
 
-SDL_Surface* screen;
-
+SDL_Window* screen;
+SDL_GLContext glContext;
 // FIXME should this really be a global variable?
 string ipaddy = "127.0.0.1";
 
-void initVideo() {
+static float getAspectRatio() {
+    SDL_DisplayMode current;
+    int retCode = SDL_GetCurrentDisplayMode(0, &current);
+    if (retCode) {
+        return 0;
+    }
+    
+    return float(current.w) / current.h;
+}
+
+static void initVideo() {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		std::cerr << "Something went wrong!\n";
 		exit(-1);
 	}
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 #ifdef UNHOLY
-	if (!NORAPE) {
+	if (!NOAA) {
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 	}
 #endif
 
 	// detect aspect ratio
-	const float ratio = float(SDL_GetVideoInfo()->current_w) / SDL_GetVideoInfo()->current_h;
+	const float ratio = getAspectRatio();
 	const float d5x4 = fabs(ratio - FIVE_BY_FOUR);
 	const float d4x3 = fabs(ratio - FOUR_BY_THREE);
 	const float d16x10 = fabs(ratio - SIXTEEN_BY_TEN);
@@ -57,11 +69,10 @@ void initVideo() {
 
 	WIDTH = ALIGN(WIDTH);
 	HEIGHT = ALIGN(HEIGHT);
-
-	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 24, SDL_DOUBLEBUF | SDL_OPENGL);
-	//SDL_ShowCursor(false);
-	//SDL_WM_GrabInput(SDL_GRAB_ON);
-
+	
+    screen = SDL_CreateWindow("Holy Balls", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_OPENGL);  // XXX SDL_DOUBLEBUF?
+    glContext = SDL_GL_CreateContext(screen);
+	
 	glViewport(0, 0, WIDTH, HEIGHT);
 
 	cout << "using resolution " << WIDTH << "x" << HEIGHT << "\n";
@@ -69,17 +80,18 @@ void initVideo() {
 }
 
 int main(int argc, char* argv[]) {
-	srand(time(NULL));
+	srand((unsigned)time(NULL));
 	// process args
 	for (int i = 1; i < argc; ++i) {
 		if (!strcmp(argv[i], "-h")) {
 			printf("Usage:\n"
-					"-h to show this message\n"
+                   "-h to show this message\n"
+                   "-d <width> <height> to set the screen resolution\n"
 #ifdef UNHOLY
-					"-norape to avoid antialiasing\n"
+                   "-noaa to avoid antialiasing\n"
 #endif
 					);
-			exit(0);
+			exit(-1);
 		} else if (!strcmp(argv[i], "-d")) {
 			WIDTH = ALIGN(atoi(argv[i+1]));
 			HEIGHT = ALIGN(atoi(argv[i+2]));
@@ -88,8 +100,8 @@ int main(int argc, char* argv[]) {
 			ipaddy = argv[i+1];
 		}
 #ifdef UNHOLY
-		else if (!strcmp(argv[i], "-norape")) {
-			NORAPE = true;
+		else if (!strcmp(argv[i], "-noaa")) {
+			NOAA = true;
 		}
 #endif
 	}
@@ -105,7 +117,7 @@ int main(int argc, char* argv[]) {
 				while ((viewToDisplay = svc->didFinishView()) == kHBNoView) {
 					svc->process();
 					svc->render();
-					SDL_GL_SwapBuffers();
+                    SDL_GL_SwapWindow(screen);
 				}
 				delete svc;
 				break;
@@ -115,7 +127,7 @@ int main(int argc, char* argv[]) {
 				while ((viewToDisplay = scvc->didFinishView()) == kHBNoView) {
 					scvc->process();
 					scvc->render();
-					SDL_GL_SwapBuffers();
+                    SDL_GL_SwapWindow(screen);
 				}
 				delete scvc;
 				break;
@@ -133,12 +145,13 @@ int main(int argc, char* argv[]) {
 				while ((viewToDisplay = gvc->didFinishView()) == kHBNoView) {
 					gvc->process();
 					gvc->render();
-					SDL_GL_SwapBuffers();
+                    SDL_GL_SwapWindow(screen);
 				}
 				delete gvc;
 				break;
 			}
 			default: {
+                SDL_GL_DeleteContext(glContext);
 				break;
 			}
 		}

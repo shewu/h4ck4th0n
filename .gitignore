@@ -7,3 +7,4 @@ server
 Makefile-overrides
 logs/*
 bin/
+*.xcuserdatad

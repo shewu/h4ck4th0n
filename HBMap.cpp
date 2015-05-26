@@ -107,6 +107,7 @@ void HBMap::parse(string const& filename) {
 	width = -1;
 	height = -1;
 	in.open(filename.c_str());
+    assert(!in.fail());
 	string cmd;
 	string s;
 	while (!in.eof()) {

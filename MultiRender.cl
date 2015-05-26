@@ -99,7 +99,7 @@ render(
 		float when = castRay(x, y, z, xdir, ydir, zdir, obstacles, obspoints, objects, objpoint, objsize, &obstacle, &object, 100);
 
 		float4 color = (float4)(0, .5, 1, 1);
-		float4 ccolor;
+		float4 ccolor = (float4)(0, 0, 0, 0);
 		float4 normal;
 		float4 dir = normalize((float4)(xdir, ydir, zdir, 0));
 		bool hit = false;
@@ -120,7 +120,7 @@ render(
 			float xp = (x-xdir*z/zdir)/3, yp = (y-ydir*z/zdir)/3;
 			if (xp < 0) xp += (int)(fabs(xp)/2+1)*2;
 			if (yp < 0) yp += (int)(fabs(yp)/2+1)*2;
-			ccolor = (((int)xp+(int)yp)%2)*(float4)(1, 1, 1, 0);
+			ccolor = ((float4)(((int)xp+(int)yp)%2))*(float4)(1, 1, 1, 0);
 			normal = (float4)(0, 0, 1, 0);
 			when = -z/zdir;
 			hit = true;
@@ -129,7 +129,7 @@ render(
 		}
 		when *= (1-EPS);
 		if (hit) {
-			color = ccolor*.2;
+			color = ccolor*((float4).2);
 			for (int i = 0; i < lights; i++) {
 				float4 lightdir = (float4)(lightpos[3*i]-x-xdir*when, lightpos[3*i+1]-y-ydir*when, lightpos[3*i+2]-z-zdir*when, 0);
 				float w = castRay(x+xdir*when, y+ydir*when, z+zdir*when, lightdir.x, lightdir.y, lightdir.z, obstacles, obspoints, objects, objpoint, objsize, &obstacle, &object, 1);
@@ -137,7 +137,7 @@ render(
 
 				lightdir = normalize(lightdir);
 				if (dot(lightdir, normal) <= 0) continue;
-				color += .6*dot(lightdir, normal)*ccolor*(float4)(lightcolor[4*i]/255.0, lightcolor[4*i+1]/255.0, lightcolor[4*i+2]/255.0, lightcolor[4*i+3]/255.0);
+				color += ((float4).6*dot(lightdir, normal)*ccolor)*(float4)(lightcolor[4*i]/255.0, lightcolor[4*i+1]/255.0, lightcolor[4*i+2]/255.0, lightcolor[4*i+3]/255.0);
 			}
 		}
 
@@ -148,7 +148,7 @@ render(
 			float smallest = dot(diffv, diffv);
 			if (xdiff*xdir+ydiff*ydir+zdiff*zdir <= 0) smallest = xdiff*xdiff+ydiff*ydiff+zdiff*zdiff;
 			if (xdiff*xdir+ydiff*ydir+zdiff*zdir >= when*(xdir*xdir+ydir*ydir+zdir*zdir)) smallest = (xdiff-when*xdir)*(xdiff-when*xdir)+(ydiff-when*ydir)*(ydiff-when*ydir)+(zdiff-when*zdir)*(zdiff-when*zdir);
-			color += (float4)(lightcolor[4*i]/255.0, lightcolor[4*i+1]/255.0, lightcolor[4*i+2]/255.0, lightcolor[4*i+3]/255.0)*exp(-smallest/8.0)*3;
+			color += (float4)(lightcolor[4*i]/255.0, lightcolor[4*i+1]/255.0, lightcolor[4*i+2]/255.0, lightcolor[4*i+3]/255.0)*(float4)(exp(-smallest/8.0)*3);
 		}
 
 		tcolor += color*mult;

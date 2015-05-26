@@ -67,7 +67,7 @@ void MultiGameViewController::_initGL() {
 	glViewport(0, 0, WIDTH, HEIGHT);
 	glOrtho(-1, 1, -1, 1, -1, 1);
 	glEnable(GL_TEXTURE_2D);
-	glGenTextures(devices.size(), &texture);
+	glGenTextures((GLsizei)devices.size(), &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
@@ -201,12 +201,9 @@ void MultiGameViewController::render() {
 		int render_offset = (((i+1)*(HEIGHT/16))/devices.size()-(i*(HEIGHT/16))/devices.size())*16;
 		cqs[i].enqueueNDRangeKernel(renderKern, cl::NullRange, cl::NDRange(WIDTH, render_offset), cl::NDRange(16, 16));
 		cl::size_t<3> offset, sz;
-		offset.push_back(0);
-		offset.push_back(0);
-		offset.push_back(0);
-		sz.push_back(WIDTH);
-		sz.push_back((((i+1)*(HEIGHT/16))/devices.size()-(i*(HEIGHT/16))/devices.size())*16);
-		sz.push_back(1);
+        sz[0] = WIDTH;
+        sz[1] = (((i+1)*(HEIGHT/16))/devices.size()-(i*(HEIGHT/16))/devices.size())*16;
+        sz[2] = 1;
 		cqs[i].enqueueReadImage(images[i], false, offset, sz, 0, 0, pixels+((i*(HEIGHT/16))/devices.size())*16*WIDTH);
 	}
 	for (unsigned i = 0; i < devices.size(); i++) cqs[i].finish();

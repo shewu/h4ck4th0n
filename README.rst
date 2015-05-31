@@ -68,8 +68,12 @@ Playing
 * Escape: Bring up menu
 
 Credits
-======
+=======
 * Sounds from freesound.org
 	- bounce sound from user dreamoron
 	- ding sound from user acclivity
 	- splat sound from user benhillyard
+
+Style Guide
+===========
+https://google-styleguide.googlecode.com/svn/trunk/cppguide.html

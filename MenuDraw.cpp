@@ -84,7 +84,7 @@ void Menu::draw() {
 #define unselected_g		140
 #define unselected_b		214
 
-void draw_button(bool selected, string const& text, float x, float y, float width, float height, GLubyte alpha) {
+static void draw_button(bool selected, string const& text, float x, float y, float width, float height, GLubyte alpha) {
     if (selected) {
 		glColor4ub(selected_r,selected_g,selected_b,alpha);
     } else {
@@ -103,7 +103,7 @@ void draw_button(bool selected, string const& text, float x, float y, float widt
 	draw_str(tq, text);
 }
 
-void MenuItem::drawAsActive(unsigned char alpha) {}
+void MenuItem::drawAsActive(unsigned char) {}
 
 void MenuItem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
 	draw_button(selected, name_.c_str(), x, y, width, height, alpha);
@@ -118,7 +118,7 @@ void SubMenuItem::draw(bool selected, float x, float y, float width, float heigh
 	glEnd();
 }
 
-void SubMenuItem::drawAsActive(unsigned char alpha) {
+void SubMenuItem::drawAsActive(unsigned char) {
 	m->draw();
 }
 
@@ -212,7 +212,7 @@ void SliderMenuItem::draw(bool selected, float x, float y, float width, float he
     glBegin(GL_LINES); {
         glVertex3f(x + slider_left  * width, y + slider_line_height * height, 0.0f);
         glVertex3f(x + slider_right * width, y + slider_line_height * height, 0.0f);
-        for (int i = 0; i < states.size(); i++) {
+        for (int i = 0; i < static_cast<int>(states.size()); i++) {
             float tickx = x + width*(slider_right*(float)i + slider_left*(float)(states.size()-1-i)) / (float)(states.size()-1);
             glVertex3f(tickx, y + slider_tick_top * height, 0.0f);
             glVertex3f(tickx, y + slider_tick_bottom * height, 0.0f);
@@ -243,7 +243,7 @@ void SliderMenuItem::draw(bool selected, float x, float y, float width, float he
 	glEnd();
 
 	glColor4ub(0,0,0,255);
-	for(int i = 0; i < states.size(); i++) {
+	for(int i = 0; i < static_cast<int>(states.size()); i++) {
 		float tickx = x + width*(slider_right*(float)i + slider_left*(float)(states.size()-1-i)) / (float)(states.size()-1);
 		textquad tq(tickx, y+slider_text_top*height, 0.0f,
 				tickx, y+slider_text_bottom*height, 0.0f,

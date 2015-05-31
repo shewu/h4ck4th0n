@@ -6,21 +6,13 @@ using std::string;
 
 MenuItem::~MenuItem() { }
 bool MenuItem::activate() { return false; }
-bool MenuItem::keyInput(int key) { return false; }
-void MenuItem::keyInputNonActive(int key) { }
+bool MenuItem::keyInput(int) { return false; }
+void MenuItem::keyInputNonActive(int) { }
 bool MenuItem::shouldMenuBeDrawn() { return false; }
 void MenuItem::onSelect() { }
 void MenuItem::onDeselect() { }
 
 //SubMenuItem
-SubMenuItem::~SubMenuItem() { }
-
-SubMenuItem::SubMenuItem(Menu *m, char *name) {
-	this->m = m;
-	this->name = string(name);
-	isActive = false;
-}
-
 bool SubMenuItem::activate() {
 	isActive = true;
 	m->setActive(true);
@@ -70,12 +62,12 @@ bool InputMenuItem::keyInput(int key) {
 			displayError = true;
 	} else if(key >= MENU_KEY_A && key <= MENU_KEY_A + 25) {
 		if(len < maxlen) {
-			input[len++] = 'a' + key - MENU_KEY_A;
+			input[len++] = 'a' + static_cast<char>(key - MENU_KEY_A);
 			input[len] = '\0';
 		}
 	} else if(key >= MENU_KEY_0 && key <= MENU_KEY_0 + 9) {
 		if(len < maxlen) {
-			input[len++] = '0' + key - MENU_KEY_0;
+			input[len++] = '0' + static_cast<char>(key - MENU_KEY_0);
 			input[len] = '\0';
 		}
 	} else if (key == (int)'.') {
@@ -114,16 +106,14 @@ bool SliderMenuItem::getState() {
 }
 
 void SliderMenuItem::keyInputNonActive(int key) {
-	if(key == MENU_KEY_LEFT) {
-		if(newcurstate > 0) {
+	if (key == MENU_KEY_LEFT) {
+		if (newcurstate > 0) {
 			newcurstate--;
-			//if(action != NULL) action(curstate); //now somewhere else
 		}
 	}
-	else if(key == MENU_KEY_RIGHT) {
-		if(newcurstate < states.size() - 1) {
+	else if (key == MENU_KEY_RIGHT) {
+		if (newcurstate < static_cast<int>(states.size()) - 1) {
 			newcurstate++;
-			//if(action != NULL) action(curstate);
 		}
 	}
 }

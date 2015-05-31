@@ -7,28 +7,28 @@
 #include <GL/gl.h>
 #endif
 
-#define button_left		0.05f
-#define button_top		0.05f
-#define button_width		(1.0f - 2.0f * button_left) //0.75f
-#define button_height		0.15f
-#define button_separation	0.05f
-#define font_size		0.05f
-#define button_text_padding	0.055f
+const float kMenuDrawButtonLeft         = 0.05f;
+const float kMenuDrawButtonTop          = 0.05f;
+const float kMenuDrawButtonWidth        = (1.0f - 2.0f * kMenuDrawButtonLeft);
+const float kMenuDrawButtonHeight       = 0.15f;
+const float kMenuDrawButtonSeparation   = 0.05f;
+const float kMenuDrawFontSize           = 0.05f;
+const float kMenuDrawButtonTextPadding  = 0.055f;
 
-#define toggle_dist_from_back	0.2f
+const float kMenuDrawToggleDistanceFromBack = 0.2f;
 
-#define input_left		0.15f
-#define input_right		0.85f
-#define input_top		0.3f
-#define input_bottom		0.7f
-#define input_title_left	0.02f
-#define input_title_top		0.02f
-#define input_textfield_left	0.02f
-#define input_textfield_top	0.09f
-#define input_textfield_width	0.66f
-#define input_textfield_height	0.07f
+const float kMenuDrawInputLeft              = 0.15f;
+const float kMenuDrawInputRight             = 0.85f;
+const float kMenuDrawInputTop               = 0.3f;
+const float kMenuDrawInputBottom            = 0.7f;
+const float kMenuDrawInputTitleLeft         = 0.02f;
+const float kMenuDrawInputTitleTop          = 0.02f;
+const float kMenuDrawInputTextfieldLeft     = 0.02f;
+const float kMenuDrawInputTextfieldTop      = 0.09f;
+const float kMenuDrawInputTextfieldWidth    = 0.66f;
+const float kMenuDrawInputTextfieldHeight   = 0.07f;
 
-#define menu_alpha 200
+const int8_t kMenuDrawMenuAlpha = 200;
 
 using std::string;
 
@@ -54,7 +54,7 @@ void Menu::drawMenu() {
 
 void Menu::draw() {
 	if(!is_item_active || menuItems[current_index]->shouldMenuBeDrawn()) {
-		glColor4ub(167,155,155,transparent?menu_alpha:255);
+		glColor4ub(167,155,155,transparent?kMenuDrawMenuAlpha:255);
 		glBegin(GL_QUADS);
 		glVertex3f(0.0f, 0.0f, 0.0f);
 		glVertex3f(0.0f, 1.0f, 0.0f);
@@ -62,19 +62,20 @@ void Menu::draw() {
 		glVertex3f(1.0f, 0.0f, 0.0f);
 		glEnd();
 
-		for(int i = 0; i < (int)menuItems.size(); i++) {
+		for (int i = 0; i < static_cast<int>(menuItems.size()); i++) {
 			menuItems[i]->draw(i == current_index, 
-				button_left,
-				button_top + i * (button_height + button_separation),
-				button_width,
-				button_height,
-				transparent ? menu_alpha : 255	
+				kMenuDrawButtonLeft,
+				kMenuDrawButtonTop + i * (kMenuDrawButtonHeight + kMenuDrawButtonSeparation),
+				kMenuDrawButtonWidth,
+				kMenuDrawButtonHeight,
+				transparent ? kMenuDrawMenuAlpha : 255	
 			);
 		}
 	}
 
-	if(is_item_active)
-		menuItems[current_index]->drawAsActive(transparent?menu_alpha:255);
+    if (is_item_active) {
+		menuItems[current_index]->drawAsActive(transparent?kMenuDrawMenuAlpha:255);
+    }
 }
 
 #define selected_r 		40
@@ -91,15 +92,15 @@ static void draw_button(bool selected, string const& text, float x, float y, flo
 		glColor4ub(unselected_r,unselected_g,unselected_b,alpha);
     }
 
-	glBegin(GL_QUADS);
-	glVertex3f(x, y, 0.0f);
-	glVertex3f(x, y+height, 0.0f);
-	glVertex3f(x+width, y+height, 0.0f);
-	glVertex3f(x+width, y, 0.0f);
-	glEnd();
+    glBegin(GL_QUADS); {
+        glVertex3f(x, y, 0.0f);
+        glVertex3f(x, y+height, 0.0f);
+        glVertex3f(x+width, y+height, 0.0f);
+        glVertex3f(x+width, y, 0.0f);
+    } glEnd();
 
-	glColor4ub(255,255,255,menu_alpha);
-	textquad tq(x + button_text_padding, y + (height - font_size) * 0.5f, 0.0f, x + button_text_padding, y + (height + font_size) * 0.5f, 0.0f, 0.05f, 0.0f, 0.0f);
+	glColor4ub(255,255,255,kMenuDrawMenuAlpha);
+	textquad tq(x + kMenuDrawButtonTextPadding, y + (height - kMenuDrawFontSize) * 0.5f, 0.0f, x + kMenuDrawButtonTextPadding, y + (height + kMenuDrawFontSize) * 0.5f, 0.0f, 0.05f, 0.0f, 0.0f);
 	draw_str(tq, text);
 }
 
@@ -111,11 +112,11 @@ void MenuItem::draw(bool selected, float x, float y, float width, float height, 
 
 void SubMenuItem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
 	draw_button(selected, name_.c_str(), x, y, width, height, alpha);
-	glBegin(GL_TRIANGLES);
-	glVertex3f(x + 0.01f, y + 0.03f, 0.0f);
-	glVertex3f(x + 0.01f, y + 0.12f, 0.0f);
-	glVertex3f(x + 0.045f, y + 0.075f, 0.0f);
-	glEnd();
+    glBegin(GL_TRIANGLES); {
+        glVertex3f(x + 0.01f, y + 0.03f, 0.0f);
+        glVertex3f(x + 0.01f, y + 0.12f, 0.0f);
+        glVertex3f(x + 0.045f, y + 0.075f, 0.0f);
+    } glEnd();
 }
 
 void SubMenuItem::drawAsActive(unsigned char) {
@@ -123,53 +124,53 @@ void SubMenuItem::drawAsActive(unsigned char) {
 }
 
 void InputMenuItem::drawAsActive(unsigned char alpha) {
-	glBegin(GL_QUADS);
-	glColor4ub(75,75,75,alpha);
-	glVertex3f(input_left, input_top, 0.0f);
-	glVertex3f(input_left, input_bottom, 0.0f);
-	glVertex3f(input_right, input_bottom, 0.0f);
-	glVertex3f(input_right, input_top, 0.0f);
-	glColor4ub(150,150,150,alpha);
-	glVertex3f(input_left + input_textfield_left, input_top + input_textfield_top, 0.0f);
-	glVertex3f(input_left + input_textfield_left + input_textfield_width, 
-			input_top + input_textfield_top, 0.0f);
-	glVertex3f(input_left + input_textfield_left + input_textfield_width,
-			input_top + input_textfield_top + input_textfield_height, 0.0f);
-	glVertex3f(input_left + input_textfield_left,
-			input_top + input_textfield_top + input_textfield_height, 0.0f);
-	glEnd();
+    glBegin(GL_QUADS); {
+        glColor4ub(75,75,75,alpha);
+        glVertex3f(kMenuDrawInputLeft, kMenuDrawInputTop, 0.0f);
+        glVertex3f(kMenuDrawInputLeft, kMenuDrawInputBottom, 0.0f);
+        glVertex3f(kMenuDrawInputRight, kMenuDrawInputBottom, 0.0f);
+        glVertex3f(kMenuDrawInputRight, kMenuDrawInputTop, 0.0f);
+        glColor4ub(150,150,150,alpha);
+        glVertex3f(kMenuDrawInputLeft + kMenuDrawInputTextfieldLeft, kMenuDrawInputTop + kMenuDrawInputTextfieldTop, 0.0f);
+        glVertex3f(kMenuDrawInputLeft + kMenuDrawInputTextfieldLeft + kMenuDrawInputTextfieldWidth, 
+                kMenuDrawInputTop + kMenuDrawInputTextfieldTop, 0.0f);
+        glVertex3f(kMenuDrawInputLeft + kMenuDrawInputTextfieldLeft + kMenuDrawInputTextfieldWidth,
+                kMenuDrawInputTop + kMenuDrawInputTextfieldTop + kMenuDrawInputTextfieldHeight, 0.0f);
+        glVertex3f(kMenuDrawInputLeft + kMenuDrawInputTextfieldLeft,
+                kMenuDrawInputTop + kMenuDrawInputTextfieldTop + kMenuDrawInputTextfieldHeight, 0.0f);
+    } glEnd();
 
 	glColor4ub(0,0,0,255); //Make text opaque
 
-	if(text != "") {
-		textquad tq(input_left + input_title_left,
-				input_top + input_title_top,
+	if ("" != text) {
+		textquad tq(kMenuDrawInputLeft + kMenuDrawInputTitleLeft,
+				kMenuDrawInputTop + kMenuDrawInputTitleTop,
 				0.0f,
-				input_left + input_title_left,
-				input_top + input_title_top + font_size,
+				kMenuDrawInputLeft + kMenuDrawInputTitleLeft,
+				kMenuDrawInputTop + kMenuDrawInputTitleTop + kMenuDrawFontSize,
 				0.0f,
 				0.05f, 0.0f, 0.0f);
 		draw_str(tq, text);
 	}
 
-	if(input != NULL) {
-		textquad tq(input_left + input_textfield_left + 0.02f,
-				input_top + input_textfield_top + 0.02f,
+	if (nullptr != input) {
+		textquad tq(kMenuDrawInputLeft + kMenuDrawInputTextfieldLeft + 0.02f,
+				kMenuDrawInputTop + kMenuDrawInputTextfieldTop + 0.02f,
 				0.0f,
-				input_left + input_textfield_left + 0.02f,
-				input_top + input_textfield_top + font_size + 0.02f,
+				kMenuDrawInputLeft + kMenuDrawInputTextfieldLeft + 0.02f,
+				kMenuDrawInputTop + kMenuDrawInputTextfieldTop + kMenuDrawFontSize + 0.02f,
 				0.0f,
 				0.05f, 0.0f, 0.0f);
 		draw_str(tq, std::string(input, len));
 	}
 
-	if(displayError && invalidInputError != "") {
+	if (displayError && "" != invalidInputError) {
 		glColor4ub(255,0,0,255);
-		textquad tq(input_left + input_textfield_left + 0.02f,
-				input_top + input_textfield_top + input_textfield_height + 0.02f,
+		textquad tq(kMenuDrawInputLeft + kMenuDrawInputTextfieldLeft + 0.02f,
+				kMenuDrawInputTop + kMenuDrawInputTextfieldTop + kMenuDrawInputTextfieldHeight + 0.02f,
 				0.0f,
-				input_left + input_textfield_left + 0.02f,
-				input_top + input_textfield_top + input_textfield_height + font_size + 0.02f,
+				kMenuDrawInputLeft + kMenuDrawInputTextfieldLeft + 0.02f,
+				kMenuDrawInputTop + kMenuDrawInputTextfieldTop + kMenuDrawInputTextfieldHeight + kMenuDrawFontSize + 0.02f,
 				0.0f,
 				0.05f, 0.0f, 0.0f);
 		draw_str(tq, invalidInputError);
@@ -179,11 +180,11 @@ void InputMenuItem::drawAsActive(unsigned char alpha) {
 
 void ToggleMenuItem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
 	draw_button(selected, name_, x, y, width, height, alpha);
-	textquad tq(x + width - toggle_dist_from_back,
-			y + (height - font_size) * 0.5f,
+	textquad tq(x + width - kMenuDrawToggleDistanceFromBack,
+			y + (height - kMenuDrawFontSize) * 0.5f,
 			0.0f,
-			x + width - toggle_dist_from_back,
-			y + (height + font_size) * 0.5f,
+			x + width - kMenuDrawToggleDistanceFromBack,
+			y + (height + kMenuDrawFontSize) * 0.5f,
 			0.0f, 0.05f, 0.0f, 0.0f);
 	if(state) {
 		glColor4ub(0,255,0,alpha);
@@ -205,7 +206,7 @@ void ToggleMenuItem::draw(bool selected, float x, float y, float width, float he
 #define slider_text_bottom	0.9f
 #define slider_text_name_top	0.1f
 #define slider_text_name_bottom	0.4f
-#define slider_text_name_left	button_left + 0.02f
+#define slider_text_name_left	kMenuDrawButtonLeft + 0.02f
 
 void SliderMenuItem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
 	glColor4ub(0,0,0,alpha);

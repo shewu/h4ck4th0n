@@ -3,6 +3,7 @@
 #else
 #include <OpenGL/glu.h>
 #endif
+#include <numeric>
 #include <cstdio>
 #include <cstdlib>
 #include "Font.h"
@@ -73,27 +74,26 @@ void draw_str(textquad tq, string const& text) {
 	glBindTexture(GL_TEXTURE_2D, font_texture);
 
 	glBegin(GL_QUADS);
-	for(int i = 0; i < text.size(); i++) {
-		float x1 = character_x1[(int)text[i]];
-		float x2 = character_x2[(int)text[i]];
-		float y1 = character_y1[(int)text[i]];
-		float y2 = character_y2[(int)text[i]];
-		float s = (x2 - x1) * 16.0f;
-		glTexCoord2f(x1, y1); glVertex3f(tq.x1, tq.y1, tq.z1);
-		glTexCoord2f(x1, y2); glVertex3f(tq.x2, tq.y2, tq.z2);
-		glTexCoord2f(x2, y2); glVertex3f(tq.x2 + tq.dx * s, tq.y2 + tq.dy * s, tq.z2 + tq.dz * s);
-		glTexCoord2f(x2, y1); glVertex3f(tq.x1 + tq.dx * s, tq.y1 + tq.dy * s, tq.z1 + tq.dz * s);
-		tq.inc(s);
-	}
+    for (auto& textElt : text) {
+        const float x1 = character_x1[static_cast<int>(textElt)];
+        const float x2 = character_x2[static_cast<int>(textElt)];
+        const float y1 = character_y1[static_cast<int>(textElt)];
+        const float y2 = character_y2[static_cast<int>(textElt)];
+        const float s = (x2 - x1) * 16.0f;
+        glTexCoord2f(x1, y1); glVertex3f(tq.x1, tq.y1, tq.z1);
+        glTexCoord2f(x1, y2); glVertex3f(tq.x2, tq.y2, tq.z2);
+        glTexCoord2f(x2, y2); glVertex3f(tq.x2 + tq.dx * s, tq.y2 + tq.dy * s, tq.z2 + tq.dz * s);
+        glTexCoord2f(x2, y1); glVertex3f(tq.x1 + tq.dx * s, tq.y1 + tq.dy * s, tq.z1 + tq.dz * s);
+        tq.inc(s);
+    }
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 }
 
 void draw_str_center(textquad tq, string const& text) {
-	float width = 0.0f;
-	for(int i = 0; i < text.size(); i++) {
-		width += character_x2[(int)text[i]] - character_x1[(int)text[i]];
-	}
+    const float width = std::accumulate(text.begin(), text.end(), 0.0f, [](float acc, const char& textElt) {
+        return acc + character_x2[static_cast<int>(textElt)] - character_x1[static_cast<int>(textElt)];
+    });
 	tq.inc(-width * 8.0f);
 	draw_str(tq, text);
 }

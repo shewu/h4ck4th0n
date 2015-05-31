@@ -189,10 +189,10 @@ void GameViewController::process() {
 	alListenerfv(AL_ORIENTATION, alori);
 	if (((++count)%100) == 0) {
 		int time = SDL_GetTicks();
-		float fps = 100000./(time - oldTime);
+		const float fps = 100000.f/(time - oldTime);
 		printf("\r");
 		std::cout.width(6);
-		std::cout << (int)fps << "fps" << std::flush;
+        std::cout << static_cast<int>(fps) << "fps" << std::flush;
 		oldTime = time;
 	}
 }
@@ -240,10 +240,10 @@ void GameViewController::_initMenus() {
 
 	// first, determine which set of resolutions we should use. 
 	const float ratio = getAspectRatio();
-	const float d5x4 = fabs(ratio - FIVE_BY_FOUR);
-	const float d4x3 = fabs(ratio - FOUR_BY_THREE);
-	const float d16x10 = fabs(ratio - SIXTEEN_BY_TEN);
-	const float d16x9 = fabs(ratio - SIXTEEN_BY_NINE);
+    const float d5x4 = std::abs(ratio - FIVE_BY_FOUR);
+    const float d4x3 = std::abs(ratio - FOUR_BY_THREE);
+    const float d16x10 = std::abs(ratio - SIXTEEN_BY_TEN);
+    const float d16x9 = std::abs(ratio - SIXTEEN_BY_NINE);
 	const int arg = argMin({d5x4, d4x3, d16x10, d16x9});
 
 	_resmenu = new Menu();

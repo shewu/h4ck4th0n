@@ -141,7 +141,7 @@ class Wall : public Object
 		float bouncinessCoefficient;
 
 	public:
-		Wall(MaterialPtr material, int wallType, float bouncinessCoefficient) :
+		Wall(MaterialPtr material, WallType wallType, float bouncinessCoefficient) :
 		    Object(material),
 		    wallType(wallType),
 		    bouncinessCoefficient(bouncinessCoefficient) {
@@ -167,7 +167,7 @@ class RectangularWall : public Wall
 		Vector2D p1, p2;
 	
 	public:
-		RectangularWall(MaterialPtr material, int wallType, float bouncinessCoefficient, Vector2D p1, Vector2D p2) :
+		RectangularWall(MaterialPtr material, WallType wallType, float bouncinessCoefficient, Vector2D p1, Vector2D p2) :
 		    Wall(material, wallType, bouncinessCoefficient),
 		    p1(p1), p2(p2) {
 		}
@@ -190,7 +190,7 @@ class RoundWall : public Wall
 
 	public:
 		// TODO these should just accept Descriptors as arguments
-		RoundWall(MaterialPtr material, int wallType, float bouncinessCoefficient,
+		RoundWall(MaterialPtr material, WallType wallType, float bouncinessCoefficient,
 		          Vector2D center, float radius, float theta1, float theta2) :
 		    Wall(material, wallType, bouncinessCoefficient),
 		    center(center),

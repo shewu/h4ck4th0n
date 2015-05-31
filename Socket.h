@@ -120,7 +120,7 @@ class SocketConnection {
 		void recv_data(char *buf, long length);
 		~SocketConnection();
 
-		int lastTimeReceived;
+		time_t lastTimeReceived;
 		int largestPacketNum;
 
 		struct sockaddr *get_addr() {

@@ -49,10 +49,11 @@ void Menu::keyInput(int key) {
 
 	if(key == MENU_KEY_UP) {
 		menuItems[current_index]->onDeselect();
-		if(current_index == 0)
-			current_index = menuItems.size() - 1;
-		else
+        if (current_index == 0) {
+			current_index = static_cast<int>(menuItems.size()) - 1;
+        } else {
 			current_index--;
+        }
 		menuItems[current_index]->onSelect();
 	}
 	else if(key == MENU_KEY_DOWN) {

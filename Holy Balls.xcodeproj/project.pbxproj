@@ -140,7 +140,6 @@
 		A83D1A091B1413AB001D6261 /* Font.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Font.h; sourceTree = SOURCE_ROOT; };
 		A83D1A0A1B1413AB001D6261 /* Game.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = SOURCE_ROOT; };
 		A83D1A0B1B1413AB001D6261 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = SOURCE_ROOT; };
-		A83D1A0C1B1413AB001D6261 /* hack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hack.h; sourceTree = SOURCE_ROOT; };
 		A83D1A0D1B1413AB001D6261 /* HBMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBMap.h; sourceTree = SOURCE_ROOT; };
 		A83D1A0E1B1413AB001D6261 /* HBViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBViewController.h; sourceTree = SOURCE_ROOT; };
 		A83D1A0F1B1413AB001D6261 /* HolyGameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HolyGameViewController.h; sourceTree = SOURCE_ROOT; };
@@ -287,42 +286,6 @@
 		A8A8DF441B07291B00D701AC /* Holy Balls */ = {
 			isa = PBXGroup;
 			children = (
-				A83D1A051B1413AB001D6261 /* clconstants.h */,
-				A83D1A061B1413AB001D6261 /* constants.h */,
-				A83D1A071B1413AB001D6261 /* CTFGame.h */,
-				A83D1A081B1413AB001D6261 /* Exceptions.h */,
-				A83D1A091B1413AB001D6261 /* Font.h */,
-				A83D1A0A1B1413AB001D6261 /* Game.h */,
-				A83D1A0B1B1413AB001D6261 /* GameViewController.h */,
-				A83D1A0C1B1413AB001D6261 /* hack.h */,
-				A83D1A0D1B1413AB001D6261 /* HBMap.h */,
-				A83D1A0E1B1413AB001D6261 /* HBViewController.h */,
-				A83D1A0F1B1413AB001D6261 /* HolyGameViewController.h */,
-				A83D1A101B1413AB001D6261 /* Light.h */,
-				A83D1A111B1413AB001D6261 /* Logging.h */,
-				A83D1A121B1413AB001D6261 /* mac.h */,
-				A83D1A131B1413AB001D6261 /* MapElements.h */,
-				A83D1A141B1413AB001D6261 /* MapInfo.h */,
-				A83D1A151B1413AB001D6261 /* Material.h */,
-				A83D1A161B1413AB001D6261 /* Menu.h */,
-				A83D1A171B1413AB001D6261 /* MirroringWorld.h */,
-				A83D1A181B1413AB001D6261 /* MultiGameViewController.h */,
-				A83D1A191B1413AB001D6261 /* NetworkProtocol.h */,
-				A83D1A1A1B1413AB001D6261 /* Object.h */,
-				A83D1A1B1B1413AB001D6261 /* Packet.h */,
-				A83D1A1C1B1413AB001D6261 /* PhysicsWorld.h */,
-				A83D1A1D1B1413AB001D6261 /* Render.h */,
-				A83D1A1E1B1413AB001D6261 /* server.h */,
-				A83D1A1F1B1413AB001D6261 /* ServerConnectViewController.h */,
-				A83D1A201B1413AB001D6261 /* Socket.h */,
-				A83D1A211B1413AB001D6261 /* Sound.h */,
-				A83D1A221B1413AB001D6261 /* SplashViewController.h */,
-				A83D1A231B1413AB001D6261 /* UnholyGameViewController.h */,
-				A83D1A241B1413AB001D6261 /* UserInput.h */,
-				A83D1A251B1413AB001D6261 /* Util.h */,
-				A83D1A261B1413AB001D6261 /* Vector.h */,
-				A83D1A271B1413AB001D6261 /* WallType.h */,
-				A83D1A281B1413AB001D6261 /* World.h */,
 				A8A8DFB31B08909100D701AC /* Client */,
 				A8A8DFB21B08900A00D701AC /* Server */,
 				A8A8DFB11B088FA100D701AC /* Common */,
@@ -333,6 +296,22 @@
 		A8A8DFB11B088FA100D701AC /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				A83D1A251B1413AB001D6261 /* Util.h */,
+				A83D1A121B1413AB001D6261 /* mac.h */,
+				A83D1A081B1413AB001D6261 /* Exceptions.h */,
+				A83D1A061B1413AB001D6261 /* constants.h */,
+				A83D1A101B1413AB001D6261 /* Light.h */,
+				A83D1A241B1413AB001D6261 /* UserInput.h */,
+				A83D1A131B1413AB001D6261 /* MapElements.h */,
+				A83D1A141B1413AB001D6261 /* MapInfo.h */,
+				A83D1A151B1413AB001D6261 /* Material.h */,
+				A83D1A1B1B1413AB001D6261 /* Packet.h */,
+				A83D1A1A1B1413AB001D6261 /* Object.h */,
+				A83D1A201B1413AB001D6261 /* Socket.h */,
+				A83D1A0D1B1413AB001D6261 /* HBMap.h */,
+				A83D1A261B1413AB001D6261 /* Vector.h */,
+				A83D1A271B1413AB001D6261 /* WallType.h */,
+				A83D1A281B1413AB001D6261 /* World.h */,
 				A83D1A441B1413AB001D6261 /* UserInput.cpp */,
 				A83D1A311B1413AB001D6261 /* MapElements.cpp */,
 				A83D1A321B1413AB001D6261 /* Material.cpp */,
@@ -349,6 +328,12 @@
 		A8A8DFB21B08900A00D701AC /* Server */ = {
 			isa = PBXGroup;
 			children = (
+				A83D1A071B1413AB001D6261 /* CTFGame.h */,
+				A83D1A171B1413AB001D6261 /* MirroringWorld.h */,
+				A83D1A1C1B1413AB001D6261 /* PhysicsWorld.h */,
+				A83D1A0A1B1413AB001D6261 /* Game.h */,
+				A83D1A1E1B1413AB001D6261 /* server.h */,
+				A83D1A111B1413AB001D6261 /* Logging.h */,
 				A83D1A461B14148F001D6261 /* PlaybackServer */,
 				A83D1A2A1B1413AB001D6261 /* CTFGame.cpp */,
 				A83D1A3C1B1413AB001D6261 /* PhysicsWorld.cpp */,
@@ -364,6 +349,19 @@
 		A8A8DFB31B08909100D701AC /* Client */ = {
 			isa = PBXGroup;
 			children = (
+				A83D1A091B1413AB001D6261 /* Font.h */,
+				A83D1A0B1B1413AB001D6261 /* GameViewController.h */,
+				A83D1A0E1B1413AB001D6261 /* HBViewController.h */,
+				A83D1A0F1B1413AB001D6261 /* HolyGameViewController.h */,
+				A83D1A161B1413AB001D6261 /* Menu.h */,
+				A83D1A181B1413AB001D6261 /* MultiGameViewController.h */,
+				A83D1A191B1413AB001D6261 /* NetworkProtocol.h */,
+				A83D1A1D1B1413AB001D6261 /* Render.h */,
+				A83D1A1F1B1413AB001D6261 /* ServerConnectViewController.h */,
+				A83D1A211B1413AB001D6261 /* Sound.h */,
+				A83D1A221B1413AB001D6261 /* SplashViewController.h */,
+				A83D1A231B1413AB001D6261 /* UnholyGameViewController.h */,
+				A83D1A051B1413AB001D6261 /* clconstants.h */,
 				A83D1A2F1B1413AB001D6261 /* HolyGameViewController.cpp */,
 				A83D1A371B1413AB001D6261 /* MultiGameViewController.cpp */,
 				A83D1A431B1413AB001D6261 /* UnholyGameViewController.cpp */,
@@ -679,10 +677,17 @@
 		A8A8DF4A1B07291B00D701AC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_ASSIGN_ENUM = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -690,10 +695,17 @@
 		A8A8DF4B1B07291B00D701AC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_ASSIGN_ENUM = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

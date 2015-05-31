@@ -6,22 +6,22 @@
 #include <list>
 #include <utility>
 
-const float FRICTION = 0.3;
+const float FRICTION = 0.3f;
 const float KEYPRESS_ACCELERATION = 6.0f;
-const float DEATH_RATE = 0.05;
-const float EPS = 0.000001;
-const unsigned MAX_EVENTS = 10;
+const float DEATH_RATE = 0.05f;
+const float EPS = 0.000001f;
+const int MAX_EVENTS = 10;
 const float SPAWN_TIME = 3;
-const float SPAWN_TRY = 0.1;
-const float SPAWN_PROB = 0.1;
-const unsigned MAX_CLIENTS = 32;
+const float SPAWN_TRY = 0.1f;
+const float SPAWN_PROB = 0.1f;
+const int MAX_CLIENTS = 32;
 
 const int PROTMAGIC = 0xee76f6a8;
-const unsigned MAXPACKET = 10240;
-const unsigned MAXQUEUE = 10000;
-const unsigned TIMEOUT = 5;
+const int MAXPACKET = 10240;
+const int MAXQUEUE = 10000;
+const int TIMEOUT = 5;
 
-const unsigned ALSRCS = 32;
+const int ALSRCS = 32;
 
 const unsigned AA = 1;
 
@@ -32,7 +32,7 @@ typedef enum {
 	kHBGameView
 } HBViewMode;
 
-const float CYL_ANGLE_DELTA = M_PI/90.;
+const float CYL_ANGLE_DELTA = static_cast<float>(M_PI/90.);
 
 const float FIVE_BY_FOUR = 1.25f;
 const float FOUR_BY_THREE = 1.33333f;

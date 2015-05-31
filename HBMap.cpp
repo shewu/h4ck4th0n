@@ -80,7 +80,7 @@ namespace {
 		if (angleDegrees <= -360 || angleDegrees > 360) {
 			throw ParseException("failure to parse angle: " + s + " should be in (-360, 360]");
 		}
-		return ((float) angleDegrees) * M_PI / 180.0f;
+		return static_cast<float>(angleDegrees * M_PI / 180.0f);
 	}
 
 	struct TokenizedLine {
@@ -91,8 +91,8 @@ namespace {
 			StringTokenizer rest(s);
 			while (rest.hasMoreTokens()) {
 				string tok = rest.nextToken();
-				int eqIndex = tok.find_first_of('=');
-				if (eqIndex == string::npos) {
+                const unsigned long eqIndex = tok.find_first_of('=');
+				if (string::npos == eqIndex) {
 					args.push_back(tok);
 				} else {
 					attributes[tok.substr(0, eqIndex)] = tok.substr(eqIndex + 1);
@@ -120,7 +120,7 @@ void HBMap::parse(string const& filename) {
 		getline(in, s);
 
 		// get rid of comments
-		int commentStartPos = s.find_first_of('%');
+		int commentStartPos = static_cast<int>(s.find_first_of('%'));
 		s = s.substr(0, commentStartPos);
 
 		if (cmd == "name") {
@@ -148,7 +148,7 @@ void HBMap::parseHBMapName(string const& s) {
 	mapName = s.substr(5, s.size());
 }
 
-GameMode parseGameMode(string str) {
+static GameMode parseGameMode(string str) {
 	for (int i = 0; i < NUM_GAMEMODES; ++i) {
 		if (str == modeStrings[i]) {
 			return (GameMode)i;

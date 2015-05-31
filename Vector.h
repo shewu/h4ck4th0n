@@ -56,11 +56,11 @@ class Vector2D
 		}
 
 		Vector2D getNormalVector() const {
-			if(*this == Vector2D(0,0)) {
+			if(Vector2D(0,0) == *this) {
 				fprintf(stderr, "[WARN] normalizing (0,0)!\n");
 				return *this;
 			}
-			return Vector2D(-y, x)*(1/sqrt(x*x+y*y));
+            return Vector2D(-y, x)*(1.f/std::sqrt(x*x+y*y));
 		}
 
 		Vector2D getRotation(const float theta) const {
@@ -72,20 +72,20 @@ class Vector2D
 		}
 
 		float length() const {
-			return sqrt(x*x + y*y);
+            return std::sqrt(x*x + y*y);
 		}
 
 		// returns value in [0, 2pi)
 		float getAngle() const {
-			float theta = atan2(y, x);
+            const float theta = std::atan2(y, x);
 			if (theta < 0.0) {
-				return theta + M_PI * 2.0;
+                return static_cast<float>(theta + M_PI * 2.0f);
 			}
 			return theta;
 		}
 
 		static Vector2D getUnitVector(float theta) {
-			return Vector2D(cosf(theta), sinf(theta));
+            return Vector2D(std::cos(theta), std::sin(theta));
 		}
 };
 

@@ -90,13 +90,13 @@ short ReadPacket::read_short() {
     short s;
     memcpy((void *)&s, (void *)&buf[index], 2);
     index += 2;
-    return ntohl(s);
+    return static_cast<short>(ntohl(s));
 }
 
 void WritePacket::write_short(short s) {
     while(size + 2 > max_size)
         _increase_buf_size();
-    s = htonl(s);
+    s = static_cast<short>(htonl(s));
     memcpy((void *)&buf[size], (void *)&s, 2);
     size += 2;
 }
@@ -157,7 +157,7 @@ inline uint64_t pack754(long double f, unsigned bits, unsigned expbits) {
     fnorm = fnorm - 1.0;
 
     // calculate the binary form (non-float) of the significand data
-    significand = fnorm * ((1LL<<significandbits) + 0.5f);
+    significand = static_cast<long long>(fnorm * ((1LL<<significandbits) + 0.5f));
 
     // get the biased exponent
     exp = shift + ((1<<(expbits-1)) - 1); // shift + bias

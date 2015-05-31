@@ -32,7 +32,8 @@ class MenuItem {
 		virtual void onDeselect();
 
 	protected:
-		std::string name;
+		std::string name_;
+        MenuItem(std::string const& name) : name_(name) {}
 	
 	friend class Menu;
 };
@@ -66,8 +67,8 @@ class Menu {
 // The subMenuItem "owns" its menu and will free it on destruction
 class SubMenuItem : public MenuItem {
 	public:
-		~SubMenuItem();
-		SubMenuItem(Menu *m, char *name);
+    ~SubMenuItem() {}
+    SubMenuItem(Menu *m, std::string&& name) : m(m), isActive(false), MenuItem(name) {}
 
 	private:
 		bool activate();
@@ -83,10 +84,7 @@ class SubMenuItem : public MenuItem {
 class ActionMenuItem : public MenuItem {
 	public:
 		~ActionMenuItem();
-		ActionMenuItem(const std::function<bool()>& init1, char *name1) {
-			init = init1;
-			name = name1;
-		}
+        ActionMenuItem(const std::function<bool()>& init1, std::string&& name1) : init(init1), MenuItem(name1) {}
 
 	private:
 		bool activate();
@@ -102,7 +100,7 @@ class InputMenuItem : public MenuItem {
 				std::string const& initInput,
 				std::string const& iie,
 				std::string const& t,
-				std::string const& nam) {
+                std::string const&& nam) : MenuItem(nam) {
 				maxlen = maxInputLen;
 			input = new char[maxlen+1];
 			strcpy(input, initInput.c_str());
@@ -113,7 +111,6 @@ class InputMenuItem : public MenuItem {
 			displayError = false;
 
 			text = t;
-			name = nam;
 		}
 		~InputMenuItem();
 
@@ -128,7 +125,7 @@ class InputMenuItem : public MenuItem {
 		char *input;
 		
 		std::string text;
-		int maxlen, len;
+		size_t maxlen, len;
 
 		std::string invalidInputError;
 		bool displayError;
@@ -137,11 +134,7 @@ class InputMenuItem : public MenuItem {
 
 class ToggleMenuItem : public MenuItem {
 	public:
-		ToggleMenuItem(char *name1, bool state1, const std::function<void(bool)>& act) {
-			name = name1;
-			state = state1;
-			action = act;
-		}
+        ToggleMenuItem(std::string&& name1, bool state1, const std::function<void(bool)>& act) : state(state1), action(act), MenuItem(name1) {}
 		~ToggleMenuItem();
 
 		bool getState();
@@ -157,10 +150,8 @@ class ToggleMenuItem : public MenuItem {
 
 class SliderMenuItem : public MenuItem {
 	public:
-		SliderMenuItem(char *name1, std::vector<std::string> states, int curstate1, const std::function<void(int)>& act):
-		states(states), curstate(curstate1), action(act) {
-			name = name1;
-		}
+        SliderMenuItem(std::string&& name1, std::vector<std::string> states, int curstate1, const std::function<void(int)>& act):
+		states(states), curstate(curstate1), action(act), MenuItem(name1) {}
 		~SliderMenuItem();
 
 		bool getState();

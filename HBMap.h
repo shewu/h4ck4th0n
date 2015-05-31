@@ -154,7 +154,7 @@ class HBMap {
 		/**
 		 * The maximum spawn region number.
 		 */
-		const static unsigned kMaxSpawnRegionNumber = 10;
+		const static int kMaxSpawnRegionNumber = 10;
 
 	private:
 		void parse(std::string const& filename);

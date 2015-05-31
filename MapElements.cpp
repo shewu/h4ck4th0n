@@ -1,6 +1,7 @@
 #include "MapElements.h"
 
 #include <cmath>
+#include <numeric>
 
 #include "assert.h"
 #include "Util.h"
@@ -26,13 +27,13 @@ float SpawnComponentLine::getArea() const {
 Vector2D SpawnComponentLine::getRandomPoint() const {
 	float a = random_uniform_float(0.0f, 1.0f);
 	return (a * _point1) + 
-	       ((1.0 - a) * _point2);
+	       ((1.0f - a) * _point2);
 }
 
 // SpawnComponentRectangle
 
 float SpawnComponentRectangle::getArea() const {
-	return abs((_point1.x - _point2.x) * (_point1.y - _point2.y));
+    return std::abs((_point1.x - _point2.x) * (_point1.y - _point2.y));
 }
 
 Vector2D SpawnComponentRectangle::getRandomPoint() const {
@@ -43,7 +44,7 @@ Vector2D SpawnComponentRectangle::getRandomPoint() const {
 // SpawnComponentTriangle
 
 float SpawnComponentTriangle::getArea() const {
-	return 0.5 * abs(_point1.x * _point2.y +
+    return 0.5f * std::abs(_point1.x * _point2.y +
 	                 _point2.x * _point3.y + 
 	                 _point3.x * _point1.y -
 	                 _point1.x * _point3.y -
@@ -58,7 +59,7 @@ Vector2D SpawnComponentTriangle::getRandomPoint() const {
 		a = 1.0f - a;
 		b = 1.0f - b;
 	}
-	return ((1.0 - a - b) * _point1) +
+	return ((1.0f - a - b) * _point1) +
 	       (a * _point2) +
 	       (b * _point3);
 }
@@ -66,15 +67,15 @@ Vector2D SpawnComponentTriangle::getRandomPoint() const {
 // Arc slice
 
 float SpawnComponentSlice::getArea() const {
-	float theta = _theta2 - _theta1;
-	return 0.5f * (theta - sinf(theta)) * _radius * _radius;
+	const float theta = _theta2 - _theta1;
+    return 0.5f * (theta - std::sin(theta)) * _radius * _radius;
 }
 
 Vector2D SpawnComponentSlice::getRandomPoint() const {
-	float theta = _theta2 - _theta1;
+	const float theta = _theta2 - _theta1;
 	float x, y;
-	float sinThetaOver2 = sinf(theta / 2.0f);
-	float cosThetaOver2 = cosf(theta / 2.0f);
+    float sinThetaOver2 = std::sin(theta / 2.0f);
+    float cosThetaOver2 = std::cos(theta / 2.0f);
 	do {
 		x = random_uniform_float(cosThetaOver2, 1.0f);
 		if (theta >= M_PI) {
@@ -89,13 +90,13 @@ Vector2D SpawnComponentSlice::getRandomPoint() const {
 // Sector
 
 float SpawnComponentSector::getArea() const {
-	float theta = _theta2 - _theta1;
+	const float theta = _theta2 - _theta1;
 	return 0.5f * theta * _radius * _radius;
 }
 
 Vector2D SpawnComponentSector::getRandomPoint() const {
-	float theta = random_uniform_float(_theta1, _theta2);
-	float r = sqrt(random_uniform_float(0.0f, 1.0f));
+	const float theta = random_uniform_float(_theta1, _theta2);
+    const float r = std::sqrt(random_uniform_float(0.0f, 1.0f));
 	return _center + (r * _radius * Vector2D::getUnitVector(theta));
 }
 
@@ -104,10 +105,9 @@ Vector2D SpawnComponentSector::getRandomPoint() const {
 Vector2D SpawnDescriptor::getRandomPoint() const {
 	assert(_components.size() > 0);
 
-	float totalArea = 0.0;
-	for (shared_ptr<SpawnComponent> const& sc : _components) {
-		totalArea += sc->getArea();
-	}
+    const float totalArea = std::accumulate(_components.begin(), _components.end(), 0.0f, [](const float acc, shared_ptr<SpawnComponent> const& sc) {
+        return acc + sc->getArea();
+    });
 
 	float r = random_uniform_float(0.0, totalArea);
 	int index = -1;

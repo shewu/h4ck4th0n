@@ -22,13 +22,13 @@ void UnholyGameViewController::_initGL() {
 	_quad = gluNewQuadric();
 	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 
-	GLfloat light_ambient[] = { 0.6, 0.6, 0.6, 1.0 };
-	GLfloat light_diffuse[] = { 0.4, 0.4, 0.4, 1.0 };
-	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
-	GLfloat mat_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
-	GLfloat mat_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
-	GLfloat mat_specular[] = { 0.8, 0.8, 0.8, 0.0 };
+	GLfloat light_ambient[] = { 0.6f, 0.6f, 0.6f, 1.0f };
+	GLfloat light_diffuse[] = { 0.4f, 0.4f, 0.4f, 1.0f };
+	GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	GLfloat light_position[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+	GLfloat mat_ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+	GLfloat mat_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+	GLfloat mat_specular[] = { 0.8f, 0.8f, 0.8f, 0.0f };
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
@@ -80,7 +80,7 @@ void UnholyGameViewController::render() {
 	glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glColor4f(1.0, 1.0, 1.0, 1.0);
-		_drawFloor(.82);
+		_drawFloor(.82f);
 	glDisable(GL_BLEND);
 
 	// draw the things right-side up
@@ -103,7 +103,7 @@ void UnholyGameViewController::_drawWalls() {
 	for (auto& iter : world->getRectangularWalls()) {
 		RectangularWall* wall = iter.second;
 		MaterialPtr color = wall->getMaterial();
-		glColor3f(color->getR()/255.0, color->getG()/255.0, color->getB()/255.0);
+		glColor3f(color->getR()/255.0f, color->getG()/255.0f, color->getB()/255.0f);
 		glVertex3f(wall->p1.x, wall->p1.y, 0);
 		glVertex3f(wall->p2.x, wall->p2.y, 0);
 		glVertex3f(wall->p2.x, wall->p2.y, 1);
@@ -113,18 +113,18 @@ void UnholyGameViewController::_drawWalls() {
 	for (auto& iter : world->getRoundWalls()) {
 		RoundWall* wall = iter.second;
 		MaterialPtr color = wall->getMaterial();
-		glColor3f(color->getR()/255.0, color->getG()/255.0, color->getB()/255.0);
+		glColor3f(color->getR()/255.0f, color->getG()/255.0f, color->getB()/255.0f);
 		float th1 = wall->theta1;
 		float th2 = wall->theta2;
 		for (float t = th1; t < th2; t += CYL_ANGLE_DELTA) {
-			glVertex3f(wall->center.x+wall->radius*cos(t), 
-						wall->center.y+wall->radius*sin(t), 0);
-			glVertex3f(wall->center.x+wall->radius*cos(t+CYL_ANGLE_DELTA), 
-						wall->center.y+wall->radius*sin(t+CYL_ANGLE_DELTA), 0);
-			glVertex3f(wall->center.x+wall->radius*cos(t+CYL_ANGLE_DELTA), 
-						wall->center.y+wall->radius*sin(t+CYL_ANGLE_DELTA), 1);
-			glVertex3f(wall->center.x+wall->radius*cos(t), 
-						wall->center.y+wall->radius*sin(t), 1);
+            glVertex3f(wall->center.x+wall->radius*std::cos(t),
+                       wall->center.y+wall->radius*std::sin(t), 0);
+            glVertex3f(wall->center.x+wall->radius*std::cos(t+CYL_ANGLE_DELTA),
+                       wall->center.y+wall->radius*std::sin(t+CYL_ANGLE_DELTA), 0);
+            glVertex3f(wall->center.x+wall->radius*std::cos(t+CYL_ANGLE_DELTA),
+                       wall->center.y+wall->radius*std::sin(t+CYL_ANGLE_DELTA), 1);
+            glVertex3f(wall->center.x+wall->radius*std::cos(t),
+                       wall->center.y+wall->radius*std::sin(t), 1);
 		}
 	}
 	glEnd();
@@ -138,7 +138,7 @@ void UnholyGameViewController::_drawObjects() {
 		glTranslatef(obj->center.x, obj->center.y, 0);
 		glScalef(obj->radius, obj->radius, obj->heightRatio*obj->radius);
 		MaterialPtr color = obj->getMaterial();
-		glColor3f(color->getR()/255.0, color->getG()/255.0, color->getB()/255.0);
+		glColor3f(color->getR()/255.0f, color->getG()/255.0f, color->getB()/255.0f);
 		gluSphere(_quad, 1.0, 50, 50);
 		glPopMatrix();
 	}

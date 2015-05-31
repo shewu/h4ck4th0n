@@ -85,10 +85,11 @@ void Menu::draw() {
 #define unselected_b		214
 
 void draw_button(bool selected, string const& text, float x, float y, float width, float height, GLubyte alpha) {
-	if(selected)
+    if (selected) {
 		glColor4ub(selected_r,selected_g,selected_b,alpha);
-	else
+    } else {
 		glColor4ub(unselected_r,unselected_g,unselected_b,alpha);
+    }
 
 	glBegin(GL_QUADS);
 	glVertex3f(x, y, 0.0f);
@@ -105,11 +106,11 @@ void draw_button(bool selected, string const& text, float x, float y, float widt
 void MenuItem::drawAsActive(unsigned char alpha) {}
 
 void MenuItem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
-	draw_button(selected, name.c_str(), x, y, width, height, alpha);
+	draw_button(selected, name_.c_str(), x, y, width, height, alpha);
 }
 
 void SubMenuItem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
-	draw_button(selected, name.c_str(), x, y, width, height, alpha);
+	draw_button(selected, name_.c_str(), x, y, width, height, alpha);
 	glBegin(GL_TRIANGLES);
 	glVertex3f(x + 0.01f, y + 0.03f, 0.0f);
 	glVertex3f(x + 0.01f, y + 0.12f, 0.0f);
@@ -177,7 +178,7 @@ void InputMenuItem::drawAsActive(unsigned char alpha) {
 }	
 
 void ToggleMenuItem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
-	draw_button(selected, name, x, y, width, height, alpha);
+	draw_button(selected, name_, x, y, width, height, alpha);
 	textquad tq(x + width - toggle_dist_from_back,
 			y + (height - font_size) * 0.5f,
 			0.0f,
@@ -208,20 +209,21 @@ void ToggleMenuItem::draw(bool selected, float x, float y, float width, float he
 
 void SliderMenuItem::draw(bool selected, float x, float y, float width, float height, unsigned char alpha) {
 	glColor4ub(0,0,0,alpha);
-	glBegin(GL_LINES);
-	glVertex3f(x + slider_left  * width, y + slider_line_height * height, 0.0f);
-	glVertex3f(x + slider_right * width, y + slider_line_height * height, 0.0f);
-	for(int i = 0; i < states.size(); i++) {
-		float tickx = x + width*(slider_right*(float)i + slider_left*(float)(states.size()-1-i)) / (float)(states.size()-1);
-		glVertex3f(tickx, y + slider_tick_top * height, 0.0f);
-		glVertex3f(tickx, y + slider_tick_bottom * height, 0.0f);
-	}
-	glEnd();
+    glBegin(GL_LINES); {
+        glVertex3f(x + slider_left  * width, y + slider_line_height * height, 0.0f);
+        glVertex3f(x + slider_right * width, y + slider_line_height * height, 0.0f);
+        for (int i = 0; i < states.size(); i++) {
+            float tickx = x + width*(slider_right*(float)i + slider_left*(float)(states.size()-1-i)) / (float)(states.size()-1);
+            glVertex3f(tickx, y + slider_tick_top * height, 0.0f);
+            glVertex3f(tickx, y + slider_tick_bottom * height, 0.0f);
+        }
+    } glEnd();
 
-	if(selected)
+    if (selected) {
 		glColor4ub(selected_r,selected_g,selected_b,alpha);
-	else
+    } else {
 		glColor4ub(unselected_r,unselected_g,unselected_b,alpha);
+    }
 	float rectx1 = x + width * ((slider_right * (float)curstate + slider_left * (float)(states.size()-1-curstate))/(float)(states.size()-1) - 0.5f * slider_slide_width);
 	float recty1 = y + height * (slider_line_height - 0.5f*slider_slide_height);
 	float recty2 = y + height * (slider_line_height + 0.5f*slider_slide_height);
@@ -230,7 +232,7 @@ void SliderMenuItem::draw(bool selected, float x, float y, float width, float he
 	glVertex3f(rectx1, recty2, 0.0f);
 	glVertex3f(rectx1 + slider_slide_width * width, recty2, 0.0f);
 	glVertex3f(rectx1 + slider_slide_width * width, recty1, 0.0f);
-	if(curstate != newcurstate) {
+	if (curstate != newcurstate) {
 		glColor4ub(selected_r,selected_g,selected_b,50);
 		rectx1 = x + width * ((slider_right * (float)newcurstate + slider_left * (float)(states.size()-1-newcurstate))/(float)(states.size()-1) - 0.5f * slider_slide_width);
 		glVertex3f(rectx1, recty1, 0.0f);
@@ -251,5 +253,5 @@ void SliderMenuItem::draw(bool selected, float x, float y, float width, float he
 	textquad tq(    slider_text_name_left * width, y+slider_text_name_top*height, 0.0f,
 			slider_text_name_left * width, y+slider_text_name_bottom*height, 0.0f,
 			(slider_text_name_bottom-slider_text_name_top)*height, 0.0f, 0.0f);
-	draw_str(tq, name);
+	draw_str(tq, name_);
 }

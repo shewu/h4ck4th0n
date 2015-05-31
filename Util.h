@@ -13,18 +13,8 @@
 
 #define TWO_PI (2.0 * M_PI);
 
-// Returns a mod m as an integer in [0, m)
-inline int modHandleNegative(int a, int m) {
-	a %= m;
-	if (a < 0) {
-		return a + m;
-	} else {
-		return a;
-	}
-}
-
 inline float random_uniform_float(const float l_, const float h_) {
-	return rand() / float(RAND_MAX) * (h_-l_) + l_;
+	return rand() / static_cast<float>(RAND_MAX) * (h_-l_) + l_;
 }
 
 template<typename T_>

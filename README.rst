@@ -6,8 +6,8 @@ TODO
 ====
 Proposed Gameplay
 -----------------
-    - Capture the flag based
-    - event engine interfaces with game engine that announces what happens, sends data to socket code to talk to client
+    * Capture the flag based
+    * event engine interfaces with game engine that announces what happens, sends data to socket code to talk to client
 
 Requirements
 ============
@@ -23,7 +23,7 @@ Requirements
 * The Mac version works on a Mac running Mac OS X 10.10 Yosemite or higher. Earlier versions have not been tested.
 
 Building
-=======
+========
 * Linux
 	- make
 		see 'make all'

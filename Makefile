@@ -15,9 +15,9 @@ else
 	CCFLAGS += -O2 -w
 endif
 
-UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW
-HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW
-#HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -L/opt/AMDAPP/lib/x86_64 -O2 -g
+UNHOLY_LDFLAGS=-lSDL2 -lGL -lGLU -lalut -lopenal -lGLEW
+HOLY_LDFLAGS=-lOpenCL -lSDL2 -lGL -lGLU -lalut -lopenal -lGLEW
+#HOLY_LDFLAGS=-lOpenCL -lSDL2 -lGL -lGLU -lalut -lopenal -lGLEW -L/opt/AMDAPP/lib/x86_64 -O2 -g
 
 PLAYBACKSERVER_TARGET=playback
 SERVER_TARGET=server

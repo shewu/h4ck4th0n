@@ -6,17 +6,17 @@
 #include "HBViewController.h"
 
 class ServerConnectViewController : public HBViewController {
-	private:
-		Menu* serverConnectMenu;
+private:
+    Menu *serverConnectMenu;
 
-	public:
-		ServerConnectViewController();
-		~ServerConnectViewController();
+public:
+    ServerConnectViewController();
+    ~ServerConnectViewController();
 
-		HBViewMode didFinishView();
-		void process();
-		void render();
-		bool quit();
+    HBViewMode didFinishView();
+    void process();
+    void render();
+    bool quit();
 };
 
 #endif

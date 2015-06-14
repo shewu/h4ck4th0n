@@ -105,4 +105,7 @@ clean:
 love:
 	echo 'In Soviet Russia, love makes you!'
 
+format:
+	cd src && find \( -name '*.cpp' -o -name '*.h' \) -print0 | xargs -0 clang-format -style=file -i
+
 -include $(wildcard $(DEP_DIR)/*.d)

@@ -27,34 +27,34 @@ extern int WIDTH;
 extern int HEIGHT;
 
 class GameViewController : public HBViewController {
-	public:
-		GameViewController();
-		~GameViewController();
-		HBViewMode didFinishView();
-		void process();
-		bool quit();
-		bool leave();
+public:
+    GameViewController();
+    ~GameViewController();
+    HBViewMode didFinishView();
+    void process();
+    bool quit();
+    bool leave();
 
-	protected:
-		unsigned int albuf[NUM_SOUND_TYPES], alsrcs[ALSRCS];
-		Socket *sock;
-		SocketConnection* sc;
-		std::unique_ptr<MirroringWorld> world;
-		float angle;
-		int latestPacket;
-		int count;
-		int oldTime;
-		Menu* mainmenu;
-		Menu* _resmenu;
+protected:
+    unsigned int albuf[NUM_SOUND_TYPES], alsrcs[ALSRCS];
+    Socket *sock;
+    SocketConnection *sc;
+    std::unique_ptr<MirroringWorld> world;
+    float angle;
+    int latestPacket;
+    int count;
+    int oldTime;
+    Menu *mainmenu;
+    Menu *_resmenu;
 
-		ALfloat pos[3], vel[3], ori[6];
-    
-        virtual void _initGL() = 0;
+    ALfloat pos[3], vel[3], ori[6];
 
-	private:
-		void _disconnect();
-		void _initMenus();
-        void _initSound();
+    virtual void _initGL() = 0;
+
+private:
+    void _disconnect();
+    void _initMenus();
+    void _initSound();
 };
 
 #endif

@@ -25,11 +25,11 @@ WritePacket::~WritePacket() {
 }
 
 void WritePacket::reset() {
-	size = 0;
+    size = 0;
 }
 
 void WritePacket::reset(int pos) {
-	size = pos;
+    size = pos;
 }
 
 // Constructor
@@ -52,15 +52,14 @@ ReadPacket::~ReadPacket() {
 // Read and write characters
 
 char ReadPacket::read_char() {
-    if(index == size)
+    if (index == size)
         return '\0';
     index++;
-    return buf[index-1];
+    return buf[index - 1];
 }
 
 void WritePacket::write_char(char c) {
-    while(size + 1 > max_size)
-        _increase_buf_size();
+    while (size + 1 > max_size) _increase_buf_size();
     buf[size] = c;
     size++;
 }
@@ -68,7 +67,7 @@ void WritePacket::write_char(char c) {
 // Read and write ints
 
 int ReadPacket::read_int() {
-    if(index > size - 4)
+    if (index > size - 4)
         return 0;
     int i;
     memcpy((void *)&i, (void *)&buf[index], 4);
@@ -77,15 +76,14 @@ int ReadPacket::read_int() {
 }
 
 void WritePacket::write_int(int i) {
-    while(size + 4 > max_size)
-        _increase_buf_size();
+    while (size + 4 > max_size) _increase_buf_size();
     i = htonl(i);
     memcpy((void *)&buf[size], (void *)&i, 4);
-    size += 4;    
+    size += 4;
 }
 
 short ReadPacket::read_short() {
-    if(index > size - 2)
+    if (index > size - 2)
         return 0;
     short s;
     memcpy((void *)&s, (void *)&buf[index], 2);
@@ -94,8 +92,7 @@ short ReadPacket::read_short() {
 }
 
 void WritePacket::write_short(short s) {
-    while(size + 2 > max_size)
-        _increase_buf_size();
+    while (size + 2 > max_size) _increase_buf_size();
     s = static_cast<short>(htonl(s));
     memcpy((void *)&buf[size], (void *)&s, 2);
     size += 2;
@@ -110,19 +107,18 @@ void WritePacket::write_short(short s) {
 
 string ReadPacket::read_string() {
     int length = (int)read_short();
-    if(length == 0 || index + length > size)
-        return (string)"";
+    if (length == 0 || index + length > size)
+        return (string) "";
     string s = string(buf + index, length);
     index += length;
     return s;
 }
 
-void WritePacket::write_string(string const& s) {
-	assert(s.size() < (1 << 15));
+void WritePacket::write_string(string const &s) {
+    assert(s.size() < (1 << 15));
 
     write_short((short)s.size());
-    while(size + (int)s.size() > max_size)
-        _increase_buf_size();
+    while (size + (int)s.size() > max_size) _increase_buf_size();
     memcpy((void *)(buf + size), (void *)s.data(), s.size());
     size += s.size();
 }
@@ -142,51 +138,71 @@ inline uint64_t pack754(long double f, unsigned bits, unsigned expbits) {
     long double fnorm;
     int shift;
     long long sign, exp, significand;
-    unsigned significandbits = bits - expbits - 1; // -1 for sign bit
+    unsigned significandbits = bits - expbits - 1;  // -1 for sign bit
 
-    if (f == 0.0) return 0; // get this special case out of the way
+    if (f == 0.0)
+        return 0;  // get this special case out of the way
 
     // check sign and begin normalization
-    if (f < 0) { sign = 1; fnorm = -f; }
-    else { sign = 0; fnorm = f; }
+    if (f < 0) {
+        sign = 1;
+        fnorm = -f;
+    } else {
+        sign = 0;
+        fnorm = f;
+    }
 
     // get the normalized form of f and track the exponent
     shift = 0;
-    while(fnorm >= 2.0) { fnorm /= 2.0; shift++; }
-    while(fnorm < 1.0) { fnorm *= 2.0; shift--; }
+    while (fnorm >= 2.0) {
+        fnorm /= 2.0;
+        shift++;
+    }
+    while (fnorm < 1.0) {
+        fnorm *= 2.0;
+        shift--;
+    }
     fnorm = fnorm - 1.0;
 
     // calculate the binary form (non-float) of the significand data
-    significand = static_cast<long long>(fnorm * ((1LL<<significandbits) + 0.5f));
+    significand =
+        static_cast<long long>(fnorm * ((1LL << significandbits) + 0.5f));
 
     // get the biased exponent
-    exp = shift + ((1<<(expbits-1)) - 1); // shift + bias
+    exp = shift + ((1 << (expbits - 1)) - 1);  // shift + bias
 
     // return the final answer
-    return (sign<<(bits-1)) | (exp<<(bits-expbits-1)) | significand;
+    return (sign << (bits - 1)) | (exp << (bits - expbits - 1)) | significand;
 }
 
 inline long double unpack754(uint64_t i, unsigned bits, unsigned expbits) {
     long double result;
     long long shift;
     unsigned bias;
-    unsigned significandbits = bits - expbits - 1; // -1 for sign bit
+    unsigned significandbits = bits - expbits - 1;  // -1 for sign bit
 
-    if (i == 0) return 0.0;
+    if (i == 0)
+        return 0.0;
 
     // pull the significand
-    result = (i&((1LL<<significandbits)-1)); // mask
-    result /= (1LL<<significandbits); // convert back to float
-    result += 1.0f; // add the one back on
+    result = (i & ((1LL << significandbits) - 1));  // mask
+    result /= (1LL << significandbits);             // convert back to float
+    result += 1.0f;                                 // add the one back on
 
     // deal with the exponent
-    bias = (1<<(expbits-1)) - 1;
-    shift = ((i>>significandbits)&((1LL<<expbits)-1)) - bias;
-    while(shift > 0) { result *= 2.0; shift--; }
-    while(shift < 0) { result /= 2.0; shift++; }
+    bias = (1 << (expbits - 1)) - 1;
+    shift = ((i >> significandbits) & ((1LL << expbits) - 1)) - bias;
+    while (shift > 0) {
+        result *= 2.0;
+        shift--;
+    }
+    while (shift < 0) {
+        result /= 2.0;
+        shift++;
+    }
 
     // sign it
-    result *= (i>>(bits-1))&1? -1.0: 1.0;
+    result *= (i >> (bits - 1)) & 1 ? -1.0 : 1.0;
 
     return result;
 }
@@ -196,7 +212,7 @@ void WritePacket::write_float(float f) {
 }
 
 float ReadPacket::read_float() {
-    if(index > size - 4)
+    if (index > size - 4)
         return 0.0f;
     return (float)unpack754_32(read_int());
 }
@@ -204,7 +220,7 @@ float ReadPacket::read_float() {
 // Make sure buf is large enough
 
 void WritePacket::_increase_buf_size() {
-	int new_max_size = (max_size > 0 ? max_size * 2 : 1);
+    int new_max_size = (max_size > 0 ? max_size * 2 : 1);
     char *buf2 = new char[new_max_size];
     memcpy(buf2, buf, size);
     delete[] buf;
@@ -215,18 +231,18 @@ void WritePacket::_increase_buf_size() {
 // Getters for WritePacket
 
 char WritePacket::getMessageType() const {
-	return message_type;
+    return message_type;
 }
 
 int WritePacket::getSize() const {
-	return size;
+    return size;
 }
 
-char const* WritePacket::getContents() const {
-	return buf;
+char const *WritePacket::getContents() const {
+    return buf;
 }
 
 void WritePacket::backup(int nbytes) {
-	assert(size >= nbytes);
-	size -= nbytes;
+    assert(size >= nbytes);
+    size -= nbytes;
 }

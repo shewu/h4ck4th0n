@@ -30,53 +30,51 @@
 */
 
 class WritePacket {
-    public:
-        WritePacket(char message_type, int max_size = 1);
-        virtual ~WritePacket();
+public:
+    WritePacket(char message_type, int max_size = 1);
+    virtual ~WritePacket();
 
-        void write_char(char c);
-        void write_int(int i);
-        void write_short(short s);
-        void write_float(float f);
-        void write_string(std::string const& s);
+    void write_char(char c);
+    void write_int(int i);
+    void write_short(short s);
+    void write_float(float f);
+    void write_string(std::string const &s);
 
-        void reset();
-        void reset(int);
-        void backup(int);
+    void reset();
+    void reset(int);
+    void backup(int);
 
-        char getMessageType() const;
-        int getSize() const;
-        char const* getContents() const;
+    char getMessageType() const;
+    int getSize() const;
+    char const *getContents() const;
 
-    private:
-        void _increase_buf_size();
+private:
+    void _increase_buf_size();
 
-        int max_size, size;
-        char *buf;
-        char message_type;
+    int max_size, size;
+    char *buf;
+    char message_type;
 };
 
 // TODO make stuff private
 class ReadPacket {
-    public:
-        ReadPacket(char message_type, long size, int packet_number);
-        virtual ~ReadPacket();
+public:
+    ReadPacket(char message_type, long size, int packet_number);
+    virtual ~ReadPacket();
 
-        bool hasBytesLeft() {
-        	return index < size;
-		}
+    bool hasBytesLeft() { return index < size; }
 
-        char read_char();
-        int read_int();
-        short read_short();
-        float read_float();
-        std::string read_string();
+    char read_char();
+    int read_int();
+    short read_short();
+    float read_float();
+    std::string read_string();
 
-        long size;
-        char *buf;
-        char message_type;
-        int index;
-        int packet_number;
+    long size;
+    char *buf;
+    char message_type;
+    int index;
+    int packet_number;
 };
 
 #endif

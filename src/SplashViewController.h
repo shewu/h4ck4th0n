@@ -6,17 +6,17 @@
 #include "HBViewController.h"
 
 class SplashViewController : public HBViewController {
-	private:
-		Menu* splashMenu;
+private:
+    Menu *splashMenu;
 
-	public:
-		SplashViewController();
-		~SplashViewController();
+public:
+    SplashViewController();
+    ~SplashViewController();
 
-		HBViewMode didFinishView();
-		void process();
-		void render();
-		bool quit();
+    HBViewMode didFinishView();
+    void process();
+    void render();
+    bool quit();
 };
 
 #endif

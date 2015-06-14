@@ -14,24 +14,23 @@
 #include "GameViewController.h"
 
 class HolyGameViewController : public GameViewController {
-	private:
-		void _initGL();
-		cl::Context context;
-		cl::Program program;
-		std::vector<cl::Device> devices;
-		cl::CommandQueue cq;
-		std::vector<cl::Memory> bs;
-		cl::ImageGL igl;
-		GLuint texture;
+private:
+    void _initGL();
+    cl::Context context;
+    cl::Program program;
+    std::vector<cl::Device> devices;
+    cl::CommandQueue cq;
+    std::vector<cl::Memory> bs;
+    cl::ImageGL igl;
+    GLuint texture;
 
-	public:
-		HolyGameViewController();
-		~HolyGameViewController();
+public:
+    HolyGameViewController();
+    ~HolyGameViewController();
 
-		void process();
-		void render();
-        bool change_resolution (int width, int height);
+    void process();
+    void render();
+    bool change_resolution(int width, int height);
 };
 
 #endif
-

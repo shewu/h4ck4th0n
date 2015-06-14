@@ -38,18 +38,18 @@ timeval tim;
 // instances as clients connect
 Socket *s;
 
-set<SocketConnection*> watchers;
+set<SocketConnection *> watchers;
 
 int main() {
     fstream f;
     f.open("logs/log", fstream::in | fstream::binary);
     if (f.fail()) {
-    	fprintf(stderr, "failed to open log, aborting\n");
-    	return 0;
-	}
+        fprintf(stderr, "failed to open log, aborting\n");
+        return 0;
+    }
 
-	// Get a socket file descriptor, and make
-	// a Socket instance
+    // Get a socket file descriptor, and make
+    // a Socket instance
     struct addrinfo hints, *res;
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
@@ -65,148 +65,141 @@ int main() {
     s = new Socket(sockfd);
     s->listen_for_client();
 
-	// TODO make it possible to set this at runtime
-	Game* game = new CTFGame(HBMap("custom.hbm", "CTF"));
-	game->init();
+    // TODO make it possible to set this at runtime
+    Game *game = new CTFGame(HBMap("custom.hbm", "CTF"));
+    game->init();
 
-	char buf[4];
+    char buf[4];
 
-	// Main server loop
-	bool quit = false;
-    while(!quit) {
-    	s->recv_all();
-		SocketConnection* sc = s->receiveConnection();
-		if (sc != NULL) {
-			watchers.insert(sc);
+    // Main server loop
+    bool quit = false;
+    while (!quit) {
+        s->recv_all();
+        SocketConnection *sc = s->receiveConnection();
+        if (sc != NULL) {
+            watchers.insert(sc);
 
-			printf("watcher added\n");
-		}
+            printf("watcher added\n");
+        }
 
-		for (SocketConnection* sc : watchers) {
-			ReadPacket* rp;
-			while((rp = sc->receive_packet()) != NULL) {
-				if (rp->message_type == CTS_CONNECT) {
-					WritePacket wp(STC_INIT_INFO, 0);
-					wp.write_float(0.0f);
-					game->getMap().writeToPacket(wp);
-					sc->send_packet(wp);
-				}
-				delete rp;
-			}
-		}
+        for (SocketConnection *sc : watchers) {
+            ReadPacket *rp;
+            while ((rp = sc->receive_packet()) != NULL) {
+                if (rp->message_type == CTS_CONNECT) {
+                    WritePacket wp(STC_INIT_INFO, 0);
+                    wp.write_float(0.0f);
+                    game->getMap().writeToPacket(wp);
+                    sc->send_packet(wp);
+                }
+                delete rp;
+            }
+        }
 
-		char type = f.get();
+        char type = f.get();
 
-		switch(type) {
-			case kLoggingRemovePlayer:
-				{
-					int playerID;
-					f.read(buf, 4);
-					memcpy((void *) &playerID, buf, 4);
+        switch (type) {
+            case kLoggingRemovePlayer: {
+                int playerID;
+                f.read(buf, 4);
+                memcpy((void *)&playerID, buf, 4);
 
-					game->removePlayer(playerID);
-				}
+                game->removePlayer(playerID);
+            }
 
-				break;
+            break;
 
-			case kLoggingAddPlayer:
-				{
-					int playerID;
-					f.read(buf, 4);
-					memcpy((void *) &playerID, buf, 4);
+            case kLoggingAddPlayer: {
+                int playerID;
+                f.read(buf, 4);
+                memcpy((void *)&playerID, buf, 4);
 
-					// not used, but need to pass as arg
-					WritePacket wp(STC_INIT_INFO, 0);
-					game->addPlayer(playerID, wp);
-				}
+                // not used, but need to pass as arg
+                WritePacket wp(STC_INIT_INFO, 0);
+                game->addPlayer(playerID, wp);
+            }
 
-				break;
+            break;
 
-			case kLoggingProcessPacket:
-				{
-					char message_type = f.get();
+            case kLoggingProcessPacket: {
+                char message_type = f.get();
 
-					int size;
-					f.read(buf, 4);
-					memcpy((void *) &size, buf, 4);
+                int size;
+                f.read(buf, 4);
+                memcpy((void *)&size, buf, 4);
 
-					int playerID;
-					f.read(buf, 4);
-					memcpy((void *) &playerID, buf, 4);
+                int playerID;
+                f.read(buf, 4);
+                memcpy((void *)&playerID, buf, 4);
 
-					int packet_number;
-					f.read(buf, 4);
-					memcpy((void *) &packet_number, buf, 4);
+                int packet_number;
+                f.read(buf, 4);
+                memcpy((void *)&packet_number, buf, 4);
 
-					ReadPacket rp(message_type, size, packet_number);
-					f.read(rp.buf, size);
+                ReadPacket rp(message_type, size, packet_number);
+                f.read(rp.buf, size);
 
-					game->processPacket(playerID, &rp);
-				}
+                game->processPacket(playerID, &rp);
+            }
 
-				break;
+            break;
 
-			case kLoggingDoSimulation:
-				{
-					float dt;
-					f.read(buf, 4);
-					memcpy((void *) &dt, buf, 4);
+            case kLoggingDoSimulation: {
+                float dt;
+                f.read(buf, 4);
+                memcpy((void *)&dt, buf, 4);
 
-					game->update(dt);
-					usleep((int)(dt * 1000000.0));
+                game->update(dt);
+                usleep((int)(dt * 1000000.0));
 
-					// Send the world state to all watchers
-					WritePacket worldWritePacket(STC_WORLD_DATA);
-					game->getWorld().writeToPacket(&worldWritePacket);
-					worldWritePacket.write_int(Game::kNoObjectExists);
-					for (SocketConnection* sc : watchers) {
-						sc->send_packet(worldWritePacket);
-					}
+                // Send the world state to all watchers
+                WritePacket worldWritePacket(STC_WORLD_DATA);
+                game->getWorld().writeToPacket(&worldWritePacket);
+                worldWritePacket.write_int(Game::kNoObjectExists);
+                for (SocketConnection *sc : watchers) {
+                    sc->send_packet(worldWritePacket);
+                }
 
-					// Send the sounds to all watchers
-					for (Sound const& sound : game->getSounds()) {
-						WritePacket wp(STC_SOUND, 9);
-						sound.writeToPacket(&wp);
-						for (SocketConnection* sc : watchers) {
-							sc->send_packet(wp);
-						}
-					}
-					game->clearSounds();
-				}
+                // Send the sounds to all watchers
+                for (Sound const &sound : game->getSounds()) {
+                    WritePacket wp(STC_SOUND, 9);
+                    sound.writeToPacket(&wp);
+                    for (SocketConnection *sc : watchers) {
+                        sc->send_packet(wp);
+                    }
+                }
+                game->clearSounds();
+            }
 
-				break;
+            break;
 
-			case kLoggingDone:
-				{
-					quit = true;
-				}
+            case kLoggingDone: {
+                quit = true;
+            }
 
-				break;
+            break;
 
-			case kLoggingRandomSeed:
-				{
-					unsigned int seed;
-					f.read(buf, 4);
-					memcpy((void *) &seed, buf, 4);
+            case kLoggingRandomSeed: {
+                unsigned int seed;
+                f.read(buf, 4);
+                memcpy((void *)&seed, buf, 4);
 
-					srand(seed);
-				}
+                srand(seed);
+            }
 
-				break;
+            break;
 
-			default:
-				{
-					fprintf(stderr, "error: unrecognized log code\n");
-					quit = true;
-				}
+            default: {
+                fprintf(stderr, "error: unrecognized log code\n");
+                quit = true;
+            }
 
-				break;
-		}
-	}
+            break;
+        }
+    }
 
-	// kill server
-	// should probably also deal with any clients
-	close(sockfd);
+    // kill server
+    // should probably also deal with any clients
+    close(sockfd);
 
-	f.close();
+    f.close();
 }

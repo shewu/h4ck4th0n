@@ -22,54 +22,55 @@ using std::max;
    - message type (constants in packet.h), 1 byte
    */
 
-SocketConnection::SocketConnection(int socket, sockaddr *addr, socklen_t addrlen, int my_id, int their_id) {
+SocketConnection::SocketConnection(int socket, sockaddr *addr,
+                                   socklen_t addrlen, int my_id, int their_id) {
     this->socket = socket;
     this->num_sent = 0;
     this->lastTimeReceived = time(NULL);
 
-	this->addr = (struct sockaddr *)malloc(addrlen);
-	memcpy(this->addr, addr, addrlen);
-	this->addrlen = addrlen;
-	this->my_id = my_id;
-	this->their_id = their_id;
+    this->addr = (struct sockaddr *)malloc(addrlen);
+    memcpy(this->addr, addr, addrlen);
+    this->addrlen = addrlen;
+    this->my_id = my_id;
+    this->their_id = their_id;
 
-	this->largestPacketNum = 0;
+    this->largestPacketNum = 0;
 }
 
 SocketConnection::~SocketConnection() {
     free(this->addr);
 }
 
-ReadPacket* SocketConnection::receive_packet() {
-	if(read_packets.size() == 0)
-		return NULL;
-	ReadPacket *rp = read_packets.front();
-	read_packets.pop();
+ReadPacket *SocketConnection::receive_packet() {
+    if (read_packets.size() == 0)
+        return NULL;
+    ReadPacket *rp = read_packets.front();
+    read_packets.pop();
 
-	largestPacketNum = max(largestPacketNum, rp->packet_number);
+    largestPacketNum = max(largestPacketNum, rp->packet_number);
 
-	return rp;
+    return rp;
 }
 
 void SocketConnection::recv_data(char *buf, long length) {
     if (length < 5) {
-    	return;
+        return;
     }
     int header;
     memcpy((void *)&header, (void *)buf, 4);
     int num = ntohl(header);
     char type = buf[4];
 
-    ReadPacket* rp = new ReadPacket(type, length - 5, num);
-    if(length - 5 > 0) {
-      memcpy(rp->buf, buf + 5, length - 5);
-	}
+    ReadPacket *rp = new ReadPacket(type, length - 5, num);
+    if (length - 5 > 0) {
+        memcpy(rp->buf, buf + 5, length - 5);
+    }
 
     lastTimeReceived = time(NULL);
-	read_packets.push(rp);
+    read_packets.push(rp);
 }
 
-void SocketConnection::send_packet(WritePacket const& wp) {
+void SocketConnection::send_packet(WritePacket const &wp) {
     int header_ints[3];
 
     int size = wp.getSize();

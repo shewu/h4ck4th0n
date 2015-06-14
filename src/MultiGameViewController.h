@@ -14,23 +14,22 @@
 #include "GameViewController.h"
 
 class MultiGameViewController : public GameViewController {
-	private:
-		void _initGL();
-		std::vector<cl::Context> deviceContexts;
-		std::vector<cl::Program> devicePrograms;
-		std::vector<cl::Device> devices;
-		std::vector<cl::Image2D> images;
-		std::vector<cl::CommandQueue> cqs;
-		GLuint texture;
-		int* pixels;
+private:
+    void _initGL();
+    std::vector<cl::Context> deviceContexts;
+    std::vector<cl::Program> devicePrograms;
+    std::vector<cl::Device> devices;
+    std::vector<cl::Image2D> images;
+    std::vector<cl::CommandQueue> cqs;
+    GLuint texture;
+    int *pixels;
 
-	public:
-		MultiGameViewController();
-		~MultiGameViewController();
+public:
+    MultiGameViewController();
+    ~MultiGameViewController();
 
-		void process();
-		void render();
+    void process();
+    void render();
 };
 
 #endif
-

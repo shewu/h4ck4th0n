@@ -10,12 +10,12 @@
 
 using namespace std;
 
-World::World(HBMap const& hbmap) : worldMap(hbmap) {
-	//rectangularWalls = worldMap.getRectangularWalls();
+World::World(HBMap const &hbmap) : worldMap(hbmap) {
+    // rectangularWalls = worldMap.getRectangularWalls();
 
-	Light l(Vector3D(0,0,10), Color(255,255,255));
-	lights.push_back(l);
-	
-	Light l2(Vector3D(0,30,20), Color(255,255,255));
-	lights.push_back(l2);
+    Light l(Vector3D(0, 0, 10), Color(255, 255, 255));
+    lights.push_back(l);
+
+    Light l2(Vector3D(0, 30, 20), Color(255, 255, 255));
+    lights.push_back(l2);
 }

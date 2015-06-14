@@ -6,13 +6,12 @@
 typedef char WallType;
 
 struct WallTypeData {
-	WallTypeData() { }
-	WallTypeData(WallType wallType, MaterialPtr material) :
-		wallType(wallType),
-		material(material) { }
+    WallTypeData() {}
+    WallTypeData(WallType wallType, MaterialPtr material)
+        : wallType(wallType), material(material) {}
 
-	WallType wallType;
-	MaterialPtr material;
+    WallType wallType;
+    MaterialPtr material;
 };
 
 #endif

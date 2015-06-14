@@ -12,11 +12,11 @@ static const char kLoggingDoSimulation = 3;
 static const char kLoggingDone = 4;
 static const char kLoggingRandomSeed = 5;
 
-void logRemovePlayer(std::fstream& f, int playerID);
-void logAddPlayer(std::fstream& f, int playerID);
-void logProcessPacket(std::fstream& f, int playerID, ReadPacket* rp);
-void logDoSimulation(std::fstream& f, float dt);
-void logDone(std::fstream& f);
-void logRandomSeed(std::fstream& f, unsigned int seed);
+void logRemovePlayer(std::fstream &f, int playerID);
+void logAddPlayer(std::fstream &f, int playerID);
+void logProcessPacket(std::fstream &f, int playerID, ReadPacket *rp);
+void logDoSimulation(std::fstream &f, float dt);
+void logDone(std::fstream &f);
+void logRandomSeed(std::fstream &f, unsigned int seed);
 
 #endif

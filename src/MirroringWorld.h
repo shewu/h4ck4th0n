@@ -3,18 +3,17 @@
 
 #include "World.h"
 
-class MirroringWorld : public World
-{
-	public:
-		MirroringWorld() : World(), myId_(-1) { }
-		MirroringWorld(HBMap const& hbmap) : World(hbmap), myId_(-1) { }
+class MirroringWorld : public World {
+public:
+    MirroringWorld() : World(), myId_(-1) {}
+    MirroringWorld(HBMap const &hbmap) : World(hbmap), myId_(-1) {}
 
-		void readFromPacket(ReadPacket *rp);
+    void readFromPacket(ReadPacket *rp);
 
-		MovingRoundObject* getMyObject();
+    MovingRoundObject *getMyObject();
 
-	private:
-		int myId_;
+private:
+    int myId_;
 };
 
 #endif

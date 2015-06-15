@@ -22,6 +22,13 @@ Requirements
         + OpenCL is required only for holyballs
 * The Mac version works on a Mac running Mac OS X 10.10 Yosemite or higher. Earlier versions have not been tested.
 
+Installing
+----------
+
+On Ubuntu:
+
+    apt-get install libsdl2-dev libglew-dev libalut-dev
+
 Building
 ========
 * Linux

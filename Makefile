@@ -4,6 +4,7 @@ LD=g++
 OBJ_DIR = bin/objs
 OUT_DIR = bin
 DEP_DIR = bin/deps
+SRC_DIR = src
 
 CCSTD = c++0x
 
@@ -15,9 +16,9 @@ else
 	CCFLAGS += -O2 -w
 endif
 
-UNHOLY_LDFLAGS=-lSDL -lGL -lGLU -lalut -lopenal -lGLEW
-HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW
-#HOLY_LDFLAGS=-lOpenCL -lSDL -lGL -lGLU -lalut -lopenal -lGLEW -L/opt/AMDAPP/lib/x86_64 -O2 -g
+UNHOLY_LDFLAGS=-lSDL2 -lGL -lGLU -lalut -lopenal -lGLEW
+HOLY_LDFLAGS=-lOpenCL -lSDL2 -lGL -lGLU -lalut -lopenal -lGLEW
+#HOLY_LDFLAGS=-lOpenCL -lSDL2 -lGL -lGLU -lalut -lopenal -lGLEW -L/opt/AMDAPP/lib/x86_64 -O2 -g
 
 PLAYBACKSERVER_TARGET=playback
 SERVER_TARGET=server
@@ -80,16 +81,16 @@ $(OUT_DIR)/$(HOLY_BALLS_TARGET): $(HOLY_BALLS_OBJECTS)
 $(OUT_DIR)/$(MULTI_BALLS_TARGET): $(MULTI_BALLS_OBJECTS)
 	$(LD) -o $(OUT_DIR)/$(MULTI_BALLS_TARGET) $(MULTI_BALLS_OBJECTS) $(HOLY_LDFLAGS)
 
-$(OBJ_DIR)/%.o: %.cpp
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) -c $(CCFLAGS) -o $@ $< -MF "$(DEP_DIR)/$(<:.cpp=.d)"
 
-$(OBJ_DIR)/Unholyclient.o: Client.cpp
+$(OBJ_DIR)/Unholyclient.o: $(SRC_DIR)/Client.cpp
 	$(CC) -c $(CCFLAGS) -DUNHOLY -o $@ $< -MF "$(DEP_DIR)/Unholyclient.d"
 
-$(OBJ_DIR)/Holyclient.o: Client.cpp
+$(OBJ_DIR)/Holyclient.o: $(SRC_DIR)/Client.cpp
 	$(CC) -c $(CCFLAGS) -o $@ $< -MF "$(DEP_DIR)/Holyclient.d"
 
-$(OBJ_DIR)/Multiclient.o: Client.cpp
+$(OBJ_DIR)/Multiclient.o: $(SRC_DIR)/Client.cpp
 	$(CC) -c $(CCFLAGS) -DMULTI -o $@ $< -MF "$(DEP_DIR)/Multiclient.d"
 
 test: $(SHARED_OBJECTS)
@@ -103,5 +104,8 @@ clean:
 
 love:
 	echo 'In Soviet Russia, love makes you!'
+
+format:
+	cd src && find \( -name '*.cpp' -o -name '*.h' \) -print0 | xargs -0 clang-format -style=file -i
 
 -include $(wildcard $(DEP_DIR)/*.d)

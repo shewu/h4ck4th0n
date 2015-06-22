@@ -61,6 +61,7 @@
 //                              be used where std::wstring is unavailable).
 //   GTEST_HAS_TR1_TUPLE      - Define it to 1/0 to indicate tr1::tuple
 //                              is/isn't available.
+#define GTEST_HAS_TR1_TUPLE 0
 //   GTEST_HAS_SEH            - Define it to 1/0 to indicate whether the
 //                              compiler supports Microsoft's "Structured
 //                              Exception Handling".

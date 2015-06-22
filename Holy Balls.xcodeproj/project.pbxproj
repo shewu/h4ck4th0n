@@ -133,70 +133,70 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A83D1A051B1413AB001D6261 /* clconstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = clconstants.h; sourceTree = SOURCE_ROOT; };
-		A83D1A061B1413AB001D6261 /* constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = SOURCE_ROOT; };
-		A83D1A071B1413AB001D6261 /* CTFGame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTFGame.h; sourceTree = SOURCE_ROOT; };
-		A83D1A081B1413AB001D6261 /* Exceptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Exceptions.h; sourceTree = SOURCE_ROOT; };
-		A83D1A091B1413AB001D6261 /* Font.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Font.h; sourceTree = SOURCE_ROOT; };
-		A83D1A0A1B1413AB001D6261 /* Game.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = SOURCE_ROOT; };
-		A83D1A0B1B1413AB001D6261 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = SOURCE_ROOT; };
-		A83D1A0D1B1413AB001D6261 /* HBMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBMap.h; sourceTree = SOURCE_ROOT; };
-		A83D1A0E1B1413AB001D6261 /* HBViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBViewController.h; sourceTree = SOURCE_ROOT; };
-		A83D1A0F1B1413AB001D6261 /* HolyGameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HolyGameViewController.h; sourceTree = SOURCE_ROOT; };
-		A83D1A101B1413AB001D6261 /* Light.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Light.h; sourceTree = SOURCE_ROOT; };
-		A83D1A111B1413AB001D6261 /* Logging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = SOURCE_ROOT; };
-		A83D1A121B1413AB001D6261 /* mac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mac.h; sourceTree = SOURCE_ROOT; };
-		A83D1A131B1413AB001D6261 /* MapElements.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapElements.h; sourceTree = SOURCE_ROOT; };
-		A83D1A141B1413AB001D6261 /* MapInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapInfo.h; sourceTree = SOURCE_ROOT; };
-		A83D1A151B1413AB001D6261 /* Material.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = SOURCE_ROOT; };
-		A83D1A161B1413AB001D6261 /* Menu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Menu.h; sourceTree = SOURCE_ROOT; };
-		A83D1A171B1413AB001D6261 /* MirroringWorld.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MirroringWorld.h; sourceTree = SOURCE_ROOT; };
-		A83D1A181B1413AB001D6261 /* MultiGameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MultiGameViewController.h; sourceTree = SOURCE_ROOT; };
-		A83D1A191B1413AB001D6261 /* NetworkProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkProtocol.h; sourceTree = SOURCE_ROOT; };
-		A83D1A1A1B1413AB001D6261 /* Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = SOURCE_ROOT; };
-		A83D1A1B1B1413AB001D6261 /* Packet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Packet.h; sourceTree = SOURCE_ROOT; };
-		A83D1A1C1B1413AB001D6261 /* PhysicsWorld.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhysicsWorld.h; sourceTree = SOURCE_ROOT; };
-		A83D1A1D1B1413AB001D6261 /* Render.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Render.h; sourceTree = SOURCE_ROOT; };
-		A83D1A1E1B1413AB001D6261 /* server.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = server.h; sourceTree = SOURCE_ROOT; };
-		A83D1A1F1B1413AB001D6261 /* ServerConnectViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServerConnectViewController.h; sourceTree = SOURCE_ROOT; };
-		A83D1A201B1413AB001D6261 /* Socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = SOURCE_ROOT; };
-		A83D1A211B1413AB001D6261 /* Sound.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sound.h; sourceTree = SOURCE_ROOT; };
-		A83D1A221B1413AB001D6261 /* SplashViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SplashViewController.h; sourceTree = SOURCE_ROOT; };
-		A83D1A231B1413AB001D6261 /* UnholyGameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnholyGameViewController.h; sourceTree = SOURCE_ROOT; };
-		A83D1A241B1413AB001D6261 /* UserInput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserInput.h; sourceTree = SOURCE_ROOT; };
-		A83D1A251B1413AB001D6261 /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = SOURCE_ROOT; };
-		A83D1A261B1413AB001D6261 /* Vector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = SOURCE_ROOT; };
-		A83D1A271B1413AB001D6261 /* WallType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WallType.h; sourceTree = SOURCE_ROOT; };
-		A83D1A281B1413AB001D6261 /* World.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = World.h; sourceTree = SOURCE_ROOT; };
-		A83D1A291B1413AB001D6261 /* Client.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Client.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A2A1B1413AB001D6261 /* CTFGame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CTFGame.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A2B1B1413AB001D6261 /* Font.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Font.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A2C1B1413AB001D6261 /* Game.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A2D1B1413AB001D6261 /* GameViewController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameViewController.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A2E1B1413AB001D6261 /* HBMap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HBMap.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A2F1B1413AB001D6261 /* HolyGameViewController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HolyGameViewController.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A301B1413AB001D6261 /* Logging.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Logging.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A311B1413AB001D6261 /* MapElements.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MapElements.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A321B1413AB001D6261 /* Material.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A331B1413AB001D6261 /* Menu.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Menu.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A341B1413AB001D6261 /* MenuDraw.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MenuDraw.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A351B1413AB001D6261 /* MenuItem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MenuItem.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A361B1413AB001D6261 /* MirroringWorld.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MirroringWorld.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A371B1413AB001D6261 /* MultiGameViewController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MultiGameViewController.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A381B1413AB001D6261 /* Object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A391B1413AB001D6261 /* Packet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Packet.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A3A1B1413AB001D6261 /* Physics.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Physics.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A3B1B1413AB001D6261 /* PhysicsForces.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicsForces.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A3C1B1413AB001D6261 /* PhysicsWorld.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicsWorld.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A3D1B1413AB001D6261 /* PlaybackServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PlaybackServer.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A3E1B1413AB001D6261 /* Server.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Server.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A3F1B1413AB001D6261 /* ServerConnectViewController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ServerConnectViewController.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A401B1413AB001D6261 /* Socket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Socket.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A411B1413AB001D6261 /* SocketConnection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SocketConnection.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A421B1413AB001D6261 /* SplashViewController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SplashViewController.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A431B1413AB001D6261 /* UnholyGameViewController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UnholyGameViewController.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A441B1413AB001D6261 /* UserInput.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UserInput.cpp; sourceTree = SOURCE_ROOT; };
-		A83D1A451B1413AB001D6261 /* World.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = World.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A051B1413AB001D6261 /* CLConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CLConstants.h; path = src/CLConstants.h; sourceTree = SOURCE_ROOT; };
+		A83D1A061B1413AB001D6261 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = src/Constants.h; sourceTree = SOURCE_ROOT; };
+		A83D1A071B1413AB001D6261 /* CTFGame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CTFGame.h; path = src/CTFGame.h; sourceTree = SOURCE_ROOT; };
+		A83D1A081B1413AB001D6261 /* Exceptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Exceptions.h; path = src/Exceptions.h; sourceTree = SOURCE_ROOT; };
+		A83D1A091B1413AB001D6261 /* Font.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Font.h; path = src/Font.h; sourceTree = SOURCE_ROOT; };
+		A83D1A0A1B1413AB001D6261 /* Game.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Game.h; path = src/Game.h; sourceTree = SOURCE_ROOT; };
+		A83D1A0B1B1413AB001D6261 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GameViewController.h; path = src/GameViewController.h; sourceTree = SOURCE_ROOT; };
+		A83D1A0D1B1413AB001D6261 /* HBMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HBMap.h; path = src/HBMap.h; sourceTree = SOURCE_ROOT; };
+		A83D1A0E1B1413AB001D6261 /* HBViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HBViewController.h; path = src/HBViewController.h; sourceTree = SOURCE_ROOT; };
+		A83D1A101B1413AB001D6261 /* Light.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Light.h; path = src/Light.h; sourceTree = SOURCE_ROOT; };
+		A83D1A111B1413AB001D6261 /* Logging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Logging.h; path = src/Logging.h; sourceTree = SOURCE_ROOT; };
+		A83D1A121B1413AB001D6261 /* mac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = mac.h; path = src/mac.h; sourceTree = SOURCE_ROOT; };
+		A83D1A131B1413AB001D6261 /* MapElements.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MapElements.h; path = src/MapElements.h; sourceTree = SOURCE_ROOT; };
+		A83D1A141B1413AB001D6261 /* MapInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MapInfo.h; path = src/MapInfo.h; sourceTree = SOURCE_ROOT; };
+		A83D1A151B1413AB001D6261 /* Material.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Material.h; path = src/Material.h; sourceTree = SOURCE_ROOT; };
+		A83D1A161B1413AB001D6261 /* Menu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Menu.h; path = src/Menu.h; sourceTree = SOURCE_ROOT; };
+		A83D1A171B1413AB001D6261 /* MirroringWorld.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MirroringWorld.h; path = src/MirroringWorld.h; sourceTree = SOURCE_ROOT; };
+		A83D1A181B1413AB001D6261 /* MultiGameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MultiGameViewController.h; path = src/MultiGameViewController.h; sourceTree = SOURCE_ROOT; };
+		A83D1A191B1413AB001D6261 /* NetworkProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NetworkProtocol.h; path = src/NetworkProtocol.h; sourceTree = SOURCE_ROOT; };
+		A83D1A1A1B1413AB001D6261 /* Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Object.h; path = src/Object.h; sourceTree = SOURCE_ROOT; };
+		A83D1A1B1B1413AB001D6261 /* Packet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Packet.h; path = src/Packet.h; sourceTree = SOURCE_ROOT; };
+		A83D1A1C1B1413AB001D6261 /* PhysicsWorld.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PhysicsWorld.h; path = src/PhysicsWorld.h; sourceTree = SOURCE_ROOT; };
+		A83D1A1D1B1413AB001D6261 /* Render.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Render.h; path = src/Render.h; sourceTree = SOURCE_ROOT; };
+		A83D1A1F1B1413AB001D6261 /* ServerConnectViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ServerConnectViewController.h; path = src/ServerConnectViewController.h; sourceTree = SOURCE_ROOT; };
+		A83D1A201B1413AB001D6261 /* Socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Socket.h; path = src/Socket.h; sourceTree = SOURCE_ROOT; };
+		A83D1A211B1413AB001D6261 /* Sound.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Sound.h; path = src/Sound.h; sourceTree = SOURCE_ROOT; };
+		A83D1A221B1413AB001D6261 /* SplashViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SplashViewController.h; path = src/SplashViewController.h; sourceTree = SOURCE_ROOT; };
+		A83D1A231B1413AB001D6261 /* UnholyGameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UnholyGameViewController.h; path = src/UnholyGameViewController.h; sourceTree = SOURCE_ROOT; };
+		A83D1A241B1413AB001D6261 /* UserInput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UserInput.h; path = src/UserInput.h; sourceTree = SOURCE_ROOT; };
+		A83D1A251B1413AB001D6261 /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Util.h; path = src/Util.h; sourceTree = SOURCE_ROOT; };
+		A83D1A261B1413AB001D6261 /* Vector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = src/Vector.h; sourceTree = SOURCE_ROOT; };
+		A83D1A271B1413AB001D6261 /* WallType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WallType.h; path = src/WallType.h; sourceTree = SOURCE_ROOT; };
+		A83D1A281B1413AB001D6261 /* World.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = World.h; path = src/World.h; sourceTree = SOURCE_ROOT; };
+		A83D1A291B1413AB001D6261 /* Client.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Client.cpp; path = src/Client.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A2A1B1413AB001D6261 /* CTFGame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CTFGame.cpp; path = src/CTFGame.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A2B1B1413AB001D6261 /* Font.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Font.cpp; path = src/Font.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A2C1B1413AB001D6261 /* Game.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Game.cpp; path = src/Game.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A2D1B1413AB001D6261 /* GameViewController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GameViewController.cpp; path = src/GameViewController.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A2E1B1413AB001D6261 /* HBMap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HBMap.cpp; path = src/HBMap.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A2F1B1413AB001D6261 /* HolyGameViewController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HolyGameViewController.cpp; path = src/HolyGameViewController.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A301B1413AB001D6261 /* Logging.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Logging.cpp; path = src/Logging.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A311B1413AB001D6261 /* MapElements.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MapElements.cpp; path = src/MapElements.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A321B1413AB001D6261 /* Material.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Material.cpp; path = src/Material.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A331B1413AB001D6261 /* Menu.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Menu.cpp; path = src/Menu.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A341B1413AB001D6261 /* MenuDraw.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MenuDraw.cpp; path = src/MenuDraw.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A351B1413AB001D6261 /* MenuItem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MenuItem.cpp; path = src/MenuItem.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A361B1413AB001D6261 /* MirroringWorld.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MirroringWorld.cpp; path = src/MirroringWorld.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A371B1413AB001D6261 /* MultiGameViewController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MultiGameViewController.cpp; path = src/MultiGameViewController.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A381B1413AB001D6261 /* Object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Object.cpp; path = src/Object.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A391B1413AB001D6261 /* Packet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Packet.cpp; path = src/Packet.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A3A1B1413AB001D6261 /* Physics.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Physics.cpp; path = src/Physics.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A3B1B1413AB001D6261 /* PhysicsForces.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsForces.cpp; path = src/PhysicsForces.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A3C1B1413AB001D6261 /* PhysicsWorld.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsWorld.cpp; path = src/PhysicsWorld.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A3D1B1413AB001D6261 /* PlaybackServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PlaybackServer.cpp; path = src/PlaybackServer.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A3E1B1413AB001D6261 /* Server.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Server.cpp; path = src/Server.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A3F1B1413AB001D6261 /* ServerConnectViewController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ServerConnectViewController.cpp; path = src/ServerConnectViewController.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A401B1413AB001D6261 /* Socket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Socket.cpp; path = src/Socket.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A411B1413AB001D6261 /* SocketConnection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SocketConnection.cpp; path = src/SocketConnection.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A421B1413AB001D6261 /* SplashViewController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SplashViewController.cpp; path = src/SplashViewController.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A431B1413AB001D6261 /* UnholyGameViewController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = UnholyGameViewController.cpp; path = src/UnholyGameViewController.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A441B1413AB001D6261 /* UserInput.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = UserInput.cpp; path = src/UserInput.cpp; sourceTree = SOURCE_ROOT; };
+		A83D1A451B1413AB001D6261 /* World.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = World.cpp; path = src/World.cpp; sourceTree = SOURCE_ROOT; };
+		A83F07731B37A82A00AA55A0 /* HolyGameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HolyGameViewController.h; path = src/HolyGameViewController.h; sourceTree = SOURCE_ROOT; };
+		A83F07741B37D57200AA55A0 /* cl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = cl.hpp; path = src/CL/cl.hpp; sourceTree = SOURCE_ROOT; };
 		A8A8DF421B07291B00D701AC /* unholyballs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unholyballs; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8A8DF8E1B072A9100D701AC /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		A8A8DF901B072B6800D701AC /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -299,7 +299,7 @@
 				A83D1A251B1413AB001D6261 /* Util.h */,
 				A83D1A121B1413AB001D6261 /* mac.h */,
 				A83D1A081B1413AB001D6261 /* Exceptions.h */,
-				A83D1A061B1413AB001D6261 /* constants.h */,
+				A83D1A061B1413AB001D6261 /* Constants.h */,
 				A83D1A101B1413AB001D6261 /* Light.h */,
 				A83D1A241B1413AB001D6261 /* UserInput.h */,
 				A83D1A131B1413AB001D6261 /* MapElements.h */,
@@ -332,7 +332,6 @@
 				A83D1A171B1413AB001D6261 /* MirroringWorld.h */,
 				A83D1A1C1B1413AB001D6261 /* PhysicsWorld.h */,
 				A83D1A0A1B1413AB001D6261 /* Game.h */,
-				A83D1A1E1B1413AB001D6261 /* server.h */,
 				A83D1A111B1413AB001D6261 /* Logging.h */,
 				A83D1A461B14148F001D6261 /* PlaybackServer */,
 				A83D1A2A1B1413AB001D6261 /* CTFGame.cpp */,
@@ -349,10 +348,11 @@
 		A8A8DFB31B08909100D701AC /* Client */ = {
 			isa = PBXGroup;
 			children = (
+				A83F07741B37D57200AA55A0 /* cl.hpp */,
 				A83D1A091B1413AB001D6261 /* Font.h */,
 				A83D1A0B1B1413AB001D6261 /* GameViewController.h */,
 				A83D1A0E1B1413AB001D6261 /* HBViewController.h */,
-				A83D1A0F1B1413AB001D6261 /* HolyGameViewController.h */,
+				A83F07731B37A82A00AA55A0 /* HolyGameViewController.h */,
 				A83D1A161B1413AB001D6261 /* Menu.h */,
 				A83D1A181B1413AB001D6261 /* MultiGameViewController.h */,
 				A83D1A191B1413AB001D6261 /* NetworkProtocol.h */,
@@ -361,7 +361,7 @@
 				A83D1A211B1413AB001D6261 /* Sound.h */,
 				A83D1A221B1413AB001D6261 /* SplashViewController.h */,
 				A83D1A231B1413AB001D6261 /* UnholyGameViewController.h */,
-				A83D1A051B1413AB001D6261 /* clconstants.h */,
+				A83D1A051B1413AB001D6261 /* CLConstants.h */,
 				A83D1A2F1B1413AB001D6261 /* HolyGameViewController.cpp */,
 				A83D1A371B1413AB001D6261 /* MultiGameViewController.cpp */,
 				A83D1A431B1413AB001D6261 /* UnholyGameViewController.cpp */,

@@ -58,6 +58,17 @@ EXECUTABLES=$(addprefix $(OUT_DIR)/,$(SERVER_TARGET) $(UNHOLY_BALLS_TARGET) $(HO
 
 executables: $(EXECUTABLES)
 
+directories: $(OBJ_DIR) $(OUT_DIR) $(DEP_DIR)
+
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+$(OUT_DIR):
+	mkdir -p $(OUT_DIR)
+
+$(DEP_DIR):
+	mkdir -p $(DEP_DIR)
+
 all: executables
 
 $(SERVER_TARGET) : $(OUT_DIR)/$(SERVER_TARGET)
@@ -66,44 +77,41 @@ $(UNHOLY_BALLS_TARGET) : $(OUT_DIR)/$(UNHOLY_BALLS_TARGET)
 $(HOLY_BALLS_TARGET) : $(OUT_DIR)/$(HOLY_BALLS_TARGET)
 $(MULTI_BALLS_TARGET) : $(OUT_DIR)/$(MULTI_BALLS_TARGET)
 
-$(OUT_DIR)/$(SERVER_TARGET): $(SERVER_OBJECTS)
+$(OUT_DIR)/$(SERVER_TARGET): $(OUT_DIR) $(SERVER_OBJECTS)
 	$(LD) -o $(OUT_DIR)/$(SERVER_TARGET) $(SERVER_OBJECTS) $(SERVER_LDFLAGS)
 
-$(OUT_DIR)/$(PLAYBACKSERVER_TARGET): $(PLAYBACKSERVER_OBJECTS)
+$(OUT_DIR)/$(PLAYBACKSERVER_TARGET): $(OUT_DIR) $(PLAYBACKSERVER_OBJECTS)
 	$(LD) -o $(OUT_DIR)/$(PLAYBACKSERVER_TARGET) $(PLAYBACKSERVER_OBJECTS) $(SERVER_LDFLAGS)
 
-$(OUT_DIR)/$(UNHOLY_BALLS_TARGET): $(UNHOLY_BALLS_OBJECTS)
+$(OUT_DIR)/$(UNHOLY_BALLS_TARGET): $(OUT_DIR) $(UNHOLY_BALLS_OBJECTS)
 	$(LD) -o $(OUT_DIR)/$(UNHOLY_BALLS_TARGET) $(UNHOLY_BALLS_OBJECTS) $(UNHOLY_LDFLAGS)
 
-$(OUT_DIR)/$(HOLY_BALLS_TARGET): $(HOLY_BALLS_OBJECTS)
+$(OUT_DIR)/$(HOLY_BALLS_TARGET): $(OUT_DIR) $(HOLY_BALLS_OBJECTS)
 	$(LD) -o $(OUT_DIR)/$(HOLY_BALLS_TARGET) $(HOLY_BALLS_OBJECTS) $(HOLY_LDFLAGS)
 
-$(OUT_DIR)/$(MULTI_BALLS_TARGET): $(MULTI_BALLS_OBJECTS)
+$(OUT_DIR)/$(MULTI_BALLS_TARGET): $(OUT_DIR) $(MULTI_BALLS_OBJECTS)
 	$(LD) -o $(OUT_DIR)/$(MULTI_BALLS_TARGET) $(MULTI_BALLS_OBJECTS) $(HOLY_LDFLAGS)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(OBJ_DIR)/%.o: $(DEP_DIR) $(OBJ_DIR) $(SRC_DIR)/%.cpp
 	$(CC) -c $(CCFLAGS) -o $@ $< -MF "$(DEP_DIR)/$(<:.cpp=.d)"
 
-$(OBJ_DIR)/Unholyclient.o: $(SRC_DIR)/Client.cpp
+$(OBJ_DIR)/Unholyclient.o: $(DEP_DIR) $(OBJ_DIR) $(SRC_DIR)/Client.cpp
 	$(CC) -c $(CCFLAGS) -DUNHOLY -o $@ $< -MF "$(DEP_DIR)/Unholyclient.d"
 
-$(OBJ_DIR)/Holyclient.o: $(SRC_DIR)/Client.cpp
+$(OBJ_DIR)/Holyclient.o: $(DEP_DIR) $(OBJ_DIR) $(SRC_DIR)/Client.cpp
 	$(CC) -c $(CCFLAGS) -o $@ $< -MF "$(DEP_DIR)/Holyclient.d"
 
-$(OBJ_DIR)/Multiclient.o: $(SRC_DIR)/Client.cpp
+$(OBJ_DIR)/Multiclient.o: $(DEP_DIR) $(OBJ_DIR) $(SRC_DIR)/Client.cpp
 	$(CC) -c $(CCFLAGS) -DMULTI -o $@ $< -MF "$(DEP_DIR)/Multiclient.d"
 
 test: $(SHARED_OBJECTS)
 	(cd tests; make test)
 
-test2: $(SHARED_OBJECTS)
-	(cd tests; make test2)
-
 clean:
 	rm -rf $(EXECUTABLES) $(OBJ_DIR)/*.o $(DEP_DIR)/*.d
 
 love:
-	echo 'In Soviet Russia, love makes you!'
+	@echo 'In Soviet Russia, love makes you!'
 
 format:
 	cd src && find \( -name '*.cpp' -o -name '*.h' \) -print0 | xargs -0 clang-format -style=file -i

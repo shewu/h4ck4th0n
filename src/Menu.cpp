@@ -1,9 +1,6 @@
 #include "Menu.h"
 
-Menu::Menu() {
-    current_index = 0;
-    is_item_active = false;
-    is_menu_active = false;
+Menu::Menu() : current_index(0), is_item_active(false), is_menu_active(false) {
     setAppearanceMiddle();
 }
 

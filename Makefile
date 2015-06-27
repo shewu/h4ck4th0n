@@ -1,5 +1,5 @@
-CC=g++
-LD=g++
+CC=clang++
+LD=clang++
 
 OBJ_DIR = bin/objs
 OUT_DIR = bin

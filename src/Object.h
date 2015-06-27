@@ -215,6 +215,7 @@ enum MovingObjectState {
     MOS_ALIVE,
     MOS_SHRINKING,
     MOS_DEAD,
+    MOS_BEING_SWALLOWED,
 
     MOS_NUM_STATES
 };
@@ -233,8 +234,12 @@ private:
     float timeUntilSpawn;
 
     // MOS_SHRINKING
-    MovingRoundObject *parent;
+    MovingRoundObject *shrinkingParent;
     int numChildren;
+
+    // MOS_BEING_SWALLOWED
+	MovingRoundObject *swallowerParent;
+	std::unordered_set<MovingRoundObject*> swallowees;
 
     int regionNumber;
 
@@ -296,7 +301,14 @@ public:
      * parent. Should only be called if the state is MOS_SHRINKING
      * @return a pointer to the parent Player
      */
-    MovingRoundObject *getShrinkingParent() const { return parent; }
+    MovingRoundObject *getShrinkingParent() const { return shrinkingParent; }
+
+    /**
+     * Gets the parent for swallowing, or NULL if there is no
+     * parent. Should only be called if the state is MOS_BEING_SWALLOWED
+     * @return a pointer to the parent Player
+     */
+    MovingRoundObject *getSwallowerParent() const { return swallowerParent; }
 
     /**
      * Returns whether this object is currently shrinking.

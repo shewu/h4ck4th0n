@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-enum class RoundCollisionResult { NOTHING, DEATH };
+enum class RoundCollisionResult { NOTHING, DEATH, SWALLOW };
 
 class PhysicsWorld : public World {
 public:

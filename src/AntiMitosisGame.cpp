@@ -1,4 +1,4 @@
-#include "CTFGame.h"
+#include "AntiMitosisGame.h"
 
 #include <sstream>
 
@@ -12,10 +12,10 @@ using std::stringstream;
 // 3 is red team flag
 // 4 is blue team flag
 
-void CTFGame::doGameLogic() {
+void AntiMitosisGame::doGameLogic() {
 }
 
-RoundCollisionResult CTFGame::roundWallCollision(
+RoundCollisionResult AntiMitosisGame::roundWallCollision(
     ObjectPtr<MovingRoundObject> obj1, ObjectPtr<Wall> wall) {
     int rn = obj1->getRegionNumber();
     bool ans;
@@ -45,7 +45,7 @@ RoundCollisionResult CTFGame::roundWallCollision(
 }
 
 std::pair<RoundCollisionResult, RoundCollisionResult>
-CTFGame::roundRoundCollision(ObjectPtr<MovingRoundObject> obj1,
+AntiMitosisGame::roundRoundCollision(ObjectPtr<MovingRoundObject> obj1,
                              ObjectPtr<MovingRoundObject> obj2) {
     int rn1 = obj1->getRegionNumber();
     int rn2 = obj2->getRegionNumber();
@@ -75,12 +75,12 @@ CTFGame::roundRoundCollision(ObjectPtr<MovingRoundObject> obj1,
     }
 }
 
-void CTFGame::onInit() {
+void AntiMitosisGame::onInit() {
     createFlag(3);
     createFlag(4);
 }
 
-GamePlayer *CTFGame::onPlayerAdded() {
+GamePlayer *AntiMitosisGame::onPlayerAdded() {
     GamePlayer *gp = new GamePlayer();
 
     int teamNum;
@@ -100,7 +100,7 @@ GamePlayer *CTFGame::onPlayerAdded() {
     return gp;
 }
 
-void CTFGame::onPlayerRemoved(GamePlayer *player) {
+void AntiMitosisGame::onPlayerRemoved(GamePlayer *player) {
     // remove the player's object from the game
     if (!player->obj.empty() && (player->obj->getState() == MOS_ALIVE ||
                                  player->obj->getState() == MOS_SPAWNING)) {
@@ -110,22 +110,22 @@ void CTFGame::onPlayerRemoved(GamePlayer *player) {
     teamLookup.erase(player);
 }
 
-void CTFGame::createFlag(int regionNum) {
+void AntiMitosisGame::createFlag(int regionNum) {
     world_.addFlagObject(regionNum, []() {},
-                         std::bind(&CTFGame::createFlag, this, regionNum));
+                         std::bind(&AntiMitosisGame::createFlag, this, regionNum));
 }
 
-void CTFGame::createNewPlayer(int teamNum, GamePlayer *gp) {
+void AntiMitosisGame::createNewPlayer(int teamNum, GamePlayer *gp) {
     ObjectPtr<MovingRoundObject> obj =
         world_.addPlayerObject(teamNum, []() {}, []() {});
 
     obj->setSpawnCallback([obj, gp]() { gp->obj = obj; });
 
     obj->setDeathCallback(
-        std::bind(&CTFGame::createNewPlayer, this, teamNum, gp));
+        std::bind(&AntiMitosisGame::createNewPlayer, this, teamNum, gp));
 }
 
-string CTFGame::getScore(GamePlayer *player) {
+string AntiMitosisGame::getScore(GamePlayer *player) {
     stringstream ss;
     ss << "Red: " << score[0] << " Blue: " << score[1];
     return ss.str();

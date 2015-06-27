@@ -6,9 +6,9 @@
 #include "Game.h"
 #include "mapinfo/CTF.h"
 
-class CTFGame : public Game {
+class AntiMitosisGame : public Game {
 public:
-    CTFGame(HBMap const& hbmap) : Game(hbmap) {
+    AntiMitosisGame(HBMap const& hbmap) : Game(hbmap) {
         numplayers[0] = 0;
         numplayers[1] = 0;
         score[0] = 0;

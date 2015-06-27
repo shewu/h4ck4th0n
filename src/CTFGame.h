@@ -8,7 +8,7 @@
 
 class CTFGame : public Game {
 public:
-    CTFGame(HBMap const &hbmap) : Game(hbmap) {
+    CTFGame(HBMap const& hbmap) : Game(hbmap) {
         numplayers[0] = 0;
         numplayers[1] = 0;
         score[0] = 0;
@@ -18,20 +18,21 @@ public:
 private:
     int numplayers[2];
     int score[2];
-    std::map<GamePlayer *, int> teamLookup;
+    std::map<GamePlayer*, int> teamLookup;
 
     void doGameLogic();
 
-    bool roundWallCollision(ObjectPtr<MovingRoundObject>, ObjectPtr<Wall>);
-    std::pair<bool, bool> roundRoundCollision(ObjectPtr<MovingRoundObject>,
-                                              ObjectPtr<MovingRoundObject>);
-    GamePlayer *onPlayerAdded();
-    void onPlayerRemoved(GamePlayer *);
+    RoundCollisionResult roundWallCollision(ObjectPtr<MovingRoundObject>,
+                                            ObjectPtr<Wall>);
+    std::pair<RoundCollisionResult, RoundCollisionResult> roundRoundCollision(
+        ObjectPtr<MovingRoundObject>, ObjectPtr<MovingRoundObject>);
+    GamePlayer* onPlayerAdded();
+    void onPlayerRemoved(GamePlayer*);
     void onInit();
-    std::string getScore(GamePlayer *);
+    std::string getScore(GamePlayer*);
 
     void createFlag(int regionNum);
-    void createNewPlayer(int teamNum, GamePlayer *gp);
+    void createNewPlayer(int teamNum, GamePlayer* gp);
 };
 
 #endif

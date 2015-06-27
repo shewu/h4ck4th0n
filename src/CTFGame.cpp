@@ -15,8 +15,8 @@ using std::stringstream;
 void CTFGame::doGameLogic() {
 }
 
-bool CTFGame::roundWallCollision(ObjectPtr<MovingRoundObject> obj1,
-                                 ObjectPtr<Wall> wall) {
+RoundCollisionResult CTFGame::roundWallCollision(
+    ObjectPtr<MovingRoundObject> obj1, ObjectPtr<Wall> wall) {
     int rn = obj1->getRegionNumber();
     bool ans;
     if (wall->getWallType() == CTF_WT_DEADLY) {
@@ -41,11 +41,12 @@ bool CTFGame::roundWallCollision(ObjectPtr<MovingRoundObject> obj1,
         sounds.push_back(Sound(SOUND_BOING2, world_.getCollisionPoint()));
     }
 
-    return ans;
+    return ans ? RoundCollisionResult::DEATH : RoundCollisionResult::NOTHING;
 }
 
-std::pair<bool, bool> CTFGame::roundRoundCollision(
-    ObjectPtr<MovingRoundObject> obj1, ObjectPtr<MovingRoundObject> obj2) {
+std::pair<RoundCollisionResult, RoundCollisionResult>
+CTFGame::roundRoundCollision(ObjectPtr<MovingRoundObject> obj1,
+                             ObjectPtr<MovingRoundObject> obj2) {
     int rn1 = obj1->getRegionNumber();
     int rn2 = obj2->getRegionNumber();
     bool sameType = !((rn1 == 1 || rn1 == 2) ^ (rn2 == 1 || rn2 == 2));
@@ -55,17 +56,22 @@ std::pair<bool, bool> CTFGame::roundRoundCollision(
         } else {
             sounds.push_back(Sound(SOUND_BOING2, world_.getCollisionPoint()));
         }
-        return pair<bool, bool>(false, sameType);
+        return std::make_pair(RoundCollisionResult::NOTHING,
+                              sameType ? RoundCollisionResult::DEATH
+                                       : RoundCollisionResult::NOTHING);
     } else if (obj2->getState() == MOS_SHRINKING) {
         if (sameType) {
             sounds.push_back(Sound(SOUND_SPLAT2, world_.getCollisionPoint()));
         } else {
             sounds.push_back(Sound(SOUND_BOING2, world_.getCollisionPoint()));
         }
-        return pair<bool, bool>(sameType, false);
+        return std::make_pair(sameType ? RoundCollisionResult::DEATH
+                                       : RoundCollisionResult::NOTHING,
+                              RoundCollisionResult::NOTHING);
     } else {
         sounds.push_back(Sound(SOUND_BOING2, world_.getCollisionPoint()));
-        return pair<bool, bool>(false, false);
+        return std::make_pair(RoundCollisionResult::NOTHING,
+                              RoundCollisionResult::NOTHING);
     }
 }
 

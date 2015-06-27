@@ -449,31 +449,34 @@ void PhysicsWorld::doSimulation(float dt) {
                 collisionPoint =
                     obj1.center +
                     normal * (1 / sqrt(normal * normal)) * obj1.radius;
-                pair<bool, bool> shouldDie = roundRoundCollisionCallback(
-                    ObjectPtr<MovingRoundObject>(&obj1),
-                    ObjectPtr<MovingRoundObject>(&obj2));
+                pair<RoundCollisionResult, RoundCollisionResult> shouldDie_ =
+                    roundRoundCollisionCallback(
+                        ObjectPtr<MovingRoundObject>(&obj1),
+                        ObjectPtr<MovingRoundObject>(&obj2));
+                bool shouldDie1 =
+                    shouldDie_.first == RoundCollisionResult::DEATH;
+                bool shouldDie2 =
+                    shouldDie_.second == RoundCollisionResult::DEATH;
 
                 if (obj1.state == MOS_SHRINKING) {
-                    bounceMovingRoundAndShrinkingRound(obj1, obj2,
-                                                       shouldDie.second);
+                    bounceMovingRoundAndShrinkingRound(obj1, obj2, shouldDie1);
                 }
 
                 else if (obj2.state == MOS_SHRINKING) {
-                    bounceMovingRoundAndShrinkingRound(obj2, obj1,
-                                                       shouldDie.first);
+                    bounceMovingRoundAndShrinkingRound(obj2, obj1, shouldDie2);
                 }
 
                 else {
-                    if (shouldDie.first && shouldDie.second) {
+                    if (shouldDie1 && shouldDie2) {
                         Vector2D vel =
                             normal * (1 / sqrt(normal * normal)) * DEATH_RATE;
                         obj1.startShrinking(NULL, vel);
                         obj2.startShrinking(NULL, -vel);
-                    } else if (shouldDie.first) {
+                    } else if (shouldDie1) {
                         obj2.velocity +=
                             obj1.velocity * (obj1.mass / obj2.mass);
                         obj1.startShrinking(NULL, Vector2D(0.0f, 0.0f));
-                    } else if (shouldDie.second) {
+                    } else if (shouldDie2) {
                         obj1.velocity +=
                             obj2.velocity * (obj2.mass / obj1.mass);
                         obj2.startShrinking(NULL, Vector2D(0.0f, 0.0f));
@@ -555,8 +558,10 @@ void PhysicsWorld::doSimulation(float dt) {
                 collisionPoint =
                     obj.center +
                     normal * (1 / sqrt(normal * normal)) * obj.radius;
-                bool shouldDie = roundWallCollisionCallback(
-                    ObjectPtr<MovingRoundObject>(&obj), ObjectPtr<Wall>(&wall));
+                bool shouldDie =
+                    roundWallCollisionCallback(
+                        ObjectPtr<MovingRoundObject>(&obj),
+                        ObjectPtr<Wall>(&wall)) == RoundCollisionResult::DEATH;
 
                 if (shouldDie) {
                     obj.startShrinking(
@@ -624,8 +629,10 @@ void PhysicsWorld::doSimulation(float dt) {
                 collisionPoint =
                     obj.center +
                     normal * (1 / sqrt(normal * normal)) * obj.radius;
-                bool shouldDie = roundWallCollisionCallback(
-                    ObjectPtr<MovingRoundObject>(&obj), ObjectPtr<Wall>(&wall));
+                bool shouldDie =
+                    roundWallCollisionCallback(
+                        ObjectPtr<MovingRoundObject>(&obj),
+                        ObjectPtr<Wall>(&wall)) == RoundCollisionResult::DEATH;
 
                 if (shouldDie) {
                     obj.startShrinking(
@@ -660,6 +667,7 @@ void PhysicsWorld::doSimulation(float dt) {
 
                 break;
             }
+
 
             case ET_ROUND_DISAPPEAR: {
                 collideDisappear[e.t1] =

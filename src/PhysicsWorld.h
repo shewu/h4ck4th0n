@@ -16,7 +16,7 @@ public:
                                                ObjectPtr<Wall>)>
         RoundWallCollisionCallback;
     typedef std::function<std::pair<RoundCollisionResult, RoundCollisionResult>(
-        ObjectPtr<MovingRoundObject>, ObjectPtr<Wall>)>
+        ObjectPtr<MovingRoundObject>, ObjectPtr<MovingRoundObject>)>
         RoundRoundCollisionCallback;
 
     PhysicsWorld(HBMap const& hbmap) : World(hbmap) {

@@ -1,5 +1,5 @@
 name "Vlad's map"
-mode CTF
+mode AntiMitosis
 dim 60 120
 
 wall normal -30 -60 -30 60

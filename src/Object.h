@@ -6,6 +6,7 @@
 #include <cmath>
 #include <functional>
 #include <memory>
+#include <unordered_set>
 
 #include "Material.h"
 #include "Packet.h"
@@ -251,6 +252,7 @@ private:
 
     // helpers used by PhysicsWorld
     void startShrinking(MovingRoundObject *parent, Vector2D const &velocity);
+	void startBeingSwallowed(MovingRoundObject *parent);
     void kill();
 
 public:
@@ -262,6 +264,8 @@ public:
           state(MOS_SPAWNING),
           mass(mass),
           timeUntilSpawn(timeUntilSpawn),
+          shrinkingParent(NULL),
+		  swallowerParent(NULL),
           regionNumber(regionNumber),
           onSpawnCallback(onSpawnCallback),
           onDeathCallback(onDeathCallback),

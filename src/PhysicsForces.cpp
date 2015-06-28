@@ -25,7 +25,7 @@ void PhysicsWorld::applyForces(float dt) {
         if (swallower != NULL) {
         	MovingRoundObject& obj2 = *swallower;
 
-			Vector2D offset = swallower.center - obj.center;
+			Vector2D offset = obj2.center - obj.center;
 			Vector2D force = SWALLOWING_SPRING_CONSTANT * offset;
 			obj.velocity += force * dt;
 			obj2.velocity -= force * dt;

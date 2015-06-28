@@ -46,8 +46,8 @@ CLIENT_OBJECTS = $(SHARED_OBJECTS) \
 	MirroringWorld.o \
 	UserInput.o
 
-SERVER_OBJECTS=$(addprefix $(OBJ_DIR)/,$(SHARED_OBJECTS) Server.o Game.o Physics.o PhysicsWorld.o PhysicsForces.o CTFGame.o UserInput.o Logging.o)
-PLAYBACKSERVER_OBJECTS=$(addprefix $(OBJ_DIR)/,$(SHARED_OBJECTS) Game.o Physics.o PhysicsWorld.o PhysicsForces.o CTFGame.o UserInput.o PlaybackServer.o)
+SERVER_OBJECTS=$(addprefix $(OBJ_DIR)/,$(SHARED_OBJECTS) Server.o Game.o Physics.o PhysicsWorld.o PhysicsForces.o CTFGame.o UserInput.o Logging.o AntiMitosisGame.o)
+PLAYBACKSERVER_OBJECTS=$(addprefix $(OBJ_DIR)/,$(SHARED_OBJECTS) Game.o Physics.o PhysicsWorld.o PhysicsForces.o CTFGame.o UserInput.o PlaybackServer.o AntiMitosisGame.o)
 UNHOLY_BALLS_OBJECTS=$(addprefix $(OBJ_DIR)/,$(CLIENT_OBJECTS) Unholyclient.o UnholyGameViewController.o)
 HOLY_BALLS_OBJECTS=$(addprefix $(OBJ_DIR)/,$(CLIENT_OBJECTS) Holyclient.o HolyGameViewController.o)
 MULTI_BALLS_OBJECTS=$(addprefix $(OBJ_DIR)/,$(CLIENT_OBJECTS) Multiclient.o MultiGameViewController.o)

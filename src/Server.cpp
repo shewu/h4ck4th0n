@@ -17,6 +17,7 @@
 #include <iostream>
 #include <set>
 
+#include "AntiMitosisGame.h"
 #include "CTFGame.h"
 #include "Game.h"
 #include "Logging.h"
@@ -109,7 +110,7 @@ int main() {
     WritePacket worldWritePacket(STC_WORLD_DATA);
 
     // TODO make it possible to set this at runtime
-    Game *game = new CTFGame(HBMap("custom.hbm", "CTF"));
+    Game *game = new AntiMitosisGame(HBMap("custom.hbm", "AntiMitosis"));
     game->init();
 
     // Main server loop

@@ -101,9 +101,8 @@ MovingRoundObject::MovingRoundObject(ReadPacket *rp) : RoundObject(rp) {
     state = (MovingObjectState)rp->read_char();
 
     shrinkingParent = NULL;
-	swallowingParent = NULL;
+	swallowerParent = NULL;
     numChildren = 0;
-    numSwallowees = 0;
 }
 
 void MovingRoundObject::startShrinking(MovingRoundObject *parent,
@@ -121,21 +120,21 @@ void MovingRoundObject::startShrinking(MovingRoundObject *parent,
 void MovingRoundObject::startBeingSwallowed(MovingRoundObject *parent) {
 	assert(parent != NULL);
 
-	if (this->state == MOS_SWALLOWING) {
-		this->swallowingParent.swallers.erase(this);
+	if (this->state == MOS_BEING_SWALLOWED) {
+		this->swallowerParent->swallowees.erase(this);
 	}
 
-	this->swallowingParent = parent;
-	this->state = MOS_SWALLOWING;
-	this->swallowees.push_back(this);
+	this->swallowerParent = parent;
+	this->state = MOS_BEING_SWALLOWED;
+	this->swallowees.insert(this);
 }
 
 void MovingRoundObject::kill() {
     state = MOS_DEAD;
-    if (shinkingParent != NULL) {
+    if (shrinkingParent != NULL) {
         shrinkingParent->numChildren--;
     }
-    if (swallowingParent != NULL) {
-    	swallowingParent->swallowees.erase(this);
+    if (swallowerParent != NULL) {
+    	swallowerParent->swallowees.erase(this);
   	}
 }

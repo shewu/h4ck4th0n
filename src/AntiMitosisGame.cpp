@@ -57,7 +57,7 @@ AntiMitosisGame::roundRoundCollision(ObjectPtr<MovingRoundObject> obj1,
             sounds.push_back(Sound(SOUND_BOING2, world_.getCollisionPoint()));
         }
         return std::make_pair(RoundCollisionResult::NOTHING,
-                              sameType ? RoundCollisionResult::DEATH
+                              sameType ? RoundCollisionResult::SWALLOW
                                        : RoundCollisionResult::NOTHING);
     } else if (obj2->getState() == MOS_SHRINKING) {
         if (sameType) {
@@ -65,12 +65,13 @@ AntiMitosisGame::roundRoundCollision(ObjectPtr<MovingRoundObject> obj1,
         } else {
             sounds.push_back(Sound(SOUND_BOING2, world_.getCollisionPoint()));
         }
-        return std::make_pair(sameType ? RoundCollisionResult::DEATH
+        return std::make_pair(sameType ? RoundCollisionResult::SWALLOW
                                        : RoundCollisionResult::NOTHING,
                               RoundCollisionResult::NOTHING);
     } else {
         sounds.push_back(Sound(SOUND_BOING2, world_.getCollisionPoint()));
-        return std::make_pair(RoundCollisionResult::NOTHING,
+      	printf("hiiiiiiiiiiiiiiiiiiiiiiii\n");
+        return std::make_pair(RoundCollisionResult::SWALLOW,
                               RoundCollisionResult::NOTHING);
     }
 }

@@ -1,8 +1,8 @@
 #ifndef __GAMEVIEWCONTROLLER_H__
 #define __GAMEVIEWCONTROLLER_H__
 
-#ifndef __APPLE__
 #include <AL/alut.h>
+#ifndef __APPLE__
 #include <AL/al.h>
 #include <GL/gl.h>
 #else

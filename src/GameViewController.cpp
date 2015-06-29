@@ -265,7 +265,6 @@ void GameViewController::_initMenus() {
 }
 
 void GameViewController::_initSound() {
-#ifndef __APPLE__
     ALCdevice *dev = alcOpenDevice(NULL);
     ALCcontext *con = alcCreateContext(dev, NULL);
     alcMakeContextCurrent(con);
@@ -289,5 +288,4 @@ void GameViewController::_initSound() {
             ("sounds/" + kSoundFilenames[i] + ".wav").data());
     }
     alGenSources(ALSRCS, alsrcs);
-#endif
 }

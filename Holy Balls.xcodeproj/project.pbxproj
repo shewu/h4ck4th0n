@@ -80,7 +80,10 @@
 		A83D1A8D1B144C01001D6261 /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83D1A401B1413AB001D6261 /* Socket.cpp */; };
 		A83D1A8E1B144C01001D6261 /* HBMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83D1A2E1B1413AB001D6261 /* HBMap.cpp */; };
 		A83D1A8F1B144C01001D6261 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83D1A451B1413AB001D6261 /* World.cpp */; };
-		A83F07831B40D71200AA55A0 /* AntiMitosisGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83F07821B40D71200AA55A0 /* AntiMitosisGame.cpp */; };
+		A83F077D1B3F571B00AA55A0 /* AntiMitosisGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83F077B1B3F571B00AA55A0 /* AntiMitosisGame.cpp */; };
+		A83F077F1B3F749600AA55A0 /* libalut.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A83F077E1B3F749600AA55A0 /* libalut.0.dylib */; };
+		A83F07801B3F756D00AA55A0 /* libalut.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A83F077E1B3F749600AA55A0 /* libalut.0.dylib */; };
+		A83F07811B3F757400AA55A0 /* libalut.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A83F077E1B3F749600AA55A0 /* libalut.0.dylib */; };
 		A8A8DF8F1B072A9100D701AC /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8A8DF8E1B072A9100D701AC /* SDL2.framework */; };
 		A8A8DF911B072B6800D701AC /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8A8DF901B072B6800D701AC /* OpenGL.framework */; };
 		A8A8DF951B072DBC00D701AC /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8A8DF941B072DBC00D701AC /* OpenAL.framework */; };
@@ -198,8 +201,9 @@
 		A83D1A451B1413AB001D6261 /* World.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = World.cpp; path = src/World.cpp; sourceTree = SOURCE_ROOT; };
 		A83F07731B37A82A00AA55A0 /* HolyGameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HolyGameViewController.h; path = src/HolyGameViewController.h; sourceTree = SOURCE_ROOT; };
 		A83F07741B37D57200AA55A0 /* cl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = cl.hpp; path = src/CL/cl.hpp; sourceTree = SOURCE_ROOT; };
-		A83F07821B40D71200AA55A0 /* AntiMitosisGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AntiMitosisGame.cpp; path = src/AntiMitosisGame.cpp; sourceTree = SOURCE_ROOT; };
-		A83F07841B40D71A00AA55A0 /* AntiMitosisGame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AntiMitosisGame.h; path = src/AntiMitosisGame.h; sourceTree = SOURCE_ROOT; };
+		A83F077B1B3F571B00AA55A0 /* AntiMitosisGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AntiMitosisGame.cpp; path = src/AntiMitosisGame.cpp; sourceTree = SOURCE_ROOT; };
+		A83F077C1B3F571B00AA55A0 /* AntiMitosisGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AntiMitosisGame.h; path = src/AntiMitosisGame.h; sourceTree = SOURCE_ROOT; };
+		A83F077E1B3F749600AA55A0 /* libalut.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libalut.0.dylib; path = ../../../../opt/local/lib/libalut.0.dylib; sourceTree = "<group>"; };
 		A8A8DF421B07291B00D701AC /* unholyballs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unholyballs; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8A8DF8E1B072A9100D701AC /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		A8A8DF901B072B6800D701AC /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -216,6 +220,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A83F077F1B3F749600AA55A0 /* libalut.0.dylib in Frameworks */,
 				A8A8DF951B072DBC00D701AC /* OpenAL.framework in Frameworks */,
 				A8A8DF911B072B6800D701AC /* OpenGL.framework in Frameworks */,
 				A8A8DF8F1B072A9100D701AC /* SDL2.framework in Frameworks */,
@@ -233,6 +238,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A83F07811B3F757400AA55A0 /* libalut.0.dylib in Frameworks */,
 				A8A8DFD01B09AE6400D701AC /* OpenCL.framework in Frameworks */,
 				A8A8DFCE1B09AE5F00D701AC /* OpenAL.framework in Frameworks */,
 				A8A8DFD11B09AE6F00D701AC /* SDL2.framework in Frameworks */,
@@ -244,6 +250,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A83F07801B3F756D00AA55A0 /* libalut.0.dylib in Frameworks */,
 				A8A8DFDE1B0A9C1F00D701AC /* OpenCL.framework in Frameworks */,
 				A8A8DFDF1B0A9C1F00D701AC /* OpenAL.framework in Frameworks */,
 				A8A8DFE01B0A9C1F00D701AC /* OpenGL.framework in Frameworks */,
@@ -265,6 +272,7 @@
 		A8A8DF391B07291B00D701AC = {
 			isa = PBXGroup;
 			children = (
+				A83F077E1B3F749600AA55A0 /* libalut.0.dylib */,
 				A8A8DFCF1B09AE6400D701AC /* OpenCL.framework */,
 				A8A8DF941B072DBC00D701AC /* OpenAL.framework */,
 				A8A8DF921B072B7500D701AC /* GLUT.framework */,
@@ -333,6 +341,7 @@
 			children = (
 				A83F07841B40D71A00AA55A0 /* AntiMitosisGame.h */,
 				A83D1A071B1413AB001D6261 /* CTFGame.h */,
+				A83F077C1B3F571B00AA55A0 /* AntiMitosisGame.h */,
 				A83D1A171B1413AB001D6261 /* MirroringWorld.h */,
 				A83D1A1C1B1413AB001D6261 /* PhysicsWorld.h */,
 				A83D1A0A1B1413AB001D6261 /* Game.h */,
@@ -340,6 +349,7 @@
 				A83D1A461B14148F001D6261 /* PlaybackServer */,
 				A83F07821B40D71200AA55A0 /* AntiMitosisGame.cpp */,
 				A83D1A2A1B1413AB001D6261 /* CTFGame.cpp */,
+				A83F077B1B3F571B00AA55A0 /* AntiMitosisGame.cpp */,
 				A83D1A3C1B1413AB001D6261 /* PhysicsWorld.cpp */,
 				A83D1A3B1B1413AB001D6261 /* PhysicsForces.cpp */,
 				A83D1A3A1B1413AB001D6261 /* Physics.cpp */,
@@ -544,6 +554,7 @@
 				A83D1A661B144215001D6261 /* Object.cpp in Sources */,
 				A83D1A671B144215001D6261 /* Socket.cpp in Sources */,
 				A83D1A681B144215001D6261 /* HBMap.cpp in Sources */,
+				A83F077D1B3F571B00AA55A0 /* AntiMitosisGame.cpp in Sources */,
 				A83D1A691B144215001D6261 /* World.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -694,6 +705,15 @@
 				GCC_WARN_SIGN_COMPARE = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/opt/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALID_ARCHS = x86_64;
 			};
@@ -713,6 +733,15 @@
 				GCC_WARN_SIGN_COMPARE = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/opt/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALID_ARCHS = x86_64;
 			};
@@ -747,6 +776,15 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/opt/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -757,6 +795,15 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/opt/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -773,6 +820,15 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/opt/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -783,6 +839,15 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/opt/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

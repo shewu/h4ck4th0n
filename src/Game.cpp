@@ -85,6 +85,13 @@ void Game::applyForcesFromInput(float dt) {
         if (!player->obj.empty() && player->obj->getState() == MOS_ALIVE) {
             Vector2D accel = player->input.getAcceleration();
             player->obj->setVelocity(player->obj->getVelocity() + accel * dt);
+
+            // Apply the force to all the swallowees
+            for (MovingRoundObject *swalloweeObj :
+                 player->obj->getSwallowees()) {
+                swalloweeObj->setVelocity(swalloweeObj->getVelocity() +
+                                          accel * dt);
+            }
         }
     }
 }

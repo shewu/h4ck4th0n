@@ -14,7 +14,7 @@ const int MAX_EVENTS = 10;
 const float SPAWN_TIME = 3;
 const float SPAWN_TRY = 0.1f;
 const float SPAWN_PROB = 0.1f;
-const float SWALLOWING_SPRING_CONSTANT = 0.5f;
+const float SWALLOWING_SPRING_CONSTANT = 10.0f;
 
 const int MAX_CLIENTS = 32;
 

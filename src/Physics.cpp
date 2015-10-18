@@ -374,7 +374,7 @@ void PhysicsWorld::updateRoundObjectsForward(
     map<int, MovingRoundObject *> &objects, float dt) {
     for (auto &pa : objects) {
         MovingRoundObject &obj = *(pa.second);
-        if (obj.state == MOS_ALIVE) {
+        if (obj.state == MOS_ALIVE || obj.state == MOS_BEING_SWALLOWED) {
             obj.center += obj.velocity * dt;
         } else if (obj.isCurrentlyShrinking()) {
             obj.center += obj.velocity * dt;

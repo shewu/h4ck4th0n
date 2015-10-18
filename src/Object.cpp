@@ -126,7 +126,7 @@ void MovingRoundObject::startBeingSwallowed(MovingRoundObject *parent) {
 
     this->swallowerParent = parent;
     this->state = MOS_BEING_SWALLOWED;
-    this->swallowees.insert(this);
+    parent->swallowees.insert(this);
 }
 
 void MovingRoundObject::kill() {

@@ -335,7 +335,7 @@ public:
      * @param velocity the new velocity for this object
      */
     void setVelocity(const Vector2D &velocity) {
-        assert(state == MOS_ALIVE);
+        assert(state == MOS_ALIVE || state == MOS_BEING_SWALLOWED);
         this->velocity = velocity;
     }
 
@@ -343,6 +343,13 @@ public:
      * @return the velocity
      */
     const Vector2D &getVelocity() const { return velocity; }
+
+    /**
+     * @return the objects being swallowed by this object
+     */
+    const std::unordered_set<MovingRoundObject *> getSwallowees() const {
+        return swallowees;
+    }
 
     /**
      * @return the mass

@@ -239,8 +239,8 @@ private:
     int numChildren;
 
     // MOS_BEING_SWALLOWED
-	MovingRoundObject *swallowerParent;
-	std::unordered_set<MovingRoundObject*> swallowees;
+    MovingRoundObject *swallowerParent;
+    std::unordered_set<MovingRoundObject *> swallowees;
 
     int regionNumber;
 
@@ -252,7 +252,7 @@ private:
 
     // helpers used by PhysicsWorld
     void startShrinking(MovingRoundObject *parent, Vector2D const &velocity);
-	void startBeingSwallowed(MovingRoundObject *parent);
+    void startBeingSwallowed(MovingRoundObject *parent);
     void kill();
 
 public:
@@ -265,7 +265,7 @@ public:
           mass(mass),
           timeUntilSpawn(timeUntilSpawn),
           shrinkingParent(NULL),
-		  swallowerParent(NULL),
+          swallowerParent(NULL),
           regionNumber(regionNumber),
           onSpawnCallback(onSpawnCallback),
           onDeathCallback(onDeathCallback),

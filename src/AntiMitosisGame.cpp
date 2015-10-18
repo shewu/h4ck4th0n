@@ -46,7 +46,7 @@ RoundCollisionResult AntiMitosisGame::roundWallCollision(
 
 std::pair<RoundCollisionResult, RoundCollisionResult>
 AntiMitosisGame::roundRoundCollision(ObjectPtr<MovingRoundObject> obj1,
-                             ObjectPtr<MovingRoundObject> obj2) {
+                                     ObjectPtr<MovingRoundObject> obj2) {
     int rn1 = obj1->getRegionNumber();
     int rn2 = obj2->getRegionNumber();
     bool sameType = !((rn1 == 1 || rn1 == 2) ^ (rn2 == 1 || rn2 == 2));
@@ -111,8 +111,9 @@ void AntiMitosisGame::onPlayerRemoved(GamePlayer *player) {
 }
 
 void AntiMitosisGame::createFlag(int regionNum) {
-    world_.addFlagObject(regionNum, []() {},
-                         std::bind(&AntiMitosisGame::createFlag, this, regionNum));
+    world_.addFlagObject(
+        regionNum, []() {},
+        std::bind(&AntiMitosisGame::createFlag, this, regionNum));
 }
 
 void AntiMitosisGame::createNewPlayer(int teamNum, GamePlayer *gp) {

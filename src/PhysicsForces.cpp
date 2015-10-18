@@ -15,7 +15,7 @@ void PhysicsWorld::applyForces(float dt) {
             }
         }
 
-		// Apply force from friction
+        // Apply force from friction
         if (obj.state == MOS_ALIVE) {
             obj.velocity -= obj.velocity * frictionCoeff * dt;
         }
@@ -23,12 +23,12 @@ void PhysicsWorld::applyForces(float dt) {
         // Apply force from swallowing
         MovingRoundObject *swallower = obj.getSwallowerParent();
         if (swallower != NULL) {
-        	MovingRoundObject& obj2 = *swallower;
+            MovingRoundObject &obj2 = *swallower;
 
-			Vector2D offset = obj2.center - obj.center;
-			Vector2D force = SWALLOWING_SPRING_CONSTANT * offset;
-			obj.velocity += force * dt;
-			obj2.velocity -= force * dt;
-		}
+            Vector2D offset = obj2.center - obj.center;
+            Vector2D force = SWALLOWING_SPRING_CONSTANT * offset;
+            obj.velocity += force * dt;
+            obj2.velocity -= force * dt;
+        }
     }
 }

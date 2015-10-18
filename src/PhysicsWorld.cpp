@@ -58,14 +58,16 @@ void PhysicsWorld::writeToPacket(WritePacket *wp) const {
     int size = 0;
     for (auto &pa : movingRoundObjects) {
         MovingRoundObject *obj = pa.second;
-        if (obj->state == MOS_ALIVE || obj->state == MOS_SHRINKING || obj->state == MOS_BEING_SWALLOWED) {
+        if (obj->state == MOS_ALIVE || obj->state == MOS_SHRINKING ||
+            obj->state == MOS_BEING_SWALLOWED) {
             size++;
         }
     }
     wp->write_int(size);
     for (auto &pa : movingRoundObjects) {
         MovingRoundObject *obj = pa.second;
-        if (obj->state == MOS_ALIVE || obj->state == MOS_SHRINKING || obj->state == MOS_BEING_SWALLOWED) {
+        if (obj->state == MOS_ALIVE || obj->state == MOS_SHRINKING ||
+            obj->state == MOS_BEING_SWALLOWED) {
             obj->writeToPacket(wp);
         }
     }

@@ -458,8 +458,10 @@ void PhysicsWorld::doSimulation(float dt) {
                 bool shouldDie2 =
                     shouldDie_.second == RoundCollisionResult::DEATH;
 
-				bool should1Swallow2 = shouldDie_.second == RoundCollisionResult::SWALLOW;
-				bool should2Swallow1 = shouldDie_.first == RoundCollisionResult::SWALLOW;
+                bool should1Swallow2 =
+                    shouldDie_.second == RoundCollisionResult::SWALLOW;
+                bool should2Swallow1 =
+                    shouldDie_.first == RoundCollisionResult::SWALLOW;
 
                 if (obj1.state == MOS_SHRINKING) {
                     bounceMovingRoundAndShrinkingRound(obj1, obj2, shouldDie1);
@@ -483,10 +485,10 @@ void PhysicsWorld::doSimulation(float dt) {
                         obj1.velocity +=
                             obj2.velocity * (obj2.mass / obj1.mass);
                         obj2.startShrinking(NULL, Vector2D(0.0f, 0.0f));
-					} else if (should1Swallow2) {
-						obj2.startBeingSwallowed(&obj1);
-					} else if (should2Swallow1) {
-						obj1.startBeingSwallowed(&obj2);
+                    } else if (should1Swallow2) {
+                        obj2.startBeingSwallowed(&obj1);
+                    } else if (should2Swallow1) {
+                        obj1.startBeingSwallowed(&obj2);
                     } else {
                         float nv1 = obj1.velocity * normal;
                         float nv2 = obj2.velocity * normal;

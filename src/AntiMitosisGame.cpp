@@ -70,7 +70,6 @@ AntiMitosisGame::roundRoundCollision(ObjectPtr<MovingRoundObject> obj1,
                               RoundCollisionResult::NOTHING);
     } else {
         sounds.push_back(Sound(SOUND_BOING2, world_.getCollisionPoint()));
-      	printf("hiiiiiiiiiiiiiiiiiiiiiiii\n");
         return std::make_pair(RoundCollisionResult::SWALLOW,
                               RoundCollisionResult::NOTHING);
     }

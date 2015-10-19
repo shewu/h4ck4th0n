@@ -111,6 +111,8 @@ public:
 
     T *operator->() { return ptr_; }
 
+    T *value() const { return ptr_; }
+
     bool empty() const { return ptr_ == NULL; }
 
 private:

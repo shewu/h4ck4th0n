@@ -13,11 +13,13 @@ enum SoundType {
     SOUND_SPLAT,
     SOUND_SPLAT2,
 
+    SOUND_SUCK,
+
     NUM_SOUND_TYPES
 };
 
 static const std::string kSoundFilenames[] = {"ding", "boing", "boing2",
-                                              "splat", "splat2"};
+                                              "splat", "splat2", "suck"};
 
 struct Sound {
     SoundType type;

@@ -190,15 +190,17 @@ void PhysicsWorld::doRectangularWallCollision(
         return;
     }
 
+    float rc = getShrinkRate(obj);
+
     float time1 = INFINITY;
     float time2 = INFINITY;
     if ((wall.p1 - obj.center) * obj.velocity > 0.0) {
         time1 =
-            collideCircles(obj.center - wall.p1, obj.velocity, obj.radius, 0);
+            collideCircles(obj.center - wall.p1, obj.velocity, obj.radius, rc);
     }
     if ((wall.p2 - obj.center) * obj.velocity > 0.0) {
         time2 =
-            collideCircles(obj.center - wall.p2, obj.velocity, obj.radius, 0);
+            collideCircles(obj.center - wall.p2, obj.velocity, obj.radius, rc);
     }
 
     float time3;
@@ -210,10 +212,11 @@ void PhysicsWorld::doRectangularWallCollision(
         normal = -normal;
         dist = -dist;
     }
-    if (obj.velocity * normal >= 0) {
+    float speedAwayFromWall = (obj.velocity * normal) + rc;
+    if (speedAwayFromWall >= 0) {
         time3 = INFINITY;
     } else {
-        time3 = (obj.radius - dist) / (obj.velocity * normal);
+        time3 = (obj.radius - dist) / speedAwayFromWall;
         if (time3 < 0) {
             time3 = 0;
         }
@@ -378,11 +381,10 @@ void PhysicsWorld::updateRoundObjectsForward(
     map<int, MovingRoundObject *> &objects, float dt) {
     for (auto &pa : objects) {
         MovingRoundObject &obj = *(pa.second);
-        if (obj.state == MOS_ALIVE || obj.state == MOS_BEING_SWALLOWED) {
+        if (obj.state == MOS_ALIVE || obj.state == MOS_BEING_SWALLOWED ||
+            obj.isCurrentlyShrinking()) {
             obj.center += obj.velocity * dt;
-        } else if (obj.isCurrentlyShrinking()) {
-            obj.center += obj.velocity * dt;
-            obj.radius -= DEATH_RATE * dt;
+            obj.radius -= getShrinkRate(obj) * dt;
         }
     }
 }

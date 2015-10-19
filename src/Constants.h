@@ -15,6 +15,7 @@ const float SPAWN_TIME = 3;
 const float SPAWN_TRY = 0.1f;
 const float SPAWN_PROB = 0.1f;
 const float SWALLOWING_SPRING_CONSTANT = 10.0f;
+const float TIME_TO_SHRINK_SECS = 0.4f;
 
 const int MAX_CLIENTS = 32;
 

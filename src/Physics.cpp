@@ -142,6 +142,8 @@ void PhysicsWorld::doObjectCollision(
         return;
     }
 
+    // Compute the relative velocities of the circles and
+    // the rate at which the sum of their radii is shrinking.
     float rc = 0.0;
     Vector2D v(0, 0);
     if (fo.state == MOS_ALIVE || fo.isCurrentlyShrinking()) {
@@ -180,7 +182,7 @@ void PhysicsWorld::doRectangularWallCollision(
     map<pair<int, int>, PhysicsWorld::collide_event> &collideRoundWithWall,
     priority_queue<PhysicsWorld::collide_event> &collideEvents, float cur,
     float dt) {
-    if (obj.state != MOS_ALIVE) {
+    if (obj.state != MOS_ALIVE && obj.state != MOS_BEING_SWALLOWED) {
         collideRoundWithWall[pair<int, int>(obj.getID(), wall.getID())] =
             collide_event(INFINITY, ET_NONE, obj.getID(), wall.getID());
         return;
@@ -247,7 +249,7 @@ void PhysicsWorld::doRoundWallCollision(
     map<pair<int, int>, PhysicsWorld::collide_event> &collideRoundWithRoundWall,
     priority_queue<PhysicsWorld::collide_event> &collideEvents, float cur,
     float dt) {
-    if (obj.state != MOS_ALIVE) {
+    if (obj.state != MOS_ALIVE && obj.state != MOS_BEING_SWALLOWED) {
         collideRoundWithRoundWall[pair<int, int>(obj.getID(), wall.getID())] =
             collide_event(INFINITY, ET_NONE, obj.getID(), wall.getID());
         return;

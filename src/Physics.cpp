@@ -60,6 +60,14 @@ bool isAngleInRange(float theta1, float theta2, float theta) {
     return (theta1 <= theta && theta <= theta2) ||
            (theta1 <= thetap && thetap <= theta2);
 }
+
+float getShrinkRate(MovingRoundObject const &obj) {
+    if (obj.isCurrentlyShrinking()) {
+        return DEATH_RATE;
+    } else {
+        return 0.0f;
+    }
+}
 }  // anonymous namespace
 
 bool PhysicsWorld::objectsIntersect(MovingRoundObject const &obj1,
@@ -144,19 +152,13 @@ void PhysicsWorld::doObjectCollision(
 
     // Compute the relative velocities of the circles and
     // the rate at which the sum of their radii is shrinking.
-    float rc = 0.0;
+    float rc = getShrinkRate(fo) + getShrinkRate(so);
     Vector2D v(0, 0);
     if (fo.state == MOS_ALIVE || fo.isCurrentlyShrinking()) {
         v -= fo.velocity;
     }
-    if (fo.isCurrentlyShrinking()) {
-        rc += DEATH_RATE;
-    }
     if (so.state == MOS_ALIVE || fo.isCurrentlyShrinking()) {
         v += so.velocity;
-    }
-    if (so.isCurrentlyShrinking()) {
-        rc += DEATH_RATE;
     }
 
     float t =

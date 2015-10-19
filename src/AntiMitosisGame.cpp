@@ -72,7 +72,6 @@ AntiMitosisGame::roundRoundCollision(ObjectPtr<MovingRoundObject> obj1,
         if (obj1->getSwallowees().find(obj2.value()) == obj1->getSwallowees().end() && obj2->getSwallowees().find(obj1.value()) == obj2->getSwallowees().end()) {
             sounds.push_back(Sound(SOUND_SUCK, world_.getCollisionPoint()));
         }
-        // if not, play swallow sound
         return std::make_pair(RoundCollisionResult::SWALLOW,
                               RoundCollisionResult::NOTHING);
     }

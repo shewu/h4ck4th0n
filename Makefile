@@ -67,30 +67,43 @@ $(HOLY_BALLS_TARGET) : $(OUT_DIR)/$(HOLY_BALLS_TARGET)
 $(MULTI_BALLS_TARGET) : $(OUT_DIR)/$(MULTI_BALLS_TARGET)
 
 $(OUT_DIR)/$(SERVER_TARGET): $(SERVER_OBJECTS)
+	if [ ! -d $(OUT_DIR) ]; then mkdir -p $(OUT_DIR); fi
 	$(LD) -o $(OUT_DIR)/$(SERVER_TARGET) $(SERVER_OBJECTS) $(SERVER_LDFLAGS)
 
 $(OUT_DIR)/$(PLAYBACKSERVER_TARGET): $(PLAYBACKSERVER_OBJECTS)
+	if [ ! -d $(OUT_DIR) ]; then mkdir -p $(OUT_DIR); fi
 	$(LD) -o $(OUT_DIR)/$(PLAYBACKSERVER_TARGET) $(PLAYBACKSERVER_OBJECTS) $(SERVER_LDFLAGS)
 
 $(OUT_DIR)/$(UNHOLY_BALLS_TARGET): $(UNHOLY_BALLS_OBJECTS)
+	if [ ! -d $(OUT_DIR) ]; then mkdir -p $(OUT_DIR); fi
 	$(LD) -o $(OUT_DIR)/$(UNHOLY_BALLS_TARGET) $(UNHOLY_BALLS_OBJECTS) $(UNHOLY_LDFLAGS)
 
 $(OUT_DIR)/$(HOLY_BALLS_TARGET): $(HOLY_BALLS_OBJECTS)
+	if [ ! -d $(OUT_DIR) ]; then mkdir -p $(OUT_DIR); fi
 	$(LD) -o $(OUT_DIR)/$(HOLY_BALLS_TARGET) $(HOLY_BALLS_OBJECTS) $(HOLY_LDFLAGS)
 
 $(OUT_DIR)/$(MULTI_BALLS_TARGET): $(MULTI_BALLS_OBJECTS)
+	if [ ! -d $(OUT_DIR) ]; then mkdir -p $(OUT_DIR); fi
 	$(LD) -o $(OUT_DIR)/$(MULTI_BALLS_TARGET) $(MULTI_BALLS_OBJECTS) $(HOLY_LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	if [ ! -d $(OBJ_DIR) ]; then mkdir -p $(OBJ_DIR); fi
+	if [ ! -d $(DEP_DIR)/$(SRC_DIR) ]; then mkdir -p $(DEP_DIR)/$(SRC_DIR); fi
 	$(CC) -c $(CCFLAGS) -o $@ $< -MF "$(DEP_DIR)/$(<:.cpp=.d)"
 
 $(OBJ_DIR)/Unholyclient.o: $(SRC_DIR)/Client.cpp
+	if [ ! -d $(OBJ_DIR) ]; then mkdir -p $(OBJ_DIR); fi
+	if [ ! -d $(DEP_DIR)/$(SRC_DIR) ]; then mkdir -p $(DEP_DIR); fi
 	$(CC) -c $(CCFLAGS) -DUNHOLY -o $@ $< -MF "$(DEP_DIR)/Unholyclient.d"
 
 $(OBJ_DIR)/Holyclient.o: $(SRC_DIR)/Client.cpp
+	if [ ! -d $(OBJ_DIR) ]; then mkdir -p $(OBJ_DIR); fi
+	if [ ! -d $(DEP_DIR)/$(SRC_DIR) ]; then mkdir -p $(DEP_DIR); fi
 	$(CC) -c $(CCFLAGS) -o $@ $< -MF "$(DEP_DIR)/Holyclient.d"
 
 $(OBJ_DIR)/Multiclient.o: $(SRC_DIR)/Client.cpp
+	if [ ! -d $(OBJ_DIR) ]; then mkdir -p $(OBJ_DIR); fi
+	if [ ! -d $(DEP_DIR)/$(SRC_DIR) ]; then mkdir -p $(DEP_DIR); fi
 	$(CC) -c $(CCFLAGS) -DMULTI -o $@ $< -MF "$(DEP_DIR)/Multiclient.d"
 
 test: $(SHARED_OBJECTS)

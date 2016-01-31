@@ -113,10 +113,10 @@ test2: $(SHARED_OBJECTS)
 	(cd tests; make test2)
 
 clean:
-	rm -rf $(EXECUTABLES) $(OBJ_DIR)/*.o $(DEP_DIR)/*.d
+	@rm -rf $(EXECUTABLES) $(OUT_DIR)
 
 love:
-	echo 'In Soviet Russia, love makes you!'
+	@echo 'In Soviet Russia, love makes you!'
 
 format:
 	cd src && find \( -name '*.cpp' -o -name '*.h' \) -print0 | xargs -0 clang-format -style=file -i

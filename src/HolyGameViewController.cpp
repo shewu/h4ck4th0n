@@ -109,12 +109,20 @@ void HolyGameViewController::render() {
         world->getRectangularWalls();
     map<int, RoundWall *> const &roundWalls = world->getRoundWalls();
 
-    const int numWallsInRound = 360;
+    int totalRoundWallSegments = 0;
+    std::map<RoundWall *, int> roundWallSegments;
+    for (auto& pair : roundWalls) {
+        RoundWall *roundWall = pair.second;
+        const float dTheta = fabs(roundWall->theta2 - roundWall->theta1);
+        const int segments = 90 * (dTheta / (2*M_PI));
+        totalRoundWallSegments += segments;
+        roundWallSegments[roundWall] = segments;
+    }
 
     float obspoints[4 * rectangularWalls.size() +
-                    numWallsInRound * roundWalls.size() * 4];
+                    totalRoundWallSegments * 4];
     unsigned char obscolor[4 * rectangularWalls.size() +
-                           numWallsInRound * roundWalls.size() * 4];
+                           totalRoundWallSegments * 4];
     unsigned ti, i2 = 0;
     map<int, RoundWall *>::const_iterator i3 = roundWalls.begin();
     int i3Component = 0;
@@ -130,18 +138,18 @@ void HolyGameViewController::render() {
                 material = wall->getMaterial();
             } else {
                 RoundWall *wall = i3->second;
-                float ratio = (float)i3Component / (float)(numWallsInRound + 1);
+                float ratio = (float)i3Component / (float)(roundWallSegments[wall] + 1);
                 p1 = wall->center +
                      wall->radius *
                          Vector2D::getUnitVector(wall->theta2 * ratio +
                                                  wall->theta1 * (1.0 - ratio));
-                ratio = (float)(i3Component + 1) / (float)(numWallsInRound + 1);
+                ratio = (float)(i3Component + 1) / (float)(roundWallSegments[wall] + 1);
                 p2 = wall->center +
                      wall->radius *
                          Vector2D::getUnitVector(wall->theta2 * ratio +
                                                  wall->theta1 * (1.0 - ratio));
                 i3Component++;
-                if (i3Component == numWallsInRound) {
+                if (i3Component == roundWallSegments[wall]) {
                     i3Component = 0;
                     ++i3;
                 }

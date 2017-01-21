@@ -120,15 +120,55 @@ void MultiGameViewController::render() {
 
     map<int, RectangularWall *> const &rectangularWalls =
         world->getRectangularWalls();
+    map<int, RoundWall *> const &roundWalls = world->getRoundWalls();
+    
+    int totalRoundWallSegments = 0;
+    std::map<RoundWall *, int> roundWallSegments;
+    for (auto& pair : roundWalls) {
+        RoundWall *roundWall = pair.second;
+        const float dTheta = fabs(roundWall->theta2 - roundWall->theta1);
+        const int segments = 90 * (dTheta / (2*M_PI));
+        totalRoundWallSegments += segments;
+        roundWallSegments[roundWall] = segments;
+    }
 
-    float obspoints[4 * rectangularWalls.size()];
-    unsigned char obscolor[4 * rectangularWalls.size()];
+    float obspoints[4 * rectangularWalls.size() + totalRoundWallSegments * 4];
+    unsigned char obscolor[4 * rectangularWalls.size()
+                           + totalRoundWallSegments * 4];
     unsigned ti, i2 = 0;
+    map<int, RoundWall *>::const_iterator i3 = roundWalls.begin();
+    int i3Component = 0;
     for (ti = 0;; ti++) {
-        while (i2 != rectangularWalls.size()) {
-            RectangularWall *wall = rectangularWalls.find(i2)->second;
-            Vector2D diff = Vector2D(focusx, focusy) - wall->p1;
-            Vector2D obsdir = wall->p2 - wall->p1;
+        Vector2D p1, p2;
+        MaterialPtr material;
+        while (i2 != rectangularWalls.size() || i3 != roundWalls.end()) {
+            if (i2 != rectangularWalls.size()) {
+                RectangularWall *wall = rectangularWalls.find(i2)->second;
+                p1 = wall->p1;
+                p2 = wall->p2;
+                i2++;
+                material = wall->getMaterial();
+            } else {
+                RoundWall *wall = i3->second;
+                float ratio = (float)i3Component / (float)(roundWallSegments[wall] + 1);
+                p1 = wall->center +
+                wall->radius *
+                Vector2D::getUnitVector(wall->theta2 * ratio +
+                                        wall->theta1 * (1.0 - ratio));
+                ratio = (float)(i3Component + 1) / (float)(roundWallSegments[wall] + 1);
+                p2 = wall->center +
+                wall->radius *
+                Vector2D::getUnitVector(wall->theta2 * ratio +
+                                        wall->theta1 * (1.0 - ratio));
+                i3Component++;
+                if (i3Component == roundWallSegments[wall]) {
+                    i3Component = 0;
+                    ++i3;
+                }
+                material = wall->getMaterial();
+            }
+            Vector2D diff = Vector2D(focusx, focusy) - p1;
+            Vector2D obsdir = p2 - p1;
             float smallest;
             if (diff * obsdir <= 0)
                 smallest = diff * diff;
@@ -142,30 +182,27 @@ void MultiGameViewController::render() {
                                        float(WIDTH) * float(WIDTH) /
                                            float(HEIGHT) / float(HEIGHT) / 4.0))
                 break;
-            i2++;
         }
-        if (i2 == rectangularWalls.size())
+        if (i2 == rectangularWalls.size() && i3 == roundWalls.end())
             break;
-        RectangularWall *wall = rectangularWalls.find(i2)->second;
-        obspoints[4 * ti] = wall->p1.x;
-        obspoints[4 * ti + 1] = wall->p1.y;
-        obspoints[4 * ti + 2] = wall->p2.x;
-        obspoints[4 * ti + 3] = wall->p2.y;
-        obscolor[4 * ti] = wall->getMaterial()->getR();
-        obscolor[4 * ti + 1] = wall->getMaterial()->getG();
-        obscolor[4 * ti + 2] = wall->getMaterial()->getB();
-        obscolor[4 * ti + 3] = wall->getMaterial()->getA();
-        i2++;
+        obspoints[4 * ti] = p1.x;
+        obspoints[4 * ti + 1] = p1.y;
+        obspoints[4 * ti + 2] = p2.x;
+        obspoints[4 * ti + 3] = p2.y;
+        obscolor[4 * ti] = material->getR();
+        obscolor[4 * ti + 1] = material->getG();
+        obscolor[4 * ti + 2] = material->getB();
+        obscolor[4 * ti + 3] = material->getA();
     }
     vector<cl::Buffer> obspointsbuf, obscolorbuf, objpointbuf, objsizebuf,
         objcolorbuf, lightposbuf, lightcolorbuf;
     for (unsigned i = 0; i < devices.size(); i++) {
         obspointsbuf.push_back(cl::Buffer(
             deviceContexts[i], CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-            4 * rectangularWalls.size() * sizeof(float), obspoints, NULL));
+            4 * ti * sizeof(float), obspoints, NULL));
         obscolorbuf.push_back(cl::Buffer(
             deviceContexts[i], CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-            4 * rectangularWalls.size() * sizeof(char), obscolor, NULL));
+            4 * ti * sizeof(char), obscolor, NULL));
     }
 
     float objpoint[2 * roundObjects.size()];

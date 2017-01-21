@@ -52,6 +52,7 @@ protected:
     virtual void _initGL() = 0;
 
 private:
+    int _sockfd;
     void _disconnect();
     void _initMenus();
     void _initSound();

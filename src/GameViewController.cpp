@@ -41,9 +41,9 @@ GameViewController::GameViewController() {
 
     std::cout << "IP Address = " << ipaddy << "\n";
     getaddrinfo(ipaddy.c_str(), "55555", &hints, &res);
-    int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-    std::cout << "socket fd: " << sockfd << "\n";
-    sock = new Socket(sockfd);
+    _sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    std::cout << "socket fd: " << _sockfd << "\n";
+    sock = new Socket(_sockfd);
 
     sc = sock->connect(res->ai_addr, res->ai_addrlen);
 
@@ -89,6 +89,8 @@ GameViewController::~GameViewController() {
     delete sc;
     delete _resmenu;
     delete mainmenu;
+    close(_sockfd);
+    _sockfd = -1;
 }
 
 void GameViewController::process() {

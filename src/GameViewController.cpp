@@ -87,8 +87,6 @@ GameViewController::~GameViewController() {
     SDL_ShowCursor(true);
     SDL_SetWindowGrab(screen, SDL_FALSE);
     delete sc;
-    delete _resmenu;
-    delete mainmenu;
     close(_sockfd);
     _sockfd = -1;
 }
@@ -235,7 +233,7 @@ static float getAspectRatio() {
 }
 
 void GameViewController::_initMenus() {
-    mainmenu = new Menu();
+    mainmenu.reset(new Menu());
     mainmenu->addMenuItem(
         new ActionMenuItem([this]() { return leave(); }, (char *)"Leave Game"));
     mainmenu->addMenuItem(new ToggleMenuItem((char *)"Fullscreen", false,
@@ -249,7 +247,7 @@ void GameViewController::_initMenus() {
     const float d16x9 = std::abs(ratio - SIXTEEN_BY_NINE);
     const int arg = argMin({d5x4, d4x3, d16x10, d16x9});
 
-    _resmenu = new Menu();
+    std::unique_ptr<Menu> _resmenu(new Menu());
     for (auto p : RESOLUTIONS[arg]) {
         std::ostringstream resStream;
         resStream << p.first << " x " << p.second;
@@ -263,7 +261,7 @@ void GameViewController::_initMenus() {
                                },
                                (char *)(resStream.str().c_str())));
     }
-    mainmenu->addMenuItem(new SubMenuItem(_resmenu, (char *)"Resolution"));
+    mainmenu->addMenuItem(new SubMenuItem(std::move(_resmenu), (char *)"Resolution"));
 }
 
 void GameViewController::_initSound() {

@@ -4,6 +4,7 @@
 #include <vector>
 #include <functional>
 #include <string>
+#include <memory>
 #include <SDL2/SDL.h>
 
 #define MENU_KEY_LEFT SDLK_LEFT
@@ -67,12 +68,11 @@ private:
     float x1, x2, y1, y2;
 };
 
-// The subMenuItem "owns" its menu and will free it on destruction
 class SubMenuItem : public MenuItem {
 public:
     ~SubMenuItem() {}
-    SubMenuItem(Menu *m, std::string &&name)
-        : m(m), isActive(false), MenuItem(name) {}
+    SubMenuItem(std::unique_ptr<Menu> &&m, std::string &&name)
+        : m(std::move(m)), isActive(false), MenuItem(name) {}
 
 private:
     bool activate();
@@ -81,7 +81,7 @@ private:
     bool shouldMenuBeDrawn();
     void draw(bool, float, float, float, float, unsigned char);
 
-    Menu *m;
+    std::unique_ptr<Menu> m;
     bool isActive;
 };
 

@@ -44,8 +44,7 @@ protected:
     int latestPacket;
     int count;
     int oldTime;
-    Menu *mainmenu;
-    Menu *_resmenu;
+    std::unique_ptr<Menu> mainmenu;
 
     ALfloat pos[3], vel[3], ori[6];
 

@@ -39,12 +39,12 @@ ServerConnectViewController::ServerConnectViewController() {
     finishedView = kHBNoView;
 
     serverConnectMenu = new Menu();
-    serverConnectMenu->addMenuItem(new InputMenuItem(
+    serverConnectMenu->addMenuItem(std::unique_ptr<MenuItem>(new InputMenuItem(
         20, menuGetIP, (char *)"", (char *)"Must not be empty",
-        (char *)"Enter Server IP Address", (char *)"Connect to server"));
-    serverConnectMenu->addMenuItem(new ActionMenuItem(goBack, (char *)"Back"));
-    serverConnectMenu->addMenuItem(
-        new ActionMenuItem([this]() { return quit(); }, (char *)"Quit"));
+        (char *)"Enter Server IP Address", (char *)"Connect to server")));
+    serverConnectMenu->addMenuItem(std::unique_ptr<MenuItem>(new ActionMenuItem(goBack, (char *)"Back")));
+    serverConnectMenu->addMenuItem(std::unique_ptr<MenuItem>(
+        new ActionMenuItem([this]() { return quit(); }, (char *)"Quit")));
 
     serverConnectMenu->setActive(true);
 }

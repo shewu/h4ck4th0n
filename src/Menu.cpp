@@ -5,11 +5,10 @@ Menu::Menu() : current_index(0), is_item_active(false), is_menu_active(false) {
 }
 
 Menu::~Menu() {
-    menuItems.clear();
 }
 
-void Menu::addMenuItem(MenuItem *a) {
-    menuItems.push_back(a);
+void Menu::addMenuItem(std::unique_ptr<MenuItem>&& a) {
+    menuItems.push_back(std::move(a));
 }
 
 bool Menu::isActive() {
@@ -72,8 +71,7 @@ void Menu::keyInput(int key) {
             current_index++;
         menuItems[current_index]->onSelect();
     } else if (key == MENU_KEY_ENTER) {
-        MenuItem *item = menuItems[current_index];
-        is_item_active = item->activate();
+        is_item_active = menuItems[current_index]->activate();
     } else if (key == MENU_KEY_BACK) {
         menuItems[current_index]->onDeselect();
         is_menu_active = false;

@@ -234,10 +234,10 @@ static float getAspectRatio() {
 
 void GameViewController::_initMenus() {
     mainmenu.reset(new Menu());
-    mainmenu->addMenuItem(
-        new ActionMenuItem([this]() { return leave(); }, (char *)"Leave Game"));
-    mainmenu->addMenuItem(new ToggleMenuItem((char *)"Fullscreen", false,
-                                             actionToggleFullscreen));
+    mainmenu->addMenuItem(std::unique_ptr<MenuItem>(
+        new ActionMenuItem([this]() { return leave(); }, (char *)"Leave Game")));
+    mainmenu->addMenuItem(std::unique_ptr<MenuItem>(
+    	new ToggleMenuItem((char *)"Fullscreen", false, actionToggleFullscreen)));
 
     // first, determine which set of resolutions we should use.
     const float ratio = getAspectRatio();
@@ -251,7 +251,7 @@ void GameViewController::_initMenus() {
     for (auto p : RESOLUTIONS[arg]) {
         std::ostringstream resStream;
         resStream << p.first << " x " << p.second;
-        _resmenu->addMenuItem(
+        _resmenu->addMenuItem(std::unique_ptr<MenuItem>(
             new ActionMenuItem([p]() {
                                    WIDTH = p.first;
                                    HEIGHT = p.second;
@@ -259,9 +259,10 @@ void GameViewController::_initMenus() {
                                    glViewport(0, 0, p.first, p.second);
                                    return 0;
                                },
-                               (char *)(resStream.str().c_str())));
+                               (char *)(resStream.str().c_str()))));
     }
-    mainmenu->addMenuItem(new SubMenuItem(std::move(_resmenu), (char *)"Resolution"));
+    mainmenu->addMenuItem(std::unique_ptr<MenuItem>(
+    		new SubMenuItem(std::move(_resmenu), (char *)"Resolution")));
 }
 
 void GameViewController::_initSound() {

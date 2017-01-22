@@ -27,9 +27,9 @@ SplashViewController::SplashViewController() {
 
     splashMenu = new Menu();
     splashMenu->addMenuItem(
-        new ActionMenuItem(menuConnectToServer, "Play Game"));
+        std::unique_ptr<MenuItem>(new ActionMenuItem(menuConnectToServer, "Play Game")));
     splashMenu->addMenuItem(
-        new ActionMenuItem([this]() { return quit(); }, "Quit"));
+        std::unique_ptr<MenuItem>(new ActionMenuItem([this]() { return quit(); }, "Quit")));
 
     splashMenu->setActive(true);
 }

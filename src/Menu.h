@@ -46,7 +46,7 @@ public:
     Menu();
     virtual ~Menu();
 
-    void addMenuItem(MenuItem *a);
+    void addMenuItem(std::unique_ptr<MenuItem>&& a);
     void keyInput(int key);
     bool isActive();
     void setActive(bool);
@@ -59,7 +59,7 @@ public:
     void setAppearanceMiddle();
 
 private:
-    std::vector<MenuItem *> menuItems;
+    std::vector<std::unique_ptr<MenuItem>> menuItems;
     int current_index;
     bool is_item_active;
     bool is_menu_active;

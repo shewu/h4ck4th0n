@@ -458,11 +458,11 @@ void PhysicsWorld::doSimulation(float dt) {
                     shouldDie_.second == RoundCollisionResult::DEATH;
 
                 if (obj1->state == MOS_SHRINKING) {
-                    bounceMovingRoundAndShrinkingRound(obj1, obj2, shouldDie1);
+                    bounceMovingRoundAndShrinkingRound(obj1, obj2, shouldDie2);
                 }
 
                 else if (obj2->state == MOS_SHRINKING) {
-                    bounceMovingRoundAndShrinkingRound(obj2, obj1, shouldDie2);
+                    bounceMovingRoundAndShrinkingRound(obj2, obj1, shouldDie1);
                 }
 
                 else {

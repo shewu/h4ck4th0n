@@ -83,7 +83,7 @@ void HolyGameViewController::render() {
         return;
     }
 
-    map<int, MovingRoundObject *> const &roundObjects =
+    auto const &roundObjects =
         world->getMovingRoundObjects();
 
     float focusx = 0.0f;
@@ -105,14 +105,14 @@ void HolyGameViewController::render() {
         focusy -= (14 + focusy - world->getMaxY()) *
                   (14 + focusy - world->getMaxY()) / 28.0;
 
-    map<int, RectangularWall *> const &rectangularWalls =
+    auto const &rectangularWalls =
         world->getRectangularWalls();
-    map<int, RoundWall *> const &roundWalls = world->getRoundWalls();
+    auto const &roundWalls = world->getRoundWalls();
 
     int totalRoundWallSegments = 0;
-    std::map<RoundWall *, int> roundWallSegments;
+    std::map<std::shared_ptr<RoundWall>, int> roundWallSegments;
     for (auto& pair : roundWalls) {
-        RoundWall *roundWall = pair.second;
+        auto roundWall = pair.second;
         const float dTheta = fabs(roundWall->theta2 - roundWall->theta1);
         const int segments = 90 * (dTheta / (2*M_PI));
         totalRoundWallSegments += segments;
@@ -124,20 +124,20 @@ void HolyGameViewController::render() {
     unsigned char obscolor[4 * rectangularWalls.size() +
                            totalRoundWallSegments * 4];
     unsigned ti, i2 = 0;
-    map<int, RoundWall *>::const_iterator i3 = roundWalls.begin();
+    auto i3 = roundWalls.begin();
     int i3Component = 0;
     for (ti = 0;; ti++) {
         Vector2D p1, p2;
         MaterialPtr material;
         while (i2 != rectangularWalls.size() || i3 != roundWalls.end()) {
             if (i2 != rectangularWalls.size()) {
-                RectangularWall *wall = rectangularWalls.find(i2)->second;
+                auto wall = rectangularWalls.find(i2)->second;
                 p1 = wall->p1;
                 p2 = wall->p2;
                 i2++;
                 material = wall->getMaterial();
             } else {
-                RoundWall *wall = i3->second;
+                auto wall = i3->second;
                 float ratio = (float)i3Component / (float)(roundWallSegments[wall] + 1);
                 p1 = wall->center +
                      wall->radius *

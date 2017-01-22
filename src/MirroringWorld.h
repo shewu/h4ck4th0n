@@ -10,7 +10,7 @@ public:
 
     void readFromPacket(ReadPacket *rp);
 
-    MovingRoundObject *getMyObject();
+    std::shared_ptr<MovingRoundObject> getMyObject();
 
 private:
     int myId_;

@@ -22,10 +22,10 @@ private:
 
     void doGameLogic();
 
-    RoundCollisionResult roundWallCollision(ObjectPtr<MovingRoundObject>,
-                                            ObjectPtr<Wall>);
+    RoundCollisionResult roundWallCollision(std::shared_ptr<MovingRoundObject>,
+                                            std::shared_ptr<Wall>);
     std::pair<RoundCollisionResult, RoundCollisionResult> roundRoundCollision(
-        ObjectPtr<MovingRoundObject>, ObjectPtr<MovingRoundObject>);
+        std::shared_ptr<MovingRoundObject>, std::shared_ptr<MovingRoundObject>);
     GamePlayer* onPlayerAdded();
     void onPlayerRemoved(GamePlayer*);
     void onInit();

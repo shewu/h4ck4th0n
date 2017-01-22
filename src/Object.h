@@ -233,7 +233,7 @@ private:
     float timeUntilSpawn;
 
     // MOS_SHRINKING
-    MovingRoundObject *parent;
+    std::shared_ptr<MovingRoundObject> parent;
     int numChildren;
 
     int regionNumber;
@@ -245,7 +245,7 @@ private:
     Vector2D velocity;
 
     // helpers used by PhysicsWorld
-    void startShrinking(MovingRoundObject *parent, Vector2D const &velocity);
+    void startShrinking(std::shared_ptr<MovingRoundObject> parent, Vector2D const &velocity);
     void kill();
 
 public:
@@ -296,7 +296,7 @@ public:
      * parent. Should only be called if the state is MOS_SHRINKING
      * @return a pointer to the parent Player
      */
-    MovingRoundObject *getShrinkingParent() const { return parent; }
+    std::shared_ptr<MovingRoundObject> getShrinkingParent() const { return parent; }
 
     /**
      * Returns whether this object is currently shrinking.

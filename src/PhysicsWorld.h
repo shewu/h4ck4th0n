@@ -12,36 +12,35 @@ enum class RoundCollisionResult { NOTHING, DEATH };
 
 class PhysicsWorld : public World {
 public:
-    typedef std::function<RoundCollisionResult(ObjectPtr<MovingRoundObject>,
-                                               ObjectPtr<Wall>)>
+    typedef std::function<RoundCollisionResult(std::shared_ptr<MovingRoundObject>,
+                                               std::shared_ptr<Wall>)>
         RoundWallCollisionCallback;
     typedef std::function<std::pair<RoundCollisionResult, RoundCollisionResult>(
-        ObjectPtr<MovingRoundObject>, ObjectPtr<MovingRoundObject>)>
+        std::shared_ptr<MovingRoundObject>, std::shared_ptr<MovingRoundObject>)>
         RoundRoundCollisionCallback;
 
     PhysicsWorld(HBMap const& hbmap) : World(hbmap) {
         roundWallCollisionCallback =
-            [](ObjectPtr<MovingRoundObject> a, ObjectPtr<Wall> b) {
+            [](std::shared_ptr<MovingRoundObject> a, std::shared_ptr<Wall> b) {
             return RoundCollisionResult::NOTHING;
         };
         roundRoundCollisionCallback =
-            [](ObjectPtr<MovingRoundObject> a, ObjectPtr<MovingRoundObject> b) {
+            [](std::shared_ptr<MovingRoundObject> a, std::shared_ptr<MovingRoundObject> b) {
             return std::make_pair(RoundCollisionResult::NOTHING,
                                   RoundCollisionResult::NOTHING);
         };
         for (auto const& wallDesc : hbmap.getRectangularWalls()) {
-            RectangularWall* wall = new RectangularWall(
+            std::shared_ptr<RectangularWall> wall(new RectangularWall(
                 wallDesc.getMaterial(), wallDesc.getWallType(),
                 wallDesc.getBouncinessCoefficient(), wallDesc.getPos1(),
-                wallDesc.getPos2());
+                wallDesc.getPos2()));
             rectangularWalls.insert(std::make_pair(wall->getID(), wall));
         }
         for (auto const& wallDesc : hbmap.getRoundWalls()) {
-            RoundWall* wall =
-                new RoundWall(wallDesc.getMaterial(), wallDesc.getWallType(),
+            std::shared_ptr<RoundWall> wall(new RoundWall(wallDesc.getMaterial(), wallDesc.getWallType(),
                               wallDesc.getBouncinessCoefficient(),
                               wallDesc.getCenter(), wallDesc.getRadius(),
-                              wallDesc.getTheta1(), wallDesc.getTheta2());
+                              wallDesc.getTheta1(), wallDesc.getTheta2()));
             roundWalls.insert(std::make_pair(wall->getID(), wall));
         }
     }
@@ -52,10 +51,10 @@ public:
     /**
      * These must be safe to call from a callback during a simulation
      */
-    ObjectPtr<MovingRoundObject> addFlagObject(
+    std::shared_ptr<MovingRoundObject> addFlagObject(
         int regionNumber, std::function<void()> const& onSpawnCallback,
         std::function<void()> const& onDeathCallback);
-    ObjectPtr<MovingRoundObject> addPlayerObject(
+    std::shared_ptr<MovingRoundObject> addPlayerObject(
         int regionNumber, std::function<void()> const& onSpawnCallback,
         std::function<void()> const& onDeathCallback);
     /**
@@ -121,35 +120,33 @@ private:
     };
 
     // Helper methods for physics (see Physics.cpp)
-    static bool objectsIntersect(MovingRoundObject const& obj1,
-                                 MovingRoundObject const& obj2);
-    static bool objectsIntersect(MovingRoundObject const& obj,
-                                 RectangularWall const& wall);
+    static bool objectsIntersect(std::shared_ptr<MovingRoundObject> obj1,
+                                 std::shared_ptr<MovingRoundObject> obj2);
+    static bool objectsIntersect(std::shared_ptr<MovingRoundObject> obj,
+                                 std::shared_ptr<RectangularWall> wall);
     static float collideCircles(Vector2D diff, Vector2D vel, float r, float rc);
-    static void doObjectCollision(
-        MovingRoundObject const& fo, MovingRoundObject const& so,
+    static void doObjectCollision(std::shared_ptr<MovingRoundObject> fo,
+                                  std::shared_ptr<MovingRoundObject> so,
         std::map<std::pair<int, int>, collide_event>& collideRoundWithRound,
         std::priority_queue<collide_event>& collideEvents, float cur, float dt);
-    static void doRectangularWallCollision(
-        MovingRoundObject const& obj, RectangularWall const& wall,
+    static void doRectangularWallCollision(std::shared_ptr<MovingRoundObject> obj,
+                                           std::shared_ptr<RectangularWall> wall,
         std::map<std::pair<int, int>, collide_event>& collideRoundWithWall,
         std::priority_queue<collide_event>& collideEvents, float cur, float dt);
-    static void doRoundWallCollision(
-        MovingRoundObject const& obj, RoundWall const& wall,
+    static void doRoundWallCollision(std::shared_ptr<MovingRoundObject> obj,
+                                     std::shared_ptr<RoundWall> wall,
         std::map<std::pair<int, int>, collide_event>& collideRoundWithRoundWall,
         std::priority_queue<collide_event>& collideEvents, float cur, float dt);
-    static void doRoundObjectDisappearing(
-        MovingRoundObject const& obj,
+    static void doRoundObjectDisappearing(std::shared_ptr<MovingRoundObject> obj,
         std::map<int, collide_event>& collideDisappear,
         std::priority_queue<collide_event>& collideEvents, float cur, float dt);
-    static void bounceMovingRoundAndShrinkingRound(MovingRoundObject& obj1,
-                                                   MovingRoundObject& obj2,
+    static void bounceMovingRoundAndShrinkingRound(std::shared_ptr<MovingRoundObject> obj1,
+                                                   std::shared_ptr<MovingRoundObject> obj2,
                                                    bool shouldDie);
-    static void bounceMovingRoundObjectByNormal(MovingRoundObject& obj,
+    static void bounceMovingRoundObjectByNormal(std::shared_ptr<MovingRoundObject> obj,
                                                 Vector2D const& normal,
                                                 float bouncinessCoefficient);
-    static void updateRoundObjectsForward(
-        std::map<int, MovingRoundObject*>& objects, float dt);
+    static void updateRoundObjectsForward(std::map<int, std::shared_ptr<MovingRoundObject> >& objects, float dt);
 };
 
 #endif

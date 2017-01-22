@@ -127,12 +127,11 @@ void GameViewController::process() {
             }
         } else if (rp->message_type != STC_WORLD_DATA ||
                    rp->packet_number <= latestPacket) {
-            delete rp;
         } else {
             latestPacket = rp->packet_number;
             world->readFromPacket(rp);
-            delete rp;
         }
+        delete rp;
     }
 
     SDL_Event event;

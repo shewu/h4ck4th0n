@@ -10,7 +10,7 @@
 
 struct GamePlayer {
     UserInput input;
-    ObjectPtr<MovingRoundObject> obj;
+    std::shared_ptr<MovingRoundObject> obj;
 };
 
 class Game {
@@ -28,11 +28,9 @@ private:
     // interface that needs to be implemented by inheriting Game class
     // to clarify, "roundWallCollision" means a collision between a
     // round object and a wall, not specifically a round wall
-    virtual RoundCollisionResult roundWallCollision(
-        ObjectPtr<MovingRoundObject>, ObjectPtr<Wall>) = 0;
-    virtual std::pair<RoundCollisionResult, RoundCollisionResult>
-        roundRoundCollision(ObjectPtr<MovingRoundObject>,
-                            ObjectPtr<MovingRoundObject>) = 0;
+    virtual RoundCollisionResult roundWallCollision(std::shared_ptr<MovingRoundObject>, std::shared_ptr<Wall>) = 0;
+    virtual std::pair<RoundCollisionResult, RoundCollisionResult>roundRoundCollision(std::shared_ptr<MovingRoundObject>,
+                        std::shared_ptr<MovingRoundObject>) = 0;
     virtual void doGameLogic() = 0;
     virtual GamePlayer* onPlayerAdded() = 0;
     virtual void onPlayerRemoved(GamePlayer*) = 0;

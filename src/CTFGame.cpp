@@ -15,8 +15,8 @@ using std::stringstream;
 void CTFGame::doGameLogic() {
 }
 
-RoundCollisionResult CTFGame::roundWallCollision(
-    ObjectPtr<MovingRoundObject> obj1, ObjectPtr<Wall> wall) {
+RoundCollisionResult CTFGame::roundWallCollision(std::shared_ptr<MovingRoundObject> obj1,
+                                                 std::shared_ptr<Wall> wall) {
     int rn = obj1->getRegionNumber();
     bool ans;
     if (wall->getWallType() == CTF_WT_DEADLY) {
@@ -45,8 +45,8 @@ RoundCollisionResult CTFGame::roundWallCollision(
 }
 
 std::pair<RoundCollisionResult, RoundCollisionResult>
-CTFGame::roundRoundCollision(ObjectPtr<MovingRoundObject> obj1,
-                             ObjectPtr<MovingRoundObject> obj2) {
+CTFGame::roundRoundCollision(std::shared_ptr<MovingRoundObject> obj1,
+                             std::shared_ptr<MovingRoundObject> obj2) {
     int rn1 = obj1->getRegionNumber();
     int rn2 = obj2->getRegionNumber();
     bool sameType = !((rn1 == 1 || rn1 == 2) ^ (rn2 == 1 || rn2 == 2));
@@ -102,7 +102,7 @@ GamePlayer *CTFGame::onPlayerAdded() {
 
 void CTFGame::onPlayerRemoved(GamePlayer *player) {
     // remove the player's object from the game
-    if (!player->obj.empty() && (player->obj->getState() == MOS_ALIVE ||
+    if (player->obj && (player->obj->getState() == MOS_ALIVE ||
                                  player->obj->getState() == MOS_SPAWNING)) {
         player->obj->instantKill();
     }
@@ -116,7 +116,7 @@ void CTFGame::createFlag(int regionNum) {
 }
 
 void CTFGame::createNewPlayer(int teamNum, GamePlayer *gp) {
-    ObjectPtr<MovingRoundObject> obj =
+    auto obj =
         world_.addPlayerObject(teamNum, []() {}, []() {});
 
     obj->setSpawnCallback([obj, gp]() { gp->obj = obj; });

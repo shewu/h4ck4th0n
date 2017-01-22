@@ -62,28 +62,28 @@ bool isAngleInRange(float theta1, float theta2, float theta) {
 }
 }  // anonymous namespace
 
-bool PhysicsWorld::objectsIntersect(MovingRoundObject const &obj1,
-                                    MovingRoundObject const &obj2) {
-    return ((obj2.state == MOS_ALIVE || obj2.state == MOS_SHRINKING) &&
-            (obj2.center.x - obj1.center.x) * (obj2.center.x - obj1.center.x) +
-                    (obj2.center.y - obj1.center.y) *
-                        (obj2.center.y - obj1.center.y) <=
-                (obj1.radius + obj2.radius) * (obj1.radius + obj2.radius));
+bool PhysicsWorld::objectsIntersect(std::shared_ptr<MovingRoundObject> obj1,
+                                    std::shared_ptr<MovingRoundObject> obj2) {
+    return ((obj2->state == MOS_ALIVE || obj2->state == MOS_SHRINKING) &&
+            (obj2->center.x - obj1->center.x) * (obj2->center.x - obj1->center.x) +
+                    (obj2->center.y - obj1->center.y) *
+                        (obj2->center.y - obj1->center.y) <=
+                (obj1->radius + obj2->radius) * (obj1->radius + obj2->radius));
 }
 
-bool PhysicsWorld::objectsIntersect(MovingRoundObject const &obj,
-                                    RectangularWall const &wall) {
-    if ((obj.center - wall.p1).lengthSquared() <= obj.radius * obj.radius ||
-        (obj.center - wall.p2).lengthSquared() <= obj.radius * obj.radius) {
+bool PhysicsWorld::objectsIntersect(std::shared_ptr<MovingRoundObject> obj,
+                                    std::shared_ptr<RectangularWall> wall) {
+    if ((obj->center - wall->p1).lengthSquared() <= obj->radius * obj->radius ||
+        (obj->center - wall->p2).lengthSquared() <= obj->radius * obj->radius) {
         return true;
     }
 
-    Vector2D dir = wall.p2 - wall.p1;
-    if ((dir * wall.p1) < (dir * obj.center) &&
-        (dir * wall.p2) > (dir * obj.center)) {
-        Vector2D vec = obj.center - wall.p1;
+    Vector2D dir = wall->p2 - wall->p1;
+    if ((dir * wall->p1) < (dir * obj->center) &&
+        (dir * wall->p2) > (dir * obj->center)) {
+        Vector2D vec = obj->center - wall->p1;
         Vector2D proj = ((vec * dir) / dir.lengthSquared()) * dir;
-        return (vec - proj).lengthSquared() <= obj.radius * obj.radius;
+        return (vec - proj).lengthSquared() <= obj->radius * obj->radius;
     }
 
     return false;
@@ -124,51 +124,51 @@ float PhysicsWorld::collideCircles(Vector2D diff, Vector2D vel, float r,
  to the queue
  *           if it occurs after dt time has passed.
  */
-void PhysicsWorld::doObjectCollision(
-    MovingRoundObject const &fo, MovingRoundObject const &so,
+void PhysicsWorld::doObjectCollision(std::shared_ptr<MovingRoundObject> fo,
+                                     std::shared_ptr<MovingRoundObject> so,
     map<pair<int, int>, PhysicsWorld::collide_event> &collideRoundWithRound,
     priority_queue<PhysicsWorld::collide_event> &collideEvents, float cur,
     float dt) {
-    if (fo.state == MOS_DEAD || so.state == MOS_DEAD ||
-        fo.state == MOS_SPAWNING || so.state == MOS_SPAWNING ||
-        (fo.state == MOS_SHRINKING && so.state == MOS_SHRINKING)) {
-        if (fo.getID() < so.getID()) {
-            collideRoundWithRound[pair<int, int>(fo.getID(), so.getID())] =
-                collide_event(INFINITY, ET_NONE, fo.getID(), so.getID());
+    if (fo->state == MOS_DEAD || so->state == MOS_DEAD ||
+        fo->state == MOS_SPAWNING || so->state == MOS_SPAWNING ||
+        (fo->state == MOS_SHRINKING && so->state == MOS_SHRINKING)) {
+        if (fo->getID() < so->getID()) {
+            collideRoundWithRound[pair<int, int>(fo->getID(), so->getID())] =
+                collide_event(INFINITY, ET_NONE, fo->getID(), so->getID());
         } else {
-            collideRoundWithRound[pair<int, int>(so.getID(), fo.getID())] =
-                collide_event(INFINITY, ET_NONE, so.getID(), fo.getID());
+            collideRoundWithRound[pair<int, int>(so->getID(), fo->getID())] =
+                collide_event(INFINITY, ET_NONE, so->getID(), fo->getID());
         }
         return;
     }
 
     float rc = 0.0;
     Vector2D v(0, 0);
-    if (fo.state == MOS_ALIVE || fo.isCurrentlyShrinking()) {
-        v -= fo.velocity;
+    if (fo->state == MOS_ALIVE || fo->isCurrentlyShrinking()) {
+        v -= fo->velocity;
     }
-    if (fo.isCurrentlyShrinking()) {
+    if (fo->isCurrentlyShrinking()) {
         rc += DEATH_RATE;
     }
-    if (so.state == MOS_ALIVE || fo.isCurrentlyShrinking()) {
-        v += so.velocity;
+    if (so->state == MOS_ALIVE || fo->isCurrentlyShrinking()) {
+        v += so->velocity;
     }
-    if (so.isCurrentlyShrinking()) {
+    if (so->isCurrentlyShrinking()) {
         rc += DEATH_RATE;
     }
 
     float t =
-        collideCircles(so.center - fo.center, v, so.radius + fo.radius, rc) +
+        collideCircles(so->center - fo->center, v, so->radius + fo->radius, rc) +
         cur;
-    if (fo.getID() < so.getID()) {
-        collide_event e(t, ET_ROUND_ROUND, fo.getID(), so.getID());
-        collideRoundWithRound[pair<int, int>(fo.getID(), so.getID())] = e;
+    if (fo->getID() < so->getID()) {
+        collide_event e(t, ET_ROUND_ROUND, fo->getID(), so->getID());
+        collideRoundWithRound[pair<int, int>(fo->getID(), so->getID())] = e;
         if (t < dt) {
             collideEvents.push(e);
         }
     } else {
-        collide_event e(t, ET_ROUND_ROUND, so.getID(), fo.getID());
-        collideRoundWithRound[pair<int, int>(so.getID(), fo.getID())] = e;
+        collide_event e(t, ET_ROUND_ROUND, so->getID(), fo->getID());
+        collideRoundWithRound[pair<int, int>(so->getID(), fo->getID())] = e;
         if (t < dt) {
             collideEvents.push(e);
         }
@@ -176,48 +176,48 @@ void PhysicsWorld::doObjectCollision(
 }
 
 void PhysicsWorld::doRectangularWallCollision(
-    MovingRoundObject const &obj, RectangularWall const &wall,
+                                              std::shared_ptr<MovingRoundObject> obj, std::shared_ptr<RectangularWall> wall,
     map<pair<int, int>, PhysicsWorld::collide_event> &collideRoundWithWall,
     priority_queue<PhysicsWorld::collide_event> &collideEvents, float cur,
     float dt) {
-    if (obj.state != MOS_ALIVE) {
-        collideRoundWithWall[pair<int, int>(obj.getID(), wall.getID())] =
-            collide_event(INFINITY, ET_NONE, obj.getID(), wall.getID());
+    if (obj->state != MOS_ALIVE) {
+        collideRoundWithWall[pair<int, int>(obj->getID(), wall->getID())] =
+            collide_event(INFINITY, ET_NONE, obj->getID(), wall->getID());
         return;
     }
 
     float time1 = INFINITY;
     float time2 = INFINITY;
-    if ((wall.p1 - obj.center) * obj.velocity > 0.0) {
+    if ((wall->p1 - obj->center) * obj->velocity > 0.0) {
         time1 =
-            collideCircles(obj.center - wall.p1, obj.velocity, obj.radius, 0);
+            collideCircles(obj->center - wall->p1, obj->velocity, obj->radius, 0);
     }
-    if ((wall.p2 - obj.center) * obj.velocity > 0.0) {
+    if ((wall->p2 - obj->center) * obj->velocity > 0.0) {
         time2 =
-            collideCircles(obj.center - wall.p2, obj.velocity, obj.radius, 0);
+            collideCircles(obj->center - wall->p2, obj->velocity, obj->radius, 0);
     }
 
     float time3;
-    Vector2D dir = wall.p2 - wall.p1;
-    Vector2D relpos = obj.center - wall.p1;
+    Vector2D dir = wall->p2 - wall->p1;
+    Vector2D relpos = obj->center - wall->p1;
     Vector2D normal = dir.getNormalVector();
     float dist = relpos * normal;
     if (dist < 0) {
         normal = -normal;
         dist = -dist;
     }
-    if (obj.velocity * normal >= 0) {
+    if (obj->velocity * normal >= 0) {
         time3 = INFINITY;
     } else {
-        time3 = (obj.radius - dist) / (obj.velocity * normal);
+        time3 = (obj->radius - dist) / (obj->velocity * normal);
         if (time3 < 0) {
             time3 = 0;
         }
-        Vector2D newpos = relpos + time3 * obj.velocity;
+        Vector2D newpos = relpos + time3 * obj->velocity;
         if (newpos * dir < 0 || newpos * dir > dir * dir) {
             time3 = INFINITY;
         }
-        if (normal * obj.velocity >= 0.0) {
+        if (normal * obj->velocity >= 0.0) {
             time3 = INFINITY;
         }
     }
@@ -235,63 +235,63 @@ void PhysicsWorld::doRectangularWallCollision(
         type = ET_ROUND_WALL_LINE;
     }
     float t = cur + mintime;
-    collide_event e(t, type, obj.getID(), wall.getID());
-    collideRoundWithWall[pair<int, int>(obj.getID(), wall.getID())] = e;
+    collide_event e(t, type, obj->getID(), wall->getID());
+    collideRoundWithWall[pair<int, int>(obj->getID(), wall->getID())] = e;
     if (t < dt) {
         collideEvents.push(e);
     }
 }
 
 void PhysicsWorld::doRoundWallCollision(
-    MovingRoundObject const &obj, RoundWall const &wall,
+                                        std::shared_ptr<MovingRoundObject> obj, std::shared_ptr<RoundWall> wall,
     map<pair<int, int>, PhysicsWorld::collide_event> &collideRoundWithRoundWall,
     priority_queue<PhysicsWorld::collide_event> &collideEvents, float cur,
     float dt) {
-    if (obj.state != MOS_ALIVE) {
-        collideRoundWithRoundWall[pair<int, int>(obj.getID(), wall.getID())] =
-            collide_event(INFINITY, ET_NONE, obj.getID(), wall.getID());
+    if (obj->state != MOS_ALIVE) {
+        collideRoundWithRoundWall[pair<int, int>(obj->getID(), wall->getID())] =
+            collide_event(INFINITY, ET_NONE, obj->getID(), wall->getID());
         return;
     }
 
-    Vector2D p1 = wall.center +
-                  wall.radius * Vector2D(cosf(wall.theta1), sinf(wall.theta1));
-    Vector2D p2 = wall.center +
-                  wall.radius * Vector2D(cosf(wall.theta2), sinf(wall.theta2));
+    Vector2D p1 = wall->center +
+                  wall->radius * Vector2D(cosf(wall->theta1), sinf(wall->theta1));
+    Vector2D p2 = wall->center +
+                  wall->radius * Vector2D(cosf(wall->theta2), sinf(wall->theta2));
     float time1 = INFINITY;
     float time2 = INFINITY;
-    if ((p1 - obj.center) * obj.velocity > 0.0) {
-        time1 = collideCircles(obj.center - p1, obj.velocity, obj.radius, 0);
+    if ((p1 - obj->center) * obj->velocity > 0.0) {
+        time1 = collideCircles(obj->center - p1, obj->velocity, obj->radius, 0);
     }
-    if ((p2 - obj.center) * obj.velocity > 0.0) {
-        time2 = collideCircles(obj.center - p2, obj.velocity, obj.radius, 0);
+    if ((p2 - obj->center) * obj->velocity > 0.0) {
+        time2 = collideCircles(obj->center - p2, obj->velocity, obj->radius, 0);
     }
 
     float time3 = INFINITY;
 
     float t1, t2, theta1, theta2;
 
-    if ((obj.center - wall.center).lengthSquared() >
-            wall.radius * wall.radius &&
-        obj.velocity * (wall.center - obj.center) > 0) {
-        intersectRayWithCircle(obj.center, obj.velocity, wall.center,
-                               wall.radius + obj.radius, t1, theta1, t2,
+    if ((obj->center - wall->center).lengthSquared() >
+            wall->radius * wall->radius &&
+        obj->velocity * (wall->center - obj->center) > 0) {
+        intersectRayWithCircle(obj->center, obj->velocity, wall->center,
+                               wall->radius + obj->radius, t1, theta1, t2,
                                theta2);
-        if (t1 < time3 && isAngleInRange(wall.theta1, wall.theta2, theta1)) {
+        if (t1 < time3 && isAngleInRange(wall->theta1, wall->theta2, theta1)) {
             time3 = t1;
         }
-        if (t2 < time3 && isAngleInRange(wall.theta1, wall.theta2, theta2)) {
+        if (t2 < time3 && isAngleInRange(wall->theta1, wall->theta2, theta2)) {
             time3 = t2;
         }
-    } else if ((obj.center - wall.center).lengthSquared() <
-                   wall.radius * wall.radius &&
-               obj.velocity * (wall.center - obj.center) < 0) {
-        intersectRayWithCircle(obj.center, obj.velocity, wall.center,
-                               wall.radius - obj.radius, t1, theta1, t2,
+    } else if ((obj->center - wall->center).lengthSquared() <
+                   wall->radius * wall->radius &&
+               obj->velocity * (wall->center - obj->center) < 0) {
+        intersectRayWithCircle(obj->center, obj->velocity, wall->center,
+                               wall->radius - obj->radius, t1, theta1, t2,
                                theta2);
-        if (t1 < time3 && isAngleInRange(wall.theta1, wall.theta2, theta1)) {
+        if (t1 < time3 && isAngleInRange(wall->theta1, wall->theta2, theta1)) {
             time3 = t1;
         }
-        if (t2 < time3 && isAngleInRange(wall.theta1, wall.theta2, theta2)) {
+        if (t2 < time3 && isAngleInRange(wall->theta1, wall->theta2, theta2)) {
             time3 = t2;
         }
     }
@@ -310,28 +310,28 @@ void PhysicsWorld::doRoundWallCollision(
     }
 
     float t = cur + mintime;
-    collide_event e(t, type, obj.getID(), wall.getID());
-    collideRoundWithRoundWall[pair<int, int>(obj.getID(), wall.getID())] = e;
+    collide_event e(t, type, obj->getID(), wall->getID());
+    collideRoundWithRoundWall[pair<int, int>(obj->getID(), wall->getID())] = e;
     if (t < dt) {
         collideEvents.push(e);
     }
 }
 
 void PhysicsWorld::doRoundObjectDisappearing(
-    MovingRoundObject const &obj,
+                                             std::shared_ptr<MovingRoundObject> obj,
     map<int, PhysicsWorld::collide_event> &collideDisappear,
     priority_queue<PhysicsWorld::collide_event> &collideEvents, float cur,
     float dt) {
-    if (obj.isCurrentlyShrinking()) {
-        float time = obj.radius / DEATH_RATE;
-        collide_event e(cur + time, ET_ROUND_DISAPPEAR, obj.getID(), -1);
-        collideDisappear[obj.getID()] = e;
+    if (obj->isCurrentlyShrinking()) {
+        float time = obj->radius / DEATH_RATE;
+        collide_event e(cur + time, ET_ROUND_DISAPPEAR, obj->getID(), -1);
+        collideDisappear[obj->getID()] = e;
         if (time < dt) {
             collideEvents.push(e);
         }
     } else {
-        collideDisappear[obj.getID()] =
-            collide_event(INFINITY, ET_NONE, obj.getID(), -1);
+        collideDisappear[obj->getID()] =
+            collide_event(INFINITY, ET_NONE, obj->getID(), -1);
     }
 }
 
@@ -342,43 +342,42 @@ void PhysicsWorld::doRoundObjectDisappearing(
  * @param obj1 A shrinking round object.
  * @param obj2 A moving object which hits obj1.
  */
-void PhysicsWorld::bounceMovingRoundAndShrinkingRound(MovingRoundObject &obj1,
-                                                      MovingRoundObject &obj2,
+void PhysicsWorld::bounceMovingRoundAndShrinkingRound(std::shared_ptr<MovingRoundObject> obj1,
+                                                      std::shared_ptr<MovingRoundObject> obj2,
                                                       bool shouldDie) {
-    Vector2D normal = obj2.center - obj1.center;
-    float nv1 = obj1.velocity * normal;
-    float nv2 = obj2.velocity * normal;
+    Vector2D normal = obj2->center - obj1->center;
+    float nv1 = obj1->velocity * normal;
+    float nv2 = obj2->velocity * normal;
     if (shouldDie) {
-        obj2.startShrinking(&obj1,
+        obj2->startShrinking(obj1,
                             -normal * (1 / sqrt(normal * normal)) * DEATH_RATE);
     } else {
-        if (obj1.isCurrentlyShrinking()) {
-            obj2.velocity -= 2.0 * ((nv2 - nv1) / (normal * normal) +
+        if (obj1->isCurrentlyShrinking()) {
+            obj2->velocity -= 2.0 * ((nv2 - nv1) / (normal * normal) +
                                     (1 / sqrt(normal * normal)) * DEATH_RATE) *
                              normal;
         } else {
-            obj2.velocity -= 2.0 * (nv2 / (normal * normal)) * normal;
+            obj2->velocity -= 2.0 * (nv2 / (normal * normal)) * normal;
         }
     }
 }
 
 void PhysicsWorld::bounceMovingRoundObjectByNormal(
-    MovingRoundObject &obj, Vector2D const &normal,
+                                                   std::shared_ptr<MovingRoundObject> obj, Vector2D const &normal,
     float bouncinessCoefficient) {
-    float nv1 = obj.velocity * normal;
-    obj.velocity -=
+    float nv1 = obj->velocity * normal;
+    obj->velocity -=
         (1.0 + bouncinessCoefficient) * (nv1 / (normal * normal)) * normal;
 }
 
-void PhysicsWorld::updateRoundObjectsForward(
-    map<int, MovingRoundObject *> &objects, float dt) {
+void PhysicsWorld::updateRoundObjectsForward(map<int, std::shared_ptr<MovingRoundObject>> &objects, float dt) {
     for (auto &pa : objects) {
-        MovingRoundObject &obj = *(pa.second);
-        if (obj.state == MOS_ALIVE) {
-            obj.center += obj.velocity * dt;
-        } else if (obj.isCurrentlyShrinking()) {
-            obj.center += obj.velocity * dt;
-            obj.radius -= DEATH_RATE * dt;
+        auto obj = pa.second;
+        if (obj->state == MOS_ALIVE) {
+            obj->center += obj->velocity * dt;
+        } else if (obj->isCurrentlyShrinking()) {
+            obj->center += obj->velocity * dt;
+            obj->radius -= DEATH_RATE * dt;
         }
     }
 }
@@ -394,20 +393,20 @@ void PhysicsWorld::doSimulation(float dt) {
          ++i) {
         auto j = i;
         for (++j; j != movingRoundObjects.end(); ++j) {
-            doObjectCollision(*(i->second), *(j->second), collideRoundWithRound,
+            doObjectCollision(i->second, j->second, collideRoundWithRound,
                               collideEvents, 0, dt);
         }
         for (auto const &pa : rectangularWalls) {
-            doRectangularWallCollision(*(i->second), *(pa.second),
+            doRectangularWallCollision(i->second, pa.second,
                                        collideRoundWithWall, collideEvents, 0,
                                        dt);
         }
         for (auto const &pa : roundWalls) {
-            doRoundWallCollision(*(i->second), *(pa.second),
+            doRoundWallCollision(i->second, pa.second,
                                  collideRoundWithRoundWall, collideEvents, 0,
                                  dt);
         }
-        doRoundObjectDisappearing(*(i->second), collideDisappear, collideEvents,
+        doRoundObjectDisappearing(i->second, collideDisappear, collideEvents,
                                   0, dt);
     }
 
@@ -441,28 +440,28 @@ void PhysicsWorld::doSimulation(float dt) {
                 collideRoundWithRound[pair<int, int>(e.t1, e.t2)] =
                     collide_event(INFINITY, ET_NONE, e.t1, e.t2);
 
-                MovingRoundObject &obj1 = *(movingRoundObjects[e.t1]);
-                MovingRoundObject &obj2 = *(movingRoundObjects[e.t2]);
+                auto obj1 = movingRoundObjects[e.t1];
+                auto obj2 = movingRoundObjects[e.t2];
 
-                Vector2D normal = obj2.center - obj1.center;
+                Vector2D normal = obj2->center - obj1->center;
 
                 collisionPoint =
-                    obj1.center +
-                    normal * (1 / sqrt(normal * normal)) * obj1.radius;
+                    obj1->center +
+                    normal * (1 / sqrt(normal * normal)) * obj1->radius;
                 pair<RoundCollisionResult, RoundCollisionResult> shouldDie_ =
                     roundRoundCollisionCallback(
-                        ObjectPtr<MovingRoundObject>(&obj1),
-                        ObjectPtr<MovingRoundObject>(&obj2));
+                        obj1,
+                        obj2);
                 bool shouldDie1 =
                     shouldDie_.first == RoundCollisionResult::DEATH;
                 bool shouldDie2 =
                     shouldDie_.second == RoundCollisionResult::DEATH;
 
-                if (obj1.state == MOS_SHRINKING) {
+                if (obj1->state == MOS_SHRINKING) {
                     bounceMovingRoundAndShrinkingRound(obj1, obj2, shouldDie1);
                 }
 
-                else if (obj2.state == MOS_SHRINKING) {
+                else if (obj2->state == MOS_SHRINKING) {
                     bounceMovingRoundAndShrinkingRound(obj2, obj1, shouldDie2);
                 }
 
@@ -470,31 +469,31 @@ void PhysicsWorld::doSimulation(float dt) {
                     if (shouldDie1 && shouldDie2) {
                         Vector2D vel =
                             normal * (1 / sqrt(normal * normal)) * DEATH_RATE;
-                        obj1.startShrinking(NULL, vel);
-                        obj2.startShrinking(NULL, -vel);
+                        obj1->startShrinking(NULL, vel);
+                        obj2->startShrinking(NULL, -vel);
                     } else if (shouldDie1) {
-                        obj2.velocity +=
-                            obj1.velocity * (obj1.mass / obj2.mass);
-                        obj1.startShrinking(NULL, Vector2D(0.0f, 0.0f));
+                        obj2->velocity +=
+                            obj1->velocity * (obj1->mass / obj2->mass);
+                        obj1->startShrinking(NULL, Vector2D(0.0f, 0.0f));
                     } else if (shouldDie2) {
-                        obj1.velocity +=
-                            obj2.velocity * (obj2.mass / obj1.mass);
-                        obj2.startShrinking(NULL, Vector2D(0.0f, 0.0f));
+                        obj1->velocity +=
+                            obj2->velocity * (obj1->mass / obj1->mass);
+                        obj2->startShrinking(NULL, Vector2D(0.0f, 0.0f));
                     } else {
-                        float nv1 = obj1.velocity * normal;
-                        float nv2 = obj2.velocity * normal;
-                        obj1.velocity -=
+                        float nv1 = obj1->velocity * normal;
+                        float nv2 = obj2->velocity * normal;
+                        obj1->velocity -=
                             (nv1 / (normal * normal)) * normal -
-                            (((obj1.mass - obj2.mass) /
-                                  (obj1.mass + obj2.mass) * nv1 +
-                              2 * obj2.mass / (obj1.mass + obj2.mass) * nv2) /
+                            (((obj1->mass - obj2->mass) /
+                                  (obj1->mass + obj2->mass) * nv1 +
+                              2 * obj2->mass / (obj1->mass + obj2->mass) * nv2) /
                              (normal * normal)) *
                                 normal;
-                        obj2.velocity -=
+                        obj2->velocity -=
                             (nv2 / (normal * normal)) * normal -
-                            (((obj2.mass - obj1.mass) /
-                                  (obj2.mass + obj1.mass) * nv2 +
-                              2 * obj1.mass / (obj2.mass + obj1.mass) * nv1) /
+                            (((obj2->mass - obj1->mass) /
+                                  (obj2->mass + obj1->mass) * nv2 +
+                              2 * obj1->mass / (obj2->mass + obj1->mass) * nv1) /
                              (normal * normal)) *
                                 normal;
                     }
@@ -502,8 +501,8 @@ void PhysicsWorld::doSimulation(float dt) {
 
                 for (auto i = movingRoundObjects.begin();
                      i != movingRoundObjects.end(); i++) {
-                    if (i->first != obj1.getID() && i->first != obj2.getID()) {
-                        MovingRoundObject &obj = *(i->second);
+                    if (i->first != obj1->getID() && i->first != obj2->getID()) {
+                        auto obj = i->second;
                         doObjectCollision(obj, obj1, collideRoundWithRound,
                                           collideEvents, e.time, dt);
                         doObjectCollision(obj, obj2, collideRoundWithRound,
@@ -512,14 +511,14 @@ void PhysicsWorld::doSimulation(float dt) {
                 }
                 for (auto i = rectangularWalls.begin();
                      i != rectangularWalls.end(); i++) {
-                    RectangularWall &wall = *(i->second);
+                    auto wall = i->second;
                     doRectangularWallCollision(obj1, wall, collideRoundWithWall,
                                                collideEvents, e.time, dt);
                     doRectangularWallCollision(obj2, wall, collideRoundWithWall,
                                                collideEvents, e.time, dt);
                 }
                 for (auto i = roundWalls.begin(); i != roundWalls.end(); i++) {
-                    RoundWall &wall = *(i->second);
+                    auto wall = i->second;
                     doRoundWallCollision(obj1, wall, collideRoundWithRoundWall,
                                          collideEvents, e.time, dt);
                     doRoundWallCollision(obj2, wall, collideRoundWithRoundWall,
@@ -538,17 +537,17 @@ void PhysicsWorld::doSimulation(float dt) {
             case ET_ROUND_WALL_LINE: {
                 collideRoundWithWall[pair<int, int>(e.t1, e.t2)] =
                     collide_event(INFINITY, ET_NONE, e.t1, e.t2);
-                MovingRoundObject &obj = *(movingRoundObjects[e.t1]);
-                RectangularWall &wall = *(rectangularWalls[e.t2]);
+                auto obj = movingRoundObjects[e.t1];
+                auto wall = rectangularWalls[e.t2];
 
                 Vector2D normal;
                 if (e.type == ET_ROUND_WALL_CORNER_1) {
-                    normal = obj.center - wall.p1;
+                    normal = obj->center - wall->p1;
                 } else if (e.type == ET_ROUND_WALL_CORNER_2) {
-                    normal = obj.center - wall.p2;
+                    normal = obj->center - wall->p2;
                 } else if (e.type == ET_ROUND_WALL_LINE) {
-                    normal = (wall.p2 - wall.p1).getNormalVector();
-                    if (obj.velocity * normal > 0) {
+                    normal = (wall->p2 - wall->p1).getNormalVector();
+                    if (obj->velocity * normal > 0) {
                         normal = -normal;
                     }
                 } else {
@@ -556,26 +555,24 @@ void PhysicsWorld::doSimulation(float dt) {
                 }
 
                 collisionPoint =
-                    obj.center +
-                    normal * (1 / sqrt(normal * normal)) * obj.radius;
-                bool shouldDie =
-                    roundWallCollisionCallback(
-                        ObjectPtr<MovingRoundObject>(&obj),
-                        ObjectPtr<Wall>(&wall)) == RoundCollisionResult::DEATH;
+                    obj->center +
+                    normal * (1 / sqrt(normal * normal)) * obj->radius;
+                const bool shouldDie =
+                    roundWallCollisionCallback(obj, wall) == RoundCollisionResult::DEATH;
 
                 if (shouldDie) {
-                    obj.startShrinking(
+                    obj->startShrinking(
                         NULL,
                         -normal * (1 / sqrt(normal * normal)) * DEATH_RATE);
                 } else {
                     bounceMovingRoundObjectByNormal(obj, normal,
-                                                    wall.bouncinessCoefficient);
+                                                    wall->bouncinessCoefficient);
                 }
 
                 for (auto i = movingRoundObjects.begin();
                      i != movingRoundObjects.end(); i++) {
                     if (i->first != e.t1) {
-                        doObjectCollision(obj, *(i->second),
+                        doObjectCollision(obj, i->second,
                                           collideRoundWithRound, collideEvents,
                                           e.time, dt);
                     }
@@ -583,13 +580,13 @@ void PhysicsWorld::doSimulation(float dt) {
                 for (auto i = rectangularWalls.begin();
                      i != rectangularWalls.end(); i++) {
                     if (i->first != e.t2) {
-                        doRectangularWallCollision(obj, *(i->second),
+                        doRectangularWallCollision(obj, i->second,
                                                    collideRoundWithWall,
                                                    collideEvents, e.time, dt);
                     }
                 }
                 for (auto i = roundWalls.begin(); i != roundWalls.end(); i++) {
-                    doRoundWallCollision(obj, *(i->second),
+                    doRoundWallCollision(obj, i->second,
                                          collideRoundWithRoundWall,
                                          collideEvents, e.time, dt);
                 }
@@ -604,61 +601,59 @@ void PhysicsWorld::doSimulation(float dt) {
             case ET_ROUND_ROUNDWALL_LINE: {
                 collideRoundWithRoundWall[pair<int, int>(e.t1, e.t2)] =
                     collide_event(INFINITY, ET_NONE, e.t1, e.t2);
-                MovingRoundObject &obj = *(movingRoundObjects[e.t1]);
-                RoundWall &wall = *(roundWalls[e.t2]);
+                auto obj = movingRoundObjects[e.t1];
+                auto wall = roundWalls[e.t2];
 
                 Vector2D normal;
                 if (e.type == ET_ROUND_ROUNDWALL_CORNER_1) {
-                    normal = obj.center -
-                             (wall.center +
-                              wall.radius * Vector2D(cosf(wall.theta1),
-                                                     sinf(wall.theta1)));
+                    normal = obj->center -
+                             (wall->center +
+                              wall->radius * Vector2D(cosf(wall->theta1),
+                                                     sinf(wall->theta1)));
 
                 } else if (e.type == ET_ROUND_ROUNDWALL_CORNER_2) {
-                    normal = obj.center -
-                             (wall.center +
-                              wall.radius * Vector2D(cosf(wall.theta2),
-                                                     sinf(wall.theta2)));
+                    normal = obj->center -
+                             (wall->center +
+                              wall->radius * Vector2D(cosf(wall->theta2),
+                                                     sinf(wall->theta2)));
                 } else if (e.type == ET_ROUND_ROUNDWALL_LINE) {
-                    normal = obj.center - wall.center;
-                    if (obj.velocity * normal > 0) {
+                    normal = obj->center - wall->center;
+                    if (obj->velocity * normal > 0) {
                         normal = -normal;
                     }
                 }
 
                 collisionPoint =
-                    obj.center +
-                    normal * (1 / sqrt(normal * normal)) * obj.radius;
+                    obj->center +
+                    normal * (1 / sqrt(normal * normal)) * obj->radius;
                 bool shouldDie =
-                    roundWallCollisionCallback(
-                        ObjectPtr<MovingRoundObject>(&obj),
-                        ObjectPtr<Wall>(&wall)) == RoundCollisionResult::DEATH;
+                    roundWallCollisionCallback(obj, wall) == RoundCollisionResult::DEATH;
 
                 if (shouldDie) {
-                    obj.startShrinking(
+                    obj->startShrinking(
                         NULL,
                         -normal * (1 / sqrt(normal * normal)) * DEATH_RATE);
                 } else {
                     bounceMovingRoundObjectByNormal(obj, normal,
-                                                    wall.bouncinessCoefficient);
+                                                    wall->bouncinessCoefficient);
                 }
 
                 for (auto i = movingRoundObjects.begin();
                      i != movingRoundObjects.end(); i++) {
                     if (i->first != e.t1) {
-                        doObjectCollision(obj, *(i->second),
+                        doObjectCollision(obj, i->second,
                                           collideRoundWithRound, collideEvents,
                                           e.time, dt);
                     }
                 }
                 for (auto i = rectangularWalls.begin();
                      i != rectangularWalls.end(); i++) {
-                    doRectangularWallCollision(obj, *(i->second),
+                    doRectangularWallCollision(obj, i->second,
                                                collideRoundWithWall,
                                                collideEvents, e.time, dt);
                 }
                 for (auto i = roundWalls.begin(); i != roundWalls.end(); i++) {
-                    doRoundWallCollision(obj, *(i->second),
+                    doRoundWallCollision(obj, i->second,
                                          collideRoundWithRoundWall,
                                          collideEvents, e.time, dt);
                 }
@@ -672,20 +667,20 @@ void PhysicsWorld::doSimulation(float dt) {
             case ET_ROUND_DISAPPEAR: {
                 collideDisappear[e.t1] =
                     collide_event(INFINITY, ET_NONE, e.t1, -1);
-                MovingRoundObject &obj = *(movingRoundObjects[e.t1]);
+                auto obj = movingRoundObjects[e.t1];
 
-                MovingRoundObject *parent = obj.getShrinkingParent();
-                obj.kill();
+                std::shared_ptr<MovingRoundObject> parent = obj->getShrinkingParent();
+                obj->kill();
 
                 for (auto i = movingRoundObjects.begin();
                      i != movingRoundObjects.end(); i++) {
-                    if (i->first != obj.getID() &&
+                    if (i->first != obj->getID() &&
                         (parent == NULL || i->first != parent->getID())) {
-                        MovingRoundObject &obj = *(i->second);
+                        auto obj = i->second;
                         doObjectCollision(obj, obj, collideRoundWithRound,
                                           collideEvents, e.time, dt);
                         if (parent != NULL) {
-                            doObjectCollision(obj, *parent,
+                            doObjectCollision(obj, parent,
                                               collideRoundWithRound,
                                               collideEvents, e.time, dt);
                         }
@@ -693,21 +688,21 @@ void PhysicsWorld::doSimulation(float dt) {
                 }
                 for (auto i = rectangularWalls.begin();
                      i != rectangularWalls.end(); i++) {
-                    RectangularWall &wall = *(i->second);
+                    auto wall = i->second;
                     doRectangularWallCollision(obj, wall, collideRoundWithWall,
                                                collideEvents, e.time, dt);
                     if (parent != NULL) {
-                        doRectangularWallCollision(*parent, wall,
+                        doRectangularWallCollision(parent, wall,
                                                    collideRoundWithWall,
                                                    collideEvents, e.time, dt);
                     }
                 }
                 for (auto i = roundWalls.begin(); i != roundWalls.end(); i++) {
-                    RoundWall &wall = *(i->second);
+                    auto wall = i->second;
                     doRoundWallCollision(obj, wall, collideRoundWithRoundWall,
                                          collideEvents, e.time, dt);
                     if (parent != NULL) {
-                        doRoundWallCollision(*parent, wall,
+                        doRoundWallCollision(parent, wall,
                                              collideRoundWithRoundWall,
                                              collideEvents, e.time, dt);
                     }
@@ -715,7 +710,7 @@ void PhysicsWorld::doSimulation(float dt) {
                 doRoundObjectDisappearing(obj, collideDisappear, collideEvents,
                                           e.time, dt);
                 if (parent != NULL) {
-                    doRoundObjectDisappearing(*parent, collideDisappear,
+                    doRoundObjectDisappearing(parent, collideDisappear,
                                               collideEvents, e.time, dt);
                 }
 
@@ -742,13 +737,13 @@ void PhysicsWorld::doSimulation(float dt) {
     // It won't screw up physics if an object spawns slightly "late",
     // whereas things like collisions need to happen in order.
     for (auto &iter : movingRoundObjects) {
-        MovingRoundObject &obj = *(iter.second);
-        if (obj.state != MOS_SPAWNING) {
+        auto obj = iter.second;
+        if (obj->state != MOS_SPAWNING) {
             continue;
         }
 
-        obj.timeUntilSpawn -= elapsed;
-        if (obj.timeUntilSpawn > 0) {
+        obj->timeUntilSpawn -= elapsed;
+        if (obj->timeUntilSpawn > 0) {
             continue;
         }
 
@@ -757,13 +752,13 @@ void PhysicsWorld::doSimulation(float dt) {
         }
 
         SpawnDescriptor const &spawnDesc =
-            worldMap.getSpawnByNumber(obj.regionNumber);
-        obj.center = spawnDesc.getRandomPoint();
+            worldMap.getSpawnByNumber(obj->regionNumber);
+        obj->center = spawnDesc.getRandomPoint();
 
         // check that we aren't intersecting any other objects if we spawn here
         bool okayToSpawn = true;
         for (auto &jter : movingRoundObjects) {
-            MovingRoundObject &obj2 = *(jter.second);
+            auto obj2 = jter.second;
             if (objectsIntersect(obj, obj2)) {
                 okayToSpawn = false;
                 break;
@@ -773,7 +768,7 @@ void PhysicsWorld::doSimulation(float dt) {
             continue;
         }
         for (auto &jter : rectangularWalls) {
-            RectangularWall &wall = *(jter.second);
+            auto wall = jter.second;
             if (objectsIntersect(obj, wall)) {
                 okayToSpawn = false;
                 break;
@@ -783,9 +778,9 @@ void PhysicsWorld::doSimulation(float dt) {
             continue;
         }
 
-        obj.velocity = Vector2D(0.0f, 0.0f);
-        obj.state = MOS_ALIVE;
+        obj->velocity = Vector2D(0.0f, 0.0f);
+        obj->state = MOS_ALIVE;
 
-        obj.onSpawnCallback();
+        obj->onSpawnCallback();
     }
 }

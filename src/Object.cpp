@@ -104,7 +104,7 @@ MovingRoundObject::MovingRoundObject(ReadPacket *rp) : RoundObject(rp) {
     numChildren = 0;
 }
 
-void MovingRoundObject::startShrinking(MovingRoundObject *parent,
+void MovingRoundObject::startShrinking(std::shared_ptr<MovingRoundObject> parent,
                                        Vector2D const &velocity) {
     this->parent = parent;
     this->numChildren = 0;

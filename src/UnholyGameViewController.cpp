@@ -107,7 +107,7 @@ void UnholyGameViewController::render() {
 void UnholyGameViewController::_drawWalls() {
     glBegin(GL_QUADS);
     for (auto &iter : world->getRectangularWalls()) {
-        RectangularWall *wall = iter.second;
+        auto wall = iter.second;
         MaterialPtr color = wall->getMaterial();
         glColor3f(color->getR() / 255.0f, color->getG() / 255.0f,
                   color->getB() / 255.0f);
@@ -118,7 +118,7 @@ void UnholyGameViewController::_drawWalls() {
     }
 
     for (auto &iter : world->getRoundWalls()) {
-        RoundWall *wall = iter.second;
+        auto wall = iter.second;
         MaterialPtr color = wall->getMaterial();
         glColor3f(color->getR() / 255.0f, color->getG() / 255.0f,
                   color->getB() / 255.0f);
@@ -145,7 +145,7 @@ void UnholyGameViewController::_drawWalls() {
 void UnholyGameViewController::_drawObjects() {
     glEnable(GL_NORMALIZE);
     for (auto &iter : world->getMovingRoundObjects()) {
-        MovingRoundObject *obj = iter.second;
+        auto obj = iter.second;
         glPushMatrix();
         glTranslatef(obj->center.x, obj->center.y, 0);
         glScalef(obj->radius, obj->radius, obj->heightRatio * obj->radius);

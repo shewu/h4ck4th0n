@@ -63,7 +63,7 @@ int Game::getObjectIDOf(int playerID) {
     }
     GamePlayer *player = iter->second;
 
-    if (player->obj.empty()) {
+    if (!player->obj) {
         return kNoObjectExists;
     } else {
         return player->obj->getID();
@@ -82,7 +82,7 @@ std::string Game::getScoreByPlayerID(int playerID) {
 void Game::applyForcesFromInput(float dt) {
     for (auto &iter : players) {
         GamePlayer *player = iter.second;
-        if (!player->obj.empty() && player->obj->getState() == MOS_ALIVE) {
+        if (player->obj && player->obj->getState() == MOS_ALIVE) {
             Vector2D accel = player->input.getAcceleration();
             player->obj->setVelocity(player->obj->getVelocity() + accel * dt);
         }

@@ -15,9 +15,9 @@ private:
     std::vector<Light> lights;
 
 protected:
-    std::map<int, MovingRoundObject *> movingRoundObjects;
-    std::map<int, RectangularWall *> rectangularWalls;
-    std::map<int, RoundWall *> roundWalls;
+    std::map<int, std::shared_ptr<MovingRoundObject> > movingRoundObjects;
+    std::map<int, std::shared_ptr<RectangularWall> > rectangularWalls;
+    std::map<int, std::shared_ptr<RoundWall> > roundWalls;
     HBMap worldMap;
 
 public:
@@ -71,15 +71,15 @@ public:
      */
     std::vector<Light> const &getLights() const { return lights; }
 
-    std::map<int, MovingRoundObject *> const &getMovingRoundObjects() const {
+    std::map<int, std::shared_ptr<MovingRoundObject> > const &getMovingRoundObjects() const {
         return movingRoundObjects;
     }
 
-    std::map<int, RectangularWall *> const &getRectangularWalls() const {
+    std::map<int, std::shared_ptr<RectangularWall> > const &getRectangularWalls() const {
         return rectangularWalls;
     }
 
-    std::map<int, RoundWall *> const &getRoundWalls() const {
+    std::map<int, std::shared_ptr<RoundWall> > const &getRoundWalls() const {
         return roundWalls;
     }
 };

@@ -4,8 +4,6 @@
 
 using std::string;
 
-MenuItem::~MenuItem() {
-}
 bool MenuItem::activate() {
     return false;
 }
@@ -40,8 +38,6 @@ bool SubMenuItem::shouldMenuBeDrawn() {
 }
 
 // ActionMenuItem
-ActionMenuItem::~ActionMenuItem() {
-}
 
 bool ActionMenuItem::activate() {
     return init();
@@ -99,8 +95,6 @@ bool InputMenuItem::shouldMenuBeDrawn() {
 }
 
 // ToggleMenuItem
-ToggleMenuItem::~ToggleMenuItem() {
-}
 
 bool ToggleMenuItem::activate() {
     state = !state;
@@ -113,8 +107,6 @@ bool ToggleMenuItem::getState() {
 }
 
 // SliderMenuItem
-SliderMenuItem::~SliderMenuItem() {
-}
 
 bool SliderMenuItem::getState() {
     return curstate;

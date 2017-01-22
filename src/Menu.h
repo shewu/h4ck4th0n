@@ -19,7 +19,7 @@
 
 class MenuItem {
 public:
-    ~MenuItem();
+    virtual ~MenuItem() = default;
 
 private:
     // Return whether or not the MenuItem is still active
@@ -44,7 +44,7 @@ protected:
 class Menu {
 public:
     Menu();
-    virtual ~Menu();
+    virtual ~Menu() = default;
 
     void addMenuItem(std::unique_ptr<MenuItem>&& a);
     void keyInput(int key);
@@ -70,7 +70,6 @@ private:
 
 class SubMenuItem : public MenuItem {
 public:
-    ~SubMenuItem() {}
     SubMenuItem(std::unique_ptr<Menu> &&m, std::string &&name)
         : m(std::move(m)), isActive(false), MenuItem(name) {}
 
@@ -87,7 +86,6 @@ private:
 
 class ActionMenuItem : public MenuItem {
 public:
-    ~ActionMenuItem();
     ActionMenuItem(const std::function<bool()> &init1, std::string &&name1)
         : init(init1), MenuItem(name1) {}
 
@@ -117,7 +115,7 @@ public:
 
         text = t;
     }
-    ~InputMenuItem();
+	~InputMenuItem();
 
     std::string getInput();
 
@@ -142,7 +140,6 @@ public:
     ToggleMenuItem(std::string &&name1, bool state1,
                    const std::function<void(bool)> &act)
         : state(state1), action(act), MenuItem(name1) {}
-    ~ToggleMenuItem();
 
     bool getState();
 
@@ -160,7 +157,6 @@ public:
     SliderMenuItem(std::string &&name1, std::vector<std::string> states,
                    int curstate1, const std::function<void(int)> &act)
         : states(states), curstate(curstate1), action(act), MenuItem(name1) {}
-    ~SliderMenuItem();
 
     bool getState();
 

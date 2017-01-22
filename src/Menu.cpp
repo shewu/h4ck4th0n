@@ -4,9 +4,6 @@ Menu::Menu() : current_index(0), is_item_active(false), is_menu_active(false) {
     setAppearanceMiddle();
 }
 
-Menu::~Menu() {
-}
-
 void Menu::addMenuItem(std::unique_ptr<MenuItem>&& a) {
     menuItems.push_back(std::move(a));
 }

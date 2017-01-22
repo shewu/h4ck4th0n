@@ -16,7 +16,6 @@ class Object {
 private:
     MaterialPtr material;
     int id;
-    unsigned refCount;
 
     static unsigned nextId;
 
@@ -31,7 +30,7 @@ public:
      * Constructs an object with the given material.
      * @param material The material for the object being created.
      */
-    explicit Object(MaterialPtr material) : material(material), refCount(0) {
+    explicit Object(MaterialPtr material) : material(material) {
         id = (Object::nextId++);
     }
 
@@ -58,8 +57,6 @@ public:
 
     bool operator<(Object const &that) const { return id < that.id; }
 
-    int getRefCount() const { return refCount; }
-
     /**
      * Writes the object to a WritePacket
      * @param wp the WritePacket to write this object to
@@ -67,56 +64,6 @@ public:
     virtual void writeToPacket(WritePacket *wp) const;
 
     virtual ~Object() {}
-
-    template <class>
-    friend class ObjectPtr;
-};
-
-template <class T>
-class ObjectPtr {
-public:
-    explicit ObjectPtr(T *obj = NULL) : ptr_(obj) {
-        if (obj != NULL) {
-            obj->refCount++;
-        }
-    }
-
-    ~ObjectPtr() {
-        if (ptr_ != NULL) {
-            ptr_->refCount--;
-        }
-    }
-
-    template <class U>
-    ObjectPtr(ObjectPtr<U> const &other) {
-        ptr_ = (T *)other.ptr_;
-        if (ptr_ != NULL) {
-            ptr_->refCount++;
-        }
-    }
-
-    template <class U>
-    ObjectPtr<T> &operator=(ObjectPtr<U> const &other) {
-        if (ptr_ != NULL) {
-            ptr_->refCount--;
-        }
-        ptr_ = (T *)other.ptr_;
-        if (ptr_ != NULL) {
-            ptr_->refCount++;
-        }
-    }
-
-    T &operator*() { return *ptr_; }
-
-    T *operator->() { return ptr_; }
-
-    bool empty() const { return ptr_ == NULL; }
-
-private:
-    T *ptr_;
-
-    template <class U>
-    friend class ObjectPtr;
 };
 
 class Wall : public Object {

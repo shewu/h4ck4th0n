@@ -121,4 +121,9 @@ love:
 format:
 	cd src && find \( -name '*.cpp' -o -name '*.h' \) -print0 | xargs -0 clang-format -style=file -i
 
--include $(wildcard $(DEP_DIR)/*.d)
+# Include these files which contain all the dependencies
+# between the source files and the header files, so if a header
+# file changes, the correct things will re-compile.
+# rwildcard is a helper to search recursively for .d files
+rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
+-include $(call rwildcard,$(DEP_DIR)/,*.d)

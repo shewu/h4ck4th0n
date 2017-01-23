@@ -42,8 +42,6 @@ void PhysicsWorld::removeDeadObjects() {
         auto iter2 = iter;
         ++iter2;
 
-		// TODO this doesn't work correctly right now because the use_count() of a dead
-		// object is 2. Need to figure out why.
         std::shared_ptr<MovingRoundObject> const& objPtr = iter->second;
         if (objPtr->getState() == MOS_DEAD && objPtr.use_count() == 1) {
             movingRoundObjects.erase(iter);

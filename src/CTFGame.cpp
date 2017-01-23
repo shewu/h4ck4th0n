@@ -119,7 +119,13 @@ void CTFGame::createNewPlayer(int teamNum, GamePlayer *gp) {
     auto obj =
         world_.addPlayerObject(teamNum, []() {}, []() {});
 
-    obj->setSpawnCallback([obj, gp]() { gp->obj = obj; });
+    // Use a weak_ptr to avoid circular dependency
+    std::weak_ptr<MovingRoundObject> weakObj = obj;
+    obj->setSpawnCallback([weakObj, gp]() {
+        if (std::shared_ptr<MovingRoundObject> obj = weakObj.lock()) {
+            gp->obj = obj;
+        }
+    });
 
     obj->setDeathCallback(
         std::bind(&CTFGame::createNewPlayer, this, teamNum, gp));

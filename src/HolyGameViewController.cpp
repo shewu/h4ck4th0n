@@ -53,8 +53,7 @@ void HolyGameViewController::_initGL() {
         clCode = string((std::istreambuf_iterator<char>(code)),
                         std::istreambuf_iterator<char>());
     }
-    cl::Program::Sources clSource(
-        1, pair<const char *, int>(clCode.c_str(), clCode.length() + 1));
+    cl::Program::Sources clSource(1, clCode.c_str());
     program = cl::Program(context, clSource);
     if (program.build(devices, "-I.")) {
         cout << program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(devices[0]) << endl;

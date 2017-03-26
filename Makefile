@@ -11,7 +11,7 @@ CCSTD = c++0x
 CCFLAGS = -Wall -MD -MP --std=$(CCSTD)
 
 ifeq ($(DEBUG), 1)
-	CCFLAGS += -O0 -g -DDEBUG -Werror
+	CCFLAGS += -O0 -g -DDEBUG
 else
 	CCFLAGS += -O2 -w
 endif

@@ -1,6 +1,7 @@
 #ifndef HOLYGAMEVIEWCONTROLLER_H
 #define HOLYGAMEVIEWCONTROLLER_H
 
+#include "CL/cl2.hpp"
 #ifndef __APPLE__
 #include <GL/glx.h>
 #include <GL/gl.h>
@@ -9,7 +10,6 @@
 #include <OpenGL/OpenGL.h>
 #include <OpenGL/glu.h>
 #endif
-#include "CL/cl.hpp"
 
 #include "GameViewController.h"
 
